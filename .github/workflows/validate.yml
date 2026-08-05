@@ -1,0 +1,88 @@
+name: validate-readiness-declaration
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: trusted
+          persist-credentials: false
+      - name: Fetch the exact candidate SHA as inert data
+        env:
+          CANDIDATE_ORIGIN: ${{ github.event.pull_request.head.repo.clone_url }}
+          HEAD_REVISION: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git init candidate
+          git -C candidate remote add origin "$CANDIDATE_ORIGIN"
+          git -C candidate fetch --filter=blob:none --no-tags origin "$HEAD_REVISION"
+          git -C candidate checkout --detach "$HEAD_REVISION"
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 22.12.0
+      - name: Fetch the exact trusted comparison base
+        env:
+          BASE_REVISION: ${{ github.event.pull_request.base.sha }}
+        working-directory: candidate
+        run: git fetch --filter=blob:none --no-tags https://github.com/sourcey/agent-ready-services.git "$BASE_REVISION"
+      - name: Install the exact Sourcey Catalog Verifier
+        run: |
+          digest="$(<trusted/.github/sourcey-catalog-verifier.sha256)"
+          if [[ ! "$digest" =~ ^[a-f0-9]{64}$ ]]; then
+            echo "Catalog Verifier pin must be one exact SHA-256 digest." >&2
+            exit 1
+          fi
+          name="sourcey-catalog-verifier-sha256-${digest}.tar.gz"
+          origin="https://artifacts.sourcey.com/catalog/code/catalog-verifier/sha256-${digest}"
+          curl --fail-with-body --silent --show-error --max-time 120 \
+            --output "$RUNNER_TEMP/$name" "$origin/$name"
+          curl --fail-with-body --silent --show-error --max-time 120 \
+            --output "$RUNNER_TEMP/$name.sha256" "$origin/$name.sha256"
+          (
+            cd "$RUNNER_TEMP"
+            sha256sum --check "$name.sha256"
+          )
+          mkdir "$RUNNER_TEMP/catalog-verifier"
+          tar -xzf "$RUNNER_TEMP/$name" \
+            --strip-components=1 \
+            -C "$RUNNER_TEMP/catalog-verifier"
+      - name: Validate only the changed declaration closure
+        env:
+          BASE_REVISION: ${{ github.event.pull_request.base.sha }}
+          HEAD_REVISION: ${{ github.event.pull_request.head.sha }}
+        run: |
+          node "$RUNNER_TEMP/catalog-verifier/sourcey-catalog-verify.js" \
+            validate-readiness-change \
+            --repository "$GITHUB_WORKSPACE/candidate" \
+            --base "$BASE_REVISION" \
+            --head "$HEAD_REVISION"
+      - name: Verify Developer Certificate of Origin sign-off
+        env:
+          BASE_REVISION: ${{ github.event.pull_request.base.sha }}
+          HEAD_REVISION: ${{ github.event.pull_request.head.sha }}
+        working-directory: candidate
+        run: |
+          change_base="$(git merge-base "$BASE_REVISION" "$HEAD_REVISION")"
+          missing=()
+          while IFS= read -r commit; do
+            if ! git show -s --format=%B "$commit" \
+              | grep -Eq '^Signed-off-by: .+ <[^>]+>$'; then
+              missing+=("$commit")
+            fi
+          done < <(git rev-list --no-merges "$change_base..$HEAD_REVISION")
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Commits missing Signed-off-by certification:\n%s\n' "${missing[*]}" >&2
+            exit 1
+          fi

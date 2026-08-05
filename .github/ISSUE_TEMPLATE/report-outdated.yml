@@ -1,0 +1,43 @@
+name: Report outdated evidence or request a rerun
+description: Identify one released Report Card finding that may no longer reflect the tested funnel.
+title: "Evidence review: "
+labels:
+  - evidence-review
+body:
+  - type: input
+    id: report_card
+    attributes:
+      label: Sourcey Report Card URL
+    validations:
+      required: true
+  - type: input
+    id: finding
+    attributes:
+      label: Finding or stage
+      description: Name the exact finding, such as signup being blocked by CAPTCHA.
+    validations:
+      required: true
+  - type: textarea
+    id: changed
+    attributes:
+      label: What changed
+      description: Explain why the released evidence may be stale or why a rerun is useful.
+    validations:
+      required: true
+  - type: textarea
+    id: public_sources
+    attributes:
+      label: Public supporting URLs
+      description: Include current public URLs. Do not upload credentials, personal data, or authenticated captures.
+    validations:
+      required: true
+  - type: dropdown
+    id: relationship
+    attributes:
+      label: Your relationship
+      options:
+        - Community reporter or customer
+        - Vendor employee or authorized representative
+        - Sourcey maintainer
+    validations:
+      required: true

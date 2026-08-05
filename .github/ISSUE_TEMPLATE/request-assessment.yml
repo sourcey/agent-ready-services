@@ -1,0 +1,66 @@
+name: Request an assessment
+description: Propose one exact service, product, or vendor funnel for independent Agent Readiness assessment.
+title: "Assessment request: "
+labels:
+  - assessment-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A request is not a readiness claim. Do not include credentials, personal data, private captures, or unpublished material.
+  - type: input
+    id: vendor
+    attributes:
+      label: Vendor
+      description: The public vendor or service provider name.
+    validations:
+      required: true
+  - type: input
+    id: product
+    attributes:
+      label: Product or service
+      description: The exact product, API, platform, or externally obtainable service.
+    validations:
+      required: true
+  - type: input
+    id: funnel
+    attributes:
+      label: Funnel
+      description: The exact journey to assess, such as self-serve signup or startup-credit application.
+    validations:
+      required: true
+  - type: textarea
+    id: entrypoints
+    attributes:
+      label: Public entrypoints
+      description: Public HTTPS URLs for discovery, terms, pricing, signup, provisioning, operation, or recovery.
+    validations:
+      required: true
+  - type: input
+    id: sourcey_record
+    attributes:
+      label: Existing Sourcey vendor or offer URL
+      description: Include it when this vendor already appears in Sourcey Startup Offers.
+  - type: dropdown
+    id: relationship
+    attributes:
+      label: Your relationship
+      options:
+        - Community contributor or customer
+        - Vendor employee or authorized representative
+        - Sourcey maintainer
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why this funnel should be assessed
+    validations:
+      required: true
+  - type: checkboxes
+    id: public_only
+    attributes:
+      label: Safety
+      options:
+        - label: I included only public, non-sensitive material.
+          required: true
