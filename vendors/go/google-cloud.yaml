@@ -1,0 +1,77 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8fpe210m3jqn5xgzztgv8
+  slug: google-cloud
+  slug_aliases: []
+  name: Google Cloud
+  domains:
+    - value: cloud.google.com
+      role: primary
+      valid_from: 2026-07-27T07:35:54.326Z
+  category: hosting-infra
+  description: Use Google Cloud credits to build and grow your startup business with innovative products and solutions designed for your needs.
+  links:
+    site: https://cloud.google.com
+    pricing: https://cloud.google.com/pricing
+  sources:
+    - source_id: source_google_startup_program
+      url: https://cloud.google.com/startup
+    - source_id: source_google_startup_terms
+      url: https://cloud.google.com/terms/startup-program-tos
+    - source_id: source_google_startup_benefits
+      url: https://cloud.google.com/startup/benefits?hl=en
+    - source_id: source_google_startup_faq
+      url: https://cloud.google.com/startup/faq?hl=en
+    - source_id: source_google_startup_application
+      url: https://cloud.google.com/startup/apply
+    - source_id: source_google_startup_operations
+      url: https://cloud.google.com/startup/perks
+    - source_id: source_google_cloud_support
+      url: https://docs.cloud.google.com/support/docs
+declarations:
+  - declaration_id: declaration_google_cloud_start_application
+    scope:
+      product:
+        key: google-for-startups-cloud-program
+        name: Google for Startups Cloud Program
+      funnel:
+        key: start-tier-application
+        name: Start tier application
+      offer_id: off_01kyh8fpe26twnnyavn9r2fxx1
+    base:
+      entity_revision_digest: sha256:6fde48652671d311a6641f10eefba8652e15a39cc71b044fc1fedff8d505b6d5
+      offer_revision_digest: sha256:1c869e895b18ac48b92bcc4b4c088d2eff85e0e933efc793b664e8784508438e
+    entrypoints:
+      - entrypoint_id: discovery
+        role: discovery
+        uri: https://cloud.google.com/startup
+      - entrypoint_id: terms
+        role: terms
+        uri: https://cloud.google.com/terms/startup-program-tos
+      - entrypoint_id: eligibility
+        role: eligibility
+        uri: https://cloud.google.com/startup/faq?hl=en
+      - entrypoint_id: pricing
+        role: pricing
+        uri: https://cloud.google.com/startup/benefits?hl=en
+      - entrypoint_id: sign-up
+        role: sign_up
+        uri: https://cloud.google.com/startup/apply
+      - entrypoint_id: operations
+        role: operations
+        uri: https://cloud.google.com/startup/perks
+      - entrypoint_id: recovery
+        role: recovery
+        uri: https://docs.cloud.google.com/support/docs
+    interfaces: []
+    source_ids:
+      - source_google_startup_program
+      - source_google_startup_terms
+      - source_google_startup_benefits
+      - source_google_startup_faq
+      - source_google_startup_application
+      - source_google_startup_operations
+      - source_google_cloud_support
+    authority_intent: community
+    declared_at: 2026-08-05T22:31:07.000Z
+    assessment_reason: Assess whether an agent can discover, apply for, receive, use, and recover Google Cloud Start tier credits through the direct public funnel.

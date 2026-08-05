@@ -1,0 +1,83 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8fpe3n3yye39kmzvy410z
+  slug: microsoft
+  slug_aliases: []
+  name: Microsoft
+  domains:
+    - value: microsoft.com
+      role: primary
+      valid_from: 2026-07-27T07:41:47.020Z
+  category: hosting-infra
+  description: Microsoft provides cloud services, AI platforms, and developer tools to help startups build, scale, and sell enterprise-grade solutions.
+  links:
+    site: https://www.microsoft.com/en-us/startups
+    pricing: https://azure.microsoft.com/en-us/pricing/
+  sources:
+    - source_id: source_microsoft_startups
+      url: https://www.microsoft.com/en-us/startups
+    - source_id: source_microsoft_startups_overview
+      url: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/overview
+    - source_id: source_microsoft_startups_application_guide
+      url: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/application
+    - source_id: source_microsoft_startups_application
+      url: https://portal.startups.microsoft.com/signup
+    - source_id: source_microsoft_startups_activation
+      url: https://learn.microsoft.com/en-us/startups/build/azure-getting-started/activate
+    - source_id: source_microsoft_startups_operations
+      url: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-page
+    - source_id: source_microsoft_startups_support
+      url: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-support
+    - source_id: source_azure_pricing
+      url: https://azure.microsoft.com/en-us/pricing/
+declarations:
+  - declaration_id: declaration_microsoft_startups_application
+    scope:
+      product:
+        key: microsoft-for-startups
+        name: Microsoft for Startups
+      funnel:
+        key: direct-application
+        name: Direct application
+      offer_id: off_01kyh8fpe3y9qhtr0stf4myyrq
+    base:
+      entity_revision_digest: sha256:a569131c2422a72436aea7d8dfa1b846f87a3500dbc533c3ea06bfd806a27e2f
+      offer_revision_digest: sha256:df159489b9a2dad09aede7d628ceded5983568e799ed694f8d1f4b772a89ecf8
+    entrypoints:
+      - entrypoint_id: discovery
+        role: discovery
+        uri: https://www.microsoft.com/en-us/startups
+      - entrypoint_id: terms
+        role: terms
+        uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/overview
+      - entrypoint_id: eligibility
+        role: eligibility
+        uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/application
+      - entrypoint_id: pricing
+        role: pricing
+        uri: https://azure.microsoft.com/en-us/pricing/
+      - entrypoint_id: sign-up
+        role: sign_up
+        uri: https://portal.startups.microsoft.com/signup
+      - entrypoint_id: provisioning
+        role: provisioning
+        uri: https://learn.microsoft.com/en-us/startups/build/azure-getting-started/activate
+      - entrypoint_id: operations
+        role: operations
+        uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-page
+      - entrypoint_id: recovery
+        role: recovery
+        uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-support
+    interfaces: []
+    source_ids:
+      - source_microsoft_startups
+      - source_microsoft_startups_overview
+      - source_microsoft_startups_application_guide
+      - source_microsoft_startups_application
+      - source_microsoft_startups_activation
+      - source_microsoft_startups_operations
+      - source_microsoft_startups_support
+      - source_azure_pricing
+    authority_intent: community
+    declared_at: 2026-08-05T22:31:07.000Z
+    assessment_reason: Assess whether an agent can discover, apply for, receive, use, and recover Microsoft for Startups credits through the direct public funnel.

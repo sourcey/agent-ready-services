@@ -1,0 +1,77 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8fpe10b164tj935t8k5zb
+  slug: aws
+  slug_aliases: []
+  name: AWS
+  domains:
+    - value: aws.amazon.com
+      role: primary
+      valid_from: 2026-07-27T07:35:36.165Z
+  category: hosting-infra
+  description: Amazon Web Services provides cloud infrastructure, data services, and AI/ML tools to help startups build and scale.
+  links:
+    site: https://aws.amazon.com/startups/
+    pricing: https://aws.amazon.com/pricing/
+  sources:
+    - source_id: source_aws_activate_credits
+      url: https://aws.amazon.com/startups/credits/?lang=en-US
+    - source_id: source_aws_activate_application_guide
+      url: https://aws.amazon.com/aws-startups/learn/applying-for-aws-activate-credits-a-step-by-step-guide/?lang=en-US
+    - source_id: source_aws_activate_application
+      url: https://startups.aws.com/join?destination=%2Fcredits%2Fapply
+    - source_id: source_aws_credit_terms
+      url: https://aws.amazon.com/awscredits/
+    - source_id: source_aws_pricing
+      url: https://aws.amazon.com/pricing/
+    - source_id: source_aws_credit_operations
+      url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-credits.html
+    - source_id: source_aws_sign_in_recovery
+      url: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
+declarations:
+  - declaration_id: declaration_aws_activate_founders_application
+    scope:
+      product:
+        key: aws-activate
+        name: AWS Activate
+      funnel:
+        key: founders-credit-application
+        name: Founders credit application
+      offer_id: off_01kz5x2kqcj2pfkaqpdwx0ywsd
+    base:
+      entity_revision_digest: sha256:dca08f2f9410a83d7a9baaeb4e32f36a3828dadb9cf563a07ff5c25fb9f5d236
+      offer_revision_digest: sha256:b2bd4ac710053935b867ae768a62b487c79c83c3351e06dded6b11e1ad11eeec
+    entrypoints:
+      - entrypoint_id: discovery
+        role: discovery
+        uri: https://aws.amazon.com/startups/credits/?lang=en-US
+      - entrypoint_id: terms
+        role: terms
+        uri: https://aws.amazon.com/awscredits/
+      - entrypoint_id: eligibility
+        role: eligibility
+        uri: https://aws.amazon.com/aws-startups/learn/applying-for-aws-activate-credits-a-step-by-step-guide/?lang=en-US
+      - entrypoint_id: pricing
+        role: pricing
+        uri: https://aws.amazon.com/pricing/
+      - entrypoint_id: sign-up
+        role: sign_up
+        uri: https://startups.aws.com/join?destination=%2Fcredits%2Fapply
+      - entrypoint_id: operations
+        role: operations
+        uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-credits.html
+      - entrypoint_id: recovery
+        role: recovery
+        uri: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
+    interfaces: []
+    source_ids:
+      - source_aws_activate_credits
+      - source_aws_activate_application_guide
+      - source_aws_activate_application
+      - source_aws_credit_terms
+      - source_aws_pricing
+      - source_aws_credit_operations
+      - source_aws_sign_in_recovery
+    authority_intent: community
+    declared_at: 2026-08-05T22:31:07.000Z
+    assessment_reason: Assess whether an agent can discover, apply for, receive, use, and recover AWS Activate Founders credits through the direct public funnel.
