@@ -115,10 +115,10 @@ admitted evidence and policy.
 git commit --signoff -m "data(readiness): declare acme db self-serve funnel"
 ```
 
-The public `validate` check parses only changed vendor blobs using the exact
+The public `sourcey/validation` status parses only changed vendor blobs using the exact
 digest-pinned Sourcey Catalog Verifier and confirms their identity-derived
 paths and dependency closure. It does not execute pull-request code. A green
-check proves declaration shape, not readiness.
+status proves declaration shape, not readiness.
 
 For an exact local preflight from a checkout with `origin/main` fetched:
 

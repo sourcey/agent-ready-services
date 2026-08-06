@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 concurrency:
   group: validate-${{ github.event.pull_request.number }}
@@ -86,3 +87,17 @@ jobs:
             printf 'Commits missing Signed-off-by certification:\n%s\n' "${missing[*]}" >&2
             exit 1
           fi
+      - name: Publish the exact Sourcey validation result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REVISION: ${{ github.event.pull_request.head.sha }}
+          VALIDATION_STATE: ${{ job.status == 'success' && 'success' || 'failure' }}
+          VALIDATION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh api --method POST \
+            "repos/${GITHUB_REPOSITORY}/statuses/${HEAD_REVISION}" \
+            -f state="$VALIDATION_STATE" \
+            -f context=sourcey/validation \
+            -f description="Sourcey changed-closure validation ${VALIDATION_STATE}" \
+            -f target_url="$VALIDATION_URL"

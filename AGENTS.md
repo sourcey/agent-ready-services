@@ -27,3 +27,9 @@ an assessment trigger and evidence source, never proof that a service is ready.
 Git merge activates an exact admitted Git declaration. Authenticated forms and
 governed operator skills may use the same Catalog-owned proposal/admission lane
 without a synthetic pull request or any executable code here.
+
+The public `sourcey/validation` status must start automatically for every
+opened or updated declaration pull request. It runs this repository's exact
+digest-pinned changed-closure verifier and DCO check without executing
+pull-request code. `sourcey/admission` remains Sourcey's separate private
+evidence gate.
