@@ -28,6 +28,14 @@ vendor:
       url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-credits.html
     - source_id: source_aws_sign_in_recovery
       url: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
+    - source_id: source_aws_builder_id_creation
+      url: https://docs.aws.amazon.com/signin/latest/userguide/create-builder-id.html
+    - source_id: source_aws_account_creation
+      url: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
+    - source_id: source_aws_activate_service_authorization
+      url: https://docs.aws.amazon.com/service-authorization/latest/reference/list_activate.html
+    - source_id: source_aws_billing_get_credits_api
+      url: https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_billing_GetCredits.html
 declarations:
   - declaration_id: declaration_aws_activate_founders_application
     scope:
@@ -57,13 +65,33 @@ declarations:
       - entrypoint_id: sign-up
         role: sign_up
         uri: https://startups.aws.com/join?destination=%2Fcredits%2Fapply
+      - entrypoint_id: builder-id-sign-up
+        role: sign_up
+        uri: https://docs.aws.amazon.com/signin/latest/userguide/create-builder-id.html
+      - entrypoint_id: aws-account-sign-up
+        role: sign_up
+        uri: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
       - entrypoint_id: operations
         role: operations
         uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-credits.html
+      - entrypoint_id: activate-api
+        role: operations
+        uri: https://docs.aws.amazon.com/service-authorization/latest/reference/list_activate.html
+      - entrypoint_id: credits-api
+        role: operations
+        uri: https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_billing_GetCredits.html
       - entrypoint_id: recovery
         role: recovery
         uri: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
-    interfaces: []
+    interfaces:
+      - interface_id: activate-api
+        role: api
+        uri: https://docs.aws.amazon.com/service-authorization/latest/reference/list_activate.html
+        standards: []
+      - interface_id: billing-credits-api
+        role: api
+        uri: https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_billing_GetCredits.html
+        standards: []
     source_ids:
       - source_aws_activate_credits
       - source_aws_activate_application_guide
@@ -72,6 +100,10 @@ declarations:
       - source_aws_pricing
       - source_aws_credit_operations
       - source_aws_sign_in_recovery
+      - source_aws_builder_id_creation
+      - source_aws_account_creation
+      - source_aws_activate_service_authorization
+      - source_aws_billing_get_credits_api
     authority_intent: community
-    declared_at: 2026-08-05T22:31:07.000Z
+    declared_at: 2026-08-06T02:55:01.943Z
     assessment_reason: Assess whether an agent can discover, apply for, receive, use, and recover AWS Activate Founders credits through the direct public funnel.
