@@ -8,9 +8,9 @@ certification, or current Report Card.
 
 1. Search the open issues and pull requests for the vendor and product funnel.
 2. Open an [assessment request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml).
-3. Sourcey will confirm or allocate the stable `entity_id`, any related
-   `offer_id`, and the exact base revision digest(s). Startup Offers and Agent
-   Readiness use the same vendor identity; do not invent or reuse IDs.
+3. Sourcey will confirm the stable `entity_id` and any exact related `offer_id`.
+   Startup Offers and Agent Readiness use the same Entity authority, but remain
+   separate catalogs. Do not invent or reuse IDs.
 4. Use `authority_intent: vendor` only when Sourcey has proven control of the
    vendor domain. Otherwise use `community`.
 
@@ -58,55 +58,98 @@ declarations:
       funnel:
         key: self-serve
         name: Self-serve signup
-      offer_id: off_01k00000000000000000000001
-    base:
-      entity_revision_digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-      offer_revision_digest: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-    entrypoints:
-      - entrypoint_id: pricing
-        role: pricing
-        uri: https://acme.example/pricing
-      - entrypoint_id: signup
-        role: sign_up
-        uri: https://acme.example/signup
-      - entrypoint_id: operations
-        role: operations
+    participants:
+      - participant_id: acme
+        roles: [subject, access_operator, operations_provider]
+        identity:
+          entity_id: ent_01k00000000000000000000001
+    resources:
+      - resource_id: documentation
         uri: https://acme.example/docs
-    ard:
-      specification_version: "1"
-      catalog_url: https://acme.example/.well-known/ai-catalog.json
-      publisher_domain: acme.example
-      resource_ids:
-        - acme-db
+        roles: [discovery, pricing, documentation, operations]
+        operated_by_participant_id: acme
+        standard_bindings: []
+      - resource_id: signup
+        uri: https://acme.example/signup
+        roles: [sign_up]
+        operated_by_participant_id: acme
+        standard_bindings: []
+    endpoints: []
     interfaces:
       - interface_id: public-api
-        role: api
-        uri: https://acme.example/openapi.json
-        standards:
-          - namespace: openapi
-            version: 3.1.1
-            requirement_id: document
-            relation: implements
-    source_ids:
-      - source_acme_docs
-      - source_acme_signup
+        capabilities: [api]
+        endpoint_ids: []
+        resource_ids: [documentation]
+        operated_by_participant_id: acme
+        standard_bindings: []
+    relations:
+      - relation_id: docs-precede-signup
+        kind: precedes
+        from: { node_kind: resource, node_id: documentation }
+        to: { node_kind: resource, node_id: signup }
+    offer_relations:
+      - offer_relation_proposal_id: acme-db-self-serve-offer
+        offer_id: off_01k00000000000000000000001
+        purpose: application_path
+        applicable_stages: [evaluate, sign_up, pay, provision, operate]
+    source_bindings:
+      - source_binding_id: acme-declaration-scope
+        source_id: source_acme_docs
+        target: { node_kind: declaration, node_id: declaration_acme_db_self_serve }
+        field_paths: [/scope/product/name, /scope/funnel/name]
+      - source_binding_id: acme-participant
+        source_id: source_acme_docs
+        target: { node_kind: participant, node_id: acme }
+        field_paths: [/roles, /identity]
+      - source_binding_id: acme-resource-documentation
+        source_id: source_acme_docs
+        target: { node_kind: resource, node_id: documentation }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: acme-resource-signup
+        source_id: source_acme_signup
+        target: { node_kind: resource, node_id: signup }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: acme-interface-public-api
+        source_id: source_acme_docs
+        target: { node_kind: interface, node_id: public-api }
+        field_paths: [/capabilities, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: acme-relation-docs-signup
+        source_id: source_acme_signup
+        target: { node_kind: relation, node_id: docs-precede-signup }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: acme-offer-relation
+        source_id: source_acme_signup
+        target: { node_kind: offer_relation, node_id: acme-db-self-serve-offer }
+        field_paths: [/offer_id, /purpose, /applicable_stages]
     authority_intent: community
     declared_at: 2026-08-05T00:00:00.000Z
     assessment_reason: Assess whether an agent can evaluate, sign up for, provision, and operate Acme DB through the self-serve funnel.
 ```
 
-Omit `offer_id` and `offer_revision_digest` together when the funnel does not
-concern a Sourcey Catalog Offer. ARD and interface blocks are optional. Do not
-add a field for a presumed result such as “ready,” “blocked,” “CAPTCHA,” a
-stage outcome, an overall grade, or a remediation. Those are derived only from
+Resources are retrievable documents or pages. Endpoints are callable network
+locations. Interfaces are logical surfaces that reference those normalized
+resources and endpoints. A URI appears only once in its node kind and carries
+all applicable roles.
+
+`standard_bindings` declare an exact standard and version implemented,
+described, or used by a node. They do not contain Sourcey stages, signals, or
+results. `source_bindings` name the exact public source supporting each material
+authored field.
+
+Offer relationships are separate from profile identity. Add an
+`offer_relations` entry only when Sourcey confirmed the exact Offer. Omit the
+entry for a readiness-only funnel; never create a synthetic Offer. Do not add a
+field for a presumed result such as “ready,” “blocked,” “CAPTCHA,” a stage
+outcome, an overall grade, or a remediation. Those are derived only from
 admitted evidence and policy.
 
 ## Pull request rules
 
 - Keep vendor YAML changes separate from documentation and workflow changes.
-- Every URL must be public HTTPS material for the declared vendor or funnel.
-- Keep stable IDs stable and update base digests when the underlying Entity or
-  Offer revision changes.
+- Every source, resource, and endpoint URL must be public HTTPS material for
+  the declared vendor or funnel.
+- Keep stable declaration and graph IDs stable.
+- Bind every material authored field to at least one exact source.
 - Use real names in ordinary language; do not keyword-stuff fields.
 - Sign every commit under the
   [Developer Certificate of Origin](https://developercertificate.org/).

@@ -20,8 +20,8 @@ pay when required, receive access, and operate it successfully?
 
 This repository is the open contribution front door for answering that
 question. Each vendor file declares one real vendor and one or more exact
-product funnels, their public entrypoints, and any relevant API, MCP, A2A,
-authentication, commerce, or recovery interfaces.
+product funnels, their public resources, callable endpoints, actors, and any
+relevant API, MCP, A2A, authentication, commerce, or recovery interfaces.
 
 Sourcey assesses those declarations independently. The resulting
 [Agent Readiness Report Card](https://sourcey.com/agent-readiness) belongs to
@@ -49,8 +49,9 @@ Only source declarations live here:
 
 - vendor identity and public sources;
 - an exact product and acquisition or operating funnel;
-- tested entrypoint candidates;
-- declared interfaces and standards references; and
+- declared participants, resources, endpoints, interfaces, and their relations;
+- exact standard/version bindings and field-level source bindings;
+- optional explicit relations to existing Sourcey Offers; and
 - a vendor or community request for independent assessment.
 
 This repository does **not** contain observations, screenshots, private
