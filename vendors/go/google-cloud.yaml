@@ -24,10 +24,16 @@ vendor:
       url: https://cloud.google.com/startup/faq?hl=en
     - source_id: source_google_startup_application
       url: https://cloud.google.com/startup/apply
-    - source_id: source_google_startup_operations
-      url: https://cloud.google.com/startup/perks
+    - source_id: source_google_startup_onboarding
+      url: https://cloud.google.com/startup/onboarding
+    - source_id: source_google_billing_credits
+      url: https://cloud.google.com/billing/docs/how-to/resolve-issues
     - source_id: source_google_cloud_support
       url: https://docs.cloud.google.com/support/docs
+    - source_id: source_google_openid_reference
+      url: https://developers.google.com/identity/openid-connect/reference
+    - source_id: source_google_openid_discovery
+      url: https://accounts.google.com/.well-known/openid-configuration
 declarations:
   - declaration_id: declaration_google_cloud_start_application
     scope:
@@ -39,7 +45,7 @@ declarations:
         name: Start tier application
     participants:
       - participant_id: google-cloud
-        roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider]
+        roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
         identity:
           entity_id: ent_01kyh8fpe210m3jqn5xgzztgv8
     resources:
@@ -68,27 +74,101 @@ declarations:
         roles: [sign_up]
         operated_by_participant_id: google-cloud
         standard_bindings: []
-      - resource_id: operations
-        uri: https://cloud.google.com/startup/perks
-        roles: [operations]
+      - resource_id: onboarding
+        uri: https://cloud.google.com/startup/onboarding
+        roles: [sign_up, checkout, provisioning, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
+      - resource_id: operations
+        uri: https://cloud.google.com/billing/docs/how-to/resolve-issues
+        roles: [operations, status, documentation]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: identity-discovery
+        uri: https://accounts.google.com/.well-known/openid-configuration
+        roles: [descriptor]
+        operated_by_participant_id: google-cloud
+        standard_bindings:
+          - namespace: openid-connect-discovery
+            version: "1.0"
+            relation: implements
       - resource_id: recovery
         uri: https://docs.cloud.google.com/support/docs
         roles: [recovery, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
-    endpoints: []
-    interfaces: []
+    endpoints:
+      - endpoint_id: identity-authorization
+        uri: https://accounts.google.com/o/oauth2/v2/auth
+        transport: http
+        roles: [authorization]
+        operated_by_participant_id: google-cloud
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: implements
+          - namespace: openid-connect
+            version: "1.0"
+            relation: implements
+      - endpoint_id: identity-token
+        uri: https://oauth2.googleapis.com/token
+        transport: http
+        roles: [token]
+        operated_by_participant_id: google-cloud
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: implements
+          - namespace: openid-connect
+            version: "1.0"
+            relation: implements
+      - endpoint_id: billing-credits-console
+        uri: https://console.cloud.google.com/billing/credits
+        transport: http
+        roles: [protected_resource, status]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+    interfaces:
+      - interface_id: google-identity
+        capabilities: [authentication]
+        endpoint_ids: [identity-authorization, identity-token]
+        resource_ids: [identity-discovery]
+        operated_by_participant_id: google-cloud
+        standard_bindings:
+          - namespace: openid-connect
+            version: "1.0"
+            relation: implements
+      - interface_id: billing-credits
+        capabilities: [tools]
+        endpoint_ids: [billing-credits-console]
+        resource_ids: [operations]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
     relations:
       - relation_id: eligibility-precedes-application
         kind: precedes
         from: { node_kind: resource, node_id: eligibility }
         to: { node_kind: resource, node_id: application }
+      - relation_id: application-requires-onboarding
+        kind: requires
+        from: { node_kind: resource, node_id: application }
+        to: { node_kind: resource, node_id: onboarding }
       - relation_id: application-precedes-operations
         kind: precedes
         from: { node_kind: resource, node_id: application }
         to: { node_kind: resource, node_id: operations }
+      - relation_id: identity-discovery-describes-identity
+        kind: describes
+        from: { node_kind: resource, node_id: identity-discovery }
+        to: { node_kind: interface, node_id: google-identity }
+      - relation_id: identity-authenticates-billing-credits
+        kind: authenticates
+        from: { node_kind: interface, node_id: google-identity }
+        to: { node_kind: interface, node_id: billing-credits }
+      - relation_id: operations-describe-billing-credits
+        kind: describes
+        from: { node_kind: resource, node_id: operations }
+        to: { node_kind: interface, node_id: billing-credits }
     offer_relations:
       - offer_relation_proposal_id: google-cloud-start-application
         offer_id: off_01kyh8fpe26twnnyavn9r2fxx1
@@ -123,10 +203,18 @@ declarations:
         source_id: source_google_startup_application
         target: { node_kind: resource, node_id: application }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-onboarding
+        source_id: source_google_startup_onboarding
+        target: { node_kind: resource, node_id: onboarding }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: google-resource-operations
-        source_id: source_google_startup_operations
+        source_id: source_google_billing_credits
         target: { node_kind: resource, node_id: operations }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-identity-discovery
+        source_id: source_google_openid_discovery
+        target: { node_kind: resource, node_id: identity-discovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings]
       - source_binding_id: google-resource-recovery
         source_id: source_google_cloud_support
         target: { node_kind: resource, node_id: recovery }
@@ -135,9 +223,45 @@ declarations:
         source_id: source_google_startup_faq
         target: { node_kind: relation, node_id: eligibility-precedes-application }
         field_paths: [/kind, /from, /to]
+      - source_binding_id: google-relation-application-onboarding
+        source_id: source_google_startup_onboarding
+        target: { node_kind: relation, node_id: application-requires-onboarding }
+        field_paths: [/kind, /from, /to]
       - source_binding_id: google-relation-application-operations
-        source_id: source_google_startup_operations
+        source_id: source_google_billing_credits
         target: { node_kind: relation, node_id: application-precedes-operations }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: google-endpoint-identity-authorization
+        source_id: source_google_openid_reference
+        target: { node_kind: endpoint, node_id: identity-authorization }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: google-endpoint-identity-token
+        source_id: source_google_openid_reference
+        target: { node_kind: endpoint, node_id: identity-token }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: google-endpoint-billing-credits-console
+        source_id: source_google_billing_credits
+        target: { node_kind: endpoint, node_id: billing-credits-console }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
+      - source_binding_id: google-interface-identity
+        source_id: source_google_openid_reference
+        target: { node_kind: interface, node_id: google-identity }
+        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: google-interface-billing-credits
+        source_id: source_google_billing_credits
+        target: { node_kind: interface, node_id: billing-credits }
+        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: google-relation-identity-discovery
+        source_id: source_google_openid_reference
+        target: { node_kind: relation, node_id: identity-discovery-describes-identity }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: google-relation-identity-billing
+        source_id: source_google_openid_reference
+        target: { node_kind: relation, node_id: identity-authenticates-billing-credits }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: google-relation-operations-billing
+        source_id: source_google_billing_credits
+        target: { node_kind: relation, node_id: operations-describe-billing-credits }
         field_paths: [/kind, /from, /to]
       - source_binding_id: google-offer-relation
         source_id: source_google_startup_program

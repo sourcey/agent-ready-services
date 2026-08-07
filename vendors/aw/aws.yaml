@@ -36,6 +36,8 @@ vendor:
       url: https://docs.aws.amazon.com/service-authorization/latest/reference/list_activate.html
     - source_id: source_aws_billing_get_credits_api
       url: https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_billing_GetCredits.html
+    - source_id: source_aws_billing_api_endpoint
+      url: https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/Welcome.html
 declarations:
   - declaration_id: declaration_aws_activate_founders_application
     scope:
@@ -47,7 +49,7 @@ declarations:
         name: Founders credit application
     participants:
       - participant_id: aws
-        roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider]
+        roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
         identity:
           entity_id: ent_01kyh8fpe10b164tj935t8k5zb
     resources:
@@ -63,7 +65,7 @@ declarations:
         standard_bindings: []
       - resource_id: eligibility
         uri: https://aws.amazon.com/aws-startups/learn/applying-for-aws-activate-credits-a-step-by-step-guide/?lang=en-US
-        roles: [eligibility, documentation]
+        roles: [eligibility, status, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: pricing
@@ -83,12 +85,12 @@ declarations:
         standard_bindings: []
       - resource_id: aws-account-sign-up
         uri: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
-        roles: [sign_up, documentation]
+        roles: [sign_up, checkout, provisioning, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: credit-operations
         uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-credits.html
-        roles: [operations, documentation]
+        roles: [operations, status, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: activate-api-documentation
@@ -106,7 +108,13 @@ declarations:
         roles: [recovery, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
-    endpoints: []
+    endpoints:
+      - endpoint_id: billing-api
+        uri: https://billing.us-east-1.api.aws
+        transport: http
+        roles: [service, status]
+        operated_by_participant_id: aws
+        standard_bindings: []
     interfaces:
       - interface_id: activate-api
         capabilities: [api]
@@ -116,7 +124,7 @@ declarations:
         standard_bindings: []
       - interface_id: billing-credits-api
         capabilities: [api]
-        endpoint_ids: []
+        endpoint_ids: [billing-api]
         resource_ids: [billing-credits-api-documentation]
         operated_by_participant_id: aws
         standard_bindings: []
@@ -125,6 +133,14 @@ declarations:
         kind: precedes
         from: { node_kind: resource, node_id: eligibility }
         to: { node_kind: resource, node_id: application }
+      - relation_id: application-requires-builder-id
+        kind: requires
+        from: { node_kind: resource, node_id: application }
+        to: { node_kind: resource, node_id: builder-id-sign-up }
+      - relation_id: application-requires-aws-account
+        kind: requires
+        from: { node_kind: resource, node_id: application }
+        to: { node_kind: resource, node_id: aws-account-sign-up }
       - relation_id: application-precedes-credit-operations
         kind: precedes
         from: { node_kind: resource, node_id: application }
@@ -202,10 +218,22 @@ declarations:
       - source_binding_id: aws-interface-billing-credits-api
         source_id: source_aws_billing_get_credits_api
         target: { node_kind: interface, node_id: billing-credits-api }
-        field_paths: [/capabilities, /resource_ids, /operated_by_participant_id]
+        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: aws-endpoint-billing-api
+        source_id: source_aws_billing_api_endpoint
+        target: { node_kind: endpoint, node_id: billing-api }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
       - source_binding_id: aws-relation-eligibility-application
         source_id: source_aws_activate_application_guide
         target: { node_kind: relation, node_id: eligibility-precedes-application }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: aws-relation-application-builder-id
+        source_id: source_aws_activate_application_guide
+        target: { node_kind: relation, node_id: application-requires-builder-id }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: aws-relation-application-account
+        source_id: source_aws_activate_application_guide
+        target: { node_kind: relation, node_id: application-requires-aws-account }
         field_paths: [/kind, /from, /to]
       - source_binding_id: aws-relation-application-operations
         source_id: source_aws_credit_operations

@@ -30,6 +30,10 @@ vendor:
       url: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-support
     - source_id: source_azure_pricing
       url: https://azure.microsoft.com/en-us/pricing/
+    - source_id: source_microsoft_identity_openid
+      url: https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc
+    - source_id: source_microsoft_identity_discovery
+      url: https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
 declarations:
   - declaration_id: declaration_microsoft_startups_application
     scope:
@@ -41,7 +45,7 @@ declarations:
         name: Direct application
     participants:
       - participant_id: microsoft
-        roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider]
+        roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
         identity:
           entity_id: ent_01kyh8fpe3n3yye39kmzvy410z
     resources:
@@ -57,7 +61,7 @@ declarations:
         standard_bindings: []
       - resource_id: eligibility
         uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/application
-        roles: [eligibility, documentation]
+        roles: [eligibility, sign_up, checkout, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: pricing
@@ -72,12 +76,12 @@ declarations:
         standard_bindings: []
       - resource_id: activation
         uri: https://learn.microsoft.com/en-us/startups/build/azure-getting-started/activate
-        roles: [provisioning, documentation]
+        roles: [provisioning, status, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: operations
         uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-page
-        roles: [operations, documentation]
+        roles: [operations, status, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: recovery
@@ -85,13 +89,67 @@ declarations:
         roles: [recovery, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
-    endpoints: []
-    interfaces: []
+      - resource_id: identity-discovery
+        uri: https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration
+        roles: [descriptor]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: openid-connect-discovery
+            version: "1.0"
+            relation: implements
+    endpoints:
+      - endpoint_id: identity-authorization
+        uri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+        transport: http
+        roles: [authorization]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: implements
+          - namespace: openid-connect
+            version: "1.0"
+            relation: implements
+      - endpoint_id: identity-token
+        uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+        transport: http
+        roles: [token]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: implements
+          - namespace: openid-connect
+            version: "1.0"
+            relation: implements
+      - endpoint_id: identity-userinfo
+        uri: https://graph.microsoft.com/oidc/userinfo
+        transport: http
+        roles: [protected_resource]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: openid-connect
+            version: "1.0"
+            relation: implements
+    interfaces:
+      - interface_id: microsoft-identity
+        capabilities: [authentication]
+        endpoint_ids: [identity-authorization, identity-token, identity-userinfo]
+        resource_ids: [identity-discovery]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: openid-connect
+            version: "1.0"
+            relation: implements
     relations:
       - relation_id: eligibility-precedes-application
         kind: precedes
         from: { node_kind: resource, node_id: eligibility }
         to: { node_kind: resource, node_id: application }
+      - relation_id: application-requires-identity
+        kind: requires
+        from: { node_kind: resource, node_id: application }
+        to: { node_kind: interface, node_id: microsoft-identity }
       - relation_id: application-precedes-activation
         kind: precedes
         from: { node_kind: resource, node_id: application }
@@ -100,6 +158,10 @@ declarations:
         kind: precedes
         from: { node_kind: resource, node_id: activation }
         to: { node_kind: resource, node_id: operations }
+      - relation_id: identity-discovery-describes-identity
+        kind: describes
+        from: { node_kind: resource, node_id: identity-discovery }
+        to: { node_kind: interface, node_id: microsoft-identity }
     offer_relations:
       - offer_relation_proposal_id: microsoft-startups-application
         offer_id: off_01kyh8fpe3y9qhtr0stf4myyrq
@@ -146,9 +208,33 @@ declarations:
         source_id: source_microsoft_startups_support
         target: { node_kind: resource, node_id: recovery }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-identity-discovery
+        source_id: source_microsoft_identity_discovery
+        target: { node_kind: resource, node_id: identity-discovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-endpoint-identity-authorization
+        source_id: source_microsoft_identity_openid
+        target: { node_kind: endpoint, node_id: identity-authorization }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-endpoint-identity-token
+        source_id: source_microsoft_identity_openid
+        target: { node_kind: endpoint, node_id: identity-token }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-endpoint-identity-userinfo
+        source_id: source_microsoft_identity_openid
+        target: { node_kind: endpoint, node_id: identity-userinfo }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-interface-identity
+        source_id: source_microsoft_identity_openid
+        target: { node_kind: interface, node_id: microsoft-identity }
+        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
       - source_binding_id: microsoft-relation-eligibility-application
         source_id: source_microsoft_startups_application_guide
         target: { node_kind: relation, node_id: eligibility-precedes-application }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-application-identity
+        source_id: source_microsoft_startups_application_guide
+        target: { node_kind: relation, node_id: application-requires-identity }
         field_paths: [/kind, /from, /to]
       - source_binding_id: microsoft-relation-application-activation
         source_id: source_microsoft_startups_activation
@@ -157,6 +243,10 @@ declarations:
       - source_binding_id: microsoft-relation-activation-operations
         source_id: source_microsoft_startups_operations
         target: { node_kind: relation, node_id: activation-precedes-operations }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-identity-discovery
+        source_id: source_microsoft_identity_openid
+        target: { node_kind: relation, node_id: identity-discovery-describes-identity }
         field_paths: [/kind, /from, /to]
       - source_binding_id: microsoft-offer-relation
         source_id: source_microsoft_startups
