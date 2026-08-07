@@ -25,7 +25,7 @@ vendor:
     - source_id: source_anthropic_pricing
       url: https://platform.claude.com/docs/en/about-claude/pricing
     - source_id: source_anthropic_console
-      url: https://platform.claude.com/settings/keys
+      url: https://platform.claude.com/login?returnTo=%2Fsettings%2Fkeys
     - source_id: source_anthropic_terms
       url: https://www.anthropic.com/legal/commercial-terms
     - source_id: source_anthropic_support
@@ -56,7 +56,7 @@ declarations:
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: console-access
-        uri: https://platform.claude.com/settings/keys
+        uri: https://platform.claude.com/login?returnTo=%2Fsettings%2Fkeys
         roles: [sign_up, checkout, provisioning]
         operated_by_participant_id: anthropic
         standard_bindings: []

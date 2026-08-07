@@ -11,8 +11,8 @@ vendor:
   links: { site: https://github.com, pricing: https://github.com/pricing }
   sources:
     - { source_id: source_github_rest, url: https://docs.github.com/en/rest }
-    - { source_id: source_github_auth, url: https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api }
-    - { source_id: source_github_repositories, url: https://docs.github.com/en/rest/repos/repos }
+    - { source_id: source_github_auth, url: "https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10" }
+    - { source_id: source_github_repositories, url: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10" }
     - { source_id: source_github_limits, url: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api }
     - { source_id: source_github_errors, url: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api }
     - { source_id: source_github_pricing, url: https://github.com/pricing }
@@ -31,8 +31,8 @@ declarations:
       - { resource_id: service-terms, uri: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service, roles: [terms], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: pricing, uri: https://github.com/pricing, roles: [pricing], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://github.com/signup, roles: [sign_up, checkout, provisioning], operated_by_participant_id: github, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api, roles: [descriptor, provisioning, documentation], operated_by_participant_id: github, standard_bindings: [] }
-      - { resource_id: repository-operations, uri: https://docs.github.com/en/rest/repos/repos, roles: [provisioning, status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: authentication, uri: "https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10", roles: [descriptor, provisioning, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: repository-operations, uri: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10", roles: [provisioning, status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api, roles: [status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: troubleshooting, uri: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api, roles: [status, operations, recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: support, uri: https://support.github.com/, roles: [recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }

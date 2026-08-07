@@ -12,7 +12,7 @@ vendor:
   sources:
     - { source_id: source_mongodb_atlas_api, url: https://www.mongodb.com/docs/atlas/api/atlas-admin-api-ref/ }
     - { source_id: source_mongodb_auth, url: https://www.mongodb.com/docs/atlas/api/api-authentication/ }
-    - { source_id: source_mongodb_clusters, url: https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/ }
+    - { source_id: source_mongodb_clusters, url: https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2 }
     - { source_id: source_mongodb_limits, url: https://www.mongodb.com/docs/atlas/api/api-rate-limit/ }
     - { source_id: source_mongodb_errors, url: https://www.mongodb.com/docs/atlas/reference/api-errors/ }
     - { source_id: source_mongodb_pricing, url: https://www.mongodb.com/pricing }
@@ -32,7 +32,7 @@ declarations:
       - { resource_id: pricing, uri: https://www.mongodb.com/pricing, roles: [pricing], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://account.mongodb.com/account/register, roles: [sign_up, checkout, provisioning], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: authentication, uri: https://www.mongodb.com/docs/atlas/api/api-authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
-      - { resource_id: cluster-operations, uri: https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: cluster-operations, uri: https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2, roles: [provisioning, status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://www.mongodb.com/docs/atlas/api/api-rate-limit/, roles: [status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://www.mongodb.com/docs/atlas/reference/api-errors/, roles: [status, operations, recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: support, uri: https://www.mongodb.com/docs/atlas/support/, roles: [recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
