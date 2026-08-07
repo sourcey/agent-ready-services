@@ -10,7 +10,7 @@ vendor:
   description: Cloudflare offers a developer platform and global network providing security, compute, storage, and performance services to build fast and secure applications.
   links: { site: https://www.cloudflare.com, pricing: https://www.cloudflare.com/plans/ }
   sources:
-    - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/ }
+    - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/resources/accounts/methods/list/ }
     - { source_id: source_cloudflare_tokens, url: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ }
     - { source_id: source_cloudflare_errors, url: https://developers.cloudflare.com/fundamentals/api/troubleshooting/ }
     - { source_id: source_cloudflare_limits, url: https://developers.cloudflare.com/fundamentals/api/reference/limits/ }
@@ -26,7 +26,7 @@ declarations:
     participants:
       - { participant_id: cloudflare, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
-      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/, roles: [discovery, provisioning, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/resources/accounts/methods/list/, roles: [discovery, provisioning, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [sign_up, checkout, provisioning], operated_by_participant_id: cloudflare, standard_bindings: [] }

@@ -9,9 +9,9 @@ vendor:
       role: primary
       valid_from: 2026-07-27T07:35:36.165Z
   category: hosting-infra
-  description: Amazon Web Services provides cloud infrastructure, data services, and AI/ML tools to help startups build and scale.
+  description: Amazon Web Services provides cloud infrastructure, data, security, and AI services through APIs and management tools.
   links:
-    site: https://aws.amazon.com/startups/
+    site: https://aws.amazon.com/
     pricing: https://aws.amazon.com/pricing/
   sources:
     - source_id: source_aws_cloud_control_overview

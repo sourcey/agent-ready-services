@@ -9,9 +9,9 @@ vendor:
       role: primary
       valid_from: 2026-07-27T07:41:47.020Z
   category: hosting-infra
-  description: Microsoft provides cloud services, AI platforms, and developer tools to help startups build, scale, and sell enterprise-grade solutions.
+  description: Microsoft Azure provides compute, data, networking, identity, and AI services through APIs and management tools.
   links:
-    site: https://www.microsoft.com/en-us/startups
+    site: https://azure.microsoft.com/
     pricing: https://azure.microsoft.com/en-us/pricing/
   sources:
     - source_id: source_azure_rest_api

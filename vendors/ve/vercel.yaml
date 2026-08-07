@@ -7,7 +7,7 @@ vendor:
   domains:
     - { value: vercel.com, role: primary, valid_from: 2026-07-27T07:35:15.230Z }
   category: hosting-infra
-  description: Vercel enables founders to deploy faster, scale globally, and ship world-class AI products.
+  description: Vercel provides deployment, hosting, compute, and delivery services through APIs, Git integrations, and management tools.
   links: { site: https://vercel.com, pricing: https://vercel.com/pricing }
   sources:
     - { source_id: source_vercel_api, url: https://vercel.com/docs/rest-api }

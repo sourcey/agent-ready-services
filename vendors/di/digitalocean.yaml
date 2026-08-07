@@ -7,8 +7,8 @@ vendor:
   domains:
     - { value: digitalocean.com, role: primary, valid_from: 2026-07-27T07:40:57.443Z }
   category: hosting-infra
-  description: DigitalOcean Startups is a global startup program providing cloud infrastructure credits, 15 months of free support, and technical guidance to help early-stage ventures scale.
-  links: { site: https://www.digitalocean.com/startups, pricing: https://www.digitalocean.com/pricing }
+  description: DigitalOcean provides virtual machines, managed databases, Kubernetes, storage, and networking through APIs and a cloud control panel.
+  links: { site: https://www.digitalocean.com/, pricing: https://www.digitalocean.com/pricing }
   sources:
     - { source_id: source_digitalocean_api, url: https://docs.digitalocean.com/reference/api/ }
     - { source_id: source_digitalocean_reference, url: https://docs.digitalocean.com/reference/api/reference/public-apis/ }

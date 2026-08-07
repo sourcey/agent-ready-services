@@ -9,15 +9,15 @@ vendor:
       role: primary
       valid_from: 2026-07-27T07:37:32.708Z
   category: ai-ml
-  description: OpenAI provides AI models and platform tools to support founders at every stage of building and scaling startups.
+  description: OpenAI provides AI models and platform capabilities through APIs for text, image, audio, tool, and agent workloads.
   links:
     site: https://openai.com
     pricing: https://openai.com/api/pricing/
   sources:
-    - { source_id: source_openai_api_reference, url: https://platform.openai.com/docs/api-reference/introduction }
-    - { source_id: source_openai_quickstart, url: https://platform.openai.com/docs/quickstart }
-    - { source_id: source_openai_errors, url: https://platform.openai.com/docs/guides/error-codes }
-    - { source_id: source_openai_rate_limits, url: https://platform.openai.com/docs/guides/rate-limits }
+    - { source_id: source_openai_api_reference, url: https://developers.openai.com/api/reference/overview }
+    - { source_id: source_openai_quickstart, url: https://developers.openai.com/api/docs/quickstart }
+    - { source_id: source_openai_errors, url: https://developers.openai.com/api/docs/guides/error-codes }
+    - { source_id: source_openai_rate_limits, url: https://developers.openai.com/api/docs/guides/rate-limits }
     - { source_id: source_openai_pricing, url: https://openai.com/api/pricing/ }
     - { source_id: source_openai_signup, url: https://platform.openai.com/signup }
     - { source_id: source_openai_terms, url: https://openai.com/policies/services-agreement/ }
@@ -32,13 +32,13 @@ declarations:
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
         identity: { entity_id: ent_01kyh8fpe4qj5yt6msnarsc8kz }
     resources:
-      - { resource_id: api-reference, uri: https://platform.openai.com/docs/api-reference/introduction, roles: [discovery, documentation, operations], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: api-reference, uri: https://developers.openai.com/api/reference/overview, roles: [discovery, documentation, operations], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://openai.com/policies/services-agreement/, roles: [terms], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: pricing, uri: https://openai.com/api/pricing/, roles: [pricing], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: platform-signup, uri: https://platform.openai.com/signup, roles: [sign_up, checkout, provisioning], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: quickstart, uri: https://platform.openai.com/docs/quickstart, roles: [descriptor, provisioning, documentation], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: api-errors, uri: https://platform.openai.com/docs/guides/error-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: rate-limits, uri: https://platform.openai.com/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: quickstart, uri: https://developers.openai.com/api/docs/quickstart, roles: [descriptor, provisioning, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://developers.openai.com/api/docs/guides/error-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: rate-limits, uri: https://developers.openai.com/api/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: billing-support, uri: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage, roles: [recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
     endpoints:
       - { endpoint_id: responses-api, uri: https://api.openai.com/v1/responses, transport: http, roles: [service], operated_by_participant_id: openai, standard_bindings: [] }

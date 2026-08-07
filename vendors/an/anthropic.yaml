@@ -9,23 +9,23 @@ vendor:
       role: primary
       valid_from: 2026-07-27T07:35:35.548Z
   category: ai-ml
-  description: Support your startup’s potential with access to resources, API credits, priority rate limits, and founder tools.
+  description: Anthropic provides Claude models through APIs for text generation, tool use, structured outputs, and multimodal workloads.
   links:
     site: https://claude.com
-    pricing: https://docs.anthropic.com/en/docs/about-claude/pricing
+    pricing: https://platform.claude.com/docs/en/about-claude/pricing
   sources:
     - source_id: source_anthropic_api_overview
-      url: https://docs.anthropic.com/en/api/overview
+      url: https://platform.claude.com/docs/en/cli-sdks-libraries/overview
     - source_id: source_anthropic_getting_started
-      url: https://docs.anthropic.com/en/api/getting-started
+      url: https://platform.claude.com/docs/en/api/overview
     - source_id: source_anthropic_errors
-      url: https://docs.anthropic.com/en/api/errors
+      url: https://platform.claude.com/docs/en/api/errors
     - source_id: source_anthropic_rate_limits
-      url: https://docs.anthropic.com/en/api/rate-limits
+      url: https://platform.claude.com/docs/en/api/rate-limits
     - source_id: source_anthropic_pricing
-      url: https://docs.anthropic.com/en/docs/about-claude/pricing
+      url: https://platform.claude.com/docs/en/about-claude/pricing
     - source_id: source_anthropic_console
-      url: https://console.anthropic.com/settings/keys
+      url: https://platform.claude.com/settings/keys
     - source_id: source_anthropic_terms
       url: https://www.anthropic.com/legal/commercial-terms
     - source_id: source_anthropic_support
@@ -41,7 +41,7 @@ declarations:
         identity: { entity_id: ent_01kyh8fpe15bvn8rdb84vmk85d }
     resources:
       - resource_id: api-overview
-        uri: https://docs.anthropic.com/en/api/overview
+        uri: https://platform.claude.com/docs/en/cli-sdks-libraries/overview
         roles: [discovery, documentation, operations]
         operated_by_participant_id: anthropic
         standard_bindings: []
@@ -51,27 +51,27 @@ declarations:
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: pricing
-        uri: https://docs.anthropic.com/en/docs/about-claude/pricing
+        uri: https://platform.claude.com/docs/en/about-claude/pricing
         roles: [pricing]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: console-access
-        uri: https://console.anthropic.com/settings/keys
+        uri: https://platform.claude.com/settings/keys
         roles: [sign_up, checkout, provisioning]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: authentication
-        uri: https://docs.anthropic.com/en/api/getting-started
+        uri: https://platform.claude.com/docs/en/api/overview
         roles: [descriptor, documentation]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: api-errors
-        uri: https://docs.anthropic.com/en/api/errors
+        uri: https://platform.claude.com/docs/en/api/errors
         roles: [status, operations, recovery, documentation]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: rate-limits
-        uri: https://docs.anthropic.com/en/api/rate-limits
+        uri: https://platform.claude.com/docs/en/api/rate-limits
         roles: [status, operations, documentation]
         operated_by_participant_id: anthropic
         standard_bindings: []

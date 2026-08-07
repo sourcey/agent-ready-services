@@ -7,7 +7,7 @@ vendor:
   domains:
     - { value: mongodb.com, role: primary, valid_from: 2026-07-27T07:41:47.670Z }
   category: databases
-  description: MongoDB for Startups offers free MongoDB Atlas credits, Voyage AI tokens, one-on-one technical advice, co-marketing opportunities, and access to our partner network.
+  description: MongoDB Atlas provides managed document databases, search, and data services through APIs and cloud management tools.
   links: { site: https://www.mongodb.com, pricing: https://www.mongodb.com/pricing }
   sources:
     - { source_id: source_mongodb_atlas_api, url: https://www.mongodb.com/docs/atlas/api/atlas-admin-api-ref/ }

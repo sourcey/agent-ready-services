@@ -7,8 +7,8 @@ vendor:
   domains:
     - { value: stripe.com, role: primary, valid_from: 2026-07-31T23:19:01.190Z }
   category: payments-fintech
-  description: Stripe provides payments and financial infrastructure to help venture-backed start-ups build, iterate, and scale faster.
-  links: { site: https://stripe.com/startups, pricing: https://stripe.com/pricing }
+  description: Stripe provides APIs for payments, billing, financial accounts, identity, tax, and commerce operations.
+  links: { site: https://stripe.com/, pricing: https://stripe.com/pricing }
   sources:
     - { source_id: source_stripe_api, url: https://docs.stripe.com/api }
     - { source_id: source_stripe_authentication, url: https://docs.stripe.com/api/authentication }

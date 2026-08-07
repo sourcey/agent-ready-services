@@ -7,7 +7,7 @@ vendor:
   domains:
     - { value: sentry.io, role: primary, valid_from: 2026-07-31T23:18:44.534Z }
   category: observability
-  description: Explore Sentry's startup program through our interactive terminal. Get up to $5,000 in credits and priority support.
+  description: Sentry provides application monitoring, error tracking, tracing, and debugging workflows through APIs and integrations.
   links: { site: https://sentry.io, pricing: https://sentry.io/pricing/ }
   sources:
     - { source_id: source_sentry_api, url: https://docs.sentry.io/api/ }

@@ -7,7 +7,7 @@ vendor:
   domains:
     - { value: resend.com, role: primary, valid_from: 2026-07-27T07:43:12.688Z }
   category: communication
-  description: Resend is designed from the ground up for startups.
+  description: Resend provides an email API for sending transactional messages, managing domains, and observing delivery.
   links: { site: https://resend.com, pricing: https://resend.com/pricing }
   sources:
     - { source_id: source_resend_api, url: https://resend.com/docs/api-reference/introduction }
