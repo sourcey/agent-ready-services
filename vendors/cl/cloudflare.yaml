@@ -1,0 +1,68 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8jtf535570d9z2bng6j1t
+  slug: cloudflare
+  slug_aliases: []
+  name: Cloudflare
+  domains:
+    - { value: cloudflare.com, role: primary, valid_from: 2026-07-27T07:45:12.619Z }
+  category: hosting-infra
+  description: Cloudflare offers a developer platform and global network providing security, compute, storage, and performance services to build fast and secure applications.
+  links: { site: https://www.cloudflare.com, pricing: https://www.cloudflare.com/plans/ }
+  sources:
+    - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/ }
+    - { source_id: source_cloudflare_tokens, url: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ }
+    - { source_id: source_cloudflare_errors, url: https://developers.cloudflare.com/fundamentals/api/troubleshooting/ }
+    - { source_id: source_cloudflare_limits, url: https://developers.cloudflare.com/fundamentals/api/reference/limits/ }
+    - { source_id: source_cloudflare_plans, url: https://www.cloudflare.com/plans/ }
+    - { source_id: source_cloudflare_signup, url: https://dash.cloudflare.com/sign-up }
+    - { source_id: source_cloudflare_terms, url: https://www.cloudflare.com/terms/ }
+    - { source_id: source_cloudflare_support, url: https://developers.cloudflare.com/support/ }
+declarations:
+  - declaration_id: declaration_cloudflare_api_resource_management
+    scope:
+      product: { key: cloudflare-developer-platform, name: Cloudflare Developer Platform }
+      funnel: { key: api-resource-management, name: API resource management }
+    participants:
+      - { participant_id: cloudflare, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
+    resources:
+      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/, roles: [discovery, provisioning, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [sign_up, checkout, provisioning], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-tokens, uri: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://developers.cloudflare.com/fundamentals/api/troubleshooting/, roles: [status, operations, recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-limits, uri: https://developers.cloudflare.com/fundamentals/api/reference/limits/, roles: [status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: support, uri: https://developers.cloudflare.com/support/, roles: [recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: cloudflare-api, uri: https://api.cloudflare.com/client/v4, transport: http, roles: [service, status], operated_by_participant_id: cloudflare, standard_bindings: [] }
+    interfaces:
+      - { interface_id: resource-api, capabilities: [api, tools], endpoint_ids: [cloudflare-api], resource_ids: [api-reference, api-errors, api-limits], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [api-tokens], operated_by_participant_id: cloudflare, standard_bindings: [] }
+    relations:
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: resource-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: resource-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: dashboard-signup }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: api-errors }, to: { node_kind: interface, node_id: resource-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: cloudflare-scope, source_id: source_cloudflare_api, target: { node_kind: declaration, node_id: declaration_cloudflare_api_resource_management }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: cloudflare-participant, source_id: source_cloudflare_api, target: { node_kind: participant, node_id: cloudflare }, field_paths: [/roles, /identity] }
+      - { source_binding_id: cloudflare-resource-reference, source_id: source_cloudflare_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-terms, source_id: source_cloudflare_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-plans, source_id: source_cloudflare_plans, target: { node_kind: resource, node_id: plans }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-signup, source_id: source_cloudflare_signup, target: { node_kind: resource, node_id: dashboard-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-tokens, source_id: source_cloudflare_tokens, target: { node_kind: resource, node_id: api-tokens }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-errors, source_id: source_cloudflare_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-limits, source_id: source_cloudflare_limits, target: { node_kind: resource, node_id: api-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-support, source_id: source_cloudflare_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-endpoint-api, source_id: source_cloudflare_api, target: { node_kind: endpoint, node_id: cloudflare-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-interface-api, source_id: source_cloudflare_api, target: { node_kind: interface, node_id: resource-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-interface-auth, source_id: source_cloudflare_tokens, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-relation-reference, source_id: source_cloudflare_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: cloudflare-relation-auth, source_id: source_cloudflare_tokens, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: cloudflare-relation-signup, source_id: source_cloudflare_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: cloudflare-relation-errors, source_id: source_cloudflare_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
+    assessment_reason: Assess whether an authorized agent can evaluate, access, provision, and operate Cloudflare resources through the public API while preserving human account and billing prerequisites as stage context.

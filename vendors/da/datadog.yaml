@@ -1,0 +1,68 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8fpe2hwmmvk3eex1hq433
+  slug: datadog
+  slug_aliases: []
+  name: Datadog
+  domains:
+    - { value: datadoghq.com, role: primary, valid_from: 2026-07-27T07:40:35.276Z }
+  category: observability
+  description: Datadog provides an integrated platform for cloud monitoring and security, offering observability across infrastructure, applications, and logs.
+  links: { site: https://www.datadoghq.com, pricing: https://www.datadoghq.com/pricing/ }
+  sources:
+    - { source_id: source_datadog_api, url: https://docs.datadoghq.com/api/latest/ }
+    - { source_id: source_datadog_auth, url: https://docs.datadoghq.com/api/latest/authentication/ }
+    - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/ }
+    - { source_id: source_datadog_limits, url: https://docs.datadoghq.com/api/latest/rate-limits/ }
+    - { source_id: source_datadog_pricing, url: https://www.datadoghq.com/pricing/ }
+    - { source_id: source_datadog_signup, url: https://app.datadoghq.com/signup }
+    - { source_id: source_datadog_terms, url: https://www.datadoghq.com/legal/terms/ }
+    - { source_id: source_datadog_support, url: https://docs.datadoghq.com/help/ }
+declarations:
+  - declaration_id: declaration_datadog_api_monitor_operations
+    scope:
+      product: { key: datadog-api, name: Datadog API }
+      funnel: { key: monitor-operations, name: Monitor operations }
+    participants:
+      - { participant_id: datadog, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe2hwmmvk3eex1hq433 } }
+    resources:
+      - { resource_id: api-reference, uri: https://docs.datadoghq.com/api/latest/, roles: [discovery, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.datadoghq.com/legal/terms/, roles: [terms], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://www.datadoghq.com/pricing/, roles: [pricing], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [sign_up, checkout, provisioning], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: rate-limits, uri: https://docs.datadoghq.com/api/latest/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: support, uri: https://docs.datadoghq.com/help/, roles: [recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: datadog-api, uri: https://api.datadoghq.com/api, transport: http, roles: [service, status], operated_by_participant_id: datadog, standard_bindings: [] }
+    interfaces:
+      - { interface_id: monitor-api, capabilities: [api, tools], endpoint_ids: [datadog-api], resource_ids: [api-reference, monitor-operations, rate-limits], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: datadog, standard_bindings: [] }
+    relations:
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: monitor-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: monitor-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: monitors-describe-api, kind: describes, from: { node_kind: resource, node_id: monitor-operations }, to: { node_kind: interface, node_id: monitor-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: datadog-scope, source_id: source_datadog_monitors, target: { node_kind: declaration, node_id: declaration_datadog_api_monitor_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: datadog-participant, source_id: source_datadog_api, target: { node_kind: participant, node_id: datadog }, field_paths: [/roles, /identity] }
+      - { source_binding_id: datadog-resource-reference, source_id: source_datadog_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-terms, source_id: source_datadog_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-pricing, source_id: source_datadog_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-signup, source_id: source_datadog_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-auth, source_id: source_datadog_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-monitors, source_id: source_datadog_monitors, target: { node_kind: resource, node_id: monitor-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-limits, source_id: source_datadog_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-support, source_id: source_datadog_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-endpoint-api, source_id: source_datadog_api, target: { node_kind: endpoint, node_id: datadog-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-interface-api, source_id: source_datadog_monitors, target: { node_kind: interface, node_id: monitor-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: datadog-interface-auth, source_id: source_datadog_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: datadog-relation-reference, source_id: source_datadog_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: datadog-relation-auth, source_id: source_datadog_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: datadog-relation-signup, source_id: source_datadog_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: datadog-relation-monitors, source_id: source_datadog_monitors, target: { node_kind: relation, node_id: monitors-describe-api }, field_paths: [/kind, /from, /to] }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
+    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, create, inspect, and recover Datadog monitors through the API while preserving human account and billing prerequisites as stage context.

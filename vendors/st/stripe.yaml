@@ -1,0 +1,71 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyygma830fqh16kvj744sk1c
+  slug: stripe
+  slug_aliases: []
+  name: Stripe
+  domains:
+    - { value: stripe.com, role: primary, valid_from: 2026-07-31T23:19:01.190Z }
+  category: payments-fintech
+  description: Stripe provides payments and financial infrastructure to help venture-backed start-ups build, iterate, and scale faster.
+  links: { site: https://stripe.com/startups, pricing: https://stripe.com/pricing }
+  sources:
+    - { source_id: source_stripe_api, url: https://docs.stripe.com/api }
+    - { source_id: source_stripe_authentication, url: https://docs.stripe.com/api/authentication }
+    - { source_id: source_stripe_idempotency, url: https://docs.stripe.com/api/idempotent_requests }
+    - { source_id: source_stripe_errors, url: https://docs.stripe.com/api/errors }
+    - { source_id: source_stripe_testing, url: https://docs.stripe.com/testing }
+    - { source_id: source_stripe_pricing, url: https://stripe.com/pricing }
+    - { source_id: source_stripe_signup, url: https://dashboard.stripe.com/register }
+    - { source_id: source_stripe_terms, url: https://stripe.com/legal/ssa }
+    - { source_id: source_stripe_support, url: https://support.stripe.com/ }
+declarations:
+  - declaration_id: declaration_stripe_payments_api_lifecycle
+    scope:
+      product: { key: stripe-payments-api, name: Stripe Payments API }
+      funnel: { key: api-payment-lifecycle, name: API payment lifecycle }
+    participants:
+      - { participant_id: stripe, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyygma830fqh16kvj744sk1c } }
+    resources:
+      - { resource_id: api-reference, uri: https://docs.stripe.com/api, roles: [discovery, documentation, operations], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://stripe.com/legal/ssa, roles: [terms], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://stripe.com/pricing, roles: [pricing], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: dashboard-signup, uri: https://dashboard.stripe.com/register, roles: [sign_up, checkout, provisioning], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.stripe.com/api/authentication, roles: [descriptor, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: testing, uri: https://docs.stripe.com/testing, roles: [provisioning, status, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: idempotency, uri: https://docs.stripe.com/api/idempotent_requests, roles: [operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://docs.stripe.com/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: support, uri: https://support.stripe.com/, roles: [recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: stripe-api, uri: https://api.stripe.com/v1, transport: http, roles: [service, status], operated_by_participant_id: stripe, standard_bindings: [] }
+    interfaces:
+      - { interface_id: payments-api, capabilities: [api, commerce], endpoint_ids: [stripe-api], resource_ids: [api-reference, testing, idempotency, api-errors], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: stripe, standard_bindings: [] }
+    relations:
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: payments-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: payments-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: dashboard-signup }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: idempotency-describes-api, kind: describes, from: { node_kind: resource, node_id: idempotency }, to: { node_kind: interface, node_id: payments-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: stripe-scope, source_id: source_stripe_api, target: { node_kind: declaration, node_id: declaration_stripe_payments_api_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: stripe-participant, source_id: source_stripe_api, target: { node_kind: participant, node_id: stripe }, field_paths: [/roles, /identity] }
+      - { source_binding_id: stripe-resource-reference, source_id: source_stripe_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-terms, source_id: source_stripe_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-pricing, source_id: source_stripe_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-signup, source_id: source_stripe_signup, target: { node_kind: resource, node_id: dashboard-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-auth, source_id: source_stripe_authentication, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-testing, source_id: source_stripe_testing, target: { node_kind: resource, node_id: testing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-idempotency, source_id: source_stripe_idempotency, target: { node_kind: resource, node_id: idempotency }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-errors, source_id: source_stripe_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-support, source_id: source_stripe_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-endpoint-api, source_id: source_stripe_api, target: { node_kind: endpoint, node_id: stripe-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-interface-api, source_id: source_stripe_api, target: { node_kind: interface, node_id: payments-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: stripe-interface-auth, source_id: source_stripe_authentication, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: stripe-relation-reference, source_id: source_stripe_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: stripe-relation-auth, source_id: source_stripe_authentication, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: stripe-relation-signup, source_id: source_stripe_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: stripe-relation-idempotency, source_id: source_stripe_idempotency, target: { node_kind: relation, node_id: idempotency-describes-api }, field_paths: [/kind, /from, /to] }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
+    assessment_reason: Assess whether an authorized agent can evaluate, access, test, and operate Stripe payments through the API while preserving account activation, billing, and regulated payment prerequisites as stage context.

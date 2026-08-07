@@ -1,0 +1,71 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyyts97tg62epymp01r8t62x
+  slug: twilio
+  slug_aliases: []
+  name: twilio
+  domains:
+    - { value: twilio.com, role: primary, valid_from: 2026-08-01T13:50:00.000Z }
+  category: communication
+  description: Build amazing customer experiences on the Twilio platform with APIs for SMS, RCS, voice, and email, plus conversational AI for smarter engagement, and identity verification for trust.
+  links: { site: https://twilio.com, pricing: https://www.twilio.com/en-us/pricing }
+  sources:
+    - { source_id: source_twilio_api, url: https://www.twilio.com/docs/usage/api }
+    - { source_id: source_twilio_auth, url: https://www.twilio.com/docs/usage/requests-to-twilio }
+    - { source_id: source_twilio_messages, url: https://www.twilio.com/docs/messaging/api/message-resource }
+    - { source_id: source_twilio_status, url: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status }
+    - { source_id: source_twilio_errors, url: https://www.twilio.com/docs/api/errors }
+    - { source_id: source_twilio_pricing, url: https://www.twilio.com/en-us/pricing }
+    - { source_id: source_twilio_signup, url: https://www.twilio.com/try-twilio }
+    - { source_id: source_twilio_terms, url: https://www.twilio.com/en-us/legal/tos }
+    - { source_id: source_twilio_support, url: https://www.twilio.com/docs/usage/troubleshooting }
+declarations:
+  - declaration_id: declaration_twilio_messaging_api_operations
+    scope:
+      product: { key: twilio-messaging-api, name: Twilio Messaging API }
+      funnel: { key: message-operations, name: Message operations }
+    participants:
+      - { participant_id: twilio, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tg62epymp01r8t62x } }
+    resources:
+      - { resource_id: api-overview, uri: https://www.twilio.com/docs/usage/api, roles: [discovery, operations, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.twilio.com/en-us/legal/tos, roles: [terms], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://www.twilio.com/en-us/pricing, roles: [pricing], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://www.twilio.com/try-twilio, roles: [sign_up, checkout, provisioning], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://www.twilio.com/docs/usage/requests-to-twilio, roles: [descriptor, provisioning, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: message-operations, uri: https://www.twilio.com/docs/messaging/api/message-resource, roles: [provisioning, status, operations, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: delivery-status, uri: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://www.twilio.com/docs/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: support, uri: https://www.twilio.com/docs/usage/troubleshooting, roles: [recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: twilio-api, uri: https://api.twilio.com/2010-04-01, transport: http, roles: [service, status], operated_by_participant_id: twilio, standard_bindings: [] }
+    interfaces:
+      - { interface_id: messaging-api, capabilities: [api, tools, events], endpoint_ids: [twilio-api], resource_ids: [api-overview, message-operations, delivery-status, api-errors], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: twilio, standard_bindings: [] }
+    relations:
+      - { relation_id: overview-describes-api, kind: describes, from: { node_kind: resource, node_id: api-overview }, to: { node_kind: interface, node_id: messaging-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: messaging-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: messages-describe-api, kind: describes, from: { node_kind: resource, node_id: message-operations }, to: { node_kind: interface, node_id: messaging-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: twilio-scope, source_id: source_twilio_messages, target: { node_kind: declaration, node_id: declaration_twilio_messaging_api_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: twilio-participant, source_id: source_twilio_api, target: { node_kind: participant, node_id: twilio }, field_paths: [/roles, /identity] }
+      - { source_binding_id: twilio-resource-overview, source_id: source_twilio_api, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-terms, source_id: source_twilio_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-pricing, source_id: source_twilio_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-signup, source_id: source_twilio_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-auth, source_id: source_twilio_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-messages, source_id: source_twilio_messages, target: { node_kind: resource, node_id: message-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-status, source_id: source_twilio_status, target: { node_kind: resource, node_id: delivery-status }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-errors, source_id: source_twilio_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-resource-support, source_id: source_twilio_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-endpoint-api, source_id: source_twilio_api, target: { node_kind: endpoint, node_id: twilio-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-interface-api, source_id: source_twilio_messages, target: { node_kind: interface, node_id: messaging-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: twilio-interface-auth, source_id: source_twilio_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: twilio-relation-overview, source_id: source_twilio_api, target: { node_kind: relation, node_id: overview-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: twilio-relation-auth, source_id: source_twilio_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: twilio-relation-signup, source_id: source_twilio_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: twilio-relation-messages, source_id: source_twilio_messages, target: { node_kind: relation, node_id: messages-describe-api }, field_paths: [/kind, /from, /to] }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
+    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, send, track, and recover Twilio messages through the API while preserving account funding, sender registration, and regulatory prerequisites as stage context.
