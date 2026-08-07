@@ -16,7 +16,7 @@ vendor:
     - { source_id: source_slack_messages, url: https://docs.slack.dev/reference/methods/chat.postMessage/ }
     - { source_id: source_slack_limits, url: https://docs.slack.dev/apis/web-api/rate-limits/ }
     - { source_id: source_slack_pricing, url: https://slack.com/pricing }
-    - { source_id: source_slack_signup, url: https://slack.com/get-started }
+    - { source_id: source_slack_signup, url: https://slack.com/help/articles/206845317-Create-a-Slack-workspace-Create-a-Slack-workspace }
     - { source_id: source_slack_terms, url: https://slack.com/terms-of-service }
     - { source_id: source_slack_support, url: https://slack.com/help }
 declarations:
@@ -30,7 +30,7 @@ declarations:
       - { resource_id: web-api, uri: https://docs.slack.dev/apis/web-api/, roles: [discovery, operations, documentation], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://slack.com/terms-of-service, roles: [terms], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: pricing, uri: https://slack.com/pricing, roles: [pricing], operated_by_participant_id: slack, standard_bindings: [] }
-      - { resource_id: workspace-signup, uri: https://slack.com/get-started, roles: [sign_up, checkout, provisioning], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: workspace-signup, uri: https://slack.com/help/articles/206845317-Create-a-Slack-workspace-Create-a-Slack-workspace, roles: [sign_up, checkout, provisioning], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.slack.dev/authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: oauth, uri: https://docs.slack.dev/authentication/installing-with-oauth/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: slack, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
       - { resource_id: message-operations, uri: https://docs.slack.dev/reference/methods/chat.postMessage/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: slack, standard_bindings: [] }
