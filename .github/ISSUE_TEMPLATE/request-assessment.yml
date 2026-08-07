@@ -30,10 +30,10 @@ body:
     validations:
       required: true
   - type: textarea
-    id: entrypoints
+    id: surfaces
     attributes:
-      label: Public entrypoints
-      description: Public HTTPS URLs for discovery, terms, pricing, signup, provisioning, operation, or recovery.
+      label: Public resources and endpoints
+      description: Public HTTPS URLs for discovery, terms, pricing, signup, provisioning, operation, recovery, descriptors, APIs, or authentication.
     validations:
       required: true
   - type: input

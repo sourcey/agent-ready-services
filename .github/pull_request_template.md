@@ -8,8 +8,9 @@
 ## Contributor checks
 
 - [ ] This pull request changes vendor YAML only, or repository documentation/workflow metadata only—not both.
-- [ ] Sourcey confirmed the stable Entity ID, related Offer ID if any, and exact base revision digest(s).
-- [ ] Every declared entrypoint and source is public HTTPS material.
+- [ ] Sourcey confirmed the stable Entity ID and every related Offer ID, if any.
+- [ ] Every declared source, resource, and endpoint is public HTTPS material.
+- [ ] Every material declaration field has exact source-binding coverage.
 - [ ] The declaration contains no observation, readiness state, grade, certification, current Report Card, private evidence, or generated output.
 - [ ] `authority_intent` is `vendor` only when Sourcey has already proven vendor-domain authority.
 - [ ] Every commit has a `Signed-off-by` line for the Developer Certificate of Origin.
