@@ -37,41 +37,112 @@ declarations:
       funnel:
         key: start-tier-application
         name: Start tier application
-      offer_id: off_01kyh8fpe26twnnyavn9r2fxx1
-    base:
-      entity_revision_digest: sha256:6fde48652671d311a6641f10eefba8652e15a39cc71b044fc1fedff8d505b6d5
-      offer_revision_digest: sha256:1c869e895b18ac48b92bcc4b4c088d2eff85e0e933efc793b664e8784508438e
-    entrypoints:
-      - entrypoint_id: discovery
-        role: discovery
+    participants:
+      - participant_id: google-cloud
+        roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider]
+        identity:
+          entity_id: ent_01kyh8fpe210m3jqn5xgzztgv8
+    resources:
+      - resource_id: discovery
         uri: https://cloud.google.com/startup
-      - entrypoint_id: terms
-        role: terms
+        roles: [discovery]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: terms
         uri: https://cloud.google.com/terms/startup-program-tos
-      - entrypoint_id: eligibility
-        role: eligibility
+        roles: [terms]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: eligibility
         uri: https://cloud.google.com/startup/faq?hl=en
-      - entrypoint_id: pricing
-        role: pricing
+        roles: [eligibility, documentation]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: benefits
         uri: https://cloud.google.com/startup/benefits?hl=en
-      - entrypoint_id: sign-up
-        role: sign_up
+        roles: [pricing, documentation]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: application
         uri: https://cloud.google.com/startup/apply
-      - entrypoint_id: operations
-        role: operations
+        roles: [sign_up]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: operations
         uri: https://cloud.google.com/startup/perks
-      - entrypoint_id: recovery
-        role: recovery
+        roles: [operations]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: recovery
         uri: https://docs.cloud.google.com/support/docs
+        roles: [recovery, documentation]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+    endpoints: []
     interfaces: []
-    source_ids:
-      - source_google_startup_program
-      - source_google_startup_terms
-      - source_google_startup_benefits
-      - source_google_startup_faq
-      - source_google_startup_application
-      - source_google_startup_operations
-      - source_google_cloud_support
+    relations:
+      - relation_id: eligibility-precedes-application
+        kind: precedes
+        from: { node_kind: resource, node_id: eligibility }
+        to: { node_kind: resource, node_id: application }
+      - relation_id: application-precedes-operations
+        kind: precedes
+        from: { node_kind: resource, node_id: application }
+        to: { node_kind: resource, node_id: operations }
+    offer_relations:
+      - offer_relation_proposal_id: google-cloud-start-application
+        offer_id: off_01kyh8fpe26twnnyavn9r2fxx1
+        purpose: application_path
+        applicable_stages: [evaluate, sign_up, pay, provision, operate]
+    source_bindings:
+      - source_binding_id: google-declaration-scope
+        source_id: source_google_startup_program
+        target: { node_kind: declaration, node_id: declaration_google_cloud_start_application }
+        field_paths: [/scope/product/name, /scope/funnel/name]
+      - source_binding_id: google-participant
+        source_id: source_google_startup_program
+        target: { node_kind: participant, node_id: google-cloud }
+        field_paths: [/roles, /identity]
+      - source_binding_id: google-resource-discovery
+        source_id: source_google_startup_program
+        target: { node_kind: resource, node_id: discovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-terms
+        source_id: source_google_startup_terms
+        target: { node_kind: resource, node_id: terms }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-eligibility
+        source_id: source_google_startup_faq
+        target: { node_kind: resource, node_id: eligibility }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-benefits
+        source_id: source_google_startup_benefits
+        target: { node_kind: resource, node_id: benefits }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-application
+        source_id: source_google_startup_application
+        target: { node_kind: resource, node_id: application }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-operations
+        source_id: source_google_startup_operations
+        target: { node_kind: resource, node_id: operations }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-recovery
+        source_id: source_google_cloud_support
+        target: { node_kind: resource, node_id: recovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-relation-eligibility-application
+        source_id: source_google_startup_faq
+        target: { node_kind: relation, node_id: eligibility-precedes-application }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: google-relation-application-operations
+        source_id: source_google_startup_operations
+        target: { node_kind: relation, node_id: application-precedes-operations }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: google-offer-relation
+        source_id: source_google_startup_program
+        target: { node_kind: offer_relation, node_id: google-cloud-start-application }
+        field_paths: [/offer_id, /purpose, /applicable_stages]
     authority_intent: community
     declared_at: 2026-08-05T22:31:07.000Z
     assessment_reason: Assess whether an agent can discover, apply for, receive, use, and recover Google Cloud Start tier credits through the direct public funnel.

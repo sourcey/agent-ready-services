@@ -45,65 +45,184 @@ declarations:
       funnel:
         key: founders-credit-application
         name: Founders credit application
-      offer_id: off_01kz5x2kqcj2pfkaqpdwx0ywsd
-    base:
-      entity_revision_digest: sha256:dca08f2f9410a83d7a9baaeb4e32f36a3828dadb9cf563a07ff5c25fb9f5d236
-      offer_revision_digest: sha256:b2bd4ac710053935b867ae768a62b487c79c83c3351e06dded6b11e1ad11eeec
-    entrypoints:
-      - entrypoint_id: discovery
-        role: discovery
+    participants:
+      - participant_id: aws
+        roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider]
+        identity:
+          entity_id: ent_01kyh8fpe10b164tj935t8k5zb
+    resources:
+      - resource_id: discovery
         uri: https://aws.amazon.com/startups/credits/?lang=en-US
-      - entrypoint_id: terms
-        role: terms
+        roles: [discovery]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: terms
         uri: https://aws.amazon.com/awscredits/
-      - entrypoint_id: eligibility
-        role: eligibility
+        roles: [terms]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: eligibility
         uri: https://aws.amazon.com/aws-startups/learn/applying-for-aws-activate-credits-a-step-by-step-guide/?lang=en-US
-      - entrypoint_id: pricing
-        role: pricing
+        roles: [eligibility, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: pricing
         uri: https://aws.amazon.com/pricing/
-      - entrypoint_id: sign-up
-        role: sign_up
+        roles: [pricing]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: application
         uri: https://startups.aws.com/join?destination=%2Fcredits%2Fapply
-      - entrypoint_id: builder-id-sign-up
-        role: sign_up
+        roles: [sign_up]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: builder-id-sign-up
         uri: https://docs.aws.amazon.com/signin/latest/userguide/create-builder-id.html
-      - entrypoint_id: aws-account-sign-up
-        role: sign_up
+        roles: [sign_up, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: aws-account-sign-up
         uri: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
-      - entrypoint_id: operations
-        role: operations
+        roles: [sign_up, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: credit-operations
         uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-credits.html
-      - entrypoint_id: activate-api
-        role: operations
+        roles: [operations, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: activate-api-documentation
         uri: https://docs.aws.amazon.com/service-authorization/latest/reference/list_activate.html
-      - entrypoint_id: credits-api
-        role: operations
+        roles: [operations, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: billing-credits-api-documentation
         uri: https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_billing_GetCredits.html
-      - entrypoint_id: recovery
-        role: recovery
+        roles: [operations, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: recovery
         uri: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
+        roles: [recovery, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+    endpoints: []
     interfaces:
       - interface_id: activate-api
-        role: api
-        uri: https://docs.aws.amazon.com/service-authorization/latest/reference/list_activate.html
-        standards: []
+        capabilities: [api]
+        endpoint_ids: []
+        resource_ids: [activate-api-documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
       - interface_id: billing-credits-api
-        role: api
-        uri: https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_billing_GetCredits.html
-        standards: []
-    source_ids:
-      - source_aws_activate_credits
-      - source_aws_activate_application_guide
-      - source_aws_activate_application
-      - source_aws_credit_terms
-      - source_aws_pricing
-      - source_aws_credit_operations
-      - source_aws_sign_in_recovery
-      - source_aws_builder_id_creation
-      - source_aws_account_creation
-      - source_aws_activate_service_authorization
-      - source_aws_billing_get_credits_api
+        capabilities: [api]
+        endpoint_ids: []
+        resource_ids: [billing-credits-api-documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+    relations:
+      - relation_id: eligibility-precedes-application
+        kind: precedes
+        from: { node_kind: resource, node_id: eligibility }
+        to: { node_kind: resource, node_id: application }
+      - relation_id: application-precedes-credit-operations
+        kind: precedes
+        from: { node_kind: resource, node_id: application }
+        to: { node_kind: resource, node_id: credit-operations }
+      - relation_id: activate-docs-describe-interface
+        kind: describes
+        from: { node_kind: resource, node_id: activate-api-documentation }
+        to: { node_kind: interface, node_id: activate-api }
+      - relation_id: billing-docs-describe-interface
+        kind: describes
+        from: { node_kind: resource, node_id: billing-credits-api-documentation }
+        to: { node_kind: interface, node_id: billing-credits-api }
+    offer_relations:
+      - offer_relation_proposal_id: aws-activate-founders-application
+        offer_id: off_01kz5x2kqcj2pfkaqpdwx0ywsd
+        purpose: application_path
+        applicable_stages: [evaluate, sign_up, pay, provision, operate]
+    source_bindings:
+      - source_binding_id: aws-declaration-scope
+        source_id: source_aws_activate_credits
+        target: { node_kind: declaration, node_id: declaration_aws_activate_founders_application }
+        field_paths: [/scope/product/name, /scope/funnel/name]
+      - source_binding_id: aws-participant
+        source_id: source_aws_activate_credits
+        target: { node_kind: participant, node_id: aws }
+        field_paths: [/roles, /identity]
+      - source_binding_id: aws-resource-discovery
+        source_id: source_aws_activate_credits
+        target: { node_kind: resource, node_id: discovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-terms
+        source_id: source_aws_credit_terms
+        target: { node_kind: resource, node_id: terms }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-eligibility
+        source_id: source_aws_activate_application_guide
+        target: { node_kind: resource, node_id: eligibility }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-pricing
+        source_id: source_aws_pricing
+        target: { node_kind: resource, node_id: pricing }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-application
+        source_id: source_aws_activate_application
+        target: { node_kind: resource, node_id: application }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-builder-id-sign-up
+        source_id: source_aws_builder_id_creation
+        target: { node_kind: resource, node_id: builder-id-sign-up }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-account-sign-up
+        source_id: source_aws_account_creation
+        target: { node_kind: resource, node_id: aws-account-sign-up }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-credit-operations
+        source_id: source_aws_credit_operations
+        target: { node_kind: resource, node_id: credit-operations }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-activate-api-documentation
+        source_id: source_aws_activate_service_authorization
+        target: { node_kind: resource, node_id: activate-api-documentation }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-billing-credits-api-documentation
+        source_id: source_aws_billing_get_credits_api
+        target: { node_kind: resource, node_id: billing-credits-api-documentation }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-recovery
+        source_id: source_aws_sign_in_recovery
+        target: { node_kind: resource, node_id: recovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-interface-activate-api
+        source_id: source_aws_activate_service_authorization
+        target: { node_kind: interface, node_id: activate-api }
+        field_paths: [/capabilities, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: aws-interface-billing-credits-api
+        source_id: source_aws_billing_get_credits_api
+        target: { node_kind: interface, node_id: billing-credits-api }
+        field_paths: [/capabilities, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: aws-relation-eligibility-application
+        source_id: source_aws_activate_application_guide
+        target: { node_kind: relation, node_id: eligibility-precedes-application }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: aws-relation-application-operations
+        source_id: source_aws_credit_operations
+        target: { node_kind: relation, node_id: application-precedes-credit-operations }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: aws-relation-activate-docs
+        source_id: source_aws_activate_service_authorization
+        target: { node_kind: relation, node_id: activate-docs-describe-interface }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: aws-relation-billing-docs
+        source_id: source_aws_billing_get_credits_api
+        target: { node_kind: relation, node_id: billing-docs-describe-interface }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: aws-offer-relation
+        source_id: source_aws_activate_credits
+        target: { node_kind: offer_relation, node_id: aws-activate-founders-application }
+        field_paths: [/offer_id, /purpose, /applicable_stages]
     authority_intent: community
     declared_at: 2026-08-06T02:55:01.943Z
     assessment_reason: Assess whether an agent can discover, apply for, receive, use, and recover AWS Activate Founders credits through the direct public funnel.

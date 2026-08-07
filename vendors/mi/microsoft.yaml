@@ -39,45 +39,129 @@ declarations:
       funnel:
         key: direct-application
         name: Direct application
-      offer_id: off_01kyh8fpe3y9qhtr0stf4myyrq
-    base:
-      entity_revision_digest: sha256:a569131c2422a72436aea7d8dfa1b846f87a3500dbc533c3ea06bfd806a27e2f
-      offer_revision_digest: sha256:df159489b9a2dad09aede7d628ceded5983568e799ed694f8d1f4b772a89ecf8
-    entrypoints:
-      - entrypoint_id: discovery
-        role: discovery
+    participants:
+      - participant_id: microsoft
+        roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider]
+        identity:
+          entity_id: ent_01kyh8fpe3n3yye39kmzvy410z
+    resources:
+      - resource_id: discovery
         uri: https://www.microsoft.com/en-us/startups
-      - entrypoint_id: terms
-        role: terms
+        roles: [discovery]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: terms
         uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/overview
-      - entrypoint_id: eligibility
-        role: eligibility
+        roles: [terms, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: eligibility
         uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/application
-      - entrypoint_id: pricing
-        role: pricing
+        roles: [eligibility, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: pricing
         uri: https://azure.microsoft.com/en-us/pricing/
-      - entrypoint_id: sign-up
-        role: sign_up
+        roles: [pricing]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: application
         uri: https://portal.startups.microsoft.com/signup
-      - entrypoint_id: provisioning
-        role: provisioning
+        roles: [sign_up]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: activation
         uri: https://learn.microsoft.com/en-us/startups/build/azure-getting-started/activate
-      - entrypoint_id: operations
-        role: operations
+        roles: [provisioning, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: operations
         uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-page
-      - entrypoint_id: recovery
-        role: recovery
+        roles: [operations, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: recovery
         uri: https://learn.microsoft.com/en-us/startups/microsoft-for-startups/mfs-program-support
+        roles: [recovery, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+    endpoints: []
     interfaces: []
-    source_ids:
-      - source_microsoft_startups
-      - source_microsoft_startups_overview
-      - source_microsoft_startups_application_guide
-      - source_microsoft_startups_application
-      - source_microsoft_startups_activation
-      - source_microsoft_startups_operations
-      - source_microsoft_startups_support
-      - source_azure_pricing
+    relations:
+      - relation_id: eligibility-precedes-application
+        kind: precedes
+        from: { node_kind: resource, node_id: eligibility }
+        to: { node_kind: resource, node_id: application }
+      - relation_id: application-precedes-activation
+        kind: precedes
+        from: { node_kind: resource, node_id: application }
+        to: { node_kind: resource, node_id: activation }
+      - relation_id: activation-precedes-operations
+        kind: precedes
+        from: { node_kind: resource, node_id: activation }
+        to: { node_kind: resource, node_id: operations }
+    offer_relations:
+      - offer_relation_proposal_id: microsoft-startups-application
+        offer_id: off_01kyh8fpe3y9qhtr0stf4myyrq
+        purpose: application_path
+        applicable_stages: [evaluate, sign_up, pay, provision, operate]
+    source_bindings:
+      - source_binding_id: microsoft-declaration-scope
+        source_id: source_microsoft_startups
+        target: { node_kind: declaration, node_id: declaration_microsoft_startups_application }
+        field_paths: [/scope/product/name, /scope/funnel/name]
+      - source_binding_id: microsoft-participant
+        source_id: source_microsoft_startups
+        target: { node_kind: participant, node_id: microsoft }
+        field_paths: [/roles, /identity]
+      - source_binding_id: microsoft-resource-discovery
+        source_id: source_microsoft_startups
+        target: { node_kind: resource, node_id: discovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-terms
+        source_id: source_microsoft_startups_overview
+        target: { node_kind: resource, node_id: terms }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-eligibility
+        source_id: source_microsoft_startups_application_guide
+        target: { node_kind: resource, node_id: eligibility }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-pricing
+        source_id: source_azure_pricing
+        target: { node_kind: resource, node_id: pricing }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-application
+        source_id: source_microsoft_startups_application
+        target: { node_kind: resource, node_id: application }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-activation
+        source_id: source_microsoft_startups_activation
+        target: { node_kind: resource, node_id: activation }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-operations
+        source_id: source_microsoft_startups_operations
+        target: { node_kind: resource, node_id: operations }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-recovery
+        source_id: source_microsoft_startups_support
+        target: { node_kind: resource, node_id: recovery }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-relation-eligibility-application
+        source_id: source_microsoft_startups_application_guide
+        target: { node_kind: relation, node_id: eligibility-precedes-application }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-application-activation
+        source_id: source_microsoft_startups_activation
+        target: { node_kind: relation, node_id: application-precedes-activation }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-activation-operations
+        source_id: source_microsoft_startups_operations
+        target: { node_kind: relation, node_id: activation-precedes-operations }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-offer-relation
+        source_id: source_microsoft_startups
+        target: { node_kind: offer_relation, node_id: microsoft-startups-application }
+        field_paths: [/offer_id, /purpose, /applicable_stages]
     authority_intent: community
     declared_at: 2026-08-05T22:31:07.000Z
     assessment_reason: Assess whether an agent can discover, apply for, receive, use, and recover Microsoft for Startups credits through the direct public funnel.
