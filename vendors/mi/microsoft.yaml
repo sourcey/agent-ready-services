@@ -17,15 +17,15 @@ vendor:
     - source_id: source_azure_rest_api
       url: https://learn.microsoft.com/en-us/rest/api/azure/
     - source_id: source_azure_resource_manager_rest
-      url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-rest
+      url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-rest?tabs=azure-cli
     - source_id: source_azure_resource_group_api
-      url: https://learn.microsoft.com/en-us/rest/api/resources/resource-groups/create-or-update
+      url: https://learn.microsoft.com/en-us/rest/api/resources/resource-groups/create-or-update?view=rest-resources-2021-04-01&tabs=HTTP
     - source_id: source_azure_async_operations
       url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/async-operations
     - source_id: source_azure_resource_manager_limits
       url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/request-limits-and-throttling
     - source_id: source_azure_service_principals
-      url: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals
+      url: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser
     - source_id: source_azure_client_credentials
       url: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
     - source_id: source_azure_account
@@ -76,7 +76,7 @@ declarations:
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: service-principals
-        uri: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals
+        uri: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser
         roles: [descriptor, documentation]
         operated_by_participant_id: microsoft
         standard_bindings:
@@ -92,12 +92,12 @@ declarations:
             version: "2.0"
             relation: implements
       - resource_id: resource-manager-rest
-        uri: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-rest
+        uri: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-rest?tabs=azure-cli
         roles: [provisioning, operations, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: resource-group-api
-        uri: https://learn.microsoft.com/en-us/rest/api/resources/resource-groups/create-or-update
+        uri: https://learn.microsoft.com/en-us/rest/api/resources/resource-groups/create-or-update?view=rest-resources-2021-04-01&tabs=HTTP
         roles: [provisioning, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
