@@ -21,7 +21,7 @@ vendor:
     - source_id: source_google_cloud_pricing
       url: https://cloud.google.com/pricing/list
     - source_id: source_google_cloud_account_setup
-      url: https://docs.cloud.google.com/free/docs/free-cloud-features
+      url: https://console.cloud.google.com/freetrial
     - source_id: source_google_resource_manager_rest
       url: https://docs.cloud.google.com/resource-manager/reference/rest
     - source_id: source_google_resource_manager_create
@@ -73,8 +73,8 @@ declarations:
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: account-setup
-        uri: https://docs.cloud.google.com/free/docs/free-cloud-features
-        roles: [sign_up, checkout, documentation]
+        uri: https://console.cloud.google.com/freetrial
+        roles: [sign_up, checkout]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: resource-manager-rest
@@ -321,4 +321,4 @@ declarations:
         field_paths: [/kind, /from, /to]
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z
-    assessment_reason: Assess whether an agent with authorized Google Cloud access can evaluate the platform, obtain workload credentials, create and inspect projects, use billing APIs, and operate through documented APIs and tools. Account and billing setup remain visible prerequisites.
+    assessment_reason: Assess Google Cloud's ordinary service lifecycle from public evaluation and account access through workload credentials, API project creation, status, billing, operation, and recovery; account and billing prerequisites remain graded stages.

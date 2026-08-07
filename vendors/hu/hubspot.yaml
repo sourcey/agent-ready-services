@@ -70,4 +70,4 @@ declarations:
       - { source_binding_id: hubspot-relation-crm, source_id: source_hubspot_crm, target: { node_kind: relation, node_id: crm-describes-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can configure a HubSpot integration and operate CRM records through the API while preserving account, consent, and billing prerequisites as stage context.
+    assessment_reason: Assess HubSpot's ordinary integration lifecycle from public evaluation and account access through authorization, CRM API operation, status, and recovery; account, consent, and billing prerequisites remain graded stages.

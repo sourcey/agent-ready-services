@@ -68,4 +68,4 @@ declarations:
       - { source_binding_id: stripe-relation-idempotency, source_id: source_stripe_idempotency, target: { node_kind: relation, node_id: idempotency-describes-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, access, test, and operate Stripe payments through the API while preserving account activation, billing, and regulated payment prerequisites as stage context.
+    assessment_reason: Assess the Stripe Payments API's ordinary service lifecycle from public evaluation and account access through test credential provisioning, payment operations, status, and recovery; activation, billing, and regulated-payment prerequisites remain graded stages.

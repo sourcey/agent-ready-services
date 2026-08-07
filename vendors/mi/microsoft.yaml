@@ -29,7 +29,7 @@ vendor:
     - source_id: source_azure_client_credentials
       url: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
     - source_id: source_azure_account
-      url: https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account
+      url: https://signup.azure.com/signup?offer=ms-azr-0003p&appId=102&l=en-us
     - source_id: source_azure_pricing
       url: https://azure.microsoft.com/en-us/pricing/
     - source_id: source_azure_retail_prices_api
@@ -71,8 +71,8 @@ declarations:
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: azure-account
-        uri: https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account
-        roles: [sign_up, checkout, documentation]
+        uri: https://signup.azure.com/signup?offer=ms-azr-0003p&appId=102&l=en-us
+        roles: [sign_up, checkout]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: service-principals
@@ -307,4 +307,4 @@ declarations:
         field_paths: [/kind, /from, /to]
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z
-    assessment_reason: Assess whether an agent with authorized Microsoft Azure access can evaluate the platform, obtain workload credentials, provision resources, observe asynchronous status, inspect pricing and cost surfaces, and operate through documented APIs and tools. Azure account and billing setup remain visible prerequisites.
+    assessment_reason: Assess Microsoft Azure's ordinary service lifecycle from public evaluation and account access through workload credentials, API resource provisioning, asynchronous status, pricing, operation, and recovery; account and billing prerequisites remain graded stages.

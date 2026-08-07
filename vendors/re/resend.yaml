@@ -68,4 +68,4 @@ declarations:
       - { source_binding_id: resend-relation-send, source_id: source_resend_send, target: { node_kind: relation, node_id: sending-describes-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, configure, send, inspect, and recover email operations through Resend while preserving account, domain-verification, and billing prerequisites as stage context.
+    assessment_reason: Assess Resend's ordinary service lifecycle from public evaluation and account access through domain configuration, API email operations, status, and recovery; account, domain-verification, and billing prerequisites remain graded stages.

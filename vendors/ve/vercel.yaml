@@ -65,4 +65,4 @@ declarations:
       - { source_binding_id: vercel-relation-deployments, source_id: source_vercel_deployments, target: { node_kind: relation, node_id: deployments-describe-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, create, inspect, and recover Vercel deployments through the REST API while preserving human account and billing prerequisites as stage context.
+    assessment_reason: Assess Vercel's ordinary service lifecycle from public evaluation and account access through API deployment creation, inspection, and recovery; account and billing prerequisites remain graded stages.

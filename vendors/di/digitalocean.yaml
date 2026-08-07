@@ -65,4 +65,4 @@ declarations:
       - { source_binding_id: digitalocean-relation-provisioning, source_id: source_digitalocean_droplets, target: { node_kind: relation, node_id: provisioning-describes-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, access, provision, and operate DigitalOcean cloud resources through the public API while preserving human account and billing prerequisites as stage context.
+    assessment_reason: Assess DigitalOcean's ordinary service lifecycle from public evaluation and account access through API resource provisioning, operation, and recovery; account and billing prerequisites remain graded stages.

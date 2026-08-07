@@ -31,7 +31,7 @@ vendor:
     - source_id: source_aws_sigv4
       url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv.html
     - source_id: source_aws_account_creation
-      url: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
+      url: https://signin.aws.amazon.com/signup?request_type=register
     - source_id: source_aws_account_creation_troubleshooting
       url: https://docs.aws.amazon.com/accounts/latest/reference/troubleshooting_create-account.html
     - source_id: source_aws_pricing
@@ -73,8 +73,8 @@ declarations:
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: account-creation
-        uri: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
-        roles: [sign_up, checkout, documentation]
+        uri: https://signin.aws.amazon.com/signup?request_type=register
+        roles: [sign_up, checkout]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: account-creation-troubleshooting
@@ -306,4 +306,4 @@ declarations:
         field_paths: [/kind, /from, /to]
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z
-    assessment_reason: Assess whether an agent with authorized AWS account access can evaluate AWS Cloud, obtain workload credentials, provision supported resources, observe request status, and operate them through documented APIs and tools. Account creation and billing remain visible prerequisites.
+    assessment_reason: Assess AWS Cloud's ordinary service lifecycle from public evaluation and account access through workload credentials, API resource provisioning, request status, operation, and recovery; account and billing prerequisites remain graded stages.

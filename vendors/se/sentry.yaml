@@ -68,4 +68,4 @@ declarations:
       - { source_binding_id: sentry-relation-events, source_id: source_sentry_events, target: { node_kind: relation, node_id: events-describe-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, inspect, update, and recover Sentry issues and projects through the Web API while preserving human account and billing prerequisites as stage context.
+    assessment_reason: Assess Sentry's ordinary service lifecycle from public evaluation and account access through API project and issue operation, status, and recovery; account and billing prerequisites remain graded stages.

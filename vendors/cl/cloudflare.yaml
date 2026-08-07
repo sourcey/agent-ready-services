@@ -65,4 +65,4 @@ declarations:
       - { source_binding_id: cloudflare-relation-errors, source_id: source_cloudflare_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, access, provision, and operate Cloudflare resources through the public API while preserving human account and billing prerequisites as stage context.
+    assessment_reason: Assess Cloudflare's ordinary service lifecycle from public evaluation and account access through API resource provisioning and operation; account and billing prerequisites remain graded stages.

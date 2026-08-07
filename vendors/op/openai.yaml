@@ -71,4 +71,4 @@ declarations:
       - { source_binding_id: openai-relation-errors, source_id: source_openai_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, access, invoke, monitor, and recover use of the OpenAI API while preserving human account and billing prerequisites as stage context.
+    assessment_reason: Assess the OpenAI API's ordinary service lifecycle from public evaluation and account access through credential provisioning, API invocation, monitoring, and recovery; account and billing prerequisites remain graded stages.

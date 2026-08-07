@@ -68,4 +68,4 @@ declarations:
       - { source_binding_id: twilio-relation-messages, source_id: source_twilio_messages, target: { node_kind: relation, node_id: messages-describe-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, send, track, and recover Twilio messages through the API while preserving account funding, sender registration, and regulatory prerequisites as stage context.
+    assessment_reason: Assess Twilio Messaging's ordinary service lifecycle from public evaluation and account access through sender setup, API sending, tracking, and recovery; funding, sender-registration, and regulatory prerequisites remain graded stages.

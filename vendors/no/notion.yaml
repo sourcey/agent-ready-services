@@ -71,4 +71,4 @@ declarations:
       - { source_binding_id: notion-relation-status, source_id: source_notion_status_codes, target: { node_kind: relation, node_id: status-describes-api }, field_paths: [/kind, /from, /to] }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess whether an authorized agent can configure a Notion integration and use the content API while preserving workspace creation and human authorization prerequisites as stage context.
+    assessment_reason: Assess Notion's ordinary integration lifecycle from public evaluation and workspace access through human authorization, API content operations, status, and recovery; workspace creation and consent prerequisites remain graded stages.
