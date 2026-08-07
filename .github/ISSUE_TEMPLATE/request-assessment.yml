@@ -26,7 +26,7 @@ body:
     id: funnel
     attributes:
       label: Funnel
-      description: The exact journey to assess, such as self-serve signup or startup-credit application.
+      description: The exact service-access or operating journey to assess, such as API resource management or workspace integration.
     validations:
       required: true
   - type: textarea
