@@ -48,7 +48,7 @@ established by evidence.
 Only source declarations live here:
 
 - vendor identity and public sources;
-- an exact product and acquisition or operating funnel;
+- an exact product and service-access/operating funnel;
 - declared participants, resources, endpoints, interfaces, and their relations;
 - exact standard/version bindings and field-level source bindings;
 - optional explicit relations to existing Sourcey Offers; and
@@ -65,8 +65,8 @@ history.
 
 Start with [CONTRIBUTING.md](CONTRIBUTING.md). New identities are allocated
 against Sourcey's existing vendor records before a declaration is merged, so
-the same vendor has one stable identity across Startup Offers and Agent
-Readiness.
+the same vendor has one stable identity across catalogs without making an
+Offer part of a readiness profile.
 
 After a declaration is merged, it enters private scope and evidence review.
 Publication happens only when the evidence floor is met. A vendor can then

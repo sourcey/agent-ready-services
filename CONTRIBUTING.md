@@ -8,9 +8,11 @@ certification, or current Report Card.
 
 1. Search the open issues and pull requests for the vendor and product funnel.
 2. Open an [assessment request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml).
-3. Sourcey will confirm the stable `entity_id` and any exact related `offer_id`.
-   Startup Offers and Agent Readiness use the same Entity authority, but remain
-   separate catalogs. Do not invent or reuse IDs.
+3. Sourcey will confirm the stable `entity_id`. Startup Offers and Agent
+   Readiness use the same Entity authority, but remain separate catalogs. Do
+   not copy a credit or deal into the readiness declaration. An optional Offer
+   relation is proposed only when Sourcey has confirmed a real downstream
+   relationship; it never scopes or identifies the profile.
 4. Use `authority_intent: vendor` only when Sourcey has proven control of the
    vendor domain. Otherwise use `community`.
 
@@ -50,14 +52,14 @@ vendor:
     - source_id: source_acme_signup
       url: https://acme.example/signup
 declarations:
-  - declaration_id: declaration_acme_db_self_serve
+  - declaration_id: declaration_acme_db_api_lifecycle
     scope:
       product:
         key: acme-db
         name: Acme DB
       funnel:
-        key: self-serve
-        name: Self-serve signup
+        key: api-service-lifecycle
+        name: API service lifecycle
     participants:
       - participant_id: acme
         roles: [subject, access_operator, operations_provider]
@@ -87,15 +89,11 @@ declarations:
         kind: precedes
         from: { node_kind: resource, node_id: documentation }
         to: { node_kind: resource, node_id: signup }
-    offer_relations:
-      - offer_relation_proposal_id: acme-db-self-serve-offer
-        offer_id: off_01k00000000000000000000001
-        purpose: application_path
-        applicable_stages: [evaluate, sign_up, pay, provision, operate]
+    offer_relations: []
     source_bindings:
       - source_binding_id: acme-declaration-scope
         source_id: source_acme_docs
-        target: { node_kind: declaration, node_id: declaration_acme_db_self_serve }
+        target: { node_kind: declaration, node_id: declaration_acme_db_api_lifecycle }
         field_paths: [/scope/product/name, /scope/funnel/name]
       - source_binding_id: acme-participant
         source_id: source_acme_docs
@@ -117,13 +115,9 @@ declarations:
         source_id: source_acme_signup
         target: { node_kind: relation, node_id: docs-precede-signup }
         field_paths: [/kind, /from, /to]
-      - source_binding_id: acme-offer-relation
-        source_id: source_acme_signup
-        target: { node_kind: offer_relation, node_id: acme-db-self-serve-offer }
-        field_paths: [/offer_id, /purpose, /applicable_stages]
     authority_intent: community
     declared_at: 2026-08-05T00:00:00.000Z
-    assessment_reason: Assess whether an agent can evaluate, sign up for, provision, and operate Acme DB through the self-serve funnel.
+    assessment_reason: Assess whether an agent with authorized access can evaluate, provision, and operate Acme DB through its documented API, while preserving any human account or billing prerequisites as stage context.
 ```
 
 Resources are retrievable documents or pages. Endpoints are callable network
@@ -136,12 +130,14 @@ described, or used by a node. They do not contain Sourcey stages, signals, or
 results. `source_bindings` name the exact public source supporting each material
 authored field.
 
-Offer relationships are separate from profile identity. Add an
-`offer_relations` entry only when Sourcey confirmed the exact Offer. Omit the
-entry for a readiness-only funnel; never create a synthetic Offer. Do not add a
-field for a presumed result such as “ready,” “blocked,” “CAPTCHA,” a stage
-outcome, an overall grade, or a remediation. Those are derived only from
-admitted evidence and policy.
+Offer relationships are optional downstream joins, separate from profile
+identity and assessment scope. Most service declarations should use
+`offer_relations: []`. Add a relation only when Sourcey confirmed the exact
+same-Entity Offer and the precise stage relationship; never create a synthetic
+Offer or use a credit application as the service funnel. Do not add a field for
+a presumed result such as “ready,” “blocked,” “CAPTCHA,” a stage outcome, an
+overall grade, or a remediation. Those are derived only from admitted evidence
+and policy.
 
 ## Pull request rules
 
