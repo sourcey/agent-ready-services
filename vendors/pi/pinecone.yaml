@@ -1,0 +1,71 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8fpe4a7e0sp2h5gjz9xbm
+  slug: pinecone
+  slug_aliases: []
+  name: Pinecone
+  domains:
+    - { value: pinecone.io, role: primary, valid_from: 2026-07-27T07:42:06.422Z }
+  category: databases
+  description: Pinecone is a purpose-built vector database for building scalable, high-performance GenAI and search applications.
+  links: { site: https://www.pinecone.io, pricing: https://www.pinecone.io/pricing/ }
+  sources:
+    - { source_id: source_pinecone_api, url: https://docs.pinecone.io/reference/api/introduction }
+    - { source_id: source_pinecone_auth, url: https://docs.pinecone.io/reference/api/authentication }
+    - { source_id: source_pinecone_create_index, url: https://docs.pinecone.io/reference/api/2025-04/control-plane/create_index }
+    - { source_id: source_pinecone_limits, url: https://docs.pinecone.io/reference/api/database-limits }
+    - { source_id: source_pinecone_errors, url: https://docs.pinecone.io/reference/api/errors }
+    - { source_id: source_pinecone_pricing, url: https://www.pinecone.io/pricing/ }
+    - { source_id: source_pinecone_signup, url: https://app.pinecone.io/ }
+    - { source_id: source_pinecone_terms, url: https://www.pinecone.io/terms/ }
+    - { source_id: source_pinecone_support, url: https://docs.pinecone.io/troubleshooting/how-to-work-with-support }
+declarations:
+  - declaration_id: declaration_pinecone_api_index_lifecycle
+    scope:
+      product: { key: pinecone-database-api, name: Pinecone Database API }
+      funnel: { key: index-lifecycle, name: Index lifecycle }
+    participants:
+      - { participant_id: pinecone, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe4a7e0sp2h5gjz9xbm } }
+    resources:
+      - { resource_id: api-reference, uri: https://docs.pinecone.io/reference/api/introduction, roles: [discovery, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.pinecone.io/terms/, roles: [terms], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://www.pinecone.io/pricing/, roles: [pricing], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: console-access, uri: https://app.pinecone.io/, roles: [sign_up, checkout, provisioning], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.pinecone.io/reference/api/authentication, roles: [descriptor, provisioning, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: create-index, uri: https://docs.pinecone.io/reference/api/2025-04/control-plane/create_index, roles: [provisioning, status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: database-limits, uri: https://docs.pinecone.io/reference/api/database-limits, roles: [status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://docs.pinecone.io/reference/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: support, uri: https://docs.pinecone.io/troubleshooting/how-to-work-with-support, roles: [recovery, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: control-plane-api, uri: https://api.pinecone.io, transport: http, roles: [service, status], operated_by_participant_id: pinecone, standard_bindings: [] }
+    interfaces:
+      - { interface_id: index-api, capabilities: [api, tools], endpoint_ids: [control-plane-api], resource_ids: [api-reference, create-index, database-limits, api-errors], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: pinecone, standard_bindings: [] }
+    relations:
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: index-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: index-api } }
+      - { relation_id: console-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: console-access }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: create-index-describes-api, kind: describes, from: { node_kind: resource, node_id: create-index }, to: { node_kind: interface, node_id: index-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: pinecone-scope, source_id: source_pinecone_create_index, target: { node_kind: declaration, node_id: declaration_pinecone_api_index_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: pinecone-participant, source_id: source_pinecone_api, target: { node_kind: participant, node_id: pinecone }, field_paths: [/roles, /identity] }
+      - { source_binding_id: pinecone-resource-reference, source_id: source_pinecone_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-terms, source_id: source_pinecone_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-pricing, source_id: source_pinecone_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-console, source_id: source_pinecone_signup, target: { node_kind: resource, node_id: console-access }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-auth, source_id: source_pinecone_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-create, source_id: source_pinecone_create_index, target: { node_kind: resource, node_id: create-index }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-limits, source_id: source_pinecone_limits, target: { node_kind: resource, node_id: database-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-errors, source_id: source_pinecone_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-resource-support, source_id: source_pinecone_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-endpoint-api, source_id: source_pinecone_api, target: { node_kind: endpoint, node_id: control-plane-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-interface-api, source_id: source_pinecone_create_index, target: { node_kind: interface, node_id: index-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-interface-auth, source_id: source_pinecone_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-relation-reference, source_id: source_pinecone_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: pinecone-relation-auth, source_id: source_pinecone_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: pinecone-relation-console, source_id: source_pinecone_signup, target: { node_kind: relation, node_id: console-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: pinecone-relation-create, source_id: source_pinecone_create_index, target: { node_kind: relation, node_id: create-index-describes-api }, field_paths: [/kind, /from, /to] }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
+    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, create, inspect, and recover Pinecone indexes through the control-plane API while preserving human account and billing prerequisites as stage context.

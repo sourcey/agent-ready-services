@@ -1,0 +1,71 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8fpe3xgjjktffez1t34rn
+  slug: github
+  slug_aliases: []
+  name: GitHub
+  domains:
+    - { value: github.com, role: primary, valid_from: 2026-07-27T07:36:31.590Z }
+  category: devtools-other
+  description: GitHub is an AI-powered developer platform providing code hosting, automated CI/CD workflows, code security, and developer tools.
+  links: { site: https://github.com, pricing: https://github.com/pricing }
+  sources:
+    - { source_id: source_github_rest, url: https://docs.github.com/en/rest }
+    - { source_id: source_github_auth, url: https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api }
+    - { source_id: source_github_repositories, url: https://docs.github.com/en/rest/repos/repos }
+    - { source_id: source_github_limits, url: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api }
+    - { source_id: source_github_errors, url: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api }
+    - { source_id: source_github_pricing, url: https://github.com/pricing }
+    - { source_id: source_github_signup, url: https://github.com/signup }
+    - { source_id: source_github_terms, url: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service }
+    - { source_id: source_github_support, url: https://support.github.com/ }
+declarations:
+  - declaration_id: declaration_github_rest_repository_operations
+    scope:
+      product: { key: github-rest-api, name: GitHub REST API }
+      funnel: { key: repository-operations, name: Repository operations }
+    participants:
+      - { participant_id: github, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3xgjjktffez1t34rn } }
+    resources:
+      - { resource_id: rest-api, uri: https://docs.github.com/en/rest, roles: [discovery, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service, roles: [terms], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://github.com/pricing, roles: [pricing], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://github.com/signup, roles: [sign_up, checkout, provisioning], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api, roles: [descriptor, provisioning, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: repository-operations, uri: https://docs.github.com/en/rest/repos/repos, roles: [provisioning, status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: rate-limits, uri: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api, roles: [status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: troubleshooting, uri: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api, roles: [status, operations, recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: support, uri: https://support.github.com/, roles: [recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: github-api, uri: https://api.github.com, transport: http, roles: [service, status], operated_by_participant_id: github, standard_bindings: [] }
+    interfaces:
+      - { interface_id: repository-api, capabilities: [api, tools], endpoint_ids: [github-api], resource_ids: [rest-api, repository-operations, rate-limits, troubleshooting], operated_by_participant_id: github, standard_bindings: [] }
+      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: github, standard_bindings: [] }
+    relations:
+      - { relation_id: rest-describes-api, kind: describes, from: { node_kind: resource, node_id: rest-api }, to: { node_kind: interface, node_id: repository-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: repository-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: repository-docs-describe-api, kind: describes, from: { node_kind: resource, node_id: repository-operations }, to: { node_kind: interface, node_id: repository-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: github-scope, source_id: source_github_repositories, target: { node_kind: declaration, node_id: declaration_github_rest_repository_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: github-participant, source_id: source_github_rest, target: { node_kind: participant, node_id: github }, field_paths: [/roles, /identity] }
+      - { source_binding_id: github-resource-rest, source_id: source_github_rest, target: { node_kind: resource, node_id: rest-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-terms, source_id: source_github_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-pricing, source_id: source_github_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-signup, source_id: source_github_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-auth, source_id: source_github_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-repositories, source_id: source_github_repositories, target: { node_kind: resource, node_id: repository-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-limits, source_id: source_github_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-errors, source_id: source_github_errors, target: { node_kind: resource, node_id: troubleshooting }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-support, source_id: source_github_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-endpoint-api, source_id: source_github_rest, target: { node_kind: endpoint, node_id: github-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-interface-api, source_id: source_github_repositories, target: { node_kind: interface, node_id: repository-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: github-interface-auth, source_id: source_github_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: github-relation-rest, source_id: source_github_rest, target: { node_kind: relation, node_id: rest-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: github-relation-auth, source_id: source_github_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: github-relation-signup, source_id: source_github_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: github-relation-repositories, source_id: source_github_repositories, target: { node_kind: relation, node_id: repository-docs-describe-api }, field_paths: [/kind, /from, /to] }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
+    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, and operate GitHub repositories through the REST API while preserving human account and organization prerequisites as stage context.

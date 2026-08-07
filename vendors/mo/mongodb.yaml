@@ -1,0 +1,71 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+vendor:
+  entity_id: ent_01kyh8fpe4ys74qx1k4zfcqpjv
+  slug: mongodb
+  slug_aliases: []
+  name: MongoDB
+  domains:
+    - { value: mongodb.com, role: primary, valid_from: 2026-07-27T07:41:47.670Z }
+  category: databases
+  description: MongoDB for Startups offers free MongoDB Atlas credits, Voyage AI tokens, one-on-one technical advice, co-marketing opportunities, and access to our partner network.
+  links: { site: https://www.mongodb.com, pricing: https://www.mongodb.com/pricing }
+  sources:
+    - { source_id: source_mongodb_atlas_api, url: https://www.mongodb.com/docs/atlas/api/atlas-admin-api-ref/ }
+    - { source_id: source_mongodb_auth, url: https://www.mongodb.com/docs/atlas/api/api-authentication/ }
+    - { source_id: source_mongodb_clusters, url: https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/ }
+    - { source_id: source_mongodb_limits, url: https://www.mongodb.com/docs/atlas/api/api-rate-limit/ }
+    - { source_id: source_mongodb_errors, url: https://www.mongodb.com/docs/atlas/reference/api-errors/ }
+    - { source_id: source_mongodb_pricing, url: https://www.mongodb.com/pricing }
+    - { source_id: source_mongodb_signup, url: https://account.mongodb.com/account/register }
+    - { source_id: source_mongodb_terms, url: https://www.mongodb.com/legal/terms-of-use }
+    - { source_id: source_mongodb_support, url: https://www.mongodb.com/docs/atlas/support/ }
+declarations:
+  - declaration_id: declaration_mongodb_atlas_api_cluster_lifecycle
+    scope:
+      product: { key: mongodb-atlas-api, name: MongoDB Atlas Administration API }
+      funnel: { key: cluster-lifecycle, name: Cluster lifecycle }
+    participants:
+      - { participant_id: mongodb, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe4ys74qx1k4zfcqpjv } }
+    resources:
+      - { resource_id: api-reference, uri: https://www.mongodb.com/docs/atlas/api/atlas-admin-api-ref/, roles: [discovery, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.mongodb.com/legal/terms-of-use, roles: [terms], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://www.mongodb.com/pricing, roles: [pricing], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://account.mongodb.com/account/register, roles: [sign_up, checkout, provisioning], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://www.mongodb.com/docs/atlas/api/api-authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: cluster-operations, uri: https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: rate-limits, uri: https://www.mongodb.com/docs/atlas/api/api-rate-limit/, roles: [status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://www.mongodb.com/docs/atlas/reference/api-errors/, roles: [status, operations, recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: support, uri: https://www.mongodb.com/docs/atlas/support/, roles: [recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: atlas-api, uri: https://cloud.mongodb.com/api/atlas/v2, transport: http, roles: [service, status], operated_by_participant_id: mongodb, standard_bindings: [] }
+    interfaces:
+      - { interface_id: cluster-api, capabilities: [api, tools], endpoint_ids: [atlas-api], resource_ids: [api-reference, cluster-operations, rate-limits, api-errors], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: mongodb, standard_bindings: [] }
+    relations:
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: cluster-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: cluster-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: clusters-describe-api, kind: describes, from: { node_kind: resource, node_id: cluster-operations }, to: { node_kind: interface, node_id: cluster-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: mongodb-scope, source_id: source_mongodb_clusters, target: { node_kind: declaration, node_id: declaration_mongodb_atlas_api_cluster_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: mongodb-participant, source_id: source_mongodb_atlas_api, target: { node_kind: participant, node_id: mongodb }, field_paths: [/roles, /identity] }
+      - { source_binding_id: mongodb-resource-reference, source_id: source_mongodb_atlas_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-terms, source_id: source_mongodb_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-pricing, source_id: source_mongodb_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-signup, source_id: source_mongodb_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-auth, source_id: source_mongodb_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-clusters, source_id: source_mongodb_clusters, target: { node_kind: resource, node_id: cluster-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-limits, source_id: source_mongodb_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-errors, source_id: source_mongodb_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-resource-support, source_id: source_mongodb_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-endpoint-api, source_id: source_mongodb_atlas_api, target: { node_kind: endpoint, node_id: atlas-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-interface-api, source_id: source_mongodb_clusters, target: { node_kind: interface, node_id: cluster-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-interface-auth, source_id: source_mongodb_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-relation-reference, source_id: source_mongodb_atlas_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: mongodb-relation-auth, source_id: source_mongodb_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: mongodb-relation-signup, source_id: source_mongodb_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: mongodb-relation-clusters, source_id: source_mongodb_clusters, target: { node_kind: relation, node_id: clusters-describe-api }, field_paths: [/kind, /from, /to] }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
+    assessment_reason: Assess whether an authorized agent can evaluate, authenticate to, provision, inspect, and recover MongoDB Atlas clusters through the Administration API while preserving human account and billing prerequisites as stage context.
