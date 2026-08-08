@@ -158,6 +158,8 @@ The public `sourcey/validation` status parses only changed vendor blobs using th
 digest-pinned Sourcey Catalog Verifier and confirms their identity-derived
 paths and dependency closure. It does not execute pull-request code. A green
 status proves declaration shape, not readiness.
+Validation starts automatically when a pull request is opened or updated; contributors do not
+need a maintainer to approve the workflow before seeing the result.
 
 For an exact local preflight from a checkout with `origin/main` fetched:
 
