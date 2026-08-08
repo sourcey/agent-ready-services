@@ -15,7 +15,7 @@ vendor:
     - { source_id: source_hubspot_crm, url: https://developers.hubspot.com/docs/api-reference/crm-objects-v3/guide }
     - { source_id: source_hubspot_errors, url: https://developers.hubspot.com/docs/api-reference/error-handling }
     - { source_id: source_hubspot_limits, url: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines }
-    - { source_id: source_hubspot_pricing, url: https://www.hubspot.com/pricing }
+    - { source_id: source_hubspot_pricing, url: https://developers.hubspot.com/developer-platform-basics }
     - { source_id: source_hubspot_signup, url: https://app.hubspot.com/signup-hubspot/crm }
     - { source_id: source_hubspot_terms, url: https://legal.hubspot.com/legal-stuff }
     - { source_id: source_hubspot_support, url: https://knowledge.hubspot.com/ }
@@ -29,7 +29,7 @@ declarations:
     resources:
       - { resource_id: api-overview, uri: https://developers.hubspot.com/docs/api-reference/overview, roles: [discovery, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://legal.hubspot.com/legal-stuff, roles: [terms], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://www.hubspot.com/pricing, roles: [pricing], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://developers.hubspot.com/developer-platform-basics, roles: [pricing], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: crm-signup, uri: https://app.hubspot.com/signup-hubspot/crm, roles: [sign_up, checkout, provisioning], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: oauth, uri: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/working-with-oauth, roles: [descriptor, provisioning, documentation], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
       - { resource_id: crm-operations, uri: https://developers.hubspot.com/docs/api-reference/crm-objects-v3/guide, roles: [provisioning, status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
