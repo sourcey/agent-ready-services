@@ -22,6 +22,7 @@ vendor:
     - { source_id: source_openai_signup, url: https://platform.openai.com/signup }
     - { source_id: source_openai_terms, url: https://openai.com/policies/services-agreement/ }
     - { source_id: source_openai_support, url: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage }
+    - { source_id: source_openai_billing_checkout, url: https://help.openai.com/en/articles/8264644-what-is-prepaid-billing }
 declarations:
   - declaration_id: declaration_openai_api_service_lifecycle
     scope:
@@ -29,7 +30,7 @@ declarations:
       funnel: { key: api-service-lifecycle, name: API service lifecycle }
     assessment_targets:
       - target_id: service-use
-        name: OpenAI API service use
+        name: Submit Responses API requests and receive model output
         interface_ids: [api-service]
     participants:
       - participant_id: openai
@@ -40,10 +41,11 @@ declarations:
       - { resource_id: service-terms, uri: https://openai.com/policies/services-agreement/, roles: [terms], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: pricing, uri: https://openai.com/api/pricing/, roles: [pricing], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: platform-signup, uri: https://platform.openai.com/signup, roles: [access], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: quickstart, uri: https://developers.openai.com/api/docs/quickstart, roles: [descriptor, checkout, provisioning, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: quickstart, uri: https://developers.openai.com/api/docs/quickstart, roles: [descriptor, provisioning, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.openai.com/api/docs/guides/error-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://developers.openai.com/api/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: billing-support, uri: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage, roles: [recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://help.openai.com/en/articles/8264644-what-is-prepaid-billing, roles: [checkout, documentation], operated_by_participant_id: openai, standard_bindings: [] }
     endpoints:
       - { endpoint_id: responses-api, uri: https://api.openai.com/v1/responses, transport: http, roles: [service], operated_by_participant_id: openai, standard_bindings: [] }
     interfaces:
@@ -70,6 +72,7 @@ declarations:
       - { source_binding_id: openai-resource-errors, source_id: source_openai_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-limits, source_id: source_openai_rate_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-support, source_id: source_openai_support, target: { node_kind: resource, node_id: billing-support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: openai-resource-billing-checkout, source_id: source_openai_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-endpoint-responses, source_id: source_openai_api_reference, target: { node_kind: endpoint, node_id: responses-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-interface-api, source_id: source_openai_api_reference, target: { node_kind: interface, node_id: api-service }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: openai-interface-auth, source_id: source_openai_quickstart, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }

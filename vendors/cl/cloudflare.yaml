@@ -10,15 +10,15 @@ vendor:
   description: Cloudflare offers a developer platform and global network providing security, compute, storage, and performance services to build fast and secure applications.
   links: { site: https://www.cloudflare.com, pricing: https://www.cloudflare.com/plans/ }
   sources:
-    - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/resources/accounts/methods/list/ }
+    - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/ }
     - { source_id: source_cloudflare_tokens, url: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ }
     - { source_id: source_cloudflare_errors, url: https://developers.cloudflare.com/fundamentals/api/troubleshooting/ }
     - { source_id: source_cloudflare_limits, url: https://developers.cloudflare.com/fundamentals/api/reference/limits/ }
     - { source_id: source_cloudflare_plans, url: https://www.cloudflare.com/plans/ }
-    - { source_id: source_cloudflare_signup, url: https://dash.cloudflare.com/sign-up }
+    - { source_id: source_cloudflare_signup, url: https://developers.cloudflare.com/fundamentals/account/create-account/ }
     - { source_id: source_cloudflare_terms, url: https://www.cloudflare.com/terms/ }
     - { source_id: source_cloudflare_support, url: https://developers.cloudflare.com/support/ }
-    - { source_id: source_cloudflare_billing_checkout, url: https://developers.cloudflare.com/billing/ }
+    - { source_id: source_cloudflare_billing_checkout, url: https://developers.cloudflare.com/billing/get-started/create-billing-profile/ }
 declarations:
   - declaration_id: declaration_cloudflare_api_resource_management
     scope:
@@ -26,20 +26,20 @@ declarations:
       funnel: { key: api-resource-management, name: API resource management }
     assessment_targets:
       - target_id: service-use
-        name: Cloudflare Developer Platform service use
+        name: Upload and manage Cloudflare Worker scripts through the API
         interface_ids: [resource-api]
     participants:
       - { participant_id: cloudflare, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
-      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/resources/accounts/methods/list/, roles: [discovery, provisioning, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/, roles: [discovery, provisioning, status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
-      - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: dashboard-signup, uri: https://developers.cloudflare.com/fundamentals/account/create-account/, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-tokens, uri: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.cloudflare.com/fundamentals/api/troubleshooting/, roles: [status, operations, recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-limits, uri: https://developers.cloudflare.com/fundamentals/api/reference/limits/, roles: [status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: support, uri: https://developers.cloudflare.com/support/, roles: [recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://developers.cloudflare.com/billing/, roles: [checkout, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://developers.cloudflare.com/billing/get-started/create-billing-profile/, roles: [checkout, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
     endpoints:
       - { endpoint_id: cloudflare-api, uri: https://api.cloudflare.com/client/v4, transport: http, roles: [service, status], operated_by_participant_id: cloudflare, standard_bindings: [] }
     interfaces:

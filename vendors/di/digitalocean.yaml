@@ -15,10 +15,10 @@ vendor:
     - { source_id: source_digitalocean_tokens, url: https://docs.digitalocean.com/reference/api/create-personal-access-token/ }
     - { source_id: source_digitalocean_droplets, url: https://docs.digitalocean.com/products/droplets/how-to/create/ }
     - { source_id: source_digitalocean_pricing, url: https://www.digitalocean.com/pricing }
-    - { source_id: source_digitalocean_signup, url: https://cloud.digitalocean.com/registrations/new }
+    - { source_id: source_digitalocean_signup, url: https://docs.digitalocean.com/platform/accounts/2fa/ }
     - { source_id: source_digitalocean_terms, url: https://www.digitalocean.com/legal/terms-of-service-agreement }
     - { source_id: source_digitalocean_support, url: https://docs.digitalocean.com/support/ }
-    - { source_id: source_digitalocean_billing_checkout, url: https://docs.digitalocean.com/platform/billing/pay-bills/ }
+    - { source_id: source_digitalocean_billing_checkout, url: https://docs.digitalocean.com/platform/billing/manage-payment-methods/ }
 declarations:
   - declaration_id: declaration_digitalocean_api_resource_management
     scope:
@@ -26,7 +26,7 @@ declarations:
       funnel: { key: api-resource-management, name: API resource management }
     assessment_targets:
       - target_id: service-use
-        name: DigitalOcean Cloud service use
+        name: Create and manage DigitalOcean Droplets through the API
         interface_ids: [resource-api]
     participants:
       - { participant_id: digitalocean, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe29kn3bm05h7kyqyka } }
@@ -34,12 +34,12 @@ declarations:
       - { resource_id: api-overview, uri: https://docs.digitalocean.com/reference/api/, roles: [discovery, operations, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.digitalocean.com/legal/terms-of-service-agreement, roles: [terms], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.digitalocean.com/pricing, roles: [pricing], operated_by_participant_id: digitalocean, standard_bindings: [] }
-      - { resource_id: cloud-signup, uri: https://cloud.digitalocean.com/registrations/new, roles: [access], operated_by_participant_id: digitalocean, standard_bindings: [] }
+      - { resource_id: cloud-signup, uri: https://docs.digitalocean.com/platform/accounts/2fa/, roles: [access], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: personal-access-tokens, uri: https://docs.digitalocean.com/reference/api/create-personal-access-token/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: droplet-provisioning, uri: https://docs.digitalocean.com/products/droplets/how-to/create/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: api-reference, uri: https://docs.digitalocean.com/reference/api/reference/public-apis/, roles: [status, operations, recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.digitalocean.com/support/, roles: [recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://docs.digitalocean.com/platform/billing/pay-bills/, roles: [checkout, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://docs.digitalocean.com/platform/billing/manage-payment-methods/, roles: [checkout, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
     endpoints:
       - { endpoint_id: digitalocean-api, uri: https://api.digitalocean.com/v2, transport: http, roles: [service, status], operated_by_participant_id: digitalocean, standard_bindings: [] }
     interfaces:

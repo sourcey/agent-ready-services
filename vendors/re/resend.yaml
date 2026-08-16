@@ -19,7 +19,7 @@ vendor:
     - { source_id: source_resend_signup, url: https://resend.com/signup }
     - { source_id: source_resend_terms, url: https://resend.com/legal/terms-of-service }
     - { source_id: source_resend_support, url: https://resend.com/docs/knowledge-base/introduction }
-    - { source_id: source_resend_billing_checkout, url: https://resend.com/changelog/in-app-billing }
+    - { source_id: source_resend_billing_checkout, url: https://resend.com/docs/dashboard/settings/billing }
 declarations:
   - declaration_id: declaration_resend_email_api_operations
     scope:
@@ -27,7 +27,7 @@ declarations:
       funnel: { key: email-operations, name: Email operations }
     assessment_targets:
       - target_id: service-use
-        name: Resend Email API service use
+        name: Configure sending domains and send email through the API
         interface_ids: [email-api]
     participants:
       - { participant_id: resend, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe5xfhy18q4ccs4a07n } }
@@ -41,7 +41,7 @@ declarations:
       - { resource_id: domain-provisioning, uri: https://resend.com/docs/api-reference/domains/create-domain, roles: [provisioning, status, operations, documentation], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://resend.com/docs/api-reference/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: support, uri: https://resend.com/docs/knowledge-base/introduction, roles: [recovery, documentation], operated_by_participant_id: resend, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://resend.com/changelog/in-app-billing, roles: [checkout, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://resend.com/docs/dashboard/settings/billing, roles: [checkout, documentation], operated_by_participant_id: resend, standard_bindings: [] }
     endpoints:
       - { endpoint_id: resend-api, uri: https://api.resend.com, transport: http, roles: [service, status], operated_by_participant_id: resend, standard_bindings: [] }
     interfaces:

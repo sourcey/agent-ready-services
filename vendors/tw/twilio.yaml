@@ -27,7 +27,7 @@ declarations:
       funnel: { key: message-operations, name: Message operations }
     assessment_targets:
       - target_id: service-use
-        name: Twilio Messaging API service use
+        name: Send messages and inspect delivery state through the API
         interface_ids: [messaging-api]
     participants:
       - { participant_id: twilio, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tg62epymp01r8t62x } }

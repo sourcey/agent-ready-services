@@ -12,7 +12,7 @@ vendor:
   sources:
     - { source_id: source_sentry_api, url: https://docs.sentry.io/api/ }
     - { source_id: source_sentry_auth, url: https://docs.sentry.io/api/auth/ }
-    - { source_id: source_sentry_events, url: https://docs.sentry.io/api/events/ }
+    - { source_id: source_sentry_projects, url: https://docs.sentry.io/api/projects/create-a-new-project/ }
     - { source_id: source_sentry_permissions, url: https://docs.sentry.io/api/permissions/ }
     - { source_id: source_sentry_limits, url: https://docs.sentry.io/api/ratelimits/ }
     - { source_id: source_sentry_pricing, url: https://sentry.io/pricing/ }
@@ -20,14 +20,14 @@ vendor:
     - { source_id: source_sentry_terms, url: https://sentry.io/terms/ }
     - { source_id: source_sentry_support, url: https://sentry.zendesk.com/hc/en-us }
 declarations:
-  - declaration_id: declaration_sentry_api_issue_operations
+  - declaration_id: declaration_sentry_api_project_operations
     scope:
       product: { key: sentry-web-api, name: Sentry Web API }
-      funnel: { key: issue-operations, name: Issue and project operations }
+      funnel: { key: project-operations, name: Project operations }
     assessment_targets:
       - target_id: service-use
-        name: Sentry Web API service use
-        interface_ids: [issue-api]
+        name: Create and manage Sentry projects through the Web API
+        interface_ids: [project-api]
     participants:
       - { participant_id: sentry, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyxthgq3w0q894h0tadvr0cq } }
     resources:
@@ -37,26 +37,26 @@ declarations:
       - { resource_id: account-signup, uri: https://sentry.io/signup/, roles: [access], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.sentry.io/api/auth/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: permissions, uri: https://docs.sentry.io/api/permissions/, roles: [descriptor, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
-      - { resource_id: issue-operations, uri: https://docs.sentry.io/api/events/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { resource_id: project-operations, uri: https://docs.sentry.io/api/projects/create-a-new-project/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.sentry.io/api/ratelimits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: support, uri: https://sentry.zendesk.com/hc/en-us, roles: [recovery, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
     endpoints:
       - { endpoint_id: sentry-api, uri: https://sentry.io/api/0, transport: http, roles: [service, status], operated_by_participant_id: sentry, standard_bindings: [] }
     interfaces:
-      - { interface_id: issue-api, modality: network_api, functions: [service_operation], endpoint_ids: [sentry-api], resource_ids: [api-reference, permissions, issue-operations, rate-limits], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { interface_id: project-api, modality: network_api, functions: [service_operation], endpoint_ids: [sentry-api], resource_ids: [api-reference, permissions, project-operations, rate-limits], operated_by_participant_id: sentry, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: sentry, standard_bindings: [] }
     relations:
-      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: issue-api } }
-      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: issue-api } }
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: project-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: project-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
-      - { relation_id: events-describe-api, kind: describes, from: { node_kind: resource, node_id: issue-operations }, to: { node_kind: interface, node_id: issue-api } }
+      - { relation_id: projects-describe-api, kind: describes, from: { node_kind: resource, node_id: project-operations }, to: { node_kind: interface, node_id: project-api } }
     offer_relations: []
     source_bindings:
       - source_binding_id: sentry_assessment_target
-        source_id: source_sentry_events
+        source_id: source_sentry_projects
         target: { node_kind: assessment_target, node_id: service-use }
         field_paths: [/name, /interface_ids]
-      - { source_binding_id: sentry-scope, source_id: source_sentry_events, target: { node_kind: declaration, node_id: declaration_sentry_api_issue_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: sentry-scope, source_id: source_sentry_projects, target: { node_kind: declaration, node_id: declaration_sentry_api_project_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
       - { source_binding_id: sentry-participant, source_id: source_sentry_api, target: { node_kind: participant, node_id: sentry }, field_paths: [/roles, /identity] }
       - { source_binding_id: sentry-resource-reference, source_id: source_sentry_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-terms, source_id: source_sentry_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -64,16 +64,16 @@ declarations:
       - { source_binding_id: sentry-resource-signup, source_id: source_sentry_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-auth, source_id: source_sentry_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-permissions, source_id: source_sentry_permissions, target: { node_kind: resource, node_id: permissions }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: sentry-resource-events, source_id: source_sentry_events, target: { node_kind: resource, node_id: issue-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: sentry-resource-projects, source_id: source_sentry_projects, target: { node_kind: resource, node_id: project-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-limits, source_id: source_sentry_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-support, source_id: source_sentry_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-endpoint-api, source_id: source_sentry_api, target: { node_kind: endpoint, node_id: sentry-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
-      - { source_binding_id: sentry-interface-api, source_id: source_sentry_events, target: { node_kind: interface, node_id: issue-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: sentry-interface-api, source_id: source_sentry_projects, target: { node_kind: interface, node_id: project-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: sentry-interface-auth, source_id: source_sentry_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: sentry-relation-reference, source_id: source_sentry_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-relation-auth, source_id: source_sentry_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-relation-signup, source_id: source_sentry_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: sentry-relation-events, source_id: source_sentry_events, target: { node_kind: relation, node_id: events-describe-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: sentry-relation-projects, source_id: source_sentry_projects, target: { node_kind: relation, node_id: projects-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-exclusion-separate-eligibility, source_id: source_sentry_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
       - { source_binding_id: sentry-exclusion-service-checkout, source_id: source_sentry_pricing, target: { node_kind: surface_exclusion, node_id: no-public-service-checkout }, field_paths: [/role, /rationale] }
     surface_exclusions:

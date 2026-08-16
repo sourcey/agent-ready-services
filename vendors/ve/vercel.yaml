@@ -15,7 +15,7 @@ vendor:
     - { source_id: source_vercel_deployments, url: https://vercel.com/docs/rest-api/reference/endpoints/deployments/create-a-new-deployment }
     - { source_id: source_vercel_errors, url: https://vercel.com/docs/rest-api/errors }
     - { source_id: source_vercel_pricing, url: https://vercel.com/pricing }
-    - { source_id: source_vercel_signup, url: https://vercel.com/signup }
+    - { source_id: source_vercel_signup, url: https://vercel.com/docs/accounts }
     - { source_id: source_vercel_terms, url: https://vercel.com/legal/terms }
     - { source_id: source_vercel_support, url: https://vercel.com/help }
     - { source_id: source_vercel_billing_checkout, url: https://vercel.com/docs/plans/pro-plan/billing }
@@ -26,7 +26,7 @@ declarations:
       funnel: { key: deployment-operations, name: Deployment operations }
     assessment_targets:
       - target_id: service-use
-        name: Vercel REST API service use
+        name: Create and inspect deployments through the REST API
         interface_ids: [deployment-api]
     participants:
       - { participant_id: vercel, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe5dk9hex187x4g03fn } }
@@ -34,7 +34,7 @@ declarations:
       - { resource_id: api-reference, uri: https://vercel.com/docs/rest-api, roles: [discovery, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://vercel.com/legal/terms, roles: [terms], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: pricing, uri: https://vercel.com/pricing, roles: [pricing], operated_by_participant_id: vercel, standard_bindings: [] }
-      - { resource_id: account-signup, uri: https://vercel.com/signup, roles: [access], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://vercel.com/docs/accounts, roles: [access], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: access-tokens, uri: https://vercel.com/guides/how-do-i-use-a-vercel-api-access-token, roles: [descriptor, provisioning, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: deployment-operations, uri: https://vercel.com/docs/rest-api/reference/endpoints/deployments/create-a-new-deployment, roles: [provisioning, status, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://vercel.com/docs/rest-api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }

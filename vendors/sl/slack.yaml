@@ -27,7 +27,7 @@ declarations:
       funnel: { key: workspace-app-operations, name: Workspace app operations }
     assessment_targets:
       - target_id: service-use
-        name: Slack Web API service use
+        name: Install an app and post messages through the Web API
         interface_ids: [workspace-api]
     participants:
       - { participant_id: slack, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tdz1rtzzt919cthny } }
