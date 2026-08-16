@@ -43,6 +43,7 @@ declarations:
       - { resource_id: support, uri: https://www.twilio.com/docs/usage/troubleshooting, roles: [recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account, roles: [checkout, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://auth.twilio.com/u/signup, transport: http, roles: [registration], operated_by_participant_id: twilio, standard_bindings: [] }
       - { endpoint_id: twilio-api, uri: https://api.twilio.com/2010-04-01, transport: http, roles: [service, status], operated_by_participant_id: twilio, standard_bindings: [] }
     interfaces:
       - { interface_id: messaging-api, modality: network_api, functions: [service_operation, events], endpoint_ids: [twilio-api], resource_ids: [api-overview, message-operations, delivery-status, api-errors], operated_by_participant_id: twilio, standard_bindings: [] }
@@ -64,6 +65,7 @@ declarations:
       - { source_binding_id: twilio-resource-terms, source_id: source_twilio_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: twilio-resource-pricing, source_id: source_twilio_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: twilio-resource-signup, source_id: source_twilio_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: twilio-endpoint-registration, source_id: source_twilio_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: twilio-resource-auth, source_id: source_twilio_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: twilio-resource-messages, source_id: source_twilio_messages, target: { node_kind: resource, node_id: message-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: twilio-resource-status, source_id: source_twilio_status, target: { node_kind: resource, node_id: delivery-status }, field_paths: [/uri, /roles, /operated_by_participant_id] }

@@ -87,6 +87,7 @@ declarations:
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://support.claude.com/en/articles/8977456-how-do-i-pay-for-my-claude-api-usage, roles: [checkout, documentation], operated_by_participant_id: anthropic, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: "https://platform.claude.com/login?returnTo=%2Fsettings%2Fkeys", transport: http, roles: [registration], operated_by_participant_id: anthropic, standard_bindings: [] }
       - endpoint_id: messages-api
         uri: https://api.anthropic.com/v1/messages
         transport: http
@@ -137,6 +138,7 @@ declarations:
       - { source_binding_id: anthropic-resource-terms, source_id: source_anthropic_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-pricing, source_id: source_anthropic_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-console, source_id: source_anthropic_console, target: { node_kind: resource, node_id: console-access }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: anthropic-endpoint-registration, source_id: source_anthropic_console, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-authentication, source_id: source_anthropic_getting_started, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-errors, source_id: source_anthropic_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-limits, source_id: source_anthropic_rate_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }

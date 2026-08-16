@@ -15,7 +15,7 @@ vendor:
     - { source_id: source_cloudflare_errors, url: https://developers.cloudflare.com/fundamentals/api/troubleshooting/ }
     - { source_id: source_cloudflare_limits, url: https://developers.cloudflare.com/fundamentals/api/reference/limits/ }
     - { source_id: source_cloudflare_plans, url: https://www.cloudflare.com/plans/ }
-    - { source_id: source_cloudflare_signup, url: https://developers.cloudflare.com/fundamentals/account/create-account/ }
+    - { source_id: source_cloudflare_signup, url: https://dash.cloudflare.com/sign-up }
     - { source_id: source_cloudflare_terms, url: https://www.cloudflare.com/terms/ }
     - { source_id: source_cloudflare_support, url: https://developers.cloudflare.com/support/ }
     - { source_id: source_cloudflare_billing_checkout, url: https://developers.cloudflare.com/billing/get-started/create-billing-profile/ }
@@ -34,13 +34,14 @@ declarations:
       - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/, roles: [discovery, provisioning, status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
-      - { resource_id: dashboard-signup, uri: https://developers.cloudflare.com/fundamentals/account/create-account/, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-tokens, uri: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.cloudflare.com/fundamentals/api/troubleshooting/, roles: [status, operations, recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-limits, uri: https://developers.cloudflare.com/fundamentals/api/reference/limits/, roles: [status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: support, uri: https://developers.cloudflare.com/support/, roles: [recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://developers.cloudflare.com/billing/get-started/create-billing-profile/, roles: [checkout, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://dash.cloudflare.com/sign-up, transport: http, roles: [registration], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { endpoint_id: cloudflare-api, uri: https://api.cloudflare.com/client/v4, transport: http, roles: [service, status], operated_by_participant_id: cloudflare, standard_bindings: [] }
     interfaces:
       - { interface_id: resource-api, modality: network_api, functions: [service_operation], endpoint_ids: [cloudflare-api], resource_ids: [api-reference, api-errors, api-limits], operated_by_participant_id: cloudflare, standard_bindings: [] }
@@ -62,6 +63,7 @@ declarations:
       - { source_binding_id: cloudflare-resource-terms, source_id: source_cloudflare_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-plans, source_id: source_cloudflare_plans, target: { node_kind: resource, node_id: plans }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-signup, source_id: source_cloudflare_signup, target: { node_kind: resource, node_id: dashboard-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-endpoint-registration, source_id: source_cloudflare_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-tokens, source_id: source_cloudflare_tokens, target: { node_kind: resource, node_id: api-tokens }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-errors, source_id: source_cloudflare_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-limits, source_id: source_cloudflare_limits, target: { node_kind: resource, node_id: api-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }

@@ -29,7 +29,7 @@ vendor:
     - source_id: source_azure_client_credentials
       url: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
     - source_id: source_azure_account
-      url: https://learn.microsoft.com/en-us/azure/cost-management-billing/troubleshoot-subscription/troubleshoot-azure-sign-up
+      url: https://signup.azure.com/
     - source_id: source_azure_pricing
       url: https://azure.microsoft.com/en-us/pricing/
     - source_id: source_azure_retail_prices_api
@@ -79,7 +79,7 @@ declarations:
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: azure-account
-        uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/troubleshoot-subscription/troubleshoot-azure-sign-up
+        uri: https://signup.azure.com/
         roles: [access]
         operated_by_participant_id: microsoft
         standard_bindings: []
@@ -136,6 +136,7 @@ declarations:
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card, roles: [checkout, documentation], operated_by_participant_id: microsoft, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://signup.azure.com/, transport: http, roles: [registration], operated_by_participant_id: microsoft, standard_bindings: [] }
       - endpoint_id: azure-resource-manager
         uri: https://management.azure.com
         transport: http
@@ -241,6 +242,10 @@ declarations:
         source_id: source_azure_account
         target: { node_kind: resource, node_id: azure-account }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-endpoint-registration
+        source_id: source_azure_account
+        target: { node_kind: endpoint, node_id: registration }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
       - source_binding_id: microsoft-resource-service-principals
         source_id: source_azure_service_principals
         target: { node_kind: resource, node_id: service-principals }

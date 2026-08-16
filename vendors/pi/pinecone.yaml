@@ -16,7 +16,7 @@ vendor:
     - { source_id: source_pinecone_limits, url: https://docs.pinecone.io/reference/api/database-limits }
     - { source_id: source_pinecone_errors, url: https://docs.pinecone.io/reference/api/errors }
     - { source_id: source_pinecone_pricing, url: https://www.pinecone.io/pricing/ }
-    - { source_id: source_pinecone_signup, url: https://docs.pinecone.io/guides/get-started/quickstart }
+    - { source_id: source_pinecone_signup, url: https://app.pinecone.io/ }
     - { source_id: source_pinecone_terms, url: https://www.pinecone.io/terms/ }
     - { source_id: source_pinecone_support, url: https://docs.pinecone.io/troubleshooting/how-to-work-with-support }
     - { source_id: source_pinecone_billing_checkout, url: https://docs.pinecone.io/guides/organizations/manage-billing/change-payment-method }
@@ -35,7 +35,7 @@ declarations:
       - { resource_id: api-reference, uri: https://docs.pinecone.io/reference/api/introduction, roles: [discovery, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.pinecone.io/terms/, roles: [terms], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.pinecone.io/pricing/, roles: [pricing], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - { resource_id: console-access, uri: https://docs.pinecone.io/guides/get-started/quickstart, roles: [access], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: console-access, uri: https://app.pinecone.io/, roles: [access], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.pinecone.io/reference/api/authentication, roles: [descriptor, provisioning, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: create-index, uri: https://docs.pinecone.io/reference/api/2025-04/control-plane/create_index, roles: [provisioning, status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: database-limits, uri: https://docs.pinecone.io/reference/api/database-limits, roles: [status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
@@ -43,6 +43,7 @@ declarations:
       - { resource_id: support, uri: https://docs.pinecone.io/troubleshooting/how-to-work-with-support, roles: [recovery, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://docs.pinecone.io/guides/organizations/manage-billing/change-payment-method, roles: [checkout, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://app.pinecone.io/, transport: http, roles: [registration], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { endpoint_id: control-plane-api, uri: https://api.pinecone.io, transport: http, roles: [service, status], operated_by_participant_id: pinecone, standard_bindings: [] }
     interfaces:
       - { interface_id: index-api, modality: network_api, functions: [service_operation], endpoint_ids: [control-plane-api], resource_ids: [api-reference, create-index, database-limits, api-errors], operated_by_participant_id: pinecone, standard_bindings: [] }
@@ -64,6 +65,7 @@ declarations:
       - { source_binding_id: pinecone-resource-terms, source_id: source_pinecone_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-resource-pricing, source_id: source_pinecone_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-resource-console, source_id: source_pinecone_signup, target: { node_kind: resource, node_id: console-access }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-endpoint-registration, source_id: source_pinecone_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-resource-auth, source_id: source_pinecone_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-resource-create, source_id: source_pinecone_create_index, target: { node_kind: resource, node_id: create-index }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-resource-limits, source_id: source_pinecone_limits, target: { node_kind: resource, node_id: database-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }

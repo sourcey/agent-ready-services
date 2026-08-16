@@ -45,6 +45,7 @@ declarations:
       - { resource_id: rate-limits, uri: https://developers.openai.com/api/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: billing-support, uri: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage, roles: [recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://platform.openai.com/signup, transport: http, roles: [registration], operated_by_participant_id: openai, standard_bindings: [] }
       - { endpoint_id: responses-api, uri: https://api.openai.com/v1/responses, transport: http, roles: [service], operated_by_participant_id: openai, standard_bindings: [] }
     interfaces:
       - { interface_id: api-service, modality: network_api, functions: [service_operation], endpoint_ids: [responses-api], resource_ids: [api-reference, quickstart, api-errors, rate-limits], operated_by_participant_id: openai, standard_bindings: [] }
@@ -66,6 +67,7 @@ declarations:
       - { source_binding_id: openai-resource-terms, source_id: source_openai_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-pricing, source_id: source_openai_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-signup, source_id: source_openai_signup, target: { node_kind: resource, node_id: platform-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: openai-endpoint-registration, source_id: source_openai_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-quickstart, source_id: source_openai_quickstart, target: { node_kind: resource, node_id: quickstart }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-errors, source_id: source_openai_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-limits, source_id: source_openai_rate_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }

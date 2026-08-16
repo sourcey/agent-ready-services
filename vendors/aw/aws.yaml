@@ -137,6 +137,7 @@ declarations:
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-payments.html, roles: [checkout, documentation], operated_by_participant_id: aws, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: "https://signin.aws.amazon.com/signup?request_type=register", transport: http, roles: [registration], operated_by_participant_id: aws, standard_bindings: [] }
       - endpoint_id: cloud-control-api
         uri: https://cloudcontrolapi.us-east-1.amazonaws.com
         transport: http
@@ -236,6 +237,10 @@ declarations:
         source_id: source_aws_account_creation
         target: { node_kind: resource, node_id: account-creation }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-endpoint-registration
+        source_id: source_aws_account_creation
+        target: { node_kind: endpoint, node_id: registration }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-account-troubleshooting
         source_id: source_aws_account_creation_troubleshooting
         target: { node_kind: resource, node_id: account-creation-troubleshooting }

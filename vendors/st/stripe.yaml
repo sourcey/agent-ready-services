@@ -41,6 +41,7 @@ declarations:
       - { resource_id: api-errors, uri: https://docs.stripe.com/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: support, uri: https://support.stripe.com/, roles: [recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://dashboard.stripe.com/register, transport: http, roles: [registration], operated_by_participant_id: stripe, standard_bindings: [] }
       - { endpoint_id: stripe-api, uri: https://api.stripe.com/v1, transport: http, roles: [service, status], operated_by_participant_id: stripe, standard_bindings: [] }
     interfaces:
       - { interface_id: payments-api, modality: network_api, functions: [service_operation, commerce], endpoint_ids: [stripe-api], resource_ids: [api-reference, testing, idempotency, api-errors], operated_by_participant_id: stripe, standard_bindings: [] }
@@ -62,6 +63,7 @@ declarations:
       - { source_binding_id: stripe-resource-terms, source_id: source_stripe_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-pricing, source_id: source_stripe_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-signup, source_id: source_stripe_signup, target: { node_kind: resource, node_id: dashboard-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-endpoint-registration, source_id: source_stripe_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-auth, source_id: source_stripe_authentication, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-testing, source_id: source_stripe_testing, target: { node_kind: resource, node_id: testing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-idempotency, source_id: source_stripe_idempotency, target: { node_kind: resource, node_id: idempotency }, field_paths: [/uri, /roles, /operated_by_participant_id] }

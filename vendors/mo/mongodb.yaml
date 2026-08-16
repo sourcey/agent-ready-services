@@ -43,6 +43,7 @@ declarations:
       - { resource_id: support, uri: https://www.mongodb.com/docs/atlas/support/, roles: [recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://www.mongodb.com/docs/atlas/billing/, roles: [checkout, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://account.mongodb.com/account/register, transport: http, roles: [registration], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { endpoint_id: atlas-api, uri: https://cloud.mongodb.com/api/atlas/v2, transport: http, roles: [service, status], operated_by_participant_id: mongodb, standard_bindings: [] }
     interfaces:
       - { interface_id: cluster-api, modality: network_api, functions: [service_operation], endpoint_ids: [atlas-api], resource_ids: [api-reference, cluster-operations, rate-limits, api-errors], operated_by_participant_id: mongodb, standard_bindings: [] }
@@ -64,6 +65,7 @@ declarations:
       - { source_binding_id: mongodb-resource-terms, source_id: source_mongodb_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-pricing, source_id: source_mongodb_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-signup, source_id: source_mongodb_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-endpoint-registration, source_id: source_mongodb_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-auth, source_id: source_mongodb_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-clusters, source_id: source_mongodb_clusters, target: { node_kind: resource, node_id: cluster-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-limits, source_id: source_mongodb_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
