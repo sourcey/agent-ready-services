@@ -92,7 +92,7 @@ declarations:
         standard_bindings: []
       - resource_id: temporary-credentials
         uri: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html
-        roles: [descriptor, documentation]
+        roles: [authentication, descriptor, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: request-signing

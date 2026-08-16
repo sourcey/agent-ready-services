@@ -107,12 +107,12 @@ declarations:
         standard_bindings: []
       - resource_id: rest-authentication
         uri: https://docs.cloud.google.com/docs/authentication/rest
-        roles: [descriptor, documentation]
+        roles: [authentication, descriptor, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: workload-identity
         uri: https://docs.cloud.google.com/iam/docs/workload-identity-federation
-        roles: [descriptor, documentation]
+        roles: [authentication, descriptor, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings:
           - namespace: oauth
