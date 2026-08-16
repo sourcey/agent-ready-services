@@ -85,7 +85,7 @@ declarations:
         standard_bindings: []
       - resource_id: service-principals
         uri: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser
-        roles: [descriptor, documentation]
+        roles: [authentication, descriptor, documentation]
         operated_by_participant_id: microsoft
         standard_bindings:
           - namespace: oauth
@@ -93,7 +93,7 @@ declarations:
             relation: uses
       - resource_id: client-credentials
         uri: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
-        roles: [descriptor, documentation]
+        roles: [authentication, descriptor, documentation]
         operated_by_participant_id: microsoft
         standard_bindings:
           - namespace: oauth
