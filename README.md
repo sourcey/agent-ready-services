@@ -15,14 +15,13 @@
 
 ---
 
-Can an AI agent discover a service, understand the commitment, obtain
-authorized access, pay when required, provision what it needs, and use the
-service safely?
+Can an AI agent discover a service, understand the terms, create an account,
+pay when required, receive access, and operate it successfully?
 
 This repository is the open contribution front door for answering that
 question. Each vendor file declares one real vendor and one or more exact
-product funnels, essential service targets, public resources, callable
-endpoints, actors, interfaces, and exact standard bindings.
+product funnels, their public resources, callable endpoints, actors, and any
+relevant API, MCP, A2A, authentication, commerce, or recovery interfaces.
 
 Sourcey assesses those declarations independently. The resulting
 [Agent Readiness Report Card](https://sourcey.com/agent-readiness) belongs to
@@ -32,18 +31,16 @@ one vendor, product, and funnel—not vaguely to an entire company.
 
 | Stage | Questions the assessment can answer |
 | --- | --- |
-| Evaluate | Can an agent find the exact service and decide its terms, eligibility, and cost from stable readable material? |
-| Sign up | Can an agent begin access, operate the controls, cross any CAPTCHA or phone boundary lawfully, and obtain scoped identity authority? |
-| Pay | When payment applies, is the commitment disclosed and can checkout and payment authorization complete through safe, resumable boundaries? |
-| Provision | Can provisioning start, deliver usable access material, and expose a bounded, reconcilable result? |
-| Operate | Can an agent use every essential service target with scoped authentication, stable operation and failure contracts, and supported credential recovery? |
+| Evaluate | Can an agent discover the service and understand its terms, eligibility, and price? |
+| Sign up | Is there a stable, machine-operable path, or does autonomy stop at something such as CAPTCHA or phone verification? |
+| Pay | When payment applies, is the price explicit and can an agent use the supported checkout and payment rails? |
+| Provision | Is access activated and delivered predictably, with a machine-readable status and bounded delay? |
+| Operate | Can an agent authenticate, use the service or API, understand limits and errors, and recover safely? |
 
-The public card leads with the overall grade, the primary supported finding,
-and plain-language context—for example, “Blocked by CAPTCHA at sign up.” It
-shows each stage and the specific Ready, Limited, Blocked, or Not applicable
-findings that compose the grade. Every conclusion remains tied to exact
-evidence, method, tested surface, and date. Missing, failed, stale, or
-contradictory evidence makes a profile unrated; Not applicable must itself be
+The public card leads with the overall grade, the first stage that breaks
+autonomy, and plain-language context—for example, “Blocked by CAPTCHA at sign
+up.” Every conclusion remains tied to exact evidence, method, tested
+entrypoint, and date. Unknown remains unknown. Not applicable must be
 established by evidence.
 
 ## What lives here
@@ -51,10 +48,8 @@ established by evidence.
 Only source declarations live here:
 
 - vendor identity and public sources;
-- an exact product and service-access/operating funnel with essential targets;
+- an exact product and service-access/operating funnel;
 - declared participants, resources, endpoints, interfaces, and their relations;
-- source-bound surface exclusions that explain an omitted assessment surface
-  without claiming a result;
 - exact standard/version bindings and field-level source bindings;
 - optional explicit relations to existing Sourcey Offers; and
 - a vendor or community request for independent assessment.
