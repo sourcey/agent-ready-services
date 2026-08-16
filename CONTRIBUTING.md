@@ -49,8 +49,14 @@ vendor:
   sources:
     - source_id: source_acme_docs
       url: https://acme.example/docs
+    - source_id: source_acme_terms
+      url: https://acme.example/terms
+    - source_id: source_acme_pricing
+      url: https://acme.example/pricing
     - source_id: source_acme_signup
       url: https://acme.example/signup
+    - source_id: source_acme_billing
+      url: https://acme.example/docs/billing
 declarations:
   - declaration_id: declaration_acme_db_api_lifecycle
     scope:
@@ -60,6 +66,10 @@ declarations:
       funnel:
         key: api-service-lifecycle
         name: API service lifecycle
+    assessment_targets:
+      - target_id: manage-databases
+        name: Create, inspect, and recover Acme databases
+        interface_ids: [public-api]
     participants:
       - participant_id: acme
         roles: [subject, access_operator, operations_provider]
@@ -68,18 +78,41 @@ declarations:
     resources:
       - resource_id: documentation
         uri: https://acme.example/docs
-        roles: [discovery, pricing, documentation, operations]
+        roles: [discovery, provisioning, operations, recovery, authentication, status, documentation]
+        operated_by_participant_id: acme
+        standard_bindings: []
+      - resource_id: terms
+        uri: https://acme.example/terms
+        roles: [terms]
+        operated_by_participant_id: acme
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://acme.example/pricing
+        roles: [pricing]
         operated_by_participant_id: acme
         standard_bindings: []
       - resource_id: signup
         uri: https://acme.example/signup
-        roles: [sign_up]
+        roles: [access]
+        operated_by_participant_id: acme
+        standard_bindings: []
+      - resource_id: billing
+        uri: https://acme.example/docs/billing
+        roles: [checkout, documentation]
         operated_by_participant_id: acme
         standard_bindings: []
     endpoints: []
     interfaces:
       - interface_id: public-api
-        capabilities: [api]
+        modality: network_api
+        functions: [service_operation]
+        endpoint_ids: []
+        resource_ids: [documentation]
+        operated_by_participant_id: acme
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions: [authentication]
         endpoint_ids: []
         resource_ids: [documentation]
         operated_by_participant_id: acme
@@ -89,8 +122,16 @@ declarations:
         kind: precedes
         from: { node_kind: resource, node_id: documentation }
         to: { node_kind: resource, node_id: signup }
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from: { node_kind: interface, node_id: api-authentication }
+        to: { node_kind: interface, node_id: public-api }
     offer_relations: []
     source_bindings:
+      - source_binding_id: acme-assessment-target
+        source_id: source_acme_docs
+        target: { node_kind: assessment_target, node_id: manage-databases }
+        field_paths: [/name, /interface_ids]
       - source_binding_id: acme-declaration-scope
         source_id: source_acme_docs
         target: { node_kind: declaration, node_id: declaration_acme_db_api_lifecycle }
@@ -107,28 +148,65 @@ declarations:
         source_id: source_acme_signup
         target: { node_kind: resource, node_id: signup }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: acme-resource-terms
+        source_id: source_acme_terms
+        target: { node_kind: resource, node_id: terms }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: acme-resource-pricing
+        source_id: source_acme_pricing
+        target: { node_kind: resource, node_id: pricing }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: acme-resource-billing
+        source_id: source_acme_billing
+        target: { node_kind: resource, node_id: billing }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: acme-interface-public-api
         source_id: source_acme_docs
         target: { node_kind: interface, node_id: public-api }
-        field_paths: [/capabilities, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: acme-interface-authentication
+        source_id: source_acme_docs
+        target: { node_kind: interface, node_id: api-authentication }
+        field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id]
       - source_binding_id: acme-relation-docs-signup
         source_id: source_acme_signup
         target: { node_kind: relation, node_id: docs-precede-signup }
         field_paths: [/kind, /from, /to]
+      - source_binding_id: acme-relation-authentication
+        source_id: source_acme_docs
+        target: { node_kind: relation, node_id: authentication-authenticates-api }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: acme-exclusion-eligibility
+        source_id: source_acme_terms
+        target: { node_kind: surface_exclusion, node_id: no-separate-eligibility-resource }
+        field_paths: [/role, /rationale]
+    surface_exclusions:
+      - exclusion_id: no-separate-eligibility-resource
+        role: eligibility
+        rationale: Applicable access conditions are documented with the service terms; no separate eligibility resource is declared.
     authority_intent: community
     declared_at: 2026-08-05T00:00:00.000Z
-    assessment_reason: Assess whether an agent with authorized access can evaluate, provision, and operate Acme DB through its documented API, while preserving any human account or billing prerequisites as stage context.
 ```
 
 Resources are retrievable documents or pages. Endpoints are callable network
 locations. Interfaces are logical surfaces that reference those normalized
-resources and endpoints. A URI appears only once in its node kind and carries
-all applicable roles.
+resources and endpoints. Assessment targets name the essential useful outcomes
+the Report Card must evaluate and list alternative interfaces that can satisfy
+them. A URI appears only once in its node kind and carries only roles the exact
+source performs or documents.
+
+Interface `modality` describes how it is used (`web_application`,
+`network_api`, `command_line`, `software_library`, `tool_server`, or
+`agent_service`). Interface `functions` describe what it does
+(`service_operation`, `authentication`, `commerce`, `events`, or `recovery`).
+Protocol names never enter either field.
 
 `standard_bindings` declare an exact standard and version implemented,
 described, or used by a node. They do not contain Sourcey stages, signals, or
-results. `source_bindings` name the exact public source supporting each material
-authored field.
+results, and their presence never proves readiness. `source_bindings` name the
+exact public source supporting each material authored field. A
+`surface_exclusion` explains why a contributor did not declare a surface role;
+it is planning input, not a Not applicable result.
 
 Offer relationships are optional downstream joins, separate from profile
 identity and assessment scope. Most service declarations should use
