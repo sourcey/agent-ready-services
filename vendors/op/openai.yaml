@@ -40,7 +40,7 @@ declarations:
       - { resource_id: service-terms, uri: https://openai.com/policies/services-agreement/, roles: [terms], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: pricing, uri: https://openai.com/api/pricing/, roles: [pricing], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: platform-signup, uri: https://platform.openai.com/signup, roles: [access], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: quickstart, uri: https://developers.openai.com/api/docs/quickstart, roles: [checkout, descriptor, provisioning, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: quickstart, uri: https://developers.openai.com/api/docs/quickstart, roles: [checkout, descriptor, provisioning, authentication, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.openai.com/api/docs/guides/error-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://developers.openai.com/api/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: billing-support, uri: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage, roles: [recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
