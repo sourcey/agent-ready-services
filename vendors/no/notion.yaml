@@ -46,6 +46,7 @@ declarations:
       - { resource_id: support, uri: https://www.notion.com/help/category/connections/all, roles: [recovery, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://www.notion.com/help/upgrade-or-downgrade-your-plan, roles: [checkout, documentation], operated_by_participant_id: notion, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://app.notion.com/signup, transport: http, roles: [registration], operated_by_participant_id: notion, standard_bindings: [] }
       - { endpoint_id: notion-api, uri: https://api.notion.com/v1, transport: http, roles: [service, status], operated_by_participant_id: notion, standard_bindings: [] }
       - { endpoint_id: oauth-token, uri: https://api.notion.com/v1/oauth/token, transport: http, roles: [authorization, token], operated_by_participant_id: notion, standard_bindings: [{ namespace: oauth, version: "2.0", relation: implements }] }
     interfaces:
@@ -68,6 +69,7 @@ declarations:
       - { source_binding_id: notion-resource-terms, source_id: source_notion_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-resource-pricing, source_id: source_notion_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-resource-signup, source_id: source_notion_signup, target: { node_kind: resource, node_id: workspace-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: notion-endpoint-registration, source_id: source_notion_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-resource-auth, source_id: source_notion_authorization, target: { node_kind: resource, node_id: authorization }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-resource-quickstart, source_id: source_notion_quickstart, target: { node_kind: resource, node_id: quickstart }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-resource-create-page, source_id: source_notion_create_page, target: { node_kind: resource, node_id: create-page }, field_paths: [/uri, /roles, /operated_by_participant_id] }

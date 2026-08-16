@@ -16,7 +16,7 @@ vendor:
     - { source_id: source_neon_projects, url: https://neon.com/docs/manage/projects }
     - { source_id: source_neon_branches, url: https://neon.com/docs/manage/branches }
     - { source_id: source_neon_pricing, url: https://neon.com/pricing }
-    - { source_id: source_neon_signup, url: https://neon.com/docs/get-started/why-neon }
+    - { source_id: source_neon_signup, url: https://console.neon.tech/signup }
     - { source_id: source_neon_terms, url: https://neon.com/terms-of-service }
     - { source_id: source_neon_support, url: https://neon.com/docs/introduction/support }
     - { source_id: source_neon_billing_checkout, url: https://neon.com/docs/introduction/plans }
@@ -35,7 +35,7 @@ declarations:
       - { resource_id: api-reference, uri: https://api-docs.neon.tech/reference/getting-started-with-neon-api, roles: [discovery, operations, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://neon.com/terms-of-service, roles: [terms], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: pricing, uri: https://neon.com/pricing, roles: [pricing], operated_by_participant_id: neon, standard_bindings: [] }
-      - { resource_id: console-signup, uri: https://neon.com/docs/get-started/why-neon, roles: [access], operated_by_participant_id: neon, standard_bindings: [] }
+      - { resource_id: console-signup, uri: https://console.neon.tech/signup, roles: [access], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: api-keys, uri: https://neon.com/docs/manage/api-keys, roles: [descriptor, provisioning, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: create-project, uri: https://api-docs.neon.tech/reference/createproject, roles: [provisioning, status, operations, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: project-operations, uri: https://neon.com/docs/manage/projects, roles: [status, operations, recovery, documentation], operated_by_participant_id: neon, standard_bindings: [] }
@@ -43,6 +43,7 @@ declarations:
       - { resource_id: support, uri: https://neon.com/docs/introduction/support, roles: [recovery, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://neon.com/docs/introduction/plans, roles: [checkout, documentation], operated_by_participant_id: neon, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://console.neon.tech/signup, transport: http, roles: [registration], operated_by_participant_id: neon, standard_bindings: [] }
       - { endpoint_id: neon-api, uri: https://console.neon.tech/api/v2, transport: http, roles: [service, status], operated_by_participant_id: neon, standard_bindings: [] }
     interfaces:
       - { interface_id: project-api, modality: network_api, functions: [service_operation], endpoint_ids: [neon-api], resource_ids: [api-reference, create-project, project-operations, branch-operations], operated_by_participant_id: neon, standard_bindings: [] }
@@ -64,6 +65,7 @@ declarations:
       - { source_binding_id: neon-resource-terms, source_id: source_neon_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: neon-resource-pricing, source_id: source_neon_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: neon-resource-signup, source_id: source_neon_signup, target: { node_kind: resource, node_id: console-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: neon-endpoint-registration, source_id: source_neon_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: neon-resource-keys, source_id: source_neon_api_keys, target: { node_kind: resource, node_id: api-keys }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: neon-resource-create, source_id: source_neon_create_project, target: { node_kind: resource, node_id: create-project }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: neon-resource-projects, source_id: source_neon_projects, target: { node_kind: resource, node_id: project-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }

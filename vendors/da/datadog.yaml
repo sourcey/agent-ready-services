@@ -15,7 +15,7 @@ vendor:
     - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/ }
     - { source_id: source_datadog_limits, url: https://docs.datadoghq.com/api/latest/rate-limits/ }
     - { source_id: source_datadog_pricing, url: https://www.datadoghq.com/pricing/ }
-    - { source_id: source_datadog_signup, url: https://docs.datadoghq.com/account_management/login_methods/ }
+    - { source_id: source_datadog_signup, url: https://app.datadoghq.com/signup }
     - { source_id: source_datadog_terms, url: https://www.datadoghq.com/legal/terms/ }
     - { source_id: source_datadog_support, url: https://docs.datadoghq.com/help/ }
     - { source_id: source_datadog_billing_checkout, url: https://docs.datadoghq.com/account_management/billing/credit_card/ }
@@ -34,13 +34,14 @@ declarations:
       - { resource_id: api-reference, uri: https://docs.datadoghq.com/api/latest/, roles: [discovery, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.datadoghq.com/legal/terms/, roles: [terms], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.datadoghq.com/pricing/, roles: [pricing], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: account-signup, uri: https://docs.datadoghq.com/account_management/login_methods/, roles: [access], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [access], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.datadoghq.com/api/latest/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.datadoghq.com/help/, roles: [recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://docs.datadoghq.com/account_management/billing/credit_card/, roles: [checkout, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://app.datadoghq.com/signup, transport: http, roles: [registration], operated_by_participant_id: datadog, standard_bindings: [] }
       - { endpoint_id: datadog-api, uri: https://api.datadoghq.com/api, transport: http, roles: [service, status], operated_by_participant_id: datadog, standard_bindings: [] }
     interfaces:
       - { interface_id: monitor-api, modality: network_api, functions: [service_operation], endpoint_ids: [datadog-api], resource_ids: [api-reference, monitor-operations, rate-limits], operated_by_participant_id: datadog, standard_bindings: [] }
@@ -62,6 +63,7 @@ declarations:
       - { source_binding_id: datadog-resource-terms, source_id: source_datadog_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-pricing, source_id: source_datadog_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-signup, source_id: source_datadog_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-endpoint-registration, source_id: source_datadog_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-auth, source_id: source_datadog_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-monitors, source_id: source_datadog_monitors, target: { node_kind: resource, node_id: monitor-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-limits, source_id: source_datadog_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }

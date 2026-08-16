@@ -16,7 +16,7 @@ vendor:
     - { source_id: source_hubspot_errors, url: https://developers.hubspot.com/docs/api-reference/error-handling }
     - { source_id: source_hubspot_limits, url: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines }
     - { source_id: source_hubspot_pricing, url: https://developers.hubspot.com/developer-platform-basics }
-    - { source_id: source_hubspot_signup, url: https://knowledge.hubspot.com/account-management/sign-up-for-hubspot-with-apple-id }
+    - { source_id: source_hubspot_signup, url: https://app.hubspot.com/signup-hubspot/crm }
     - { source_id: source_hubspot_terms, url: https://legal.hubspot.com/legal-stuff }
     - { source_id: source_hubspot_support, url: https://knowledge.hubspot.com/ }
     - { source_id: source_hubspot_billing_checkout, url: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription }
@@ -35,7 +35,7 @@ declarations:
       - { resource_id: api-overview, uri: https://developers.hubspot.com/docs/api-reference/overview, roles: [discovery, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://legal.hubspot.com/legal-stuff, roles: [terms], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: pricing, uri: https://developers.hubspot.com/developer-platform-basics, roles: [pricing], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - { resource_id: crm-signup, uri: https://knowledge.hubspot.com/account-management/sign-up-for-hubspot-with-apple-id, roles: [access], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - { resource_id: crm-signup, uri: https://app.hubspot.com/signup-hubspot/crm, roles: [access], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: oauth, uri: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/working-with-oauth, roles: [descriptor, provisioning, documentation], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
       - { resource_id: crm-operations, uri: https://developers.hubspot.com/docs/api-reference/legacy/crm/objects/objects/create-object, roles: [provisioning, status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.hubspot.com/docs/api-reference/error-handling, roles: [status, operations, recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
@@ -43,6 +43,7 @@ declarations:
       - { resource_id: support, uri: https://knowledge.hubspot.com/, roles: [recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription, roles: [checkout, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://app.hubspot.com/signup-hubspot/crm, transport: http, roles: [registration], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { endpoint_id: hubspot-api, uri: https://api.hubapi.com, transport: http, roles: [service, status], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { endpoint_id: oauth-token, uri: https://api.hubapi.com/oauth/v1/token, transport: http, roles: [authorization, token], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: implements }] }
     interfaces:
@@ -65,6 +66,7 @@ declarations:
       - { source_binding_id: hubspot-resource-terms, source_id: source_hubspot_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-pricing, source_id: source_hubspot_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-signup, source_id: source_hubspot_signup, target: { node_kind: resource, node_id: crm-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: hubspot-endpoint-registration, source_id: source_hubspot_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-oauth, source_id: source_hubspot_oauth, target: { node_kind: resource, node_id: oauth }, field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings] }
       - { source_binding_id: hubspot-resource-crm, source_id: source_hubspot_crm, target: { node_kind: resource, node_id: crm-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-errors, source_id: source_hubspot_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }

@@ -43,6 +43,7 @@ declarations:
       - { resource_id: support, uri: https://resend.com/docs/knowledge-base/introduction, roles: [recovery, documentation], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://resend.com/docs/dashboard/settings/billing, roles: [checkout, documentation], operated_by_participant_id: resend, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://resend.com/signup, transport: http, roles: [registration], operated_by_participant_id: resend, standard_bindings: [] }
       - { endpoint_id: resend-api, uri: https://api.resend.com, transport: http, roles: [service, status], operated_by_participant_id: resend, standard_bindings: [] }
     interfaces:
       - { interface_id: email-api, modality: network_api, functions: [service_operation, events], endpoint_ids: [resend-api], resource_ids: [api-reference, send-email, domain-provisioning, api-errors], operated_by_participant_id: resend, standard_bindings: [] }
@@ -64,6 +65,7 @@ declarations:
       - { source_binding_id: resend-resource-terms, source_id: source_resend_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: resend-resource-pricing, source_id: source_resend_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: resend-resource-signup, source_id: source_resend_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-endpoint-registration, source_id: source_resend_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: resend-resource-keys, source_id: source_resend_keys, target: { node_kind: resource, node_id: api-keys }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: resend-resource-send, source_id: source_resend_send, target: { node_kind: resource, node_id: send-email }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: resend-resource-domains, source_id: source_resend_domains, target: { node_kind: resource, node_id: domain-provisioning }, field_paths: [/uri, /roles, /operated_by_participant_id] }

@@ -43,6 +43,7 @@ declarations:
       - { resource_id: rate-limits, uri: https://docs.sentry.io/api/ratelimits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: support, uri: https://sentry.zendesk.com/hc/en-us, roles: [recovery, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://sentry.io/signup/, transport: http, roles: [registration], operated_by_participant_id: sentry, standard_bindings: [] }
       - { endpoint_id: sentry-api, uri: https://sentry.io/api/0, transport: http, roles: [service, status], operated_by_participant_id: sentry, standard_bindings: [] }
     interfaces:
       - { interface_id: issue-api, modality: network_api, functions: [service_operation], endpoint_ids: [sentry-api], resource_ids: [api-reference, permissions, project-provisioning, issue-operations, rate-limits], operated_by_participant_id: sentry, standard_bindings: [] }
@@ -70,6 +71,7 @@ declarations:
       - { source_binding_id: sentry-resource-terms, source_id: source_sentry_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-pricing, source_id: source_sentry_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-signup, source_id: source_sentry_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: sentry-endpoint-registration, source_id: source_sentry_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-auth, source_id: source_sentry_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-permissions, source_id: source_sentry_permissions, target: { node_kind: resource, node_id: permissions }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-projects, source_id: source_sentry_projects, target: { node_kind: resource, node_id: project-provisioning }, field_paths: [/uri, /roles, /operated_by_participant_id] }

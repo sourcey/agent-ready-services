@@ -15,7 +15,7 @@ vendor:
     - { source_id: source_vercel_deployments, url: https://vercel.com/docs/rest-api/reference/endpoints/deployments/create-a-new-deployment }
     - { source_id: source_vercel_errors, url: https://vercel.com/docs/rest-api/errors }
     - { source_id: source_vercel_pricing, url: https://vercel.com/pricing }
-    - { source_id: source_vercel_signup, url: https://vercel.com/docs/accounts }
+    - { source_id: source_vercel_signup, url: https://vercel.com/signup }
     - { source_id: source_vercel_terms, url: https://vercel.com/legal/terms }
     - { source_id: source_vercel_support, url: https://vercel.com/help }
     - { source_id: source_vercel_billing_checkout, url: https://vercel.com/docs/plans/pro-plan/billing }
@@ -34,13 +34,14 @@ declarations:
       - { resource_id: api-reference, uri: https://vercel.com/docs/rest-api, roles: [discovery, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://vercel.com/legal/terms, roles: [terms], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: pricing, uri: https://vercel.com/pricing, roles: [pricing], operated_by_participant_id: vercel, standard_bindings: [] }
-      - { resource_id: account-signup, uri: https://vercel.com/docs/accounts, roles: [access], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://vercel.com/signup, roles: [access], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: access-tokens, uri: https://vercel.com/guides/how-do-i-use-a-vercel-api-access-token, roles: [descriptor, provisioning, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: deployment-operations, uri: https://vercel.com/docs/rest-api/reference/endpoints/deployments/create-a-new-deployment, roles: [provisioning, status, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://vercel.com/docs/rest-api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: support, uri: https://vercel.com/help, roles: [recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://vercel.com/docs/plans/pro-plan/billing, roles: [checkout, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://vercel.com/signup, transport: http, roles: [registration], operated_by_participant_id: vercel, standard_bindings: [] }
       - { endpoint_id: vercel-api, uri: https://api.vercel.com, transport: http, roles: [service, status], operated_by_participant_id: vercel, standard_bindings: [] }
     interfaces:
       - { interface_id: deployment-api, modality: network_api, functions: [service_operation], endpoint_ids: [vercel-api], resource_ids: [api-reference, deployment-operations, api-errors], operated_by_participant_id: vercel, standard_bindings: [] }
@@ -62,6 +63,7 @@ declarations:
       - { source_binding_id: vercel-resource-terms, source_id: source_vercel_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-pricing, source_id: source_vercel_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-signup, source_id: source_vercel_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: vercel-endpoint-registration, source_id: source_vercel_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-tokens, source_id: source_vercel_tokens, target: { node_kind: resource, node_id: access-tokens }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-deployments, source_id: source_vercel_deployments, target: { node_kind: resource, node_id: deployment-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-errors, source_id: source_vercel_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }

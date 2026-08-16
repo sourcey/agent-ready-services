@@ -21,7 +21,7 @@ vendor:
     - source_id: source_google_cloud_pricing
       url: https://cloud.google.com/pricing/list
     - source_id: source_google_cloud_account_setup
-      url: https://docs.cloud.google.com/billing/docs/how-to/create-billing-account
+      url: https://console.cloud.google.com/freetrial
     - source_id: source_google_resource_manager_rest
       url: https://docs.cloud.google.com/resource-manager/reference/rest
     - source_id: source_google_resource_manager_create
@@ -81,7 +81,7 @@ declarations:
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: account-setup
-        uri: https://docs.cloud.google.com/billing/docs/how-to/create-billing-account
+        uri: https://console.cloud.google.com/freetrial
         roles: [access]
         operated_by_participant_id: google-cloud
         standard_bindings: []
@@ -143,6 +143,7 @@ declarations:
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://docs.cloud.google.com/billing/docs/how-to/payment-methods, roles: [checkout, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
     endpoints:
+      - { endpoint_id: registration, uri: https://console.cloud.google.com/freetrial, transport: http, roles: [registration], operated_by_participant_id: google-cloud, standard_bindings: [] }
       - endpoint_id: resource-manager-api
         uri: https://cloudresourcemanager.googleapis.com
         transport: http
@@ -251,6 +252,10 @@ declarations:
         source_id: source_google_cloud_account_setup
         target: { node_kind: resource, node_id: account-setup }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-endpoint-registration
+        source_id: source_google_cloud_account_setup
+        target: { node_kind: endpoint, node_id: registration }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
       - source_binding_id: google-resource-resource-manager
         source_id: source_google_resource_manager_rest
         target: { node_kind: resource, node_id: resource-manager-rest }
