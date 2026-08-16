@@ -30,12 +30,46 @@ body:
     validations:
       required: true
   - type: textarea
-    id: surfaces
+    id: useful_action
     attributes:
-      label: Public resources and endpoints
-      description: Public HTTPS URLs for discovery, terms, pricing, signup, provisioning, operation, recovery, descriptors, APIs, or authentication.
+      label: Essential useful action
+      description: Name the real outcome an authorized agent should be able to complete, such as create and recover a database or send and inspect a message.
     validations:
       required: true
+  - type: textarea
+    id: discovery_terms_pricing
+    attributes:
+      label: Discovery, terms, eligibility, and pricing
+      description: Public HTTPS URLs an agent can use to find the service and decide applicable commitment, access conditions, and cost.
+    validations:
+      required: true
+  - type: textarea
+    id: access_authentication
+    attributes:
+      label: Access and Authentication
+      description: Public signup, authorization, token, API-key, credential lifecycle, delegated identity, CAPTCHA, phone, or other access-boundary URLs and notes.
+  - type: textarea
+    id: payment
+    attributes:
+      label: Payment
+      description: Public pricing, checkout, billing API, payment-protocol, or explicit no-charge material when payment is part of this service funnel.
+  - type: textarea
+    id: provisioning
+    attributes:
+      label: Provisioning
+      description: Public create, activate, completion-status, credential-delivery, or bounded-delay resources and endpoints.
+  - type: textarea
+    id: operation_recovery
+    attributes:
+      label: Operation, errors, and recovery
+      description: Public service interfaces, API or tool endpoints, inputs and outputs, limits, errors, retries, idempotency, reconciliation, and recovery material.
+    validations:
+      required: true
+  - type: textarea
+    id: published_standards
+    attributes:
+      label: Published standards
+      description: Exact standard names, versions, requirement documents, and implementation descriptors such as OpenAPI, MCP, A2A, OAuth or OIDC, Web Bot Auth, ACP, UCP, AP2, or x402. Leave blank when none is declared.
   - type: input
     id: sourcey_record
     attributes:

@@ -7,7 +7,8 @@
 
 <p align="center">
   <a href="https://sourcey.com/agent-readiness">Browse Report Cards</a> ·
-  <a href="CONTRIBUTING.md">Add a service</a> ·
+  <a href="https://sourcey.com/agent-readiness/submit">Declare a service</a> ·
+  <a href="CONTRIBUTING.md">Contribution guide</a> ·
   <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml">Request an assessment</a> ·
   <a href="https://sourcey.com/claim">Claim a vendor</a> ·
   <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=report-outdated.yml">Report outdated evidence</a>
@@ -68,10 +69,15 @@ history.
 
 ## Add or improve a service
 
-Start with [CONTRIBUTING.md](CONTRIBUTING.md). New identities are allocated
-against Sourcey's existing vendor records before a declaration is merged, so
-the same vendor has one stable identity across catalogs without making an
-Offer part of a readiness profile.
+Use the [guided Sourcey declaration form](https://sourcey.com/agent-readiness/submit)
+when the vendor operates one straightforward product funnel. It resolves the
+existing Sourcey Entity, validates every assessment surface against the current
+policy, shows the exact canonical YAML, and creates one review pull request.
+Use [CONTRIBUTING.md](CONTRIBUTING.md) for a request-only path or advanced
+multi-participant and multi-interface declarations. New identities are
+allocated against Sourcey's existing vendor records before a declaration is
+merged, so the same vendor has one stable identity across catalogs without
+making an Offer part of a readiness profile.
 
 After a declaration is merged, it enters private scope and evidence review.
 Publication happens only when the evidence floor is met. A vendor can then

@@ -4,10 +4,27 @@ Contributions declare an exact vendor, product, and funnel for independent
 assessment. They never author a Sourcey observation, readiness state, grade,
 certification, or current Report Card.
 
+## Choose the smallest honest path
+
+1. **Request an assessment** when the vendor is new to Sourcey, you know the
+   service but not its complete graph, or you want Sourcey to research it.
+   Open the [assessment request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml).
+2. **Use the guided form** for one existing vendor-operated product funnel.
+   [Declare the service on Sourcey](https://sourcey.com/agent-readiness/submit),
+   inspect the exact canonical YAML, and create its review pull request.
+3. **Author canonical YAML** only for advanced declarations with third-party
+   operators, several interfaces, several standards, explicit relations, or
+   exact Offer relationships. The complete example below is the review bar.
+
+The form, API, MCP tool, and manual path all produce the same sole durable
+`sourcey.agent-readiness-authoring/v1alpha1` document. There is no shorthand
+format or hidden conversion schema.
+
 ## Before editing YAML
 
 1. Search the open issues and pull requests for the vendor and product funnel.
-2. Open an [assessment request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml).
+2. For manual YAML, open an [assessment request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
+   before editing so identity and scope can be checked.
 3. Sourcey will confirm the stable `entity_id`. Startup Offers and Agent
    Readiness use the same Entity authority, but remain separate catalogs. Do
    not copy a credit or deal into the readiness declaration. An optional Offer
