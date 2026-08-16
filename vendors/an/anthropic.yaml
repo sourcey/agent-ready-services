@@ -67,7 +67,7 @@ declarations:
         standard_bindings: []
       - resource_id: authentication
         uri: https://platform.claude.com/docs/en/api/overview
-        roles: [authentication, descriptor, documentation]
+        roles: [authentication, provisioning, descriptor, documentation]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: api-errors
