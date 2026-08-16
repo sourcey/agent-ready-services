@@ -19,7 +19,7 @@ vendor:
     - { source_id: source_github_signup, url: https://docs.github.com/en/account-and-profile/how-tos/account-management/creating-an-account-on-github }
     - { source_id: source_github_terms, url: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service }
     - { source_id: source_github_support, url: https://support.github.com/ }
-    - { source_id: source_github_billing_checkout, url: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses }
+    - { source_id: source_github_billing_checkout, url: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses/upgrade-plan }
 declarations:
   - declaration_id: declaration_github_rest_repository_operations
     scope:
@@ -27,7 +27,7 @@ declarations:
       funnel: { key: repository-operations, name: Repository operations }
     assessment_targets:
       - target_id: service-use
-        name: GitHub REST API service use
+        name: Create and manage GitHub repositories through the REST API
         interface_ids: [repository-api]
     participants:
       - { participant_id: github, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3xgjjktffez1t34rn } }
@@ -41,7 +41,7 @@ declarations:
       - { resource_id: rate-limits, uri: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api, roles: [status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: troubleshooting, uri: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api, roles: [status, operations, recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: support, uri: https://support.github.com/, roles: [recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses, roles: [checkout, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses/upgrade-plan, roles: [checkout, documentation], operated_by_participant_id: github, standard_bindings: [] }
     endpoints:
       - { endpoint_id: github-api, uri: https://api.github.com, transport: http, roles: [service, status], operated_by_participant_id: github, standard_bindings: [] }
     interfaces:

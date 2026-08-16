@@ -29,7 +29,7 @@ vendor:
     - source_id: source_azure_client_credentials
       url: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
     - source_id: source_azure_account
-      url: https://signup.azure.com/signup?offer=ms-azr-0003p&appId=102&l=en-us
+      url: https://learn.microsoft.com/en-us/azure/cost-management-billing/troubleshoot-subscription/troubleshoot-azure-sign-up
     - source_id: source_azure_pricing
       url: https://azure.microsoft.com/en-us/pricing/
     - source_id: source_azure_retail_prices_api
@@ -52,7 +52,7 @@ declarations:
         name: API resource management
     assessment_targets:
       - target_id: service-use
-        name: Microsoft Azure service use
+        name: Create and reconcile Azure resource groups through the API
         interface_ids: [azure-resource-manager]
       - target_id: cost-visibility
         name: Microsoft Azure cost visibility
@@ -79,7 +79,7 @@ declarations:
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: azure-account
-        uri: https://signup.azure.com/signup?offer=ms-azr-0003p&appId=102&l=en-us
+        uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/troubleshoot-subscription/troubleshoot-azure-sign-up
         roles: [access]
         operated_by_participant_id: microsoft
         standard_bindings: []

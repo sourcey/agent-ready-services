@@ -54,7 +54,7 @@ declarations:
         name: API resource management
     assessment_targets:
       - target_id: service-use
-        name: Google Cloud service use
+        name: Create and reconcile Google Cloud projects through the API
         interface_ids: [resource-manager]
       - target_id: cost-visibility
         name: Google Cloud cost visibility
@@ -97,7 +97,7 @@ declarations:
         standard_bindings: []
       - resource_id: operation-status-api
         uri: https://docs.cloud.google.com/resource-manager/reference/rest/v3/operations/get
-        roles: [status, documentation]
+        roles: [provisioning, status, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: api-discovery

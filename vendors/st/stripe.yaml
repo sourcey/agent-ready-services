@@ -26,7 +26,7 @@ declarations:
       funnel: { key: api-payment-lifecycle, name: API payment lifecycle }
     assessment_targets:
       - target_id: service-use
-        name: Stripe Payments API service use
+        name: Create and reconcile payments through the Payments API
         interface_ids: [payments-api]
     participants:
       - { participant_id: stripe, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyygma830fqh16kvj744sk1c } }

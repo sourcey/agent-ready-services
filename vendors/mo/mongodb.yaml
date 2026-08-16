@@ -16,7 +16,7 @@ vendor:
     - { source_id: source_mongodb_limits, url: https://www.mongodb.com/docs/atlas/api/api-rate-limit/ }
     - { source_id: source_mongodb_errors, url: https://www.mongodb.com/docs/atlas/reference/api-errors/ }
     - { source_id: source_mongodb_pricing, url: https://www.mongodb.com/pricing }
-    - { source_id: source_mongodb_signup, url: https://account.mongodb.com/account/register }
+    - { source_id: source_mongodb_signup, url: https://www.mongodb.com/docs/atlas/tutorial/create-atlas-account/ }
     - { source_id: source_mongodb_terms, url: https://www.mongodb.com/legal/terms-of-use }
     - { source_id: source_mongodb_support, url: https://www.mongodb.com/docs/atlas/support/ }
     - { source_id: source_mongodb_billing_checkout, url: https://www.mongodb.com/docs/atlas/billing/ }
@@ -27,7 +27,7 @@ declarations:
       funnel: { key: cluster-lifecycle, name: Cluster lifecycle }
     assessment_targets:
       - target_id: service-use
-        name: MongoDB Atlas Administration API service use
+        name: Create and manage Atlas clusters through the Administration API
         interface_ids: [cluster-api]
     participants:
       - { participant_id: mongodb, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe4ys74qx1k4zfcqpjv } }
@@ -35,7 +35,7 @@ declarations:
       - { resource_id: api-reference, uri: https://www.mongodb.com/docs/atlas/api/atlas-admin-api-ref/, roles: [discovery, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.mongodb.com/legal/terms-of-use, roles: [terms], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.mongodb.com/pricing, roles: [pricing], operated_by_participant_id: mongodb, standard_bindings: [] }
-      - { resource_id: account-signup, uri: https://account.mongodb.com/account/register, roles: [access], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://www.mongodb.com/docs/atlas/tutorial/create-atlas-account/, roles: [access], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: authentication, uri: https://www.mongodb.com/docs/atlas/api/api-authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: cluster-operations, uri: https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2, roles: [provisioning, status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://www.mongodb.com/docs/atlas/api/api-rate-limit/, roles: [status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }

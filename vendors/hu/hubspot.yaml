@@ -12,11 +12,11 @@ vendor:
   sources:
     - { source_id: source_hubspot_api_overview, url: https://developers.hubspot.com/docs/api-reference/overview }
     - { source_id: source_hubspot_oauth, url: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/working-with-oauth }
-    - { source_id: source_hubspot_crm, url: https://developers.hubspot.com/docs/api-reference/crm-objects-v3/guide }
+    - { source_id: source_hubspot_crm, url: https://developers.hubspot.com/docs/api-reference/legacy/crm/objects/objects/create-object }
     - { source_id: source_hubspot_errors, url: https://developers.hubspot.com/docs/api-reference/error-handling }
     - { source_id: source_hubspot_limits, url: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines }
     - { source_id: source_hubspot_pricing, url: https://developers.hubspot.com/developer-platform-basics }
-    - { source_id: source_hubspot_signup, url: https://app.hubspot.com/signup-hubspot/crm }
+    - { source_id: source_hubspot_signup, url: https://knowledge.hubspot.com/account-management/sign-up-for-hubspot-with-apple-id }
     - { source_id: source_hubspot_terms, url: https://legal.hubspot.com/legal-stuff }
     - { source_id: source_hubspot_support, url: https://knowledge.hubspot.com/ }
     - { source_id: source_hubspot_billing_checkout, url: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription }
@@ -27,7 +27,7 @@ declarations:
       funnel: { key: api-integration-lifecycle, name: API integration lifecycle }
     assessment_targets:
       - target_id: service-use
-        name: HubSpot CRM API service use
+        name: Create and manage HubSpot CRM records through the API
         interface_ids: [crm-api]
     participants:
       - { participant_id: hubspot, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3new9gxd18qs3bskh } }
@@ -35,9 +35,9 @@ declarations:
       - { resource_id: api-overview, uri: https://developers.hubspot.com/docs/api-reference/overview, roles: [discovery, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://legal.hubspot.com/legal-stuff, roles: [terms], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: pricing, uri: https://developers.hubspot.com/developer-platform-basics, roles: [pricing], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - { resource_id: crm-signup, uri: https://app.hubspot.com/signup-hubspot/crm, roles: [access], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - { resource_id: crm-signup, uri: https://knowledge.hubspot.com/account-management/sign-up-for-hubspot-with-apple-id, roles: [access], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: oauth, uri: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/working-with-oauth, roles: [descriptor, provisioning, documentation], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
-      - { resource_id: crm-operations, uri: https://developers.hubspot.com/docs/api-reference/crm-objects-v3/guide, roles: [provisioning, status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - { resource_id: crm-operations, uri: https://developers.hubspot.com/docs/api-reference/legacy/crm/objects/objects/create-object, roles: [provisioning, status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.hubspot.com/docs/api-reference/error-handling, roles: [status, operations, recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: api-limits, uri: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines, roles: [status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: support, uri: https://knowledge.hubspot.com/, roles: [recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }

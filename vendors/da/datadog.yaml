@@ -12,13 +12,13 @@ vendor:
   sources:
     - { source_id: source_datadog_api, url: https://docs.datadoghq.com/api/latest/ }
     - { source_id: source_datadog_auth, url: https://docs.datadoghq.com/api/latest/authentication/ }
-    - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/ }
+    - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/ }
     - { source_id: source_datadog_limits, url: https://docs.datadoghq.com/api/latest/rate-limits/ }
     - { source_id: source_datadog_pricing, url: https://www.datadoghq.com/pricing/ }
-    - { source_id: source_datadog_signup, url: https://app.datadoghq.com/signup }
+    - { source_id: source_datadog_signup, url: https://docs.datadoghq.com/account_management/login_methods/ }
     - { source_id: source_datadog_terms, url: https://www.datadoghq.com/legal/terms/ }
     - { source_id: source_datadog_support, url: https://docs.datadoghq.com/help/ }
-    - { source_id: source_datadog_billing_checkout, url: https://docs.datadoghq.com/account_management/billing/ }
+    - { source_id: source_datadog_billing_checkout, url: https://docs.datadoghq.com/account_management/billing/credit_card/ }
 declarations:
   - declaration_id: declaration_datadog_api_monitor_operations
     scope:
@@ -26,7 +26,7 @@ declarations:
       funnel: { key: monitor-operations, name: Monitor operations }
     assessment_targets:
       - target_id: service-use
-        name: Datadog API service use
+        name: Create and manage Datadog monitors through the API
         interface_ids: [monitor-api]
     participants:
       - { participant_id: datadog, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe2hwmmvk3eex1hq433 } }
@@ -34,12 +34,12 @@ declarations:
       - { resource_id: api-reference, uri: https://docs.datadoghq.com/api/latest/, roles: [discovery, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.datadoghq.com/legal/terms/, roles: [terms], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.datadoghq.com/pricing/, roles: [pricing], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [access], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://docs.datadoghq.com/account_management/login_methods/, roles: [access], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.datadoghq.com/api/latest/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.datadoghq.com/help/, roles: [recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://docs.datadoghq.com/account_management/billing/, roles: [checkout, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://docs.datadoghq.com/account_management/billing/credit_card/, roles: [checkout, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
     endpoints:
       - { endpoint_id: datadog-api, uri: https://api.datadoghq.com/api, transport: http, roles: [service, status], operated_by_participant_id: datadog, standard_bindings: [] }
     interfaces:

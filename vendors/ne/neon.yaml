@@ -16,7 +16,7 @@ vendor:
     - { source_id: source_neon_projects, url: https://neon.com/docs/manage/projects }
     - { source_id: source_neon_branches, url: https://neon.com/docs/manage/branches }
     - { source_id: source_neon_pricing, url: https://neon.com/pricing }
-    - { source_id: source_neon_signup, url: https://console.neon.tech/app/sign-up }
+    - { source_id: source_neon_signup, url: https://neon.com/docs/get-started/why-neon }
     - { source_id: source_neon_terms, url: https://neon.com/terms-of-service }
     - { source_id: source_neon_support, url: https://neon.com/docs/introduction/support }
     - { source_id: source_neon_billing_checkout, url: https://neon.com/docs/introduction/plans }
@@ -27,7 +27,7 @@ declarations:
       funnel: { key: project-database-lifecycle, name: Project and database lifecycle }
     assessment_targets:
       - target_id: service-use
-        name: Neon API service use
+        name: Create and manage Neon projects and databases through the API
         interface_ids: [project-api]
     participants:
       - { participant_id: neon, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe42ws3zbxkkaybx2ea } }
@@ -35,7 +35,7 @@ declarations:
       - { resource_id: api-reference, uri: https://api-docs.neon.tech/reference/getting-started-with-neon-api, roles: [discovery, operations, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://neon.com/terms-of-service, roles: [terms], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: pricing, uri: https://neon.com/pricing, roles: [pricing], operated_by_participant_id: neon, standard_bindings: [] }
-      - { resource_id: console-signup, uri: https://console.neon.tech/app/sign-up, roles: [access], operated_by_participant_id: neon, standard_bindings: [] }
+      - { resource_id: console-signup, uri: https://neon.com/docs/get-started/why-neon, roles: [access], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: api-keys, uri: https://neon.com/docs/manage/api-keys, roles: [descriptor, provisioning, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: create-project, uri: https://api-docs.neon.tech/reference/createproject, roles: [provisioning, status, operations, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: project-operations, uri: https://neon.com/docs/manage/projects, roles: [status, operations, recovery, documentation], operated_by_participant_id: neon, standard_bindings: [] }

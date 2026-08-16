@@ -38,7 +38,7 @@ declarations:
       funnel: { key: api-service-lifecycle, name: API service lifecycle }
     assessment_targets:
       - target_id: service-use
-        name: Anthropic API service use
+        name: Submit Messages API requests and receive model responses
         interface_ids: [api-service]
     participants:
       - participant_id: anthropic
