@@ -42,6 +42,7 @@ vendor:
       url: https://aws.amazon.com/service-terms/
     - source_id: source_aws_sign_in_recovery
       url: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
+    - { source_id: source_aws_billing_checkout, url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-payments.html }
 declarations:
   - declaration_id: declaration_aws_cloud_api_resource_management
     scope:
@@ -51,6 +52,13 @@ declarations:
       funnel:
         key: api-resource-management
         name: API resource management
+    assessment_targets:
+      - target_id: service-use
+        name: AWS Cloud service use
+        interface_ids: [cloud-control]
+      - target_id: cost-visibility
+        name: AWS Cloud cost visibility
+        interface_ids: [public-pricing]
     participants:
       - participant_id: aws
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -74,12 +82,12 @@ declarations:
         standard_bindings: []
       - resource_id: account-creation
         uri: https://signin.aws.amazon.com/signup?request_type=register
-        roles: [sign_up, checkout]
+        roles: [access]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: account-creation-troubleshooting
         uri: https://docs.aws.amazon.com/accounts/latest/reference/troubleshooting_create-account.html
-        roles: [sign_up, recovery, documentation]
+        roles: [access, recovery, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: temporary-credentials
@@ -127,6 +135,7 @@ declarations:
         roles: [recovery, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
+      - { resource_id: billing-checkout, uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-payments.html, roles: [checkout, documentation], operated_by_participant_id: aws, standard_bindings: [] }
     endpoints:
       - endpoint_id: cloud-control-api
         uri: https://cloudcontrolapi.us-east-1.amazonaws.com
@@ -148,19 +157,22 @@ declarations:
         standard_bindings: []
     interfaces:
       - interface_id: cloud-control
-        capabilities: [api, tools]
+        modality: network_api
+        functions: [service_operation]
         endpoint_ids: [cloud-control-api]
         resource_ids: [cloud-control-overview, cloud-control-getting-started, cloud-control-resource-operations, cloud-control-create-api, cloud-control-status-api, cloud-control-endpoints]
         operated_by_participant_id: aws
         standard_bindings: []
       - interface_id: workload-authentication
-        capabilities: [api, authentication]
+        modality: network_api
+        functions: [service_operation, authentication]
         endpoint_ids: [security-token-service]
         resource_ids: [temporary-credentials, request-signing]
         operated_by_participant_id: aws
         standard_bindings: []
       - interface_id: public-pricing
-        capabilities: [api, commerce]
+        modality: network_api
+        functions: [service_operation, commerce]
         endpoint_ids: [pricing-api]
         resource_ids: [pricing, price-list-api]
         operated_by_participant_id: aws
@@ -192,6 +204,14 @@ declarations:
         to: { node_kind: interface, node_id: public-pricing }
     offer_relations: []
     source_bindings:
+      - source_binding_id: aws_cost_visibility_target
+        source_id: source_aws_price_list_api
+        target: { node_kind: assessment_target, node_id: cost-visibility }
+        field_paths: [/name, /interface_ids]
+      - source_binding_id: aws_assessment_target
+        source_id: source_aws_cloud_control_overview
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
       - source_binding_id: aws-declaration-scope
         source_id: source_aws_cloud_control_overview
         target: { node_kind: declaration, node_id: declaration_aws_cloud_api_resource_management }
@@ -271,15 +291,15 @@ declarations:
       - source_binding_id: aws-interface-cloud-control
         source_id: source_aws_cloud_control_overview
         target: { node_kind: interface, node_id: cloud-control }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: aws-interface-authentication
         source_id: source_aws_temporary_credentials
         target: { node_kind: interface, node_id: workload-authentication }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: aws-interface-pricing
         source_id: source_aws_price_list_api
         target: { node_kind: interface, node_id: public-pricing }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: aws-relation-cloud-control-docs
         source_id: source_aws_cloud_control_overview
         target: { node_kind: relation, node_id: cloud-control-docs-describe-interface }
@@ -304,6 +324,9 @@ declarations:
         source_id: source_aws_price_list_api
         target: { node_kind: relation, node_id: pricing-docs-describe-interface }
         field_paths: [/kind, /from, /to]
+      - { source_binding_id: aws-resource-billing-checkout, source_id: source_aws_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: aws-exclusion-separate-eligibility, source_id: source_aws_service_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z
-    assessment_reason: Assess AWS Cloud's ordinary service lifecycle from public evaluation and account access through workload credentials, API resource provisioning, request status, operation, and recovery; account and billing prerequisites remain graded stages.

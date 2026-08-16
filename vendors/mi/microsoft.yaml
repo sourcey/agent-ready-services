@@ -40,6 +40,7 @@ vendor:
       url: https://azure.microsoft.com/en-us/support/legal/
     - source_id: source_azure_support
       url: https://azure.microsoft.com/en-us/support/options/
+    - { source_id: source_microsoft_billing_checkout, url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card }
 declarations:
   - declaration_id: declaration_microsoft_azure_api_resource_management
     scope:
@@ -49,6 +50,13 @@ declarations:
       funnel:
         key: api-resource-management
         name: API resource management
+    assessment_targets:
+      - target_id: service-use
+        name: Microsoft Azure service use
+        interface_ids: [azure-resource-manager]
+      - target_id: cost-visibility
+        name: Microsoft Azure cost visibility
+        interface_ids: [pricing-and-cost]
     participants:
       - participant_id: microsoft
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -72,7 +80,7 @@ declarations:
         standard_bindings: []
       - resource_id: azure-account
         uri: https://signup.azure.com/signup?offer=ms-azr-0003p&appId=102&l=en-us
-        roles: [sign_up, checkout]
+        roles: [access]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: service-principals
@@ -126,6 +134,7 @@ declarations:
         roles: [recovery, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
+      - { resource_id: billing-checkout, uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card, roles: [checkout, documentation], operated_by_participant_id: microsoft, standard_bindings: [] }
     endpoints:
       - endpoint_id: azure-resource-manager
         uri: https://management.azure.com
@@ -150,13 +159,15 @@ declarations:
         standard_bindings: []
     interfaces:
       - interface_id: azure-resource-manager
-        capabilities: [api, tools]
+        modality: network_api
+        functions: [service_operation]
         endpoint_ids: [azure-resource-manager]
         resource_ids: [azure-rest-api, resource-manager-rest, resource-group-api, asynchronous-operations, resource-manager-limits]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - interface_id: workload-authentication
-        capabilities: [api, authentication]
+        modality: network_api
+        functions: [service_operation, authentication]
         endpoint_ids: [entra-token]
         resource_ids: [service-principals, client-credentials]
         operated_by_participant_id: microsoft
@@ -165,7 +176,8 @@ declarations:
             version: "2.0"
             relation: uses
       - interface_id: pricing-and-cost
-        capabilities: [api, commerce]
+        modality: network_api
+        functions: [service_operation, commerce]
         endpoint_ids: [retail-prices]
         resource_ids: [azure-pricing, retail-prices-api, cost-management-permissions]
         operated_by_participant_id: microsoft
@@ -197,6 +209,14 @@ declarations:
         to: { node_kind: interface, node_id: pricing-and-cost }
     offer_relations: []
     source_bindings:
+      - source_binding_id: microsoft_cost_visibility_target
+        source_id: source_azure_retail_prices_api
+        target: { node_kind: assessment_target, node_id: cost-visibility }
+        field_paths: [/name, /interface_ids]
+      - source_binding_id: microsoft_assessment_target
+        source_id: source_azure_resource_manager_rest
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
       - source_binding_id: microsoft-declaration-scope
         source_id: source_azure_resource_manager_rest
         target: { node_kind: declaration, node_id: declaration_microsoft_azure_api_resource_management }
@@ -272,15 +292,15 @@ declarations:
       - source_binding_id: microsoft-interface-resource-manager
         source_id: source_azure_resource_manager_rest
         target: { node_kind: interface, node_id: azure-resource-manager }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: microsoft-interface-authentication
         source_id: source_azure_client_credentials
         target: { node_kind: interface, node_id: workload-authentication }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
       - source_binding_id: microsoft-interface-pricing
         source_id: source_azure_retail_prices_api
         target: { node_kind: interface, node_id: pricing-and-cost }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: microsoft-relation-resource-manager-docs
         source_id: source_azure_resource_manager_rest
         target: { node_kind: relation, node_id: resource-manager-docs-describe-interface }
@@ -305,6 +325,9 @@ declarations:
         source_id: source_azure_retail_prices_api
         target: { node_kind: relation, node_id: pricing-docs-describe-interface }
         field_paths: [/kind, /from, /to]
+      - { source_binding_id: microsoft-resource-billing-checkout, source_id: source_microsoft_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: microsoft-exclusion-separate-eligibility, source_id: source_azure_legal, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z
-    assessment_reason: Assess Microsoft Azure's ordinary service lifecycle from public evaluation and account access through workload credentials, API resource provisioning, asynchronous status, pricing, operation, and recovery; account and billing prerequisites remain graded stages.

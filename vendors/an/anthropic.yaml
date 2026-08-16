@@ -30,11 +30,16 @@ vendor:
       url: https://www.anthropic.com/legal/commercial-terms
     - source_id: source_anthropic_support
       url: https://support.claude.com/en/articles/8114535-where-can-i-go-for-claude-api-support-and-assistance
+    - { source_id: source_anthropic_billing_checkout, url: https://support.claude.com/en/articles/8977456-how-do-i-pay-for-my-claude-api-usage }
 declarations:
   - declaration_id: declaration_anthropic_api_service_lifecycle
     scope:
       product: { key: anthropic-api, name: Anthropic API }
       funnel: { key: api-service-lifecycle, name: API service lifecycle }
+    assessment_targets:
+      - target_id: service-use
+        name: Anthropic API service use
+        interface_ids: [api-service]
     participants:
       - participant_id: anthropic
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -57,12 +62,12 @@ declarations:
         standard_bindings: []
       - resource_id: console-access
         uri: https://platform.claude.com/login?returnTo=%2Fsettings%2Fkeys
-        roles: [sign_up, checkout, provisioning]
+        roles: [access]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: authentication
         uri: https://platform.claude.com/docs/en/api/overview
-        roles: [descriptor, documentation]
+        roles: [authentication, descriptor, documentation]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: api-errors
@@ -80,6 +85,7 @@ declarations:
         roles: [recovery, documentation]
         operated_by_participant_id: anthropic
         standard_bindings: []
+      - { resource_id: billing-checkout, uri: https://support.claude.com/en/articles/8977456-how-do-i-pay-for-my-claude-api-usage, roles: [checkout, documentation], operated_by_participant_id: anthropic, standard_bindings: [] }
     endpoints:
       - endpoint_id: messages-api
         uri: https://api.anthropic.com/v1/messages
@@ -89,13 +95,15 @@ declarations:
         standard_bindings: []
     interfaces:
       - interface_id: api-service
-        capabilities: [api, tools]
+        modality: network_api
+        functions: [service_operation]
         endpoint_ids: [messages-api]
         resource_ids: [api-overview, api-errors, rate-limits]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - interface_id: api-authentication
-        capabilities: [authentication]
+        modality: network_api
+        functions: [authentication]
         endpoint_ids: []
         resource_ids: [authentication]
         operated_by_participant_id: anthropic
@@ -119,6 +127,10 @@ declarations:
         to: { node_kind: interface, node_id: api-service }
     offer_relations: []
     source_bindings:
+      - source_binding_id: anthropic_assessment_target
+        source_id: source_anthropic_api_overview
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
       - { source_binding_id: anthropic-scope, source_id: source_anthropic_api_overview, target: { node_kind: declaration, node_id: declaration_anthropic_api_service_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
       - { source_binding_id: anthropic-participant, source_id: source_anthropic_api_overview, target: { node_kind: participant, node_id: anthropic }, field_paths: [/roles, /identity] }
       - { source_binding_id: anthropic-resource-overview, source_id: source_anthropic_api_overview, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -130,12 +142,15 @@ declarations:
       - { source_binding_id: anthropic-resource-limits, source_id: source_anthropic_rate_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-support, source_id: source_anthropic_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-endpoint-messages, source_id: source_anthropic_api_overview, target: { node_kind: endpoint, node_id: messages-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
-      - { source_binding_id: anthropic-interface-api, source_id: source_anthropic_api_overview, target: { node_kind: interface, node_id: api-service }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
-      - { source_binding_id: anthropic-interface-auth, source_id: source_anthropic_getting_started, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: anthropic-interface-api, source_id: source_anthropic_api_overview, target: { node_kind: interface, node_id: api-service }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: anthropic-interface-auth, source_id: source_anthropic_getting_started, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: anthropic-relation-overview, source_id: source_anthropic_api_overview, target: { node_kind: relation, node_id: overview-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: anthropic-relation-auth, source_id: source_anthropic_getting_started, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: anthropic-relation-console, source_id: source_anthropic_console, target: { node_kind: relation, node_id: console-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: anthropic-relation-errors, source_id: source_anthropic_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: anthropic-resource-billing-checkout, source_id: source_anthropic_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: anthropic-exclusion-separate-eligibility, source_id: source_anthropic_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess the Anthropic API's ordinary service lifecycle from public evaluation and account access through credential provisioning, API invocation, monitoring, and recovery; account and billing prerequisites remain graded stages.
