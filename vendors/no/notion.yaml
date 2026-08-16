@@ -20,29 +20,35 @@ vendor:
     - { source_id: source_notion_signup, url: https://app.notion.com/signup }
     - { source_id: source_notion_terms, url: https://app.notion.com/terms }
     - { source_id: source_notion_support, url: https://www.notion.com/help/category/connections/all }
+    - { source_id: source_notion_billing_checkout, url: https://www.notion.com/help/upgrade-or-downgrade-your-plan }
 declarations:
   - declaration_id: declaration_notion_api_integration_lifecycle
     scope:
       product: { key: notion-api, name: Notion API }
       funnel: { key: api-integration-lifecycle, name: API integration lifecycle }
+    assessment_targets:
+      - target_id: service-use
+        name: Notion API service use
+        interface_ids: [content-api]
     participants:
       - { participant_id: notion, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tbppvx69rh3v86sk2 } }
     resources:
       - { resource_id: api-overview, uri: https://developers.notion.com/guides/get-started/overview, roles: [discovery, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://app.notion.com/terms, roles: [terms], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.notion.com/pricing, roles: [pricing], operated_by_participant_id: notion, standard_bindings: [] }
-      - { resource_id: workspace-signup, uri: https://app.notion.com/signup, roles: [sign_up, checkout, provisioning], operated_by_participant_id: notion, standard_bindings: [] }
+      - { resource_id: workspace-signup, uri: https://app.notion.com/signup, roles: [access], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: authorization, uri: https://developers.notion.com/guides/get-started/authorization, roles: [descriptor, provisioning, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: quickstart, uri: https://developers.notion.com/guides/get-started/quick-start, roles: [provisioning, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: request-limits, uri: https://developers.notion.com/reference/request-limits, roles: [status, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: status-codes, uri: https://developers.notion.com/reference/status-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: support, uri: https://www.notion.com/help/category/connections/all, roles: [recovery, documentation], operated_by_participant_id: notion, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://www.notion.com/help/upgrade-or-downgrade-your-plan, roles: [checkout, documentation], operated_by_participant_id: notion, standard_bindings: [] }
     endpoints:
       - { endpoint_id: notion-api, uri: https://api.notion.com/v1, transport: http, roles: [service, status], operated_by_participant_id: notion, standard_bindings: [] }
       - { endpoint_id: oauth-token, uri: https://api.notion.com/v1/oauth/token, transport: http, roles: [authorization, token], operated_by_participant_id: notion, standard_bindings: [{ namespace: oauth, version: "2.0", relation: implements }] }
     interfaces:
-      - { interface_id: content-api, capabilities: [api, tools], endpoint_ids: [notion-api], resource_ids: [api-overview, quickstart, request-limits, status-codes], operated_by_participant_id: notion, standard_bindings: [] }
-      - { interface_id: integration-authentication, capabilities: [authentication], endpoint_ids: [oauth-token], resource_ids: [authorization], operated_by_participant_id: notion, standard_bindings: [{ namespace: oauth, version: "2.0", relation: uses }] }
+      - { interface_id: content-api, modality: network_api, functions: [service_operation], endpoint_ids: [notion-api], resource_ids: [api-overview, quickstart, request-limits, status-codes], operated_by_participant_id: notion, standard_bindings: [] }
+      - { interface_id: integration-authentication, modality: network_api, functions: [authentication], endpoint_ids: [oauth-token], resource_ids: [authorization], operated_by_participant_id: notion, standard_bindings: [{ namespace: oauth, version: "2.0", relation: uses }] }
     relations:
       - { relation_id: overview-describes-api, kind: describes, from: { node_kind: resource, node_id: api-overview }, to: { node_kind: interface, node_id: content-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: integration-authentication }, to: { node_kind: interface, node_id: content-api } }
@@ -50,6 +56,10 @@ declarations:
       - { relation_id: status-describes-api, kind: describes, from: { node_kind: resource, node_id: status-codes }, to: { node_kind: interface, node_id: content-api } }
     offer_relations: []
     source_bindings:
+      - source_binding_id: notion_assessment_target
+        source_id: source_notion_overview
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
       - { source_binding_id: notion-scope, source_id: source_notion_overview, target: { node_kind: declaration, node_id: declaration_notion_api_integration_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
       - { source_binding_id: notion-participant, source_id: source_notion_overview, target: { node_kind: participant, node_id: notion }, field_paths: [/roles, /identity] }
       - { source_binding_id: notion-resource-overview, source_id: source_notion_overview, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -63,12 +73,15 @@ declarations:
       - { source_binding_id: notion-resource-support, source_id: source_notion_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-endpoint-api, source_id: source_notion_overview, target: { node_kind: endpoint, node_id: notion-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-endpoint-oauth, source_id: source_notion_authorization, target: { node_kind: endpoint, node_id: oauth-token }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
-      - { source_binding_id: notion-interface-api, source_id: source_notion_overview, target: { node_kind: interface, node_id: content-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
-      - { source_binding_id: notion-interface-auth, source_id: source_notion_authorization, target: { node_kind: interface, node_id: integration-authentication }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: notion-interface-api, source_id: source_notion_overview, target: { node_kind: interface, node_id: content-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: notion-interface-auth, source_id: source_notion_authorization, target: { node_kind: interface, node_id: integration-authentication }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings] }
       - { source_binding_id: notion-relation-overview, source_id: source_notion_overview, target: { node_kind: relation, node_id: overview-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: notion-relation-auth, source_id: source_notion_authorization, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: notion-relation-signup, source_id: source_notion_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: notion-relation-status, source_id: source_notion_status_codes, target: { node_kind: relation, node_id: status-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: notion-resource-billing-checkout, source_id: source_notion_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: notion-exclusion-separate-eligibility, source_id: source_notion_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess Notion's ordinary integration lifecycle from public evaluation and workspace access through human authorization, API content operations, status, and recovery; workspace creation and consent prerequisites remain graded stages.

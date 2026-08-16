@@ -18,27 +18,33 @@ vendor:
     - { source_id: source_vercel_signup, url: https://vercel.com/signup }
     - { source_id: source_vercel_terms, url: https://vercel.com/legal/terms }
     - { source_id: source_vercel_support, url: https://vercel.com/help }
+    - { source_id: source_vercel_billing_checkout, url: https://vercel.com/docs/plans/pro-plan/billing }
 declarations:
   - declaration_id: declaration_vercel_api_deployment_operations
     scope:
       product: { key: vercel-rest-api, name: Vercel REST API }
       funnel: { key: deployment-operations, name: Deployment operations }
+    assessment_targets:
+      - target_id: service-use
+        name: Vercel REST API service use
+        interface_ids: [deployment-api]
     participants:
       - { participant_id: vercel, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe5dk9hex187x4g03fn } }
     resources:
       - { resource_id: api-reference, uri: https://vercel.com/docs/rest-api, roles: [discovery, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://vercel.com/legal/terms, roles: [terms], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: pricing, uri: https://vercel.com/pricing, roles: [pricing], operated_by_participant_id: vercel, standard_bindings: [] }
-      - { resource_id: account-signup, uri: https://vercel.com/signup, roles: [sign_up, checkout, provisioning], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://vercel.com/signup, roles: [access], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: access-tokens, uri: https://vercel.com/guides/how-do-i-use-a-vercel-api-access-token, roles: [descriptor, provisioning, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: deployment-operations, uri: https://vercel.com/docs/rest-api/reference/endpoints/deployments/create-a-new-deployment, roles: [provisioning, status, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://vercel.com/docs/rest-api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: support, uri: https://vercel.com/help, roles: [recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://vercel.com/docs/plans/pro-plan/billing, roles: [checkout, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
     endpoints:
       - { endpoint_id: vercel-api, uri: https://api.vercel.com, transport: http, roles: [service, status], operated_by_participant_id: vercel, standard_bindings: [] }
     interfaces:
-      - { interface_id: deployment-api, capabilities: [api, tools], endpoint_ids: [vercel-api], resource_ids: [api-reference, deployment-operations, api-errors], operated_by_participant_id: vercel, standard_bindings: [] }
-      - { interface_id: api-authentication, capabilities: [authentication], endpoint_ids: [], resource_ids: [access-tokens], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { interface_id: deployment-api, modality: network_api, functions: [service_operation], endpoint_ids: [vercel-api], resource_ids: [api-reference, deployment-operations, api-errors], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [access-tokens], operated_by_participant_id: vercel, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: deployment-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: deployment-api } }
@@ -46,6 +52,10 @@ declarations:
       - { relation_id: deployments-describe-api, kind: describes, from: { node_kind: resource, node_id: deployment-operations }, to: { node_kind: interface, node_id: deployment-api } }
     offer_relations: []
     source_bindings:
+      - source_binding_id: vercel_assessment_target
+        source_id: source_vercel_deployments
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
       - { source_binding_id: vercel-scope, source_id: source_vercel_deployments, target: { node_kind: declaration, node_id: declaration_vercel_api_deployment_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
       - { source_binding_id: vercel-participant, source_id: source_vercel_api, target: { node_kind: participant, node_id: vercel }, field_paths: [/roles, /identity] }
       - { source_binding_id: vercel-resource-reference, source_id: source_vercel_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -57,12 +67,15 @@ declarations:
       - { source_binding_id: vercel-resource-errors, source_id: source_vercel_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-support, source_id: source_vercel_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-endpoint-api, source_id: source_vercel_api, target: { node_kind: endpoint, node_id: vercel-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
-      - { source_binding_id: vercel-interface-api, source_id: source_vercel_deployments, target: { node_kind: interface, node_id: deployment-api }, field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
-      - { source_binding_id: vercel-interface-auth, source_id: source_vercel_tokens, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/capabilities, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: vercel-interface-api, source_id: source_vercel_deployments, target: { node_kind: interface, node_id: deployment-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: vercel-interface-auth, source_id: source_vercel_tokens, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: vercel-relation-reference, source_id: source_vercel_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: vercel-relation-auth, source_id: source_vercel_tokens, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: vercel-relation-signup, source_id: source_vercel_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: vercel-relation-deployments, source_id: source_vercel_deployments, target: { node_kind: relation, node_id: deployments-describe-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: vercel-resource-billing-checkout, source_id: source_vercel_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: vercel-exclusion-separate-eligibility, source_id: source_vercel_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-    assessment_reason: Assess Vercel's ordinary service lifecycle from public evaluation and account access through API deployment creation, inspection, and recovery; account and billing prerequisites remain graded stages.

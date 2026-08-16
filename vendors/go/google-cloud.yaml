@@ -42,6 +42,7 @@ vendor:
       url: https://docs.cloud.google.com/resource-manager/docs/limits
     - source_id: source_google_cloud_support
       url: https://docs.cloud.google.com/support/docs
+    - { source_id: source_google_cloud_billing_checkout, url: https://docs.cloud.google.com/billing/docs/how-to/payment-methods }
 declarations:
   - declaration_id: declaration_google_cloud_api_resource_management
     scope:
@@ -51,6 +52,13 @@ declarations:
       funnel:
         key: api-resource-management
         name: API resource management
+    assessment_targets:
+      - target_id: service-use
+        name: Google Cloud service use
+        interface_ids: [resource-manager]
+      - target_id: cost-visibility
+        name: Google Cloud cost visibility
+        interface_ids: [cloud-billing]
     participants:
       - participant_id: google-cloud
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -74,7 +82,7 @@ declarations:
         standard_bindings: []
       - resource_id: account-setup
         uri: https://docs.cloud.google.com/billing/docs/how-to/create-billing-account
-        roles: [sign_up, checkout]
+        roles: [access]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: resource-manager-rest
@@ -133,6 +141,7 @@ declarations:
         roles: [recovery, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
+      - { resource_id: billing-checkout, uri: https://docs.cloud.google.com/billing/docs/how-to/payment-methods, roles: [checkout, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
     endpoints:
       - endpoint_id: resource-manager-api
         uri: https://cloudresourcemanager.googleapis.com
@@ -157,13 +166,15 @@ declarations:
         standard_bindings: []
     interfaces:
       - interface_id: resource-manager
-        capabilities: [api, tools]
+        modality: network_api
+        functions: [service_operation]
         endpoint_ids: [resource-manager-api]
         resource_ids: [resource-manager-rest, project-create-api, operation-status-api, api-discovery, resource-manager-limits]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - interface_id: workload-authentication
-        capabilities: [api, authentication]
+        modality: network_api
+        functions: [service_operation, authentication]
         endpoint_ids: [oauth-token]
         resource_ids: [rest-authentication, workload-identity]
         operated_by_participant_id: google-cloud
@@ -175,7 +186,8 @@ declarations:
             version: "1.0"
             relation: uses
       - interface_id: cloud-billing
-        capabilities: [api, commerce]
+        modality: network_api
+        functions: [service_operation, commerce]
         endpoint_ids: [cloud-billing-api]
         resource_ids: [pricing, billing-api-reference, billing-api-guide]
         operated_by_participant_id: google-cloud
@@ -207,6 +219,14 @@ declarations:
         to: { node_kind: interface, node_id: cloud-billing }
     offer_relations: []
     source_bindings:
+      - source_binding_id: google_cloud_cost_visibility_target
+        source_id: source_google_billing_api
+        target: { node_kind: assessment_target, node_id: cost-visibility }
+        field_paths: [/name, /interface_ids]
+      - source_binding_id: google_cloud_assessment_target
+        source_id: source_google_resource_manager_rest
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
       - source_binding_id: google-declaration-scope
         source_id: source_google_resource_manager_rest
         target: { node_kind: declaration, node_id: declaration_google_cloud_api_resource_management }
@@ -286,15 +306,15 @@ declarations:
       - source_binding_id: google-interface-resource-manager
         source_id: source_google_resource_manager_rest
         target: { node_kind: interface, node_id: resource-manager }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: google-interface-authentication
         source_id: source_google_workload_identity
         target: { node_kind: interface, node_id: workload-authentication }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
       - source_binding_id: google-interface-billing
         source_id: source_google_billing_api
         target: { node_kind: interface, node_id: cloud-billing }
-        field_paths: [/capabilities, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: google-relation-resource-manager-docs
         source_id: source_google_resource_manager_rest
         target: { node_kind: relation, node_id: resource-manager-docs-describe-interface }
@@ -319,6 +339,9 @@ declarations:
         source_id: source_google_billing_api
         target: { node_kind: relation, node_id: billing-docs-describe-interface }
         field_paths: [/kind, /from, /to]
+      - { source_binding_id: google-cloud-resource-billing-checkout, source_id: source_google_cloud_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: google-cloud-exclusion-separate-eligibility, source_id: source_google_cloud_service_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z
-    assessment_reason: Assess Google Cloud's ordinary service lifecycle from public evaluation and account access through workload credentials, API project creation, status, billing, operation, and recovery; account and billing prerequisites remain graded stages.
