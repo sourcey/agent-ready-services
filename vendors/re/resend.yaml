@@ -27,7 +27,7 @@ declarations:
       funnel: { key: email-operations, name: Email operations }
     assessment_targets:
       - target_id: service-use
-        name: Configure sending domains and send email through the API
+        name: Send email through the API
         interface_ids: [email-api]
     participants:
       - { participant_id: resend, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe5xfhy18q4ccs4a07n } }
@@ -36,7 +36,7 @@ declarations:
       - { resource_id: service-terms, uri: https://resend.com/legal/terms-of-service, roles: [terms], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: pricing, uri: https://resend.com/pricing, roles: [pricing], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://resend.com/signup, roles: [access], operated_by_participant_id: resend, standard_bindings: [] }
-      - { resource_id: api-keys, uri: https://resend.com/docs/dashboard/api-keys/introduction, roles: [descriptor, provisioning, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: api-keys, uri: https://resend.com/docs/dashboard/api-keys/introduction, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: send-email, uri: https://resend.com/docs/api-reference/emails/send-email, roles: [provisioning, status, operations, documentation], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: domain-provisioning, uri: https://resend.com/docs/api-reference/domains/create-domain, roles: [provisioning, status, operations, documentation], operated_by_participant_id: resend, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://resend.com/docs/api-reference/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: resend, standard_bindings: [] }
@@ -46,7 +46,7 @@ declarations:
       - { endpoint_id: registration, uri: https://resend.com/signup, transport: http, roles: [registration], operated_by_participant_id: resend, standard_bindings: [] }
       - { endpoint_id: resend-api, uri: https://api.resend.com, transport: http, roles: [service, status], operated_by_participant_id: resend, standard_bindings: [] }
     interfaces:
-      - { interface_id: email-api, modality: network_api, functions: [service_operation, events], endpoint_ids: [resend-api], resource_ids: [api-reference, send-email, domain-provisioning, api-errors], operated_by_participant_id: resend, standard_bindings: [] }
+      - { interface_id: email-api, modality: network_api, functions: [service_operation, events], endpoint_ids: [resend-api], resource_ids: [send-email, api-errors], operated_by_participant_id: resend, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [api-keys], operated_by_participant_id: resend, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: email-api } }
