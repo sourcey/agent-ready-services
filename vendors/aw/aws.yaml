@@ -112,7 +112,7 @@ declarations:
         standard_bindings: []
       - resource_id: cloud-control-create-api
         uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_CreateResource.html
-        roles: [provisioning, documentation]
+        roles: [provisioning, recovery, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: cloud-control-status-api

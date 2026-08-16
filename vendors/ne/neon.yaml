@@ -36,7 +36,7 @@ declarations:
       - { resource_id: service-terms, uri: https://neon.com/terms-of-service, roles: [terms], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: pricing, uri: https://neon.com/pricing, roles: [pricing], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: console-signup, uri: https://console.neon.tech/signup, roles: [access], operated_by_participant_id: neon, standard_bindings: [] }
-      - { resource_id: api-keys, uri: https://neon.com/docs/manage/api-keys, roles: [descriptor, provisioning, documentation], operated_by_participant_id: neon, standard_bindings: [] }
+      - { resource_id: api-keys, uri: https://neon.com/docs/manage/api-keys, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: create-project, uri: https://api-docs.neon.tech/reference/createproject, roles: [provisioning, status, operations, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: project-operations, uri: https://neon.com/docs/manage/projects, roles: [status, operations, recovery, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: branch-operations, uri: https://neon.com/docs/manage/branches, roles: [provisioning, status, operations, recovery, documentation], operated_by_participant_id: neon, standard_bindings: [] }

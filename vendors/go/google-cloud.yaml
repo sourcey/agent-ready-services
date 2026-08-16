@@ -40,6 +40,8 @@ vendor:
       url: https://docs.cloud.google.com/billing/docs/apis
     - source_id: source_google_resource_manager_quotas
       url: https://docs.cloud.google.com/resource-manager/docs/limits
+    - source_id: source_google_resource_manager_errors
+      url: https://docs.cloud.google.com/resource-manager/docs/core_errors
     - source_id: source_google_cloud_support
       url: https://docs.cloud.google.com/support/docs
     - { source_id: source_google_cloud_billing_checkout, url: https://docs.cloud.google.com/billing/docs/how-to/payment-methods }
@@ -136,6 +138,11 @@ declarations:
         roles: [operations, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
+      - resource_id: resource-manager-errors
+        uri: https://docs.cloud.google.com/resource-manager/docs/core_errors
+        roles: [operations, recovery, documentation]
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
       - resource_id: cloud-support
         uri: https://docs.cloud.google.com/support/docs
         roles: [recovery, documentation]
@@ -170,7 +177,7 @@ declarations:
         modality: network_api
         functions: [service_operation]
         endpoint_ids: [resource-manager-api]
-        resource_ids: [resource-manager-rest, project-create-api, operation-status-api, api-discovery, resource-manager-limits]
+        resource_ids: [resource-manager-rest, project-create-api, operation-status-api, api-discovery, resource-manager-limits, resource-manager-errors]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - interface_id: workload-authentication
@@ -291,6 +298,10 @@ declarations:
       - source_binding_id: google-resource-limits
         source_id: source_google_resource_manager_quotas
         target: { node_kind: resource, node_id: resource-manager-limits }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: google-resource-errors
+        source_id: source_google_resource_manager_errors
+        target: { node_kind: resource, node_id: resource-manager-errors }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: google-resource-support
         source_id: source_google_cloud_support

@@ -111,7 +111,7 @@ declarations:
         standard_bindings: []
       - resource_id: asynchronous-operations
         uri: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/async-operations
-        roles: [provisioning, status, operations, documentation]
+        roles: [provisioning, status, operations, recovery, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: resource-manager-limits

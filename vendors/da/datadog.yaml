@@ -35,7 +35,7 @@ declarations:
       - { resource_id: service-terms, uri: https://www.datadoghq.com/legal/terms/, roles: [terms], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.datadoghq.com/pricing/, roles: [pricing], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [access], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.datadoghq.com/api/latest/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.datadoghq.com/help/, roles: [recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }

@@ -36,7 +36,7 @@ declarations:
       - { resource_id: service-terms, uri: https://www.pinecone.io/terms/, roles: [terms], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.pinecone.io/pricing/, roles: [pricing], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: console-access, uri: https://app.pinecone.io/, roles: [access], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://docs.pinecone.io/reference/api/authentication, roles: [descriptor, provisioning, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.pinecone.io/reference/api/authentication, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: create-index, uri: https://docs.pinecone.io/reference/api/2025-04/control-plane/create_index, roles: [provisioning, status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: database-limits, uri: https://docs.pinecone.io/reference/api/database-limits, roles: [status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://docs.pinecone.io/reference/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }

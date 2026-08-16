@@ -36,7 +36,7 @@ declarations:
       - { resource_id: service-terms, uri: https://www.twilio.com/en-us/legal/tos, roles: [terms], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.twilio.com/en-us/pricing, roles: [pricing], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://auth.twilio.com/u/signup, roles: [access], operated_by_participant_id: twilio, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://www.twilio.com/docs/usage/requests-to-twilio, roles: [descriptor, provisioning, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://www.twilio.com/docs/usage/requests-to-twilio, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: message-operations, uri: https://www.twilio.com/docs/messaging/api/message-resource, roles: [provisioning, status, operations, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: delivery-status, uri: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://www.twilio.com/docs/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }

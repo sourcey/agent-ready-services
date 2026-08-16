@@ -36,7 +36,7 @@ declarations:
       - { resource_id: service-terms, uri: https://sentry.io/terms/, roles: [terms], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: pricing, uri: https://sentry.io/pricing/, roles: [pricing], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://sentry.io/signup/, roles: [access], operated_by_participant_id: sentry, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://docs.sentry.io/api/auth/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.sentry.io/api/auth/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: permissions, uri: https://docs.sentry.io/api/permissions/, roles: [descriptor, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: project-provisioning, uri: https://docs.sentry.io/api/projects/create-a-new-project/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: issue-operations, uri: https://docs.sentry.io/api/events/, roles: [status, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }

@@ -35,7 +35,7 @@ declarations:
       - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
-      - { resource_id: api-tokens, uri: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-tokens, uri: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.cloudflare.com/fundamentals/api/troubleshooting/, roles: [status, operations, recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: api-limits, uri: https://developers.cloudflare.com/fundamentals/api/reference/limits/, roles: [status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: support, uri: https://developers.cloudflare.com/support/, roles: [recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }

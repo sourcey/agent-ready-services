@@ -35,7 +35,7 @@ declarations:
       - { resource_id: service-terms, uri: https://www.digitalocean.com/legal/terms-of-service-agreement, roles: [terms], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.digitalocean.com/pricing, roles: [pricing], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: cloud-signup, uri: https://cloud.digitalocean.com/registrations/new, roles: [access], operated_by_participant_id: digitalocean, standard_bindings: [] }
-      - { resource_id: personal-access-tokens, uri: https://docs.digitalocean.com/reference/api/create-personal-access-token/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
+      - { resource_id: personal-access-tokens, uri: https://docs.digitalocean.com/reference/api/create-personal-access-token/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: droplet-provisioning, uri: https://docs.digitalocean.com/products/droplets/how-to/create/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: api-reference, uri: https://docs.digitalocean.com/reference/api/reference/public-apis/, roles: [status, operations, recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.digitalocean.com/support/, roles: [recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }

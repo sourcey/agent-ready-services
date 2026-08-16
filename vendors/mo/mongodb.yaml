@@ -36,7 +36,7 @@ declarations:
       - { resource_id: service-terms, uri: https://www.mongodb.com/legal/terms-of-use, roles: [terms], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.mongodb.com/pricing, roles: [pricing], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://account.mongodb.com/account/register, roles: [access], operated_by_participant_id: mongodb, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://www.mongodb.com/docs/atlas/api/api-authentication/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://www.mongodb.com/docs/atlas/api/api-authentication/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: cluster-operations, uri: https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2, roles: [provisioning, status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://www.mongodb.com/docs/atlas/api/api-rate-limit/, roles: [status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://www.mongodb.com/docs/atlas/reference/api-errors/, roles: [status, operations, recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }

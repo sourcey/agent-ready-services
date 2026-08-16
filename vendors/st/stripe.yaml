@@ -35,7 +35,7 @@ declarations:
       - { resource_id: service-terms, uri: https://stripe.com/legal/ssa, roles: [terms], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: pricing, uri: https://stripe.com/pricing, roles: [pricing], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dashboard.stripe.com/register, roles: [access], operated_by_participant_id: stripe, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://docs.stripe.com/api/authentication, roles: [descriptor, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.stripe.com/api/authentication, roles: [authentication, descriptor, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: testing, uri: https://docs.stripe.com/testing, roles: [provisioning, status, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: idempotency, uri: https://docs.stripe.com/api/idempotent_requests, roles: [operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://docs.stripe.com/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
