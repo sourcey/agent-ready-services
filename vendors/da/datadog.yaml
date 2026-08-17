@@ -12,6 +12,7 @@ vendor:
   sources:
     - { source_id: source_datadog_api, url: https://docs.datadoghq.com/api/latest/ }
     - { source_id: source_datadog_auth, url: https://docs.datadoghq.com/api/latest/authentication/ }
+    - { source_id: source_datadog_access_material, url: https://docs.datadoghq.com/account_management/api-app-keys/ }
     - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/ }
     - { source_id: source_datadog_limits, url: https://docs.datadoghq.com/api/latest/rate-limits/ }
     - { source_id: source_datadog_pricing, url: https://www.datadoghq.com/pricing/ }
@@ -44,6 +45,7 @@ declarations:
       - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [access, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: account-access-guide, uri: https://docs.datadoghq.com/getting_started/dashboards/, roles: [access, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [authentication, descriptor, documentation, provisioning], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: access-material-delivery, uri: https://docs.datadoghq.com/account_management/api-app-keys/, roles: [authentication, provisioning, status, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.datadoghq.com/api/latest/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.datadoghq.com/help/, roles: [recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
@@ -78,6 +80,7 @@ declarations:
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: monitor-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: monitor-api } }
+      - { relation_id: access-material-describes-authentication, kind: describes, from: { node_kind: resource, node_id: access-material-delivery }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: monitors-describe-api, kind: describes, from: { node_kind: resource, node_id: monitor-operations }, to: { node_kind: interface, node_id: monitor-api } }
       - relation_id: relation-describes-8931d3e23334363abd1948f3b345243399c2f98fcc71a09a3f8b0f4f3ece96bb
@@ -119,6 +122,7 @@ declarations:
       - { source_binding_id: datadog-resource-account-access, source_id: source_datadog_account_access, target: { node_kind: resource, node_id: account-access-guide }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-endpoint-registration, source_id: source_datadog_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-auth, source_id: source_datadog_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-access-material, source_id: source_datadog_access_material, target: { node_kind: resource, node_id: access-material-delivery }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-monitors, source_id: source_datadog_monitors, target: { node_kind: resource, node_id: monitor-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-limits, source_id: source_datadog_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-support, source_id: source_datadog_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -127,6 +131,7 @@ declarations:
       - { source_binding_id: datadog-interface-auth, source_id: source_datadog_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: datadog-relation-reference, source_id: source_datadog_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: datadog-relation-auth, source_id: source_datadog_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: datadog-relation-access-material, source_id: source_datadog_access_material, target: { node_kind: relation, node_id: access-material-describes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: datadog-relation-signup, source_id: source_datadog_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: datadog-relation-monitors, source_id: source_datadog_monitors, target: { node_kind: relation, node_id: monitors-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: datadog-resource-billing-checkout, source_id: source_datadog_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }

@@ -16,10 +16,12 @@ vendor:
     - { source_id: source_hubspot_errors, url: https://developers.hubspot.com/docs/api-reference/error-handling }
     - { source_id: source_hubspot_limits, url: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines }
     - { source_id: source_hubspot_pricing, url: https://www.hubspot.com/pricing/crm }
+    - { source_id: source_hubspot_crm_commitment, url: https://www.hubspot.com/products/crm }
     - { source_id: source_hubspot_signup, url: https://app.hubspot.com/signup-hubspot/crm }
     - { source_id: source_hubspot_terms, url: https://legal.hubspot.com/legal-stuff }
     - { source_id: source_hubspot_support, url: https://knowledge.hubspot.com/ }
     - { source_id: source_hubspot_billing_checkout, url: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription }
+    - { source_id: source_hubspot_upgrade, url: https://knowledge.hubspot.com/account-management/how-do-i-upgrade-my-hubspot-account }
     - source_id: source-readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
       url: https://legal.hubspot.com/developer-terms
     - source_id: source-readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
@@ -41,6 +43,7 @@ declarations:
       - { resource_id: api-overview, uri: https://developers.hubspot.com/docs/api-reference/overview, roles: [discovery, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://legal.hubspot.com/legal-stuff, roles: [terms], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.hubspot.com/pricing/crm, roles: [pricing], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - { resource_id: crm-commitment, uri: https://www.hubspot.com/products/crm, roles: [pricing, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: crm-signup, uri: https://app.hubspot.com/signup-hubspot/crm, roles: [access], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: oauth, uri: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/working-with-oauth, roles: [authentication, descriptor, documentation, provisioning], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
       - { resource_id: crm-operations, uri: https://developers.hubspot.com/docs/api-reference/legacy/crm/objects/objects/create-object, roles: [provisioning, status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
@@ -48,6 +51,7 @@ declarations:
       - { resource_id: api-limits, uri: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines, roles: [status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: support, uri: https://knowledge.hubspot.com/, roles: [recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription, roles: [checkout, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - { resource_id: subscription-upgrade, uri: https://knowledge.hubspot.com/account-management/how-do-i-upgrade-my-hubspot-account, roles: [checkout, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - resource_id: readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
         uri: https://legal.hubspot.com/developer-terms
         roles:
@@ -108,6 +112,7 @@ declarations:
       - { source_binding_id: hubspot-resource-overview, source_id: source_hubspot_api_overview, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-terms, source_id: source_hubspot_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-pricing, source_id: source_hubspot_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: hubspot-resource-crm-commitment, source_id: source_hubspot_crm_commitment, target: { node_kind: resource, node_id: crm-commitment }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-signup, source_id: source_hubspot_signup, target: { node_kind: resource, node_id: crm-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-endpoint-registration, source_id: source_hubspot_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-oauth, source_id: source_hubspot_oauth, target: { node_kind: resource, node_id: oauth }, field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings] }
@@ -124,6 +129,7 @@ declarations:
       - { source_binding_id: hubspot-relation-signup, source_id: source_hubspot_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: hubspot-relation-crm, source_id: source_hubspot_crm, target: { node_kind: relation, node_id: crm-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: hubspot-resource-billing-checkout, source_id: source_hubspot_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: hubspot-resource-subscription-upgrade, source_id: source_hubspot_upgrade, target: { node_kind: resource, node_id: subscription-upgrade }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - source_binding_id: binding-resource-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
         source_id: source-readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
         field_paths:

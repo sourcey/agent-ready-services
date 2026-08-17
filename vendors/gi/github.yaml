@@ -16,6 +16,7 @@ vendor:
     - { source_id: source_github_limits, url: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api }
     - { source_id: source_github_errors, url: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api }
     - { source_id: source_github_pricing, url: https://github.com/pricing }
+    - { source_id: source_github_plans, url: https://docs.github.com/en/get-started/learning-about-github/githubs-plans }
     - { source_id: source_github_signup, url: https://github.com/signup }
     - { source_id: source_github_terms, url: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service }
     - { source_id: source_github_support, url: https://support.github.com/ }
@@ -43,6 +44,7 @@ declarations:
       - { resource_id: rest-api, uri: https://docs.github.com/en/rest, roles: [discovery, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service, roles: [terms], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: pricing, uri: https://github.com/pricing, roles: [documentation, pricing], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: plan-commitments, uri: https://docs.github.com/en/get-started/learning-about-github/githubs-plans, roles: [documentation, pricing], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://github.com/signup, roles: [access], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: authentication, uri: "https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10", roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: repository-operations, uri: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10", roles: [provisioning, status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
@@ -116,6 +118,7 @@ declarations:
       - { source_binding_id: github-resource-rest, source_id: source_github_rest, target: { node_kind: resource, node_id: rest-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-terms, source_id: source_github_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-pricing, source_id: source_github_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-plan-commitments, source_id: source_github_plans, target: { node_kind: resource, node_id: plan-commitments }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-signup, source_id: source_github_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-endpoint-registration, source_id: source_github_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-auth, source_id: source_github_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }

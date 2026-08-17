@@ -34,6 +34,8 @@ vendor:
       url: https://signin.aws.amazon.com/signup?request_type=register
     - source_id: source_aws_account_creation_troubleshooting
       url: https://docs.aws.amazon.com/accounts/latest/reference/troubleshooting_create-account.html
+    - source_id: source_aws_account_getting_started
+      url: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
     - source_id: source_aws_pricing
       url: https://aws.amazon.com/pricing/
     - source_id: source_aws_price_list_api
@@ -90,6 +92,11 @@ declarations:
       - resource_id: account-creation-troubleshooting
         uri: https://docs.aws.amazon.com/accounts/latest/reference/troubleshooting_create-account.html
         roles: [access, recovery, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: account-plan-activation
+        uri: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
+        roles: [access, checkout, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: temporary-credentials
@@ -253,6 +260,10 @@ declarations:
       - source_binding_id: aws-resource-account-troubleshooting
         source_id: source_aws_account_creation_troubleshooting
         target: { node_kind: resource, node_id: account-creation-troubleshooting }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-account-plan-activation
+        source_id: source_aws_account_getting_started
+        target: { node_kind: resource, node_id: account-plan-activation }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-temporary-credentials
         source_id: source_aws_temporary_credentials
