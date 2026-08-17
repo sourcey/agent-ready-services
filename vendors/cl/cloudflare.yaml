@@ -10,8 +10,7 @@ vendor:
   description: Cloudflare offers a developer platform and global network providing security, compute, storage, and performance services to build fast and secure applications.
   links: { site: https://www.cloudflare.com, pricing: https://www.cloudflare.com/plans/ }
   sources:
-    - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/ }
-    - { source_id: source_cloudflare_worker_upload, url: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update }
+    - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update }
     - { source_id: source_cloudflare_tokens, url: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ }
     - { source_id: source_cloudflare_errors, url: https://developers.cloudflare.com/fundamentals/api/troubleshooting/ }
     - { source_id: source_cloudflare_limits, url: https://developers.cloudflare.com/fundamentals/api/reference/limits/ }
@@ -26,6 +25,12 @@ vendor:
       url: https://developers.cloudflare.com/fundamentals/setup/account/login
     - source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
       url: https://developers.cloudflare.com/workers/configuration/versions-and-deployments
+    - { source_id: source_cloudflare_public_dns_overview, url: https://developers.cloudflare.com/1.1.1.1/ }
+    - { source_id: source_cloudflare_public_dns_terms, url: https://www.cloudflare.com/policies/terms/ }
+    - { source_id: source_cloudflare_public_dns_doh, url: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/ }
+    - { source_id: source_cloudflare_public_dns_json, url: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/ }
+    - { source_id: source_cloudflare_public_dns_upstream, url: https://developers.cloudflare.com/1.1.1.1/upstream-resolution/ }
+    - { source_id: source_cloudflare_public_dns_errors, url: https://developers.cloudflare.com/1.1.1.1/infrastructure/extended-dns-error-codes/ }
 declarations:
   - declaration_id: declaration_cloudflare_api_resource_management
     scope:
@@ -38,8 +43,7 @@ declarations:
     participants:
       - { participant_id: cloudflare, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
-      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/, roles: [discovery, provisioning, status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
-      - { resource_id: worker-upload-response, uri: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update, roles: [provisioning, status, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update, roles: [discovery, provisioning, status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
@@ -78,7 +82,6 @@ declarations:
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [api-tokens], operated_by_participant_id: cloudflare, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: resource-api } }
-      - { relation_id: worker-upload-describes-api, kind: describes, from: { node_kind: resource, node_id: worker-upload-response }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: dashboard-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: api-errors }, to: { node_kind: interface, node_id: resource-api } }
@@ -99,7 +102,6 @@ declarations:
       - { source_binding_id: cloudflare-scope, source_id: source_cloudflare_api, target: { node_kind: declaration, node_id: declaration_cloudflare_api_resource_management }, field_paths: [/scope/product/name, /scope/funnel/name] }
       - { source_binding_id: cloudflare-participant, source_id: source_cloudflare_api, target: { node_kind: participant, node_id: cloudflare }, field_paths: [/roles, /identity] }
       - { source_binding_id: cloudflare-resource-reference, source_id: source_cloudflare_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: cloudflare-resource-worker-upload, source_id: source_cloudflare_worker_upload, target: { node_kind: resource, node_id: worker-upload-response }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-terms, source_id: source_cloudflare_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-plans, source_id: source_cloudflare_plans, target: { node_kind: resource, node_id: plans }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-signup, source_id: source_cloudflare_signup, target: { node_kind: resource, node_id: dashboard-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -112,7 +114,6 @@ declarations:
       - { source_binding_id: cloudflare-interface-api, source_id: source_cloudflare_api, target: { node_kind: interface, node_id: resource-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-interface-auth, source_id: source_cloudflare_tokens, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-relation-reference, source_id: source_cloudflare_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: cloudflare-relation-worker-upload, source_id: source_cloudflare_worker_upload, target: { node_kind: relation, node_id: worker-upload-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-relation-auth, source_id: source_cloudflare_tokens, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-relation-signup, source_id: source_cloudflare_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-relation-errors, source_id: source_cloudflare_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
@@ -158,3 +159,57 @@ declarations:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
+  - declaration_id: declaration_cloudflare_public_dns_over_https
+    scope:
+      product: { key: cloudflare-public-dns, name: Cloudflare 1.1.1.1 Public DNS }
+      funnel: { key: dns-over-https-query, name: DNS over HTTPS query }
+    assessment_targets:
+      - target_id: service-use
+        name: Resolve public DNS records through DNS over HTTPS
+        interface_ids: [doh-api]
+    participants:
+      - { participant_id: cloudflare-public-dns, roles: [subject, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
+    resources:
+      - { resource_id: public-dns-overview, uri: https://developers.cloudflare.com/1.1.1.1/, roles: [discovery, eligibility, pricing, documentation], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+      - { resource_id: public-dns-terms, uri: https://www.cloudflare.com/policies/terms/, roles: [terms], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+      - { resource_id: doh-reference, uri: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/, roles: [discovery, operations, status, documentation], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+      - { resource_id: doh-json-contract, uri: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/, roles: [operations, status, recovery, documentation], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+      - { resource_id: upstream-resolution, uri: https://developers.cloudflare.com/1.1.1.1/upstream-resolution/, roles: [operations, status, recovery, documentation], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+      - { resource_id: extended-errors, uri: https://developers.cloudflare.com/1.1.1.1/infrastructure/extended-dns-error-codes/, roles: [status, recovery, documentation], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: doh-endpoint, uri: https://cloudflare-dns.com/dns-query, transport: http, roles: [service], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+    interfaces:
+      - { interface_id: doh-api, modality: network_api, functions: [service_operation], endpoint_ids: [doh-endpoint], resource_ids: [doh-reference, doh-json-contract, upstream-resolution, extended-errors], operated_by_participant_id: cloudflare-public-dns, standard_bindings: [] }
+    relations:
+      - { relation_id: doh-reference-describes-api, kind: describes, from: { node_kind: resource, node_id: doh-reference }, to: { node_kind: interface, node_id: doh-api } }
+      - { relation_id: doh-json-describes-api, kind: describes, from: { node_kind: resource, node_id: doh-json-contract }, to: { node_kind: interface, node_id: doh-api } }
+      - { relation_id: upstream-describes-api, kind: describes, from: { node_kind: resource, node_id: upstream-resolution }, to: { node_kind: interface, node_id: doh-api } }
+      - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: extended-errors }, to: { node_kind: interface, node_id: doh-api } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: public-dns-scope, source_id: source_cloudflare_public_dns_overview, target: { node_kind: declaration, node_id: declaration_cloudflare_public_dns_over_https }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: public-dns-target, source_id: source_cloudflare_public_dns_doh, target: { node_kind: assessment_target, node_id: service-use }, field_paths: [/name, /interface_ids] }
+      - { source_binding_id: public-dns-participant, source_id: source_cloudflare_public_dns_doh, target: { node_kind: participant, node_id: cloudflare-public-dns }, field_paths: [/roles, /identity] }
+      - { source_binding_id: public-dns-resource-overview, source_id: source_cloudflare_public_dns_overview, target: { node_kind: resource, node_id: public-dns-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-resource-terms, source_id: source_cloudflare_public_dns_terms, target: { node_kind: resource, node_id: public-dns-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-resource-doh, source_id: source_cloudflare_public_dns_doh, target: { node_kind: resource, node_id: doh-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-resource-json, source_id: source_cloudflare_public_dns_json, target: { node_kind: resource, node_id: doh-json-contract }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-resource-upstream, source_id: source_cloudflare_public_dns_upstream, target: { node_kind: resource, node_id: upstream-resolution }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-resource-errors, source_id: source_cloudflare_public_dns_errors, target: { node_kind: resource, node_id: extended-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-endpoint, source_id: source_cloudflare_public_dns_doh, target: { node_kind: endpoint, node_id: doh-endpoint }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-interface, source_id: source_cloudflare_public_dns_doh, target: { node_kind: interface, node_id: doh-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: public-dns-relation-reference, source_id: source_cloudflare_public_dns_doh, target: { node_kind: relation, node_id: doh-reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: public-dns-relation-json, source_id: source_cloudflare_public_dns_json, target: { node_kind: relation, node_id: doh-json-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: public-dns-relation-upstream, source_id: source_cloudflare_public_dns_upstream, target: { node_kind: relation, node_id: upstream-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: public-dns-relation-errors, source_id: source_cloudflare_public_dns_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: public-dns-exclusion-access, source_id: source_cloudflare_public_dns_terms, target: { node_kind: surface_exclusion, node_id: no-access-bootstrap }, field_paths: [/role, /rationale] }
+      - { source_binding_id: public-dns-exclusion-checkout, source_id: source_cloudflare_public_dns_terms, target: { node_kind: surface_exclusion, node_id: no-checkout-step }, field_paths: [/role, /rationale] }
+      - { source_binding_id: public-dns-exclusion-provisioning, source_id: source_cloudflare_public_dns_doh, target: { node_kind: surface_exclusion, node_id: no-provisioning-step }, field_paths: [/role, /rationale] }
+      - { source_binding_id: public-dns-exclusion-authentication, source_id: source_cloudflare_public_dns_doh, target: { node_kind: surface_exclusion, node_id: no-operation-authentication }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: no-access-bootstrap, role: access, rationale: "The public DNS resolver is available without a subscription or Cloudflare account, so no access bootstrap applies." }
+      - { exclusion_id: no-checkout-step, role: checkout, rationale: "The public DNS resolver is available without a subscription or Cloudflare account, so no checkout step applies." }
+      - { exclusion_id: no-provisioning-step, role: provisioning, rationale: "DNS queries are submitted directly to the public endpoint, so no resource provisioning step applies." }
+      - { exclusion_id: no-operation-authentication, role: authentication, rationale: "Cloudflare states that no authentication is required to send requests to the DNS over HTTPS API." }
+    authority_intent: community
+    declared_at: 2026-08-18T00:00:00.000Z
