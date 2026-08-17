@@ -16,10 +16,9 @@ vendor:
     - { source_id: source_twilio_status, url: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status }
     - { source_id: source_twilio_errors, url: https://www.twilio.com/docs/api/errors }
     - { source_id: source_twilio_pricing, url: https://www.twilio.com/en-us/pricing }
-    - { source_id: source_twilio_signup, url: https://auth.twilio.com/u/signup }
+    - { source_id: source_twilio_signup, url: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account }
     - { source_id: source_twilio_terms, url: https://www.twilio.com/en-us/legal/tos }
     - { source_id: source_twilio_support, url: https://www.twilio.com/docs/usage/troubleshooting }
-    - { source_id: source_twilio_billing_checkout, url: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account }
 declarations:
   - declaration_id: declaration_twilio_messaging_api_operations
     scope:
@@ -35,15 +34,14 @@ declarations:
       - { resource_id: api-overview, uri: https://www.twilio.com/docs/usage/api, roles: [discovery, operations, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.twilio.com/en-us/legal/tos, roles: [terms], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.twilio.com/en-us/pricing, roles: [pricing], operated_by_participant_id: twilio, standard_bindings: [] }
-      - { resource_id: account-signup, uri: https://auth.twilio.com/u/signup, roles: [access], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account, roles: [access, checkout, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: authentication, uri: https://www.twilio.com/docs/usage/requests-to-twilio, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: message-operations, uri: https://www.twilio.com/docs/messaging/api/message-resource, roles: [provisioning, status, operations, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: delivery-status, uri: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://www.twilio.com/docs/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: support, uri: https://www.twilio.com/docs/usage/troubleshooting, roles: [recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account, roles: [checkout, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
     endpoints:
-      - { endpoint_id: registration, uri: https://auth.twilio.com/u/signup, transport: http, roles: [registration], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { endpoint_id: registration, uri: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account, transport: http, roles: [registration], operated_by_participant_id: twilio, standard_bindings: [] }
       - { endpoint_id: twilio-api, uri: https://api.twilio.com/2010-04-01, transport: http, roles: [service, status], operated_by_participant_id: twilio, standard_bindings: [] }
     interfaces:
       - { interface_id: messaging-api, modality: network_api, functions: [service_operation, events], endpoint_ids: [twilio-api], resource_ids: [api-overview, message-operations, delivery-status, api-errors], operated_by_participant_id: twilio, standard_bindings: [] }
@@ -78,7 +76,6 @@ declarations:
       - { source_binding_id: twilio-relation-auth, source_id: source_twilio_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: twilio-relation-signup, source_id: source_twilio_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: twilio-relation-messages, source_id: source_twilio_messages, target: { node_kind: relation, node_id: messages-describe-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: twilio-resource-billing-checkout, source_id: source_twilio_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: twilio-exclusion-separate-eligibility, source_id: source_twilio_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
