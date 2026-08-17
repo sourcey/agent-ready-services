@@ -20,6 +20,10 @@ vendor:
     - { source_id: source_neon_terms, url: https://neon.com/terms-of-service }
     - { source_id: source_neon_support, url: https://neon.com/docs/introduction/support }
     - { source_id: source_neon_billing_checkout, url: https://neon.com/docs/introduction/plans }
+    - source_id: source-readiness-5d65e00053d275dc55701ece542bb1e203f417bf461cf87ed7aca40281604231
+      url: https://neon.com/docs/manage/accounts
+    - source_id: source-readiness-a75ce7955cfd5f96e15192ecd4ffb6cb37ec27d3c666eca1b31e8b3466a289d8
+      url: https://neon.com/docs/introduction/manage-billing
 declarations:
   - declaration_id: declaration_neon_api_project_database_lifecycle
     scope:
@@ -42,6 +46,20 @@ declarations:
       - { resource_id: branch-operations, uri: https://neon.com/docs/manage/branches, roles: [provisioning, status, operations, recovery, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: support, uri: https://neon.com/docs/introduction/support, roles: [recovery, documentation], operated_by_participant_id: neon, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://neon.com/docs/introduction/plans, roles: [checkout, documentation], operated_by_participant_id: neon, standard_bindings: [] }
+      - resource_id: readiness-5d65e00053d275dc55701ece542bb1e203f417bf461cf87ed7aca40281604231
+        uri: https://neon.com/docs/manage/accounts
+        roles:
+          - access
+          - documentation
+        operated_by_participant_id: neon
+        standard_bindings: []
+      - resource_id: readiness-a75ce7955cfd5f96e15192ecd4ffb6cb37ec27d3c666eca1b31e8b3466a289d8
+        uri: https://neon.com/docs/introduction/manage-billing
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: neon
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://console.neon.tech/signup, transport: http, roles: [registration], operated_by_participant_id: neon, standard_bindings: [] }
       - { endpoint_id: neon-api, uri: https://console.neon.tech/api/v2, transport: http, roles: [service, status], operated_by_participant_id: neon, standard_bindings: [] }
@@ -80,6 +98,24 @@ declarations:
       - { source_binding_id: neon-relation-projects, source_id: source_neon_create_project, target: { node_kind: relation, node_id: projects-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: neon-resource-billing-checkout, source_id: source_neon_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: neon-exclusion-separate-eligibility, source_id: source_neon_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-5d65e00053d275dc55701ece542bb1e203f417bf461cf87ed7aca40281604231
+        source_id: source-readiness-5d65e00053d275dc55701ece542bb1e203f417bf461cf87ed7aca40281604231
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-5d65e00053d275dc55701ece542bb1e203f417bf461cf87ed7aca40281604231
+      - source_binding_id: binding-resource-a75ce7955cfd5f96e15192ecd4ffb6cb37ec27d3c666eca1b31e8b3466a289d8
+        source_id: source-readiness-a75ce7955cfd5f96e15192ecd4ffb6cb37ec27d3c666eca1b31e8b3466a289d8
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-a75ce7955cfd5f96e15192ecd4ffb6cb37ec27d3c666eca1b31e8b3466a289d8
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

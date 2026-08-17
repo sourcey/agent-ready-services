@@ -34,6 +34,8 @@ vendor:
       url: https://signin.aws.amazon.com/signup?request_type=register
     - source_id: source_aws_account_creation_troubleshooting
       url: https://docs.aws.amazon.com/accounts/latest/reference/troubleshooting_create-account.html
+    - source_id: source_aws_account_getting_started
+      url: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
     - source_id: source_aws_pricing
       url: https://aws.amazon.com/pricing/
     - source_id: source_aws_price_list_api
@@ -43,6 +45,8 @@ vendor:
     - source_id: source_aws_sign_in_recovery
       url: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
     - { source_id: source_aws_billing_checkout, url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-payments.html }
+    - source_id: source-readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+      url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html
 declarations:
   - declaration_id: declaration_aws_cloud_api_resource_management
     scope:
@@ -88,6 +92,11 @@ declarations:
       - resource_id: account-creation-troubleshooting
         uri: https://docs.aws.amazon.com/accounts/latest/reference/troubleshooting_create-account.html
         roles: [access, recovery, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: account-plan-activation
+        uri: https://docs.aws.amazon.com/accounts/latest/reference/getting-started.html
+        roles: [access, checkout, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: temporary-credentials
@@ -136,6 +145,13 @@ declarations:
         operated_by_participant_id: aws
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-payments.html, roles: [checkout, documentation], operated_by_participant_id: aws, standard_bindings: [] }
+      - resource_id: readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+        uri: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html
+        roles:
+          - access
+          - documentation
+        operated_by_participant_id: aws
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: "https://signin.aws.amazon.com/signup?request_type=register", transport: http, roles: [registration], operated_by_participant_id: aws, standard_bindings: [] }
       - endpoint_id: cloud-control-api
@@ -245,6 +261,10 @@ declarations:
         source_id: source_aws_account_creation_troubleshooting
         target: { node_kind: resource, node_id: account-creation-troubleshooting }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-account-plan-activation
+        source_id: source_aws_account_getting_started
+        target: { node_kind: resource, node_id: account-plan-activation }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-temporary-credentials
         source_id: source_aws_temporary_credentials
         target: { node_kind: resource, node_id: temporary-credentials }
@@ -331,6 +351,15 @@ declarations:
         field_paths: [/kind, /from, /to]
       - { source_binding_id: aws-resource-billing-checkout, source_id: source_aws_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: aws-exclusion-separate-eligibility, source_id: source_aws_service_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+        source_id: source-readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

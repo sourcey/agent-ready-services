@@ -19,6 +19,10 @@ vendor:
     - { source_id: source_vercel_terms, url: https://vercel.com/legal/terms }
     - { source_id: source_vercel_support, url: https://vercel.com/help }
     - { source_id: source_vercel_billing_checkout, url: https://vercel.com/docs/plans/pro-plan/billing }
+    - source_id: source-readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+      url: https://vercel.com/docs/cli/tokens
+    - source_id: source-readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
+      url: https://vercel.com/docs/plans/pro-plan
 declarations:
   - declaration_id: declaration_vercel_api_deployment_operations
     scope:
@@ -40,6 +44,20 @@ declarations:
       - { resource_id: api-errors, uri: https://vercel.com/docs/rest-api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: support, uri: https://vercel.com/help, roles: [recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://vercel.com/docs/plans/pro-plan/billing, roles: [checkout, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
+      - resource_id: readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+        uri: https://vercel.com/docs/cli/tokens
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: vercel
+        standard_bindings: []
+      - resource_id: readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
+        uri: https://vercel.com/docs/plans/pro-plan
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: vercel
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://vercel.com/signup, transport: http, roles: [registration], operated_by_participant_id: vercel, standard_bindings: [] }
       - { endpoint_id: vercel-api, uri: https://api.vercel.com, transport: http, roles: [service, status], operated_by_participant_id: vercel, standard_bindings: [] }
@@ -51,6 +69,14 @@ declarations:
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: deployment-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: deployments-describe-api, kind: describes, from: { node_kind: resource, node_id: deployment-operations }, to: { node_kind: interface, node_id: deployment-api } }
+      - relation_id: relation-describes-6d02ed10c0b4e2431680d2306b1792c88939522d69d3aff8487cdc71565ad520
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+        to:
+          node_kind: interface
+          node_id: api-authentication
     offer_relations: []
     source_bindings:
       - source_binding_id: vercel_assessment_target
@@ -77,6 +103,33 @@ declarations:
       - { source_binding_id: vercel-relation-deployments, source_id: source_vercel_deployments, target: { node_kind: relation, node_id: deployments-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: vercel-resource-billing-checkout, source_id: source_vercel_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-exclusion-separate-eligibility, source_id: source_vercel_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+        source_id: source-readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+      - source_binding_id: binding-relation-6d02ed10c0b4e2431680d2306b1792c88939522d69d3aff8487cdc71565ad520
+        source_id: source-readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-6d02ed10c0b4e2431680d2306b1792c88939522d69d3aff8487cdc71565ad520
+      - source_binding_id: binding-resource-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
+        source_id: source-readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

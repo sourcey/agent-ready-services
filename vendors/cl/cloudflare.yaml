@@ -11,6 +11,7 @@ vendor:
   links: { site: https://www.cloudflare.com, pricing: https://www.cloudflare.com/plans/ }
   sources:
     - { source_id: source_cloudflare_api, url: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/ }
+    - { source_id: source_cloudflare_worker_upload, url: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update }
     - { source_id: source_cloudflare_tokens, url: https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ }
     - { source_id: source_cloudflare_errors, url: https://developers.cloudflare.com/fundamentals/api/troubleshooting/ }
     - { source_id: source_cloudflare_limits, url: https://developers.cloudflare.com/fundamentals/api/reference/limits/ }
@@ -19,6 +20,12 @@ vendor:
     - { source_id: source_cloudflare_terms, url: https://www.cloudflare.com/terms/ }
     - { source_id: source_cloudflare_support, url: https://developers.cloudflare.com/support/ }
     - { source_id: source_cloudflare_billing_checkout, url: https://developers.cloudflare.com/billing/get-started/create-billing-profile/ }
+    - source_id: source-readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+      url: https://developers.cloudflare.com/billing
+    - source_id: source-readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+      url: https://developers.cloudflare.com/fundamentals/setup/account/login
+    - source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+      url: https://developers.cloudflare.com/workers/configuration/versions-and-deployments
 declarations:
   - declaration_id: declaration_cloudflare_api_resource_management
     scope:
@@ -32,6 +39,7 @@ declarations:
       - { participant_id: cloudflare, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
       - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/resources/workers/subresources/scripts/, roles: [discovery, provisioning, status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: worker-upload-response, uri: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update, roles: [provisioning, status, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
@@ -40,6 +48,28 @@ declarations:
       - { resource_id: api-limits, uri: https://developers.cloudflare.com/fundamentals/api/reference/limits/, roles: [status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: support, uri: https://developers.cloudflare.com/support/, roles: [recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://developers.cloudflare.com/billing/get-started/create-billing-profile/, roles: [checkout, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - resource_id: readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+        uri: https://developers.cloudflare.com/billing
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: cloudflare
+        standard_bindings: []
+      - resource_id: readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+        uri: https://developers.cloudflare.com/fundamentals/setup/account/login
+        roles:
+          - access
+          - documentation
+        operated_by_participant_id: cloudflare
+        standard_bindings: []
+      - resource_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        uri: https://developers.cloudflare.com/workers/configuration/versions-and-deployments
+        roles:
+          - documentation
+          - provisioning
+          - status
+        operated_by_participant_id: cloudflare
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://dash.cloudflare.com/sign-up, transport: http, roles: [registration], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { endpoint_id: cloudflare-api, uri: https://api.cloudflare.com/client/v4, transport: http, roles: [service, status], operated_by_participant_id: cloudflare, standard_bindings: [] }
@@ -48,9 +78,18 @@ declarations:
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [api-tokens], operated_by_participant_id: cloudflare, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: resource-api } }
+      - { relation_id: worker-upload-describes-api, kind: describes, from: { node_kind: resource, node_id: worker-upload-response }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: dashboard-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: api-errors }, to: { node_kind: interface, node_id: resource-api } }
+      - relation_id: relation-describes-225c96c782ab756fb616d37d053e0fd7f9b4f86e55f67726f3184979e08c37a3
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        to:
+          node_kind: interface
+          node_id: resource-api
     offer_relations: []
     source_bindings:
       - source_binding_id: cloudflare_assessment_target
@@ -60,6 +99,7 @@ declarations:
       - { source_binding_id: cloudflare-scope, source_id: source_cloudflare_api, target: { node_kind: declaration, node_id: declaration_cloudflare_api_resource_management }, field_paths: [/scope/product/name, /scope/funnel/name] }
       - { source_binding_id: cloudflare-participant, source_id: source_cloudflare_api, target: { node_kind: participant, node_id: cloudflare }, field_paths: [/roles, /identity] }
       - { source_binding_id: cloudflare-resource-reference, source_id: source_cloudflare_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: cloudflare-resource-worker-upload, source_id: source_cloudflare_worker_upload, target: { node_kind: resource, node_id: worker-upload-response }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-terms, source_id: source_cloudflare_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-plans, source_id: source_cloudflare_plans, target: { node_kind: resource, node_id: plans }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-signup, source_id: source_cloudflare_signup, target: { node_kind: resource, node_id: dashboard-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -72,11 +112,48 @@ declarations:
       - { source_binding_id: cloudflare-interface-api, source_id: source_cloudflare_api, target: { node_kind: interface, node_id: resource-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-interface-auth, source_id: source_cloudflare_tokens, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-relation-reference, source_id: source_cloudflare_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: cloudflare-relation-worker-upload, source_id: source_cloudflare_worker_upload, target: { node_kind: relation, node_id: worker-upload-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-relation-auth, source_id: source_cloudflare_tokens, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-relation-signup, source_id: source_cloudflare_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-relation-errors, source_id: source_cloudflare_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-resource-billing-checkout, source_id: source_cloudflare_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-exclusion-separate-eligibility, source_id: source_cloudflare_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+        source_id: source-readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+      - source_binding_id: binding-resource-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+        source_id: source-readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+      - source_binding_id: binding-resource-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+      - source_binding_id: binding-relation-225c96c782ab756fb616d37d053e0fd7f9b4f86e55f67726f3184979e08c37a3
+        source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-225c96c782ab756fb616d37d053e0fd7f9b4f86e55f67726f3184979e08c37a3
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

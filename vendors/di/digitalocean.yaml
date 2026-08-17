@@ -14,6 +14,7 @@ vendor:
     - { source_id: source_digitalocean_reference, url: https://docs.digitalocean.com/reference/api/reference/public-apis/ }
     - { source_id: source_digitalocean_tokens, url: https://docs.digitalocean.com/reference/api/create-personal-access-token/ }
     - { source_id: source_digitalocean_droplets, url: https://docs.digitalocean.com/products/droplets/how-to/create/ }
+    - { source_id: source_digitalocean_account_access, url: https://docs.digitalocean.com/products/droplets/getting-started/recommended-droplet-setup/ }
     - { source_id: source_digitalocean_pricing, url: https://www.digitalocean.com/pricing }
     - { source_id: source_digitalocean_signup, url: https://cloud.digitalocean.com/registrations/new }
     - { source_id: source_digitalocean_terms, url: https://www.digitalocean.com/legal/terms-of-service-agreement }
@@ -35,6 +36,7 @@ declarations:
       - { resource_id: service-terms, uri: https://www.digitalocean.com/legal/terms-of-service-agreement, roles: [terms], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.digitalocean.com/pricing, roles: [pricing], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: cloud-signup, uri: https://cloud.digitalocean.com/registrations/new, roles: [access], operated_by_participant_id: digitalocean, standard_bindings: [] }
+      - { resource_id: account-access-guide, uri: https://docs.digitalocean.com/products/droplets/getting-started/recommended-droplet-setup/, roles: [access, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: personal-access-tokens, uri: https://docs.digitalocean.com/reference/api/create-personal-access-token/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: droplet-provisioning, uri: https://docs.digitalocean.com/products/droplets/how-to/create/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: api-reference, uri: https://docs.digitalocean.com/reference/api/reference/public-apis/, roles: [status, operations, recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
@@ -63,6 +65,7 @@ declarations:
       - { source_binding_id: digitalocean-resource-terms, source_id: source_digitalocean_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: digitalocean-resource-pricing, source_id: source_digitalocean_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: digitalocean-resource-signup, source_id: source_digitalocean_signup, target: { node_kind: resource, node_id: cloud-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: digitalocean-resource-account-access, source_id: source_digitalocean_account_access, target: { node_kind: resource, node_id: account-access-guide }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: digitalocean-endpoint-registration, source_id: source_digitalocean_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: digitalocean-resource-tokens, source_id: source_digitalocean_tokens, target: { node_kind: resource, node_id: personal-access-tokens }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: digitalocean-resource-droplets, source_id: source_digitalocean_droplets, target: { node_kind: resource, node_id: droplet-provisioning }, field_paths: [/uri, /roles, /operated_by_participant_id] }

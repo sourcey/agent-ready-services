@@ -19,6 +19,8 @@ vendor:
     - { source_id: source_twilio_signup, url: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account }
     - { source_id: source_twilio_terms, url: https://www.twilio.com/en-us/legal/tos }
     - { source_id: source_twilio_support, url: https://www.twilio.com/docs/usage/troubleshooting }
+    - source_id: source-readiness-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
+      url: https://www.twilio.com/en-us/pricing/messaging
 declarations:
   - declaration_id: declaration_twilio_messaging_api_operations
     scope:
@@ -40,6 +42,13 @@ declarations:
       - { resource_id: delivery-status, uri: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://www.twilio.com/docs/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: support, uri: https://www.twilio.com/docs/usage/troubleshooting, roles: [recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - resource_id: readiness-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
+        uri: https://www.twilio.com/en-us/pricing/messaging
+        roles:
+          - documentation
+          - pricing
+        operated_by_participant_id: twilio
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account, transport: http, roles: [registration], operated_by_participant_id: twilio, standard_bindings: [] }
       - { endpoint_id: twilio-api, uri: https://api.twilio.com/2010-04-01, transport: http, roles: [service, status], operated_by_participant_id: twilio, standard_bindings: [] }
@@ -77,6 +86,15 @@ declarations:
       - { source_binding_id: twilio-relation-signup, source_id: source_twilio_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: twilio-relation-messages, source_id: source_twilio_messages, target: { node_kind: relation, node_id: messages-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: twilio-exclusion-separate-eligibility, source_id: source_twilio_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
+        source_id: source-readiness-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

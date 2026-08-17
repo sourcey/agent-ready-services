@@ -41,6 +41,8 @@ vendor:
     - source_id: source_azure_support
       url: https://azure.microsoft.com/en-us/support/options/
     - { source_id: source_microsoft_billing_checkout, url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card }
+    - source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+      url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription
 declarations:
   - declaration_id: declaration_microsoft_azure_api_resource_management
     scope:
@@ -135,6 +137,11 @@ declarations:
         operated_by_participant_id: microsoft
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card, roles: [checkout, documentation], operated_by_participant_id: microsoft, standard_bindings: [] }
+      - resource_id: readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+        uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription
+        roles: [access, checkout, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://signup.azure.com/, transport: http, roles: [registration], operated_by_participant_id: microsoft, standard_bindings: [] }
       - endpoint_id: azure-resource-manager
@@ -332,6 +339,15 @@ declarations:
         field_paths: [/kind, /from, /to]
       - { source_binding_id: microsoft-resource-billing-checkout, source_id: source_microsoft_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: microsoft-exclusion-separate-eligibility, source_id: source_azure_legal, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+        source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

@@ -45,6 +45,10 @@ vendor:
     - source_id: source_google_cloud_support
       url: https://docs.cloud.google.com/support/docs
     - { source_id: source_google_cloud_billing_checkout, url: https://docs.cloud.google.com/billing/docs/how-to/payment-methods }
+    - source_id: source-readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+      url: https://docs.cloud.google.com/billing/docs/how-to/manage-billing-account
+    - source_id: source-readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+      url: https://docs.cloud.google.com/free/docs/free-cloud-features
 declarations:
   - declaration_id: declaration_google_cloud_api_resource_management
     scope:
@@ -149,6 +153,20 @@ declarations:
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://docs.cloud.google.com/billing/docs/how-to/payment-methods, roles: [checkout, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
+      - resource_id: readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+        uri: https://docs.cloud.google.com/billing/docs/how-to/manage-billing-account
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
+      - resource_id: readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+        uri: https://docs.cloud.google.com/free/docs/free-cloud-features
+        roles:
+          - documentation
+          - eligibility
+        operated_by_participant_id: google-cloud
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://cloud.google.com/free, transport: http, roles: [registration], operated_by_participant_id: google-cloud, standard_bindings: [] }
       - endpoint_id: resource-manager-api
@@ -356,8 +374,24 @@ declarations:
         target: { node_kind: relation, node_id: billing-docs-describe-interface }
         field_paths: [/kind, /from, /to]
       - { source_binding_id: google-cloud-resource-billing-checkout, source_id: source_google_cloud_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: google-cloud-exclusion-separate-eligibility, source_id: source_google_cloud_service_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-    surface_exclusions:
-      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - source_binding_id: binding-resource-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+        source_id: source-readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+      - source_binding_id: binding-resource-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+        source_id: source-readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+    surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z

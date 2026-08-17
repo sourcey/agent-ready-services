@@ -20,6 +20,7 @@ vendor:
     - { source_id: source_sentry_signup, url: https://sentry.io/signup/ }
     - { source_id: source_sentry_terms, url: https://sentry.io/terms/ }
     - { source_id: source_sentry_support, url: https://sentry.zendesk.com/hc/en-us }
+    - { source_id: source_sentry_self_service_plan, url: https://www.sentry.help/en/articles/13965054-can-i-get-a-quote-for-sentry }
 declarations:
   - declaration_id: declaration_sentry_api_issue_operations
     scope:
@@ -34,7 +35,8 @@ declarations:
     resources:
       - { resource_id: api-reference, uri: https://docs.sentry.io/api/, roles: [discovery, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://sentry.io/terms/, roles: [terms], operated_by_participant_id: sentry, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://sentry.io/pricing/, roles: [pricing], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://sentry.io/pricing/, roles: [checkout, documentation, pricing], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { resource_id: self-service-plan, uri: https://www.sentry.help/en/articles/13965054-can-i-get-a-quote-for-sentry, roles: [checkout, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://sentry.io/signup/, roles: [access], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.sentry.io/api/auth/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: permissions, uri: https://docs.sentry.io/api/permissions/, roles: [descriptor, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
@@ -70,6 +72,7 @@ declarations:
       - { source_binding_id: sentry-resource-reference, source_id: source_sentry_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-terms, source_id: source_sentry_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-pricing, source_id: source_sentry_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: sentry-resource-self-service-plan, source_id: source_sentry_self_service_plan, target: { node_kind: resource, node_id: self-service-plan }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-signup, source_id: source_sentry_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-endpoint-registration, source_id: source_sentry_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-auth, source_id: source_sentry_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -87,9 +90,7 @@ declarations:
       - { source_binding_id: sentry-relation-projects, source_id: source_sentry_projects, target: { node_kind: relation, node_id: projects-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-relation-issues, source_id: source_sentry_issues, target: { node_kind: relation, node_id: issues-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-exclusion-separate-eligibility, source_id: source_sentry_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - { source_binding_id: sentry-exclusion-service-checkout, source_id: source_sentry_pricing, target: { node_kind: surface_exclusion, node_id: no-public-service-checkout }, field_paths: [/role, /rationale] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
-      - { exclusion_id: no-public-service-checkout, role: checkout, rationale: "Paid plans are published, but no separate publicly retrievable service-purchase checkout resource is declared for this funnel." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

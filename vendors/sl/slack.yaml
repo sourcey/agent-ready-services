@@ -20,6 +20,8 @@ vendor:
     - { source_id: source_slack_terms, url: https://slack.com/terms-of-service }
     - { source_id: source_slack_support, url: https://slack.com/help }
     - { source_id: source_slack_billing_checkout, url: https://slack.com/help/articles/218915087-Manage-your-Slack-plan-and-billing-details }
+    - source_id: source-readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+      url: https://slack.com/help/articles/202035138-Slack-plans-and-features
 declarations:
   - declaration_id: declaration_slack_web_api_workspace_operations
     scope:
@@ -42,6 +44,13 @@ declarations:
       - { resource_id: rate-limits, uri: https://docs.slack.dev/apis/web-api/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: support, uri: https://slack.com/help, roles: [recovery, documentation], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://slack.com/help/articles/218915087-Manage-your-Slack-plan-and-billing-details, roles: [checkout, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - resource_id: readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+        uri: https://slack.com/help/articles/202035138-Slack-plans-and-features
+        roles:
+          - documentation
+          - eligibility
+        operated_by_participant_id: slack
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://slack.com/get-started, transport: http, roles: [registration], operated_by_participant_id: slack, standard_bindings: [] }
       - { endpoint_id: slack-api, uri: https://slack.com/api, transport: http, roles: [service, status], operated_by_participant_id: slack, standard_bindings: [] }
@@ -81,8 +90,15 @@ declarations:
       - { source_binding_id: slack-relation-signup, source_id: source_slack_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: slack-relation-messages, source_id: source_slack_messages, target: { node_kind: relation, node_id: messages-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: slack-resource-billing-checkout, source_id: source_slack_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: slack-exclusion-separate-eligibility, source_id: source_slack_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-    surface_exclusions:
-      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - source_binding_id: binding-resource-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+        source_id: source-readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+    surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

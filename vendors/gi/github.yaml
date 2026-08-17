@@ -15,11 +15,19 @@ vendor:
     - { source_id: source_github_repositories, url: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10" }
     - { source_id: source_github_limits, url: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api }
     - { source_id: source_github_errors, url: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api }
-    - { source_id: source_github_pricing, url: https://github.com/pricing }
+    - { source_id: source_github_pricing, url: https://docs.github.com/en/get-started/learning-about-github/githubs-plans }
     - { source_id: source_github_signup, url: https://github.com/signup }
     - { source_id: source_github_terms, url: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service }
     - { source_id: source_github_support, url: https://support.github.com/ }
     - { source_id: source_github_billing_checkout, url: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses/upgrade-plan }
+    - source_id: source-readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+      url: https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
+    - source_id: source-readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+      url: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app
+    - source_id: source-readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+      url: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation
+    - source_id: source-readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+      url: https://docs.github.com/en/billing/concepts/impact-of-plan-changes
 declarations:
   - declaration_id: declaration_github_rest_repository_operations
     scope:
@@ -34,7 +42,7 @@ declarations:
     resources:
       - { resource_id: rest-api, uri: https://docs.github.com/en/rest, roles: [discovery, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service, roles: [terms], operated_by_participant_id: github, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://github.com/pricing, roles: [pricing], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://docs.github.com/en/get-started/learning-about-github/githubs-plans, roles: [documentation, pricing], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://github.com/signup, roles: [access], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: authentication, uri: "https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10", roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: repository-operations, uri: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10", roles: [provisioning, status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
@@ -42,6 +50,34 @@ declarations:
       - { resource_id: troubleshooting, uri: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api, roles: [status, operations, recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: support, uri: https://support.github.com/, roles: [recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses/upgrade-plan, roles: [checkout, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - resource_id: readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+        uri: https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
+        roles:
+          - access
+          - documentation
+        operated_by_participant_id: github
+        standard_bindings: []
+      - resource_id: readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+        uri: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: github
+        standard_bindings: []
+      - resource_id: readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+        uri: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: github
+        standard_bindings: []
+      - resource_id: readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+        uri: https://docs.github.com/en/billing/concepts/impact-of-plan-changes
+        roles:
+          - documentation
+          - pricing
+        operated_by_participant_id: github
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://github.com/signup, transport: http, roles: [registration], operated_by_participant_id: github, standard_bindings: [] }
       - { endpoint_id: github-api, uri: https://api.github.com, transport: http, roles: [service, status], operated_by_participant_id: github, standard_bindings: [] }
@@ -53,6 +89,22 @@ declarations:
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: repository-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: repository-docs-describe-api, kind: describes, from: { node_kind: resource, node_id: repository-operations }, to: { node_kind: interface, node_id: repository-api } }
+      - relation_id: relation-describes-b89359e774bb9820b9086ea0765f3845898f0e18b10eb3b73d4687dcdfa31509
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+        to:
+          node_kind: interface
+          node_id: api-authentication
+      - relation_id: relation-describes-3bdc2359067fbad866b74feffe97cfc028acfd5b0c8af44807854b8247bd4ab1
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+        to:
+          node_kind: interface
+          node_id: api-authentication
     offer_relations: []
     source_bindings:
       - source_binding_id: github_assessment_target
@@ -80,6 +132,60 @@ declarations:
       - { source_binding_id: github-relation-repositories, source_id: source_github_repositories, target: { node_kind: relation, node_id: repository-docs-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: github-resource-billing-checkout, source_id: source_github_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-exclusion-separate-eligibility, source_id: source_github_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+        source_id: source-readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+      - source_binding_id: binding-resource-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+        source_id: source-readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+      - source_binding_id: binding-relation-b89359e774bb9820b9086ea0765f3845898f0e18b10eb3b73d4687dcdfa31509
+        source_id: source-readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-b89359e774bb9820b9086ea0765f3845898f0e18b10eb3b73d4687dcdfa31509
+      - source_binding_id: binding-resource-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+        source_id: source-readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+      - source_binding_id: binding-relation-3bdc2359067fbad866b74feffe97cfc028acfd5b0c8af44807854b8247bd4ab1
+        source_id: source-readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-3bdc2359067fbad866b74feffe97cfc028acfd5b0c8af44807854b8247bd4ab1
+      - source_binding_id: binding-resource-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+        source_id: source-readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
