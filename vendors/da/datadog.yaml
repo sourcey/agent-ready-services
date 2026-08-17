@@ -16,7 +16,7 @@ vendor:
     - { source_id: source_datadog_limits, url: https://docs.datadoghq.com/api/latest/rate-limits/ }
     - { source_id: source_datadog_pricing, url: https://www.datadoghq.com/pricing/ }
     - { source_id: source_datadog_signup, url: https://app.datadoghq.com/signup }
-    - { source_id: source_datadog_terms, url: https://www.datadoghq.com/legal/terms/ }
+    - { source_id: source_datadog_terms, url: https://www.datadoghq.com/legal/msa/ }
     - { source_id: source_datadog_support, url: https://docs.datadoghq.com/help/ }
     - { source_id: source_datadog_billing_checkout, url: https://docs.datadoghq.com/account_management/billing/credit_card/ }
 declarations:
@@ -32,7 +32,7 @@ declarations:
       - { participant_id: datadog, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe2hwmmvk3eex1hq433 } }
     resources:
       - { resource_id: api-reference, uri: https://docs.datadoghq.com/api/latest/, roles: [discovery, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: service-terms, uri: https://www.datadoghq.com/legal/terms/, roles: [terms], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.datadoghq.com/legal/msa/, roles: [terms], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.datadoghq.com/pricing/, roles: [pricing], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [access], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
