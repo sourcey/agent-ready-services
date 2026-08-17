@@ -19,6 +19,12 @@ vendor:
     - { source_id: source_cloudflare_terms, url: https://www.cloudflare.com/terms/ }
     - { source_id: source_cloudflare_support, url: https://developers.cloudflare.com/support/ }
     - { source_id: source_cloudflare_billing_checkout, url: https://developers.cloudflare.com/billing/get-started/create-billing-profile/ }
+    - source_id: source-readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+      url: https://developers.cloudflare.com/billing
+    - source_id: source-readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+      url: https://developers.cloudflare.com/fundamentals/setup/account/login
+    - source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+      url: https://developers.cloudflare.com/workers/configuration/versions-and-deployments
 declarations:
   - declaration_id: declaration_cloudflare_api_resource_management
     scope:
@@ -40,6 +46,28 @@ declarations:
       - { resource_id: api-limits, uri: https://developers.cloudflare.com/fundamentals/api/reference/limits/, roles: [status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: support, uri: https://developers.cloudflare.com/support/, roles: [recovery, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://developers.cloudflare.com/billing/get-started/create-billing-profile/, roles: [checkout, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - resource_id: readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+        uri: https://developers.cloudflare.com/billing
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: cloudflare
+        standard_bindings: []
+      - resource_id: readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+        uri: https://developers.cloudflare.com/fundamentals/setup/account/login
+        roles:
+          - access
+          - documentation
+        operated_by_participant_id: cloudflare
+        standard_bindings: []
+      - resource_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        uri: https://developers.cloudflare.com/workers/configuration/versions-and-deployments
+        roles:
+          - documentation
+          - provisioning
+          - status
+        operated_by_participant_id: cloudflare
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://dash.cloudflare.com/sign-up, transport: http, roles: [registration], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { endpoint_id: cloudflare-api, uri: https://api.cloudflare.com/client/v4, transport: http, roles: [service, status], operated_by_participant_id: cloudflare, standard_bindings: [] }
@@ -51,6 +79,14 @@ declarations:
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: dashboard-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: api-errors }, to: { node_kind: interface, node_id: resource-api } }
+      - relation_id: relation-describes-225c96c782ab756fb616d37d053e0fd7f9b4f86e55f67726f3184979e08c37a3
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        to:
+          node_kind: interface
+          node_id: resource-api
     offer_relations: []
     source_bindings:
       - source_binding_id: cloudflare_assessment_target
@@ -77,6 +113,42 @@ declarations:
       - { source_binding_id: cloudflare-relation-errors, source_id: source_cloudflare_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: cloudflare-resource-billing-checkout, source_id: source_cloudflare_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-exclusion-separate-eligibility, source_id: source_cloudflare_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+        source_id: source-readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-6b1ec9edf6e5bc9be8277ad21ed6b287369ef3921b9c2e9d3e880f4b575bf7c9
+      - source_binding_id: binding-resource-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+        source_id: source-readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
+      - source_binding_id: binding-resource-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+      - source_binding_id: binding-relation-225c96c782ab756fb616d37d053e0fd7f9b4f86e55f67726f3184979e08c37a3
+        source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-225c96c782ab756fb616d37d053e0fd7f9b4f86e55f67726f3184979e08c37a3
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

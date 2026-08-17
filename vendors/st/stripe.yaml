@@ -15,6 +15,7 @@ vendor:
     - { source_id: source_stripe_idempotency, url: https://docs.stripe.com/api/idempotent_requests }
     - { source_id: source_stripe_errors, url: https://docs.stripe.com/api/errors }
     - { source_id: source_stripe_testing, url: https://docs.stripe.com/testing }
+    - { source_id: source_stripe_payment_intents_create, url: https://docs.stripe.com/api/payment_intents/create }
     - { source_id: source_stripe_pricing, url: https://stripe.com/pricing }
     - { source_id: source_stripe_signup, url: https://dashboard.stripe.com/register }
     - { source_id: source_stripe_terms, url: https://stripe.com/legal/ssa }
@@ -33,10 +34,11 @@ declarations:
     resources:
       - { resource_id: api-reference, uri: https://docs.stripe.com/api, roles: [discovery, documentation, operations], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://stripe.com/legal/ssa, roles: [terms], operated_by_participant_id: stripe, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://stripe.com/pricing, roles: [pricing], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://stripe.com/pricing, roles: [checkout, documentation, pricing], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dashboard.stripe.com/register, roles: [access], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.stripe.com/api/authentication, roles: [authentication, descriptor, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: testing, uri: https://docs.stripe.com/testing, roles: [provisioning, status, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: payment-intents-create, uri: https://docs.stripe.com/api/payment_intents/create, roles: [provisioning, status, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: idempotency, uri: https://docs.stripe.com/api/idempotent_requests, roles: [operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://docs.stripe.com/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: support, uri: https://support.stripe.com/, roles: [recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
@@ -51,6 +53,7 @@ declarations:
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: payments-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: dashboard-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: idempotency-describes-api, kind: describes, from: { node_kind: resource, node_id: idempotency }, to: { node_kind: interface, node_id: payments-api } }
+      - { relation_id: payment-intents-create-describes-api, kind: describes, from: { node_kind: resource, node_id: payment-intents-create }, to: { node_kind: interface, node_id: payments-api } }
     offer_relations: []
     source_bindings:
       - source_binding_id: stripe_assessment_target
@@ -66,6 +69,7 @@ declarations:
       - { source_binding_id: stripe-endpoint-registration, source_id: source_stripe_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-auth, source_id: source_stripe_authentication, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-testing, source_id: source_stripe_testing, target: { node_kind: resource, node_id: testing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-payment-intents-create, source_id: source_stripe_payment_intents_create, target: { node_kind: resource, node_id: payment-intents-create }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-idempotency, source_id: source_stripe_idempotency, target: { node_kind: resource, node_id: idempotency }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-errors, source_id: source_stripe_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-support, source_id: source_stripe_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -76,10 +80,9 @@ declarations:
       - { source_binding_id: stripe-relation-auth, source_id: source_stripe_authentication, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: stripe-relation-signup, source_id: source_stripe_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: stripe-relation-idempotency, source_id: source_stripe_idempotency, target: { node_kind: relation, node_id: idempotency-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: stripe-relation-payment-intents-create, source_id: source_stripe_payment_intents_create, target: { node_kind: relation, node_id: payment-intents-create-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: stripe-exclusion-separate-eligibility, source_id: source_stripe_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - { source_binding_id: stripe-exclusion-service-checkout, source_id: source_stripe_pricing, target: { node_kind: surface_exclusion, node_id: no-separate-service-checkout }, field_paths: [/role, /rationale] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
-      - { exclusion_id: no-separate-service-checkout, role: checkout, rationale: "The API uses published usage pricing rather than a separate service-purchase checkout resource for this funnel." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

@@ -18,6 +18,8 @@ vendor:
       url: https://platform.claude.com/docs/en/cli-sdks-libraries/overview
     - source_id: source_anthropic_getting_started
       url: https://platform.claude.com/docs/en/api/overview
+    - source_id: source_anthropic_messages_create
+      url: https://platform.claude.com/docs/en/api/messages/create
     - source_id: source_anthropic_errors
       url: https://platform.claude.com/docs/en/api/errors
     - source_id: source_anthropic_rate_limits
@@ -67,7 +69,12 @@ declarations:
         standard_bindings: []
       - resource_id: authentication
         uri: https://platform.claude.com/docs/en/api/overview
-        roles: [authentication, provisioning, descriptor, documentation]
+        roles: [authentication, descriptor, documentation]
+        operated_by_participant_id: anthropic
+        standard_bindings: []
+      - resource_id: messages-create
+        uri: https://platform.claude.com/docs/en/api/messages/create
+        roles: [provisioning, status, documentation]
         operated_by_participant_id: anthropic
         standard_bindings: []
       - resource_id: api-errors
@@ -126,6 +133,10 @@ declarations:
         kind: describes
         from: { node_kind: resource, node_id: api-errors }
         to: { node_kind: interface, node_id: api-service }
+      - relation_id: messages-create-describes-api
+        kind: describes
+        from: { node_kind: resource, node_id: messages-create }
+        to: { node_kind: interface, node_id: api-service }
     offer_relations: []
     source_bindings:
       - source_binding_id: anthropic_assessment_target
@@ -140,6 +151,7 @@ declarations:
       - { source_binding_id: anthropic-resource-console, source_id: source_anthropic_console, target: { node_kind: resource, node_id: console-access }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-endpoint-registration, source_id: source_anthropic_console, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-authentication, source_id: source_anthropic_getting_started, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: anthropic-resource-messages-create, source_id: source_anthropic_messages_create, target: { node_kind: resource, node_id: messages-create }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-errors, source_id: source_anthropic_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-limits, source_id: source_anthropic_rate_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-support, source_id: source_anthropic_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -150,6 +162,7 @@ declarations:
       - { source_binding_id: anthropic-relation-auth, source_id: source_anthropic_getting_started, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: anthropic-relation-console, source_id: source_anthropic_console, target: { node_kind: relation, node_id: console-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: anthropic-relation-errors, source_id: source_anthropic_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: anthropic-relation-messages-create, source_id: source_anthropic_messages_create, target: { node_kind: relation, node_id: messages-create-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: anthropic-resource-billing-checkout, source_id: source_anthropic_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-exclusion-separate-eligibility, source_id: source_anthropic_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
     surface_exclusions:

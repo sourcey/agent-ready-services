@@ -15,11 +15,17 @@ vendor:
     - { source_id: source_hubspot_crm, url: https://developers.hubspot.com/docs/api-reference/legacy/crm/objects/objects/create-object }
     - { source_id: source_hubspot_errors, url: https://developers.hubspot.com/docs/api-reference/error-handling }
     - { source_id: source_hubspot_limits, url: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines }
-    - { source_id: source_hubspot_pricing, url: https://developers.hubspot.com/developer-platform-basics }
+    - { source_id: source_hubspot_pricing, url: https://www.hubspot.com/pricing/crm }
     - { source_id: source_hubspot_signup, url: https://app.hubspot.com/signup-hubspot/crm }
     - { source_id: source_hubspot_terms, url: https://legal.hubspot.com/legal-stuff }
     - { source_id: source_hubspot_support, url: https://knowledge.hubspot.com/ }
     - { source_id: source_hubspot_billing_checkout, url: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription }
+    - source_id: source-readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+      url: https://legal.hubspot.com/developer-terms
+    - source_id: source-readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+      url: https://developers.hubspot.com/docs/api/private-apps
+    - source_id: source-readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+      url: https://legal.hubspot.com/terms-of-service
 declarations:
   - declaration_id: declaration_hubspot_crm_api_integration_lifecycle
     scope:
@@ -34,14 +40,35 @@ declarations:
     resources:
       - { resource_id: api-overview, uri: https://developers.hubspot.com/docs/api-reference/overview, roles: [discovery, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://legal.hubspot.com/legal-stuff, roles: [terms], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://developers.hubspot.com/developer-platform-basics, roles: [pricing], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://www.hubspot.com/pricing/crm, roles: [pricing], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: crm-signup, uri: https://app.hubspot.com/signup-hubspot/crm, roles: [access], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - { resource_id: oauth, uri: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/working-with-oauth, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
+      - { resource_id: oauth, uri: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/authentication/oauth/working-with-oauth, roles: [authentication, descriptor, documentation, provisioning], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
       - { resource_id: crm-operations, uri: https://developers.hubspot.com/docs/api-reference/legacy/crm/objects/objects/create-object, roles: [provisioning, status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.hubspot.com/docs/api-reference/error-handling, roles: [status, operations, recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: api-limits, uri: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines, roles: [status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: support, uri: https://knowledge.hubspot.com/, roles: [recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription, roles: [checkout, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
+      - resource_id: readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+        uri: https://legal.hubspot.com/developer-terms
+        roles:
+          - documentation
+          - eligibility
+        operated_by_participant_id: hubspot
+        standard_bindings: []
+      - resource_id: readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+        uri: https://developers.hubspot.com/docs/api/private-apps
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: hubspot
+        standard_bindings: []
+      - resource_id: readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+        uri: https://legal.hubspot.com/terms-of-service
+        roles:
+          - documentation
+          - terms
+        operated_by_participant_id: hubspot
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://app.hubspot.com/signup-hubspot/crm, transport: http, roles: [registration], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { endpoint_id: hubspot-api, uri: https://api.hubapi.com, transport: http, roles: [service, status], operated_by_participant_id: hubspot, standard_bindings: [] }
@@ -54,6 +81,22 @@ declarations:
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: integration-authentication }, to: { node_kind: interface, node_id: crm-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: crm-signup }, to: { node_kind: interface, node_id: integration-authentication } }
       - { relation_id: crm-describes-api, kind: describes, from: { node_kind: resource, node_id: crm-operations }, to: { node_kind: interface, node_id: crm-api } }
+      - relation_id: relation-describes-b393d1b40a6a6b010018783b7b2272f9b811ed8dc1f6da3d7422cb2cec3f8fb7
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: oauth
+        to:
+          node_kind: interface
+          node_id: integration-authentication
+      - relation_id: relation-describes-091810ae56e2e84f96a64120fd2a5ad4b8bc336eb4c3abbdcaca07a2bd23c18a
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+        to:
+          node_kind: interface
+          node_id: integration-authentication
     offer_relations: []
     source_bindings:
       - source_binding_id: hubspot_assessment_target
@@ -81,8 +124,51 @@ declarations:
       - { source_binding_id: hubspot-relation-signup, source_id: source_hubspot_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: hubspot-relation-crm, source_id: source_hubspot_crm, target: { node_kind: relation, node_id: crm-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: hubspot-resource-billing-checkout, source_id: source_hubspot_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: hubspot-exclusion-separate-eligibility, source_id: source_hubspot_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-    surface_exclusions:
-      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - source_binding_id: binding-resource-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+        source_id: source-readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+      - source_binding_id: binding-relation-b393d1b40a6a6b010018783b7b2272f9b811ed8dc1f6da3d7422cb2cec3f8fb7
+        source_id: source_hubspot_oauth
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-b393d1b40a6a6b010018783b7b2272f9b811ed8dc1f6da3d7422cb2cec3f8fb7
+      - source_binding_id: binding-resource-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+        source_id: source-readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+      - source_binding_id: binding-relation-091810ae56e2e84f96a64120fd2a5ad4b8bc336eb4c3abbdcaca07a2bd23c18a
+        source_id: source-readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-091810ae56e2e84f96a64120fd2a5ad4b8bc336eb4c3abbdcaca07a2bd23c18a
+      - source_binding_id: binding-resource-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+        source_id: source-readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+    surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
