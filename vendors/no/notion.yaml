@@ -14,7 +14,7 @@ vendor:
     - { source_id: source_notion_overview, url: https://developers.notion.com/guides/get-started/overview }
     - { source_id: source_notion_authorization, url: https://developers.notion.com/guides/get-started/authorization }
     - { source_id: source_notion_quickstart, url: https://developers.notion.com/guides/get-started/quick-start }
-    - { source_id: source_notion_create_page, url: https://developers.notion.com/reference/post-page }
+    - { source_id: source_notion_create_page, url: https://developers.notion.com/reference/post-page.md }
     - { source_id: source_notion_limits, url: https://developers.notion.com/reference/request-limits }
     - { source_id: source_notion_status_codes, url: https://developers.notion.com/reference/status-codes }
     - { source_id: source_notion_pricing, url: https://www.notion.com/pricing }
@@ -40,7 +40,7 @@ declarations:
       - { resource_id: workspace-signup, uri: https://app.notion.com/signup, roles: [access], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: authorization, uri: https://developers.notion.com/guides/get-started/authorization, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: quickstart, uri: https://developers.notion.com/guides/get-started/quick-start, roles: [provisioning, status, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
-      - { resource_id: create-page, uri: https://developers.notion.com/reference/post-page, roles: [operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
+      - { resource_id: create-page, uri: https://developers.notion.com/reference/post-page.md, roles: [operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: request-limits, uri: https://developers.notion.com/reference/request-limits, roles: [status, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: status-codes, uri: https://developers.notion.com/reference/status-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: support, uri: https://www.notion.com/help/category/connections/all, roles: [recovery, documentation], operated_by_participant_id: notion, standard_bindings: [] }
