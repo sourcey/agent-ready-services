@@ -117,7 +117,7 @@ declarations:
         standard_bindings: []
       - resource_id: cloud-control-status-api
         uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResourceRequestStatus.html
-        roles: [provisioning, status, documentation]
+        roles: [provisioning, status, recovery, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
       - resource_id: cloud-control-endpoints

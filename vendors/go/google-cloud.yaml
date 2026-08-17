@@ -99,7 +99,7 @@ declarations:
         standard_bindings: []
       - resource_id: operation-status-api
         uri: https://docs.cloud.google.com/resource-manager/reference/rest/v3/operations/get
-        roles: [provisioning, status, documentation]
+        roles: [provisioning, status, recovery, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: api-discovery
