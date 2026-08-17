@@ -19,7 +19,7 @@ vendor:
     - { source_id: source_notion_status_codes, url: https://developers.notion.com/reference/status-codes }
     - { source_id: source_notion_pricing, url: https://www.notion.com/pricing }
     - { source_id: source_notion_signup, url: https://app.notion.com/signup }
-    - { source_id: source_notion_terms, url: https://app.notion.com/terms }
+    - { source_id: source_notion_terms, url: https://app.notion.com/p/Developer-Terms-ba4131408d0844e08330da2cbb225c20 }
     - { source_id: source_notion_support, url: https://www.notion.com/help/category/connections/all }
     - { source_id: source_notion_billing_checkout, url: https://www.notion.com/help/upgrade-or-downgrade-your-plan }
 declarations:
@@ -35,7 +35,7 @@ declarations:
       - { participant_id: notion, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tbppvx69rh3v86sk2 } }
     resources:
       - { resource_id: api-overview, uri: https://developers.notion.com/guides/get-started/overview, roles: [discovery, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
-      - { resource_id: service-terms, uri: https://app.notion.com/terms, roles: [terms], operated_by_participant_id: notion, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://app.notion.com/p/Developer-Terms-ba4131408d0844e08330da2cbb225c20, roles: [terms], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.notion.com/pricing, roles: [pricing], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: workspace-signup, uri: https://app.notion.com/signup, roles: [access], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: authorization, uri: https://developers.notion.com/guides/get-started/authorization, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: notion, standard_bindings: [] }
