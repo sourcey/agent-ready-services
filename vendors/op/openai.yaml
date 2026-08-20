@@ -49,7 +49,7 @@ declarations:
       - { resource_id: api-errors, uri: https://developers.openai.com/api/docs/guides/error-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://developers.openai.com/api/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: billing-support, uri: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage, roles: [recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: prepaid-billing, uri: https://help.openai.com/en/articles/8264644-how-can-i-set-up-prepaid-billing, roles: [checkout, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: prepaid-billing, uri: https://help.openai.com/en/articles/8264644-how-can-i-set-up-prepaid-billing, roles: [pricing, checkout, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - resource_id: readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
         uri: https://help.openai.com/en/articles/4936850-best-practices-for-api-key-safety
         roles:

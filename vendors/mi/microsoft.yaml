@@ -38,6 +38,8 @@ vendor:
       url: https://learn.microsoft.com/en-us/azure/cost-management-billing/automate/cost-management-api-permissions
     - source_id: source_azure_legal
       url: https://azure.microsoft.com/en-us/support/legal/
+    - source_id: source_azure_product_terms
+      url: https://www.microsoft.com/licensing/terms/en-us/productoffering/microsoftazure/mca
     - source_id: source_azure_support
       url: https://azure.microsoft.com/en-us/support/options/
     - { source_id: source_microsoft_billing_checkout, url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card }
@@ -73,6 +75,11 @@ declarations:
       - resource_id: azure-legal
         uri: https://azure.microsoft.com/en-us/support/legal/
         roles: [terms]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: azure-product-terms
+        uri: https://www.microsoft.com/licensing/terms/en-us/productoffering/microsoftazure/mca
+        roles: [eligibility, terms]
         operated_by_participant_id: microsoft
         standard_bindings: []
       - resource_id: azure-pricing
@@ -241,6 +248,10 @@ declarations:
         source_id: source_azure_legal
         target: { node_kind: resource, node_id: azure-legal }
         field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-product-terms
+        source_id: source_azure_product_terms
+        target: { node_kind: resource, node_id: azure-product-terms }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: microsoft-resource-pricing
         source_id: source_azure_pricing
         target: { node_kind: resource, node_id: azure-pricing }
@@ -338,7 +349,6 @@ declarations:
         target: { node_kind: relation, node_id: pricing-docs-describe-interface }
         field_paths: [/kind, /from, /to]
       - { source_binding_id: microsoft-resource-billing-checkout, source_id: source_microsoft_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: microsoft-exclusion-separate-eligibility, source_id: source_azure_legal, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
       - source_binding_id: binding-resource-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
         source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
         field_paths:
@@ -348,7 +358,6 @@ declarations:
         target:
           node_kind: resource
           node_id: readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
-    surface_exclusions:
-      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+    surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z
