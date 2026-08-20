@@ -43,7 +43,7 @@ declarations:
       - { resource_id: deployment-operations, uri: https://vercel.com/docs/rest-api/reference/endpoints/deployments/create-a-new-deployment, roles: [provisioning, status, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://vercel.com/docs/rest-api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: support, uri: https://vercel.com/help, roles: [recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://vercel.com/docs/plans/pro-plan/billing, roles: [checkout, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://vercel.com/docs/plans/pro-plan/billing, roles: [pricing, checkout, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - resource_id: readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
         uri: https://vercel.com/docs/cli/tokens
         roles:

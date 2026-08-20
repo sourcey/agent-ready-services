@@ -14,7 +14,7 @@ vendor:
     - { source_id: source_twilio_auth, url: https://www.twilio.com/docs/usage/requests-to-twilio }
     - { source_id: source_twilio_messages, url: https://www.twilio.com/docs/messaging/api/message-resource }
     - { source_id: source_twilio_status, url: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status }
-    - { source_id: source_twilio_errors, url: https://www.twilio.com/docs/api/errors }
+    - { source_id: source_twilio_errors, url: https://www.twilio.com/docs/usage/twilios-response }
     - { source_id: source_twilio_pricing, url: https://www.twilio.com/en-us/pricing }
     - { source_id: source_twilio_signup, url: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account }
     - { source_id: source_twilio_terms, url: https://www.twilio.com/en-us/legal/tos }
@@ -40,7 +40,7 @@ declarations:
       - { resource_id: authentication, uri: https://www.twilio.com/docs/usage/requests-to-twilio, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: message-operations, uri: https://www.twilio.com/docs/messaging/api/message-resource, roles: [provisioning, status, operations, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: delivery-status, uri: https://www.twilio.com/docs/messaging/guides/track-outbound-message-status, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
-      - { resource_id: api-errors, uri: https://www.twilio.com/docs/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://www.twilio.com/docs/usage/twilios-response, roles: [status, operations, recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - { resource_id: support, uri: https://www.twilio.com/docs/usage/troubleshooting, roles: [recovery, documentation], operated_by_participant_id: twilio, standard_bindings: [] }
       - resource_id: readiness-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
         uri: https://www.twilio.com/en-us/pricing/messaging

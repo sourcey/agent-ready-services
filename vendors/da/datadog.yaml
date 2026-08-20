@@ -12,8 +12,8 @@ vendor:
   sources:
     - { source_id: source_datadog_api, url: https://docs.datadoghq.com/api/latest/ }
     - { source_id: source_datadog_auth, url: https://docs.datadoghq.com/api/latest/authentication/ }
-    - { source_id: source_datadog_access_material, url: https://docs.datadoghq.com/account_management/api-app-keys/ }
-    - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/ }
+    - { source_id: source_datadog_access_material, url: https://docs.datadoghq.com/account_management/api-app-keys.md }
+    - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor.md }
     - { source_id: source_datadog_limits, url: https://docs.datadoghq.com/api/latest/rate-limits/ }
     - { source_id: source_datadog_pricing, url: https://www.datadoghq.com/pricing/ }
     - { source_id: source_datadog_signup, url: https://app.datadoghq.com/signup }
@@ -45,8 +45,8 @@ declarations:
       - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [access, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: account-access-guide, uri: https://docs.datadoghq.com/getting_started/dashboards/, roles: [access, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [authentication, descriptor, documentation, provisioning], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: access-material-delivery, uri: https://docs.datadoghq.com/account_management/api-app-keys/, roles: [authentication, provisioning, status, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: access-material-delivery, uri: https://docs.datadoghq.com/account_management/api-app-keys.md, roles: [authentication, provisioning, status, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor.md, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.datadoghq.com/api/latest/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.datadoghq.com/help/, roles: [recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://docs.datadoghq.com/account_management/billing/credit_card/, roles: [checkout, documentation], operated_by_participant_id: datadog, standard_bindings: [] }

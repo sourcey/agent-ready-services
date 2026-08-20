@@ -38,8 +38,8 @@ declarations:
       - { resource_id: service-terms, uri: https://slack.com/terms-of-service, roles: [terms], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: pricing, uri: https://slack.com/pricing, roles: [pricing], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: workspace-signup, uri: https://slack.com/get-started, roles: [access], operated_by_participant_id: slack, standard_bindings: [] }
-      - { resource_id: authentication, uri: https://docs.slack.dev/authentication/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: slack, standard_bindings: [] }
-      - { resource_id: oauth, uri: https://docs.slack.dev/authentication/installing-with-oauth/, roles: [descriptor, provisioning, documentation], operated_by_participant_id: slack, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
+      - { resource_id: authentication, uri: https://docs.slack.dev/authentication/, roles: [descriptor, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: oauth, uri: https://docs.slack.dev/authentication/installing-with-oauth/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: slack, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
       - { resource_id: message-operations, uri: https://docs.slack.dev/reference/methods/chat.postMessage/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.slack.dev/apis/web-api/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: slack, standard_bindings: [] }
       - { resource_id: support, uri: https://slack.com/help, roles: [recovery, documentation], operated_by_participant_id: slack, standard_bindings: [] }

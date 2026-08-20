@@ -12,13 +12,14 @@ vendor:
   description: OpenAI provides AI models and platform capabilities through APIs for text, image, audio, tool, and agent workloads.
   links:
     site: https://openai.com
-    pricing: https://openai.com/api/pricing/
+    pricing: https://developers.openai.com/api/docs/pricing
   sources:
     - { source_id: source_openai_api_reference, url: https://developers.openai.com/api/reference/overview }
     - { source_id: source_openai_quickstart, url: https://developers.openai.com/api/docs/quickstart }
     - { source_id: source_openai_errors, url: https://developers.openai.com/api/docs/guides/error-codes }
     - { source_id: source_openai_rate_limits, url: https://developers.openai.com/api/docs/guides/rate-limits }
-    - { source_id: source_openai_pricing, url: https://openai.com/api/pricing/ }
+    - { source_id: source_openai_pricing, url: https://developers.openai.com/api/docs/pricing.md }
+    - { source_id: source_openai_responses, url: https://developers.openai.com/api/docs/guides/migrate-to-responses.md }
     - { source_id: source_openai_signup, url: https://platform.openai.com/signup }
     - { source_id: source_openai_terms, url: https://openai.com/policies/services-agreement/ }
     - { source_id: source_openai_support, url: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage }
@@ -41,13 +42,14 @@ declarations:
     resources:
       - { resource_id: api-reference, uri: https://developers.openai.com/api/reference/overview, roles: [discovery, documentation, operations], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://openai.com/policies/services-agreement/, roles: [terms], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://openai.com/api/pricing/, roles: [pricing], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://developers.openai.com/api/docs/pricing.md, roles: [pricing], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: platform-signup, uri: https://platform.openai.com/signup, roles: [access], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: quickstart, uri: https://developers.openai.com/api/docs/quickstart, roles: [descriptor, provisioning, status, authentication, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: quickstart, uri: https://developers.openai.com/api/docs/quickstart, roles: [descriptor, provisioning, authentication, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: responses-guide, uri: https://developers.openai.com/api/docs/guides/migrate-to-responses.md, roles: [provisioning, status, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://developers.openai.com/api/docs/guides/error-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://developers.openai.com/api/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: billing-support, uri: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage, roles: [recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
-      - { resource_id: prepaid-billing, uri: https://help.openai.com/en/articles/8264644-how-can-i-set-up-prepaid-billing, roles: [checkout, documentation], operated_by_participant_id: openai, standard_bindings: [] }
+      - { resource_id: prepaid-billing, uri: https://help.openai.com/en/articles/8264644-how-can-i-set-up-prepaid-billing, roles: [pricing, checkout, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - resource_id: readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
         uri: https://help.openai.com/en/articles/4936850-best-practices-for-api-key-safety
         roles:
@@ -59,13 +61,14 @@ declarations:
       - { endpoint_id: registration, uri: https://platform.openai.com/signup, transport: http, roles: [registration], operated_by_participant_id: openai, standard_bindings: [] }
       - { endpoint_id: responses-api, uri: https://api.openai.com/v1/responses, transport: http, roles: [service], operated_by_participant_id: openai, standard_bindings: [] }
     interfaces:
-      - { interface_id: api-service, modality: network_api, functions: [service_operation], endpoint_ids: [responses-api], resource_ids: [api-reference, quickstart, api-errors, rate-limits], operated_by_participant_id: openai, standard_bindings: [] }
+      - { interface_id: api-service, modality: network_api, functions: [service_operation], endpoint_ids: [responses-api], resource_ids: [api-reference, quickstart, responses-guide, api-errors, rate-limits], operated_by_participant_id: openai, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [api-reference, quickstart], operated_by_participant_id: openai, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: api-service } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: api-service } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: platform-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: api-errors }, to: { node_kind: interface, node_id: api-service } }
+      - { relation_id: responses-guide-describes-api, kind: describes, from: { node_kind: resource, node_id: responses-guide }, to: { node_kind: interface, node_id: api-service } }
       - relation_id: relation-describes-11bdd29edd85e9d60a95b586c2db646cdf514d60dd5f2c97cbf0b2979b5fa8f6
         kind: describes
         from:
@@ -88,6 +91,7 @@ declarations:
       - { source_binding_id: openai-resource-signup, source_id: source_openai_signup, target: { node_kind: resource, node_id: platform-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-endpoint-registration, source_id: source_openai_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-quickstart, source_id: source_openai_quickstart, target: { node_kind: resource, node_id: quickstart }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: openai-resource-responses, source_id: source_openai_responses, target: { node_kind: resource, node_id: responses-guide }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-errors, source_id: source_openai_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-limits, source_id: source_openai_rate_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-support, source_id: source_openai_support, target: { node_kind: resource, node_id: billing-support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -99,6 +103,7 @@ declarations:
       - { source_binding_id: openai-relation-auth, source_id: source_openai_quickstart, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: openai-relation-signup, source_id: source_openai_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: openai-relation-errors, source_id: source_openai_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: openai-relation-responses, source_id: source_openai_responses, target: { node_kind: relation, node_id: responses-guide-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: openai-exclusion-separate-eligibility, source_id: source_openai_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
       - source_binding_id: binding-resource-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
         source_id: source-readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c

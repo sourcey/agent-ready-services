@@ -12,6 +12,7 @@ vendor:
   sources:
     - { source_id: source_stripe_api, url: https://docs.stripe.com/api }
     - { source_id: source_stripe_authentication, url: https://docs.stripe.com/api/authentication }
+    - { source_id: source_stripe_keys, url: https://docs.stripe.com/keys.md }
     - { source_id: source_stripe_idempotency, url: https://docs.stripe.com/api/idempotent_requests }
     - { source_id: source_stripe_errors, url: https://docs.stripe.com/api/errors }
     - { source_id: source_stripe_testing, url: https://docs.stripe.com/testing }
@@ -37,6 +38,7 @@ declarations:
       - { resource_id: pricing, uri: https://stripe.com/pricing, roles: [checkout, documentation, pricing], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dashboard.stripe.com/register, roles: [access], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.stripe.com/api/authentication, roles: [authentication, descriptor, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { resource_id: credential-lifecycle, uri: https://docs.stripe.com/keys.md, roles: [authentication, provisioning, operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: testing, uri: https://docs.stripe.com/testing, roles: [provisioning, status, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: payment-intents-create, uri: https://docs.stripe.com/api/payment_intents/create, roles: [provisioning, status, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
       - { resource_id: idempotency, uri: https://docs.stripe.com/api/idempotent_requests, roles: [operations, recovery, documentation], operated_by_participant_id: stripe, standard_bindings: [] }
@@ -47,10 +49,11 @@ declarations:
       - { endpoint_id: stripe-api, uri: https://api.stripe.com/v1, transport: http, roles: [service, status], operated_by_participant_id: stripe, standard_bindings: [] }
     interfaces:
       - { interface_id: payments-api, modality: network_api, functions: [service_operation, commerce], endpoint_ids: [stripe-api], resource_ids: [api-reference, testing, idempotency, api-errors], operated_by_participant_id: stripe, standard_bindings: [] }
-      - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: stripe, standard_bindings: [] }
+      - { interface_id: api-authentication, modality: network_api, functions: [authentication, recovery], endpoint_ids: [], resource_ids: [authentication, credential-lifecycle], operated_by_participant_id: stripe, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: payments-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: payments-api } }
+      - { relation_id: credential-lifecycle-describes-authentication, kind: describes, from: { node_kind: resource, node_id: credential-lifecycle }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: dashboard-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: idempotency-describes-api, kind: describes, from: { node_kind: resource, node_id: idempotency }, to: { node_kind: interface, node_id: payments-api } }
       - { relation_id: payment-intents-create-describes-api, kind: describes, from: { node_kind: resource, node_id: payment-intents-create }, to: { node_kind: interface, node_id: payments-api } }
@@ -68,6 +71,7 @@ declarations:
       - { source_binding_id: stripe-resource-signup, source_id: source_stripe_signup, target: { node_kind: resource, node_id: dashboard-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-endpoint-registration, source_id: source_stripe_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-auth, source_id: source_stripe_authentication, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: stripe-resource-credential-lifecycle, source_id: source_stripe_keys, target: { node_kind: resource, node_id: credential-lifecycle }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-testing, source_id: source_stripe_testing, target: { node_kind: resource, node_id: testing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-payment-intents-create, source_id: source_stripe_payment_intents_create, target: { node_kind: resource, node_id: payment-intents-create }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-idempotency, source_id: source_stripe_idempotency, target: { node_kind: resource, node_id: idempotency }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -76,6 +80,7 @@ declarations:
       - { source_binding_id: stripe-endpoint-api, source_id: source_stripe_api, target: { node_kind: endpoint, node_id: stripe-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-interface-api, source_id: source_stripe_api, target: { node_kind: interface, node_id: payments-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: stripe-interface-auth, source_id: source_stripe_authentication, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: stripe-relation-credential-lifecycle, source_id: source_stripe_keys, target: { node_kind: relation, node_id: credential-lifecycle-describes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: stripe-relation-reference, source_id: source_stripe_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: stripe-relation-auth, source_id: source_stripe_authentication, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: stripe-relation-signup, source_id: source_stripe_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }

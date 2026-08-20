@@ -33,7 +33,7 @@ declarations:
     participants:
       - { participant_id: notion, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tbppvx69rh3v86sk2 } }
     resources:
-      - { resource_id: api-overview, uri: https://developers.notion.com/guides/get-started/overview, roles: [discovery, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
+      - { resource_id: api-overview, uri: https://developers.notion.com/guides/get-started/overview, roles: [discovery, eligibility, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.notion.com/help/upgrade-or-downgrade-your-plan, roles: [terms, checkout, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.notion.com/pricing, roles: [pricing], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: workspace-signup, uri: https://app.notion.com/signup, roles: [access], operated_by_participant_id: notion, standard_bindings: [] }
@@ -82,8 +82,6 @@ declarations:
       - { source_binding_id: notion-relation-auth, source_id: source_notion_authorization, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: notion-relation-signup, source_id: source_notion_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: notion-relation-status, source_id: source_notion_status_codes, target: { node_kind: relation, node_id: status-describes-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: notion-exclusion-separate-eligibility, source_id: source_notion_billing_checkout, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-    surface_exclusions:
-      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+    surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

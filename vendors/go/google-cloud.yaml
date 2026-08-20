@@ -19,7 +19,7 @@ vendor:
     - source_id: source_google_cloud_service_terms
       url: https://cloud.google.com/terms/service-terms
     - source_id: source_google_cloud_pricing
-      url: https://cloud.google.com/pricing/list
+      url: https://cloud.google.com/resource-manager/pricing
     - source_id: source_google_cloud_account_setup
       url: https://cloud.google.com/free
     - source_id: source_google_resource_manager_rest
@@ -82,7 +82,7 @@ declarations:
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: pricing
-        uri: https://cloud.google.com/pricing/list
+        uri: https://cloud.google.com/resource-manager/pricing
         roles: [pricing]
         operated_by_participant_id: google-cloud
         standard_bindings: []

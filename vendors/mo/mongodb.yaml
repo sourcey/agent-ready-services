@@ -18,7 +18,7 @@ vendor:
     - { source_id: source_mongodb_errors, url: https://www.mongodb.com/docs/atlas/reference/api-errors/ }
     - { source_id: source_mongodb_pricing, url: https://www.mongodb.com/pricing }
     - { source_id: source_mongodb_signup, url: https://account.mongodb.com/account/register }
-    - { source_id: source_mongodb_terms, url: https://www.mongodb.com/legal/terms-of-use }
+    - { source_id: source_mongodb_terms, url: https://www.mongodb.com/legal/terms-and-conditions/cloud }
     - { source_id: source_mongodb_support, url: https://www.mongodb.com/docs/atlas/support/ }
     - { source_id: source_mongodb_billing_checkout, url: https://www.mongodb.com/docs/atlas/billing/ }
     - source_id: source-readiness-a2ebb552da0020dafded21f72ec21bd8489c921b3f9fe1dc7114df92bc3852f3
@@ -36,7 +36,7 @@ declarations:
       - { participant_id: mongodb, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe4ys74qx1k4zfcqpjv } }
     resources:
       - { resource_id: api-reference, uri: https://www.mongodb.com/docs/atlas/api/atlas-admin-api-ref/, roles: [discovery, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
-      - { resource_id: service-terms, uri: https://www.mongodb.com/legal/terms-of-use, roles: [terms], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.mongodb.com/legal/terms-and-conditions/cloud, roles: [terms], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.mongodb.com/pricing, roles: [pricing], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://account.mongodb.com/account/register, roles: [access], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: authentication, uri: https://www.mongodb.com/docs/atlas/api/api-authentication/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
