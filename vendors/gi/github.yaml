@@ -31,6 +31,7 @@ vendor:
     - { source_id: source_github_enterprise_overview, url: https://docs.github.com/en/enterprise-server@3.21/admin/overview/about-github-enterprise-server }
     - { source_id: source_github_enterprise_trial, url: https://docs.github.com/en/enterprise-server@3.21/admin/overview/setting-up-a-trial-of-github-enterprise-server }
     - { source_id: source_github_enterprise_billing, url: https://docs.github.com/en/enterprise-server@3.21/billing/concepts/enterprise-billing/billing-for-enterprises }
+    - { source_id: source_github_enterprise_pricing, url: https://github.com/pricing }
     - { source_id: source_github_enterprise_license, url: https://docs.github.com/en/enterprise-server@3.21/billing/how-tos/manage-server-licenses/download-your-license }
     - { source_id: source_github_enterprise_license_upload, url: https://docs.github.com/en/enterprise-server@3.21/billing/how-tos/manage-server-licenses/upload-new-license }
     - { source_id: source_github_enterprise_rest, url: https://docs.github.com/en/enterprise-server@3.21/rest }
@@ -214,7 +215,8 @@ declarations:
     resources:
       - { resource_id: enterprise-overview, uri: https://docs.github.com/en/enterprise-server@3.21/admin/overview/about-github-enterprise-server, roles: [discovery, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-terms, uri: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service, roles: [eligibility, terms], operated_by_participant_id: github-enterprise, standard_bindings: [] }
-      - { resource_id: enterprise-pricing, uri: https://docs.github.com/en/enterprise-server@3.21/billing/concepts/enterprise-billing/billing-for-enterprises, roles: [pricing], operated_by_participant_id: github-enterprise, standard_bindings: [] }
+      - { resource_id: enterprise-billing, uri: https://docs.github.com/en/enterprise-server@3.21/billing/concepts/enterprise-billing/billing-for-enterprises, roles: [pricing], operated_by_participant_id: github-enterprise, standard_bindings: [] }
+      - { resource_id: enterprise-pricing, uri: https://github.com/pricing, roles: [pricing], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-trial, uri: https://docs.github.com/en/enterprise-server@3.21/admin/overview/setting-up-a-trial-of-github-enterprise-server, roles: [access, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-license-acquisition, uri: https://docs.github.com/en/enterprise-server@3.21/billing/how-tos/manage-server-licenses/download-your-license, roles: [access, checkout, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-license-upload, uri: https://docs.github.com/en/enterprise-server@3.21/billing/how-tos/manage-server-licenses/upload-new-license, roles: [provisioning, status, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
@@ -241,7 +243,8 @@ declarations:
       - { source_binding_id: enterprise-participant, source_id: source_github_enterprise_overview, target: { node_kind: participant, node_id: github-enterprise }, field_paths: [/roles, /identity] }
       - { source_binding_id: enterprise-resource-overview, source_id: source_github_enterprise_overview, target: { node_kind: resource, node_id: enterprise-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-terms, source_id: source_github_terms, target: { node_kind: resource, node_id: enterprise-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: enterprise-resource-pricing, source_id: source_github_enterprise_billing, target: { node_kind: resource, node_id: enterprise-pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: enterprise-resource-billing, source_id: source_github_enterprise_billing, target: { node_kind: resource, node_id: enterprise-billing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: enterprise-resource-pricing, source_id: source_github_enterprise_pricing, target: { node_kind: resource, node_id: enterprise-pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-trial, source_id: source_github_enterprise_trial, target: { node_kind: resource, node_id: enterprise-trial }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-license-acquisition, source_id: source_github_enterprise_license, target: { node_kind: resource, node_id: enterprise-license-acquisition }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-license-upload, source_id: source_github_enterprise_license_upload, target: { node_kind: resource, node_id: enterprise-license-upload }, field_paths: [/uri, /roles, /operated_by_participant_id] }
