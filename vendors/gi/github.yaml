@@ -15,7 +15,7 @@ vendor:
     - { source_id: source_github_repositories, url: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10" }
     - { source_id: source_github_limits, url: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api }
     - { source_id: source_github_errors, url: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api }
-    - { source_id: source_github_pricing, url: https://docs.github.com/en/get-started/learning-about-github/githubs-plans }
+    - { source_id: source_github_pricing, url: https://github.com/pricing }
     - { source_id: source_github_signup, url: https://github.com/signup }
     - { source_id: source_github_terms, url: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service }
     - { source_id: source_github_support, url: https://support.github.com/ }
@@ -55,7 +55,7 @@ declarations:
     resources:
       - { resource_id: rest-api, uri: https://docs.github.com/en/rest, roles: [discovery, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service, roles: [terms], operated_by_participant_id: github, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://docs.github.com/en/get-started/learning-about-github/githubs-plans, roles: [documentation, pricing], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://github.com/pricing, roles: [documentation, pricing], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://github.com/signup, roles: [access], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: authentication, uri: "https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10", roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: repository-operations, uri: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10", roles: [provisioning, status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
