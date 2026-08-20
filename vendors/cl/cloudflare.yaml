@@ -24,7 +24,7 @@ vendor:
     - source_id: source-readiness-ad6794a9ae3bd4ff2735c8265a155b678454af08c375d85510b9b8fa1fe2753c
       url: https://developers.cloudflare.com/fundamentals/setup/account/login
     - source_id: source-readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
-      url: https://developers.cloudflare.com/workers/configuration/versions-and-deployments
+      url: https://developers.cloudflare.com/workers/versions-and-deployments/index.md
     - { source_id: source_cloudflare_public_dns_overview, url: https://developers.cloudflare.com/1.1.1.1/ }
     - { source_id: source_cloudflare_public_dns_terms, url: https://www.cloudflare.com/policies/terms/ }
     - { source_id: source_cloudflare_public_dns_doh, url: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/ }
@@ -43,7 +43,7 @@ declarations:
     participants:
       - { participant_id: cloudflare, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
-      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update, roles: [discovery, provisioning, status, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
+      - { resource_id: api-reference, uri: https://developers.cloudflare.com/api/typescript/resources/workers/subresources/scripts/methods/update, roles: [discovery, provisioning, operations, documentation], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.cloudflare.com/terms/, roles: [terms], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: plans, uri: https://www.cloudflare.com/plans/, roles: [pricing], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { resource_id: dashboard-signup, uri: https://dash.cloudflare.com/sign-up, roles: [access], operated_by_participant_id: cloudflare, standard_bindings: [] }
@@ -67,7 +67,7 @@ declarations:
         operated_by_participant_id: cloudflare
         standard_bindings: []
       - resource_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
-        uri: https://developers.cloudflare.com/workers/configuration/versions-and-deployments
+        uri: https://developers.cloudflare.com/workers/versions-and-deployments/index.md
         roles:
           - documentation
           - provisioning
