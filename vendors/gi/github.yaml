@@ -11,6 +11,7 @@ vendor:
   links: { site: https://github.com, pricing: https://github.com/pricing }
   sources:
     - { source_id: source_github_rest, url: https://docs.github.com/en/rest }
+    - { source_id: source_github_api_versions, url: "https://docs.github.com/en/rest/meta/meta?apiVersion=2026-03-10" }
     - { source_id: source_github_auth, url: "https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2026-03-10" }
     - { source_id: source_github_repositories, url: "https://docs.github.com/en/rest/repos/repos?apiVersion=2026-03-10" }
     - { source_id: source_github_limits, url: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api }
@@ -54,6 +55,7 @@ declarations:
       - { participant_id: github, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3xgjjktffez1t34rn } }
     resources:
       - { resource_id: rest-api, uri: https://docs.github.com/en/rest, roles: [discovery, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
+      - { resource_id: api-versions, uri: https://api.github.com/versions, roles: [descriptor, status], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service, roles: [terms], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: pricing, uri: https://github.com/pricing, roles: [documentation, pricing], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://github.com/signup, roles: [access], operated_by_participant_id: github, standard_bindings: [] }
@@ -99,6 +101,7 @@ declarations:
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: github, standard_bindings: [] }
     relations:
       - { relation_id: rest-describes-api, kind: describes, from: { node_kind: resource, node_id: rest-api }, to: { node_kind: interface, node_id: repository-api } }
+      - { relation_id: api-versions-describe-api, kind: describes, from: { node_kind: resource, node_id: api-versions }, to: { node_kind: interface, node_id: repository-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: repository-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: repository-docs-describe-api, kind: describes, from: { node_kind: resource, node_id: repository-operations }, to: { node_kind: interface, node_id: repository-api } }
@@ -127,6 +130,7 @@ declarations:
       - { source_binding_id: github-scope, source_id: source_github_repositories, target: { node_kind: declaration, node_id: declaration_github_rest_repository_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
       - { source_binding_id: github-participant, source_id: source_github_rest, target: { node_kind: participant, node_id: github }, field_paths: [/roles, /identity] }
       - { source_binding_id: github-resource-rest, source_id: source_github_rest, target: { node_kind: resource, node_id: rest-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-resource-api-versions, source_id: source_github_api_versions, target: { node_kind: resource, node_id: api-versions }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-terms, source_id: source_github_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-pricing, source_id: source_github_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-signup, source_id: source_github_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -140,6 +144,7 @@ declarations:
       - { source_binding_id: github-interface-api, source_id: source_github_repositories, target: { node_kind: interface, node_id: repository-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: github-interface-auth, source_id: source_github_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: github-relation-rest, source_id: source_github_rest, target: { node_kind: relation, node_id: rest-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: github-relation-api-versions, source_id: source_github_api_versions, target: { node_kind: relation, node_id: api-versions-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: github-relation-auth, source_id: source_github_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: github-relation-signup, source_id: source_github_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: github-relation-repositories, source_id: source_github_repositories, target: { node_kind: relation, node_id: repository-docs-describe-api }, field_paths: [/kind, /from, /to] }
