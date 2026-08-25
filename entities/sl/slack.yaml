@@ -1,0 +1,104 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyyts97tdz1rtzzt919cthny
+  slug: slack
+  slug_aliases: []
+  name: Slack
+  domains:
+    - value: slack.com
+      role: primary
+      valid_from: 2026-08-01T13:50:00.000Z
+  category: communication
+sources:
+  - { source_id: source_slack_web_api, url: https://docs.slack.dev/apis/web-api/ }
+  - { source_id: source_slack_auth, url: https://docs.slack.dev/authentication/ }
+  - { source_id: source_slack_oauth, url: https://docs.slack.dev/authentication/installing-with-oauth/ }
+  - { source_id: source_slack_messages, url: https://docs.slack.dev/reference/methods/chat.postMessage/ }
+  - { source_id: source_slack_limits, url: https://docs.slack.dev/apis/web-api/rate-limits/ }
+  - { source_id: source_slack_pricing, url: https://slack.com/pricing }
+  - { source_id: source_slack_signup, url: https://slack.com/get-started }
+  - { source_id: source_slack_terms, url: https://slack.com/terms-of-service }
+  - { source_id: source_slack_support, url: https://slack.com/help }
+  - { source_id: source_slack_billing_checkout, url: https://slack.com/help/articles/218915087-Manage-your-Slack-plan-and-billing-details }
+  - source_id: source-readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+    url: https://slack.com/help/articles/202035138-Slack-plans-and-features
+declarations:
+  - declaration_id: declaration_slack_web_api_workspace_operations
+    scope:
+      product: { key: slack-web-api, name: Slack Web API }
+      funnel: { key: workspace-app-operations, name: Workspace app operations }
+    assessment_targets:
+      - target_id: service-use
+        name: Install an app and post messages through the Web API
+        interface_ids: [workspace-api]
+    participants:
+      - { participant_id: slack, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tdz1rtzzt919cthny } }
+    resources:
+      - { resource_id: web-api, uri: https://docs.slack.dev/apis/web-api/, roles: [discovery, operations, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://slack.com/terms-of-service, roles: [terms], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://slack.com/pricing, roles: [pricing], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: workspace-signup, uri: https://slack.com/get-started, roles: [access], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: authentication, uri: https://docs.slack.dev/authentication/, roles: [descriptor, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: oauth, uri: https://docs.slack.dev/authentication/installing-with-oauth/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: slack, standard_bindings: [{ namespace: oauth, version: "2.0", relation: describes }] }
+      - { resource_id: message-operations, uri: https://docs.slack.dev/reference/methods/chat.postMessage/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: rate-limits, uri: https://docs.slack.dev/apis/web-api/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: support, uri: https://slack.com/help, roles: [recovery, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://slack.com/help/articles/218915087-Manage-your-Slack-plan-and-billing-details, roles: [checkout, documentation], operated_by_participant_id: slack, standard_bindings: [] }
+      - resource_id: readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+        uri: https://slack.com/help/articles/202035138-Slack-plans-and-features
+        roles:
+          - documentation
+          - eligibility
+        operated_by_participant_id: slack
+        standard_bindings: []
+    endpoints:
+      - { endpoint_id: registration, uri: https://slack.com/get-started, transport: http, roles: [registration], operated_by_participant_id: slack, standard_bindings: [] }
+      - { endpoint_id: slack-api, uri: https://slack.com/api, transport: http, roles: [service, status], operated_by_participant_id: slack, standard_bindings: [] }
+      - { endpoint_id: oauth-token, uri: https://slack.com/api/oauth.v2.access, transport: http, roles: [authorization, token], operated_by_participant_id: slack, standard_bindings: [{ namespace: oauth, version: "2.0", relation: implements }] }
+    interfaces:
+      - { interface_id: workspace-api, modality: network_api, functions: [service_operation, events], endpoint_ids: [slack-api], resource_ids: [web-api, message-operations, rate-limits], operated_by_participant_id: slack, standard_bindings: [] }
+      - { interface_id: app-authentication, modality: network_api, functions: [authentication], endpoint_ids: [oauth-token], resource_ids: [authentication, oauth], operated_by_participant_id: slack, standard_bindings: [{ namespace: oauth, version: "2.0", relation: uses }] }
+    relations:
+      - { relation_id: web-describes-api, kind: describes, from: { node_kind: resource, node_id: web-api }, to: { node_kind: interface, node_id: workspace-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: app-authentication }, to: { node_kind: interface, node_id: workspace-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: workspace-signup }, to: { node_kind: interface, node_id: app-authentication } }
+      - { relation_id: messages-describe-api, kind: describes, from: { node_kind: resource, node_id: message-operations }, to: { node_kind: interface, node_id: workspace-api } }
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: slack_assessment_target
+        source_id: source_slack_web_api
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
+      - { source_binding_id: slack-scope, source_id: source_slack_web_api, target: { node_kind: declaration, node_id: declaration_slack_web_api_workspace_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: slack-participant, source_id: source_slack_web_api, target: { node_kind: participant, node_id: slack }, field_paths: [/roles, /identity] }
+      - { source_binding_id: slack-resource-web, source_id: source_slack_web_api, target: { node_kind: resource, node_id: web-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-resource-terms, source_id: source_slack_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-resource-pricing, source_id: source_slack_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-resource-signup, source_id: source_slack_signup, target: { node_kind: resource, node_id: workspace-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-endpoint-registration, source_id: source_slack_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-resource-auth, source_id: source_slack_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-resource-oauth, source_id: source_slack_oauth, target: { node_kind: resource, node_id: oauth }, field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: slack-resource-messages, source_id: source_slack_messages, target: { node_kind: resource, node_id: message-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-resource-limits, source_id: source_slack_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-resource-support, source_id: source_slack_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-endpoint-api, source_id: source_slack_web_api, target: { node_kind: endpoint, node_id: slack-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: slack-endpoint-oauth, source_id: source_slack_oauth, target: { node_kind: endpoint, node_id: oauth-token }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: slack-interface-api, source_id: source_slack_web_api, target: { node_kind: interface, node_id: workspace-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: slack-interface-auth, source_id: source_slack_oauth, target: { node_kind: interface, node_id: app-authentication }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: slack-relation-web, source_id: source_slack_web_api, target: { node_kind: relation, node_id: web-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: slack-relation-auth, source_id: source_slack_oauth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: slack-relation-signup, source_id: source_slack_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: slack-relation-messages, source_id: source_slack_messages, target: { node_kind: relation, node_id: messages-describe-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: slack-resource-billing-checkout, source_id: source_slack_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - source_binding_id: binding-resource-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+        source_id: source-readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
+    surface_exclusions: []
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z

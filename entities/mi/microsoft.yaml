@@ -1,0 +1,359 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe3n3yye39kmzvy410z
+  slug: microsoft
+  slug_aliases: []
+  name: Microsoft
+  domains:
+    - value: microsoft.com
+      role: primary
+      valid_from: 2026-07-27T07:41:47.020Z
+  category: hosting-infra
+sources:
+  - source_id: source_azure_rest_api
+    url: https://learn.microsoft.com/en-us/rest/api/azure/
+  - source_id: source_azure_resource_manager_rest
+    url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-rest?tabs=azure-cli
+  - source_id: source_azure_resource_group_api
+    url: https://learn.microsoft.com/en-us/rest/api/resources/resource-groups/create-or-update?view=rest-resources-2021-04-01&tabs=HTTP
+  - source_id: source_azure_async_operations
+    url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/async-operations
+  - source_id: source_azure_resource_manager_limits
+    url: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/request-limits-and-throttling
+  - source_id: source_azure_service_principals
+    url: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser
+  - source_id: source_azure_client_credentials
+    url: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
+  - source_id: source_azure_account
+    url: https://signup.azure.com/
+  - source_id: source_azure_pricing
+    url: https://azure.microsoft.com/en-us/pricing/
+  - source_id: source_azure_retail_prices_api
+    url: https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices
+  - source_id: source_azure_cost_management_permissions
+    url: https://learn.microsoft.com/en-us/azure/cost-management-billing/automate/cost-management-api-permissions
+  - source_id: source_azure_legal
+    url: https://azure.microsoft.com/en-us/support/legal/
+  - source_id: source_azure_product_terms
+    url: https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/MCA
+  - source_id: source_azure_support
+    url: https://azure.microsoft.com/en-us/support/options/
+  - { source_id: source_microsoft_billing_checkout, url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card }
+  - source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+    url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription
+declarations:
+  - declaration_id: declaration_microsoft_azure_api_resource_management
+    scope:
+      product:
+        key: microsoft-azure
+        name: Microsoft Azure
+      funnel:
+        key: api-resource-management
+        name: API resource management
+    assessment_targets:
+      - target_id: service-use
+        name: Create and reconcile Azure resource groups through the API
+        interface_ids: [azure-resource-manager]
+      - target_id: cost-visibility
+        name: Microsoft Azure cost visibility
+        interface_ids: [pricing-and-cost]
+    participants:
+      - participant_id: microsoft
+        roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
+        identity:
+          entity_id: ent_01kyh8fpe3n3yye39kmzvy410z
+    resources:
+      - resource_id: azure-rest-api
+        uri: https://learn.microsoft.com/en-us/rest/api/azure/
+        roles: [discovery, documentation, operations]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: azure-legal
+        uri: https://azure.microsoft.com/en-us/support/legal/
+        roles: [terms]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: azure-product-terms
+        uri: https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/MCA
+        roles: [eligibility, terms]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: azure-pricing
+        uri: https://azure.microsoft.com/en-us/pricing/
+        roles: [pricing]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: azure-account
+        uri: https://signup.azure.com/
+        roles: [access]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: service-principals
+        uri: https://learn.microsoft.com/en-us/entra/identity-platform/app-objects-and-service-principals?tabs=browser
+        roles: [authentication, descriptor, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: uses
+      - resource_id: client-credentials
+        uri: https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow
+        roles: [authentication, descriptor, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: implements
+      - resource_id: resource-manager-rest
+        uri: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-rest?tabs=azure-cli
+        roles: [provisioning, operations, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: resource-group-api
+        uri: https://learn.microsoft.com/en-us/rest/api/resources/resource-groups/create-or-update?view=rest-resources-2021-04-01&tabs=HTTP
+        roles: [provisioning, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: asynchronous-operations
+        uri: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/async-operations
+        roles: [provisioning, status, operations, recovery, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: resource-manager-limits
+        uri: https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/request-limits-and-throttling
+        roles: [operations, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: retail-prices-api
+        uri: https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices
+        roles: [pricing, operations, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: cost-management-permissions
+        uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/automate/cost-management-api-permissions
+        roles: [operations, status, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - resource_id: azure-support
+        uri: https://azure.microsoft.com/en-us/support/options/
+        roles: [recovery, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - { resource_id: billing-checkout, uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card, roles: [checkout, documentation], operated_by_participant_id: microsoft, standard_bindings: [] }
+      - resource_id: readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+        uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription
+        roles: [access, checkout, documentation]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+    endpoints:
+      - { endpoint_id: registration, uri: https://signup.azure.com/, transport: http, roles: [registration], operated_by_participant_id: microsoft, standard_bindings: [] }
+      - endpoint_id: azure-resource-manager
+        uri: https://management.azure.com
+        transport: http
+        roles: [service, status]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - endpoint_id: entra-token
+        uri: https://login.microsoftonline.com/organizations/oauth2/v2.0/token
+        transport: http
+        roles: [authorization, token]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: implements
+      - endpoint_id: retail-prices
+        uri: https://prices.azure.com/api/retail/prices
+        transport: http
+        roles: [service]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+    interfaces:
+      - interface_id: azure-resource-manager
+        modality: network_api
+        functions: [service_operation]
+        endpoint_ids: [azure-resource-manager]
+        resource_ids: [azure-rest-api, resource-manager-rest, resource-group-api, asynchronous-operations, resource-manager-limits]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+      - interface_id: workload-authentication
+        modality: network_api
+        functions: [service_operation, authentication]
+        endpoint_ids: [entra-token]
+        resource_ids: [service-principals, client-credentials]
+        operated_by_participant_id: microsoft
+        standard_bindings:
+          - namespace: oauth
+            version: "2.0"
+            relation: uses
+      - interface_id: pricing-and-cost
+        modality: network_api
+        functions: [service_operation, commerce]
+        endpoint_ids: [retail-prices]
+        resource_ids: [azure-pricing, retail-prices-api, cost-management-permissions]
+        operated_by_participant_id: microsoft
+        standard_bindings: []
+    relations:
+      - relation_id: resource-manager-docs-describe-interface
+        kind: describes
+        from: { node_kind: resource, node_id: resource-manager-rest }
+        to: { node_kind: interface, node_id: azure-resource-manager }
+      - relation_id: client-credentials-describe-authentication
+        kind: describes
+        from: { node_kind: resource, node_id: client-credentials }
+        to: { node_kind: interface, node_id: workload-authentication }
+      - relation_id: authentication-authenticates-resource-manager
+        kind: authenticates
+        from: { node_kind: interface, node_id: workload-authentication }
+        to: { node_kind: interface, node_id: azure-resource-manager }
+      - relation_id: account-precedes-authentication
+        kind: precedes
+        from: { node_kind: resource, node_id: azure-account }
+        to: { node_kind: interface, node_id: workload-authentication }
+      - relation_id: resource-creation-precedes-status
+        kind: precedes
+        from: { node_kind: resource, node_id: resource-group-api }
+        to: { node_kind: resource, node_id: asynchronous-operations }
+      - relation_id: pricing-docs-describe-interface
+        kind: describes
+        from: { node_kind: resource, node_id: retail-prices-api }
+        to: { node_kind: interface, node_id: pricing-and-cost }
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: microsoft_cost_visibility_target
+        source_id: source_azure_retail_prices_api
+        target: { node_kind: assessment_target, node_id: cost-visibility }
+        field_paths: [/name, /interface_ids]
+      - source_binding_id: microsoft_assessment_target
+        source_id: source_azure_resource_manager_rest
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
+      - source_binding_id: microsoft-declaration-scope
+        source_id: source_azure_resource_manager_rest
+        target: { node_kind: declaration, node_id: declaration_microsoft_azure_api_resource_management }
+        field_paths: [/scope/product/name, /scope/funnel/name]
+      - source_binding_id: microsoft-participant
+        source_id: source_azure_rest_api
+        target: { node_kind: participant, node_id: microsoft }
+        field_paths: [/roles, /identity]
+      - source_binding_id: microsoft-resource-rest-api
+        source_id: source_azure_rest_api
+        target: { node_kind: resource, node_id: azure-rest-api }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-legal
+        source_id: source_azure_legal
+        target: { node_kind: resource, node_id: azure-legal }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-product-terms
+        source_id: source_azure_product_terms
+        target: { node_kind: resource, node_id: azure-product-terms }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-pricing
+        source_id: source_azure_pricing
+        target: { node_kind: resource, node_id: azure-pricing }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-account
+        source_id: source_azure_account
+        target: { node_kind: resource, node_id: azure-account }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-endpoint-registration
+        source_id: source_azure_account
+        target: { node_kind: endpoint, node_id: registration }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-service-principals
+        source_id: source_azure_service_principals
+        target: { node_kind: resource, node_id: service-principals }
+        field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-resource-client-credentials
+        source_id: source_azure_client_credentials
+        target: { node_kind: resource, node_id: client-credentials }
+        field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-resource-resource-manager
+        source_id: source_azure_resource_manager_rest
+        target: { node_kind: resource, node_id: resource-manager-rest }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-resource-group
+        source_id: source_azure_resource_group_api
+        target: { node_kind: resource, node_id: resource-group-api }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-async
+        source_id: source_azure_async_operations
+        target: { node_kind: resource, node_id: asynchronous-operations }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-limits
+        source_id: source_azure_resource_manager_limits
+        target: { node_kind: resource, node_id: resource-manager-limits }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-retail-prices
+        source_id: source_azure_retail_prices_api
+        target: { node_kind: resource, node_id: retail-prices-api }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-cost-management
+        source_id: source_azure_cost_management_permissions
+        target: { node_kind: resource, node_id: cost-management-permissions }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-resource-support
+        source_id: source_azure_support
+        target: { node_kind: resource, node_id: azure-support }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-endpoint-resource-manager
+        source_id: source_azure_resource_manager_rest
+        target: { node_kind: endpoint, node_id: azure-resource-manager }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-endpoint-entra-token
+        source_id: source_azure_client_credentials
+        target: { node_kind: endpoint, node_id: entra-token }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-endpoint-retail-prices
+        source_id: source_azure_retail_prices_api
+        target: { node_kind: endpoint, node_id: retail-prices }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
+      - source_binding_id: microsoft-interface-resource-manager
+        source_id: source_azure_resource_manager_rest
+        target: { node_kind: interface, node_id: azure-resource-manager }
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: microsoft-interface-authentication
+        source_id: source_azure_client_credentials
+        target: { node_kind: interface, node_id: workload-authentication }
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: microsoft-interface-pricing
+        source_id: source_azure_retail_prices_api
+        target: { node_kind: interface, node_id: pricing-and-cost }
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: microsoft-relation-resource-manager-docs
+        source_id: source_azure_resource_manager_rest
+        target: { node_kind: relation, node_id: resource-manager-docs-describe-interface }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-authentication-docs
+        source_id: source_azure_client_credentials
+        target: { node_kind: relation, node_id: client-credentials-describe-authentication }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-authentication
+        source_id: source_azure_client_credentials
+        target: { node_kind: relation, node_id: authentication-authenticates-resource-manager }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-account-authentication
+        source_id: source_azure_account
+        target: { node_kind: relation, node_id: account-precedes-authentication }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-provision-status
+        source_id: source_azure_async_operations
+        target: { node_kind: relation, node_id: resource-creation-precedes-status }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: microsoft-relation-pricing-docs
+        source_id: source_azure_retail_prices_api
+        target: { node_kind: relation, node_id: pricing-docs-describe-interface }
+        field_paths: [/kind, /from, /to]
+      - { source_binding_id: microsoft-resource-billing-checkout, source_id: source_microsoft_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - source_binding_id: binding-resource-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+        source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+    surface_exclusions: []
+    authority_intent: community
+    declared_at: 2026-08-07T03:06:52.000Z
