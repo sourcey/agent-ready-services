@@ -1,5 +1,5 @@
 name: Request an assessment
-description: Propose one exact service, product, or vendor funnel for independent Agent Readiness assessment.
+description: Propose one exact Entity, service, product, and funnel for independent Agent Readiness assessment.
 title: "Assessment request: "
 labels:
   - assessment-request
@@ -9,10 +9,10 @@ body:
       value: |
         A request is not a readiness claim. Do not include credentials, personal data, private captures, or unpublished material.
   - type: input
-    id: vendor
+    id: entity
     attributes:
-      label: Vendor
-      description: The public vendor or service provider name.
+      label: Entity
+      description: The public party responsible for the service or product.
     validations:
       required: true
   - type: input
@@ -73,15 +73,15 @@ body:
   - type: input
     id: sourcey_record
     attributes:
-      label: Existing Sourcey vendor or offer URL
-      description: Include it when this vendor already appears in Sourcey Startup Offers.
+      label: Existing Sourcey Entity or Offer URL
+      description: Include it when this Entity or an exact related Offer already appears in Sourcey.
   - type: dropdown
     id: relationship
     attributes:
       label: Your relationship
       options:
         - Community contributor or customer
-        - Vendor employee or authorized representative
+        - Employee or authorized representative of the Entity
         - Sourcey maintainer
     validations:
       required: true

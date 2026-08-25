@@ -37,7 +37,7 @@ body:
       label: Your relationship
       options:
         - Community reporter or customer
-        - Vendor employee or authorized representative
+        - Employee or authorized representative of the Entity
         - Sourcey maintainer
     validations:
       required: true

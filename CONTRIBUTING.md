@@ -1,18 +1,15 @@
 # Contributing
 
-Contributions declare an exact vendor, product, and funnel for independent
+Contributions declare an exact Entity, product, and funnel for independent
 assessment. They never author a Sourcey observation, readiness state, grade,
 certification, or current Report Card.
 
 ## Choose the smallest honest path
 
-1. **Request an assessment** when the vendor is new to Sourcey, you know the
+1. **Request an assessment** when the Entity is new to Sourcey, you know the
    service but not its complete graph, or you want Sourcey to research it.
    Open the [assessment request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml).
-2. **Use the guided form** for one existing vendor-operated product funnel.
-   [Declare the service on Sourcey](https://sourcey.com/agent-readiness/submit),
-   inspect the exact canonical YAML, and create its review pull request.
-3. **Author canonical YAML** only for advanced declarations with third-party
+2. **Author canonical YAML** for declarations with third-party
    operators, several interfaces, several standards, explicit relations, or
    exact Offer relationships. The complete example below is the review bar.
 
@@ -22,7 +19,7 @@ format or hidden conversion schema.
 
 ## Before editing YAML
 
-1. Search the open issues and pull requests for the vendor and product funnel.
+1. Search the open issues and pull requests for the Entity and product funnel.
 2. For manual YAML, open an [assessment request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
    before editing so identity and scope can be checked.
 3. Sourcey will confirm the stable `entity_id`. Startup Offers and Agent
@@ -30,8 +27,8 @@ format or hidden conversion schema.
    not copy a credit or deal into the readiness declaration. An optional Offer
    relation is proposed only when Sourcey has confirmed a real downstream
    relationship; it never scopes or identifies the profile.
-4. Use `authority_intent: vendor` only when Sourcey has proven control of the
-   vendor domain. Otherwise use `community`.
+4. Use `authority_intent: entity` only when Sourcey has proven control of the
+   Entity's authoritative domain. Otherwise use `community`.
 
 Never include credentials, personal data, unpublished terms, authenticated
 captures, or other private material. Public URLs are enough for a declaration;
@@ -39,9 +36,9 @@ Sourcey's evidence operations retain assessment evidence separately.
 
 ## File location and shape
 
-A vendor lives at `vendors/{shard}/{slug}.yaml`, where `shard` is the first two
-characters of the vendor slug. A file may contain several declarations for the
-same vendor, but each declaration covers exactly one product and one funnel.
+An Entity lives at `entities/{shard}/{slug}.yaml`, where `shard` is the first two
+characters of the Entity slug. A file may contain several declarations for the
+same Entity, but each declaration covers exactly one product and one funnel.
 
 The executable schema is owned by the digest-pinned Sourcey Catalog Verifier.
 This example illustrates the current authoring shape; it is not a duplicate
@@ -49,7 +46,7 @@ schema:
 
 ```yaml
 schema_version: sourcey.agent-readiness-authoring/v1alpha1
-vendor:
+entity:
   entity_id: ent_01k00000000000000000000001
   slug: acme
   slug_aliases: []
@@ -59,21 +56,17 @@ vendor:
       role: primary
       valid_from: 2026-08-05T00:00:00.000Z
   category: devtools-other
-  description: Acme makes a hosted database service.
-  links:
-    site: https://acme.example/
-    pricing: https://acme.example/pricing
-  sources:
-    - source_id: source_acme_docs
-      url: https://acme.example/docs
-    - source_id: source_acme_terms
-      url: https://acme.example/terms
-    - source_id: source_acme_pricing
-      url: https://acme.example/pricing
-    - source_id: source_acme_signup
-      url: https://acme.example/signup
-    - source_id: source_acme_billing
-      url: https://acme.example/docs/billing
+sources:
+  - source_id: source_acme_docs
+    url: https://acme.example/docs
+  - source_id: source_acme_terms
+    url: https://acme.example/terms
+  - source_id: source_acme_pricing
+    url: https://acme.example/pricing
+  - source_id: source_acme_signup
+    url: https://acme.example/signup
+  - source_id: source_acme_billing
+    url: https://acme.example/docs/billing
 declarations:
   - declaration_id: declaration_acme_db_api_lifecycle
     scope:
@@ -236,9 +229,9 @@ and policy.
 
 ## Pull request rules
 
-- Keep vendor YAML changes separate from documentation and workflow changes.
+- Keep Entity YAML changes separate from documentation and workflow changes.
 - Every source, resource, and endpoint URL must be public HTTPS material for
-  the declared vendor or funnel.
+  the declared Entity or funnel.
 - Keep stable declaration and graph IDs stable.
 - Bind every material authored field to at least one exact source.
 - Use real names in ordinary language; do not keyword-stuff fields.
@@ -249,7 +242,7 @@ and policy.
 git commit --signoff -m "data(readiness): declare acme db self-serve funnel"
 ```
 
-The public `sourcey/validation` status parses only changed vendor blobs using the exact
+The public `sourcey/validation` status parses only changed Entity blobs using the exact
 digest-pinned Sourcey Catalog Verifier and confirms their identity-derived
 paths and dependency closure. It does not execute pull-request code. A green
 status proves declaration shape, not readiness.
