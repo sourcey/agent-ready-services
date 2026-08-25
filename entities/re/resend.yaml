@@ -1,0 +1,121 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe5xfhy18q4ccs4a07n
+  slug: resend
+  slug_aliases: []
+  name: Resend
+  domains:
+    - value: resend.com
+      role: primary
+      valid_from: 2026-07-27T07:43:12.688Z
+  category: communication
+sources:
+  - { source_id: source_resend_api, url: https://resend.com/docs/api-reference/introduction }
+  - { source_id: source_resend_keys, url: https://resend.com/docs/dashboard/api-keys/introduction }
+  - { source_id: source_resend_send, url: https://resend.com/docs/api-reference/emails/send-email }
+  - { source_id: source_resend_domains, url: https://resend.com/docs/api-reference/domains/create-domain }
+  - { source_id: source_resend_errors, url: https://resend.com/docs/api-reference/errors }
+  - { source_id: source_resend_pricing, url: https://resend.com/pricing }
+  - { source_id: source_resend_signup, url: https://resend.com/signup }
+  - { source_id: source_resend_terms, url: https://resend.com/legal/terms-of-service }
+  - { source_id: source_resend_support, url: https://resend.com/docs/knowledge-base/introduction }
+  - { source_id: source_resend_billing_checkout, url: https://resend.com/docs/dashboard/settings/billing }
+  - source_id: source-readiness-9d5754b3e4da24415ca78fa40ecba0b3ca9ce3ef666e7063fd8d1258bdecc351
+    url: https://resend.com/docs/api-reference/api-keys/create-api-key
+declarations:
+  - declaration_id: declaration_resend_email_api_operations
+    scope:
+      product: { key: resend-email-api, name: Resend Email API }
+      funnel: { key: email-operations, name: Email operations }
+    assessment_targets:
+      - target_id: service-use
+        name: Send email through the API
+        interface_ids: [email-api]
+    participants:
+      - { participant_id: resend, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe5xfhy18q4ccs4a07n } }
+    resources:
+      - { resource_id: api-reference, uri: https://resend.com/docs/api-reference/introduction, roles: [discovery, operations, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://resend.com/legal/terms-of-service, roles: [terms], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://resend.com/pricing, roles: [checkout, documentation, pricing], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: account-signup, uri: https://resend.com/signup, roles: [access], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: api-keys, uri: https://resend.com/docs/dashboard/api-keys/introduction, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: send-email, uri: https://resend.com/docs/api-reference/emails/send-email, roles: [provisioning, status, operations, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: domain-provisioning, uri: https://resend.com/docs/api-reference/domains/create-domain, roles: [provisioning, status, operations, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: api-errors, uri: https://resend.com/docs/api-reference/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: support, uri: https://resend.com/docs/knowledge-base/introduction, roles: [recovery, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://resend.com/docs/dashboard/settings/billing, roles: [checkout, documentation], operated_by_participant_id: resend, standard_bindings: [] }
+      - resource_id: readiness-9d5754b3e4da24415ca78fa40ecba0b3ca9ce3ef666e7063fd8d1258bdecc351
+        uri: https://resend.com/docs/api-reference/api-keys/create-api-key
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: resend
+        standard_bindings: []
+    endpoints:
+      - { endpoint_id: registration, uri: https://resend.com/signup, transport: http, roles: [registration], operated_by_participant_id: resend, standard_bindings: [] }
+      - { endpoint_id: resend-api, uri: https://api.resend.com, transport: http, roles: [service, status], operated_by_participant_id: resend, standard_bindings: [] }
+    interfaces:
+      - { interface_id: email-api, modality: network_api, functions: [service_operation, events], endpoint_ids: [resend-api], resource_ids: [send-email, api-errors], operated_by_participant_id: resend, standard_bindings: [] }
+      - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [api-keys], operated_by_participant_id: resend, standard_bindings: [] }
+    relations:
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: email-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: email-api } }
+      - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
+      - { relation_id: sending-describes-api, kind: describes, from: { node_kind: resource, node_id: send-email }, to: { node_kind: interface, node_id: email-api } }
+      - relation_id: relation-describes-6c4d56035c5e22a92de30089f00893064e796c95327ba614484ea47b04c629c9
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-9d5754b3e4da24415ca78fa40ecba0b3ca9ce3ef666e7063fd8d1258bdecc351
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: resend_assessment_target
+        source_id: source_resend_send
+        target: { node_kind: assessment_target, node_id: service-use }
+        field_paths: [/name, /interface_ids]
+      - { source_binding_id: resend-scope, source_id: source_resend_send, target: { node_kind: declaration, node_id: declaration_resend_email_api_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: resend-participant, source_id: source_resend_api, target: { node_kind: participant, node_id: resend }, field_paths: [/roles, /identity] }
+      - { source_binding_id: resend-resource-reference, source_id: source_resend_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-terms, source_id: source_resend_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-pricing, source_id: source_resend_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-signup, source_id: source_resend_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-endpoint-registration, source_id: source_resend_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-keys, source_id: source_resend_keys, target: { node_kind: resource, node_id: api-keys }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-send, source_id: source_resend_send, target: { node_kind: resource, node_id: send-email }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-domains, source_id: source_resend_domains, target: { node_kind: resource, node_id: domain-provisioning }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-errors, source_id: source_resend_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-resource-support, source_id: source_resend_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-endpoint-api, source_id: source_resend_api, target: { node_kind: endpoint, node_id: resend-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-interface-api, source_id: source_resend_send, target: { node_kind: interface, node_id: email-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: resend-interface-auth, source_id: source_resend_keys, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: resend-relation-reference, source_id: source_resend_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: resend-relation-auth, source_id: source_resend_keys, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: resend-relation-signup, source_id: source_resend_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: resend-relation-send, source_id: source_resend_send, target: { node_kind: relation, node_id: sending-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: resend-resource-billing-checkout, source_id: source_resend_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: resend-exclusion-separate-eligibility, source_id: source_resend_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-9d5754b3e4da24415ca78fa40ecba0b3ca9ce3ef666e7063fd8d1258bdecc351
+        source_id: source-readiness-9d5754b3e4da24415ca78fa40ecba0b3ca9ce3ef666e7063fd8d1258bdecc351
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-9d5754b3e4da24415ca78fa40ecba0b3ca9ce3ef666e7063fd8d1258bdecc351
+      - source_binding_id: binding-relation-6c4d56035c5e22a92de30089f00893064e796c95327ba614484ea47b04c629c9
+        source_id: source-readiness-9d5754b3e4da24415ca78fa40ecba0b3ca9ce3ef666e7063fd8d1258bdecc351
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-6c4d56035c5e22a92de30089f00893064e796c95327ba614484ea47b04c629c9
+    surface_exclusions:
+      - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+    authority_intent: community
+    declared_at: 2026-08-07T06:30:00.000Z
