@@ -1,6 +1,6 @@
 # Declaration data licence
 
-Vendor declarations under `vendors/` are licensed under the
+Entity declarations under `entities/` are licensed under the
 [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 
 Attribution: `Sourcey Agent Ready Services, https://github.com/sourcey/agent-ready-services`.

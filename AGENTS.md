@@ -11,7 +11,7 @@ truth store. Sourcey and Agent Ready Services brand publications consume the
 same private brand-neutral fact/dependency projection; generated content,
 scores, and assessment outcomes never enter this repository.
 
-Allowed contents are vendor declaration YAML, documentation, legal files,
+Allowed contents are Entity declaration YAML, documentation, legal files,
 CODEOWNERS, pull-request and issue guidance, and minimal GitHub workflow YAML
 that invokes the digest-pinned Sourcey Catalog Verifier.
 

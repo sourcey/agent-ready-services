@@ -1,4 +1,4 @@
-<h1 align="center">Agent-ready services, APIs and vendor funnels</h1>
+<h1 align="center">Agent-ready services, APIs and operating funnels</h1>
 
 <p align="center">
   <b>Open declarations. Independent Agent Readiness Report Cards.</b><br>
@@ -7,10 +7,9 @@
 
 <p align="center">
   <a href="https://sourcey.com/agent-readiness">Browse Report Cards</a> ·
-  <a href="https://sourcey.com/agent-readiness/submit">Declare a service</a> ·
   <a href="CONTRIBUTING.md">Contribution guide</a> ·
   <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml">Request an assessment</a> ·
-  <a href="https://sourcey.com/claim">Claim a vendor</a> ·
+  <a href="https://sourcey.com/support">Claim or correct a record</a> ·
   <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=report-outdated.yml">Report outdated evidence</a>
 </p>
 
@@ -21,13 +20,13 @@ authorized access, pay when required, provision what it needs, and use the
 service safely?
 
 This repository is the open contribution front door for answering that
-question. Each vendor file declares one real vendor and one or more exact
-product funnels, essential service targets, public resources, callable
+question. Each Entity file uses Sourcey's shared identity envelope and declares
+one or more exact product funnels, essential service targets, public resources, callable
 endpoints, actors, interfaces, and exact standard bindings.
 
 Sourcey assesses those declarations independently. The resulting
 [Agent Readiness Report Card](https://sourcey.com/agent-readiness) belongs to
-one vendor, product, and funnel—not vaguely to an entire company.
+one Entity, product, and funnel—not vaguely to an entire company.
 
 ## What a Report Card covers
 
@@ -51,14 +50,14 @@ established by evidence.
 
 Only source declarations live here:
 
-- vendor identity and public sources;
+- shared Entity identity plus repository-specific public sources;
 - an exact product and service-access/operating funnel with essential targets;
 - declared participants, resources, endpoints, interfaces, and their relations;
 - source-bound surface exclusions that explain an omitted assessment surface
   without claiming a result;
 - exact standard/version bindings and field-level source bindings;
 - optional explicit relations to existing Sourcey Offers; and
-- a vendor or community request for independent assessment.
+- an Entity-authority or community request for independent assessment.
 
 This repository does **not** contain observations, screenshots, private
 evidence, stage outcomes, grades, freshness projections, generated indexes, or
@@ -69,25 +68,21 @@ history.
 
 ## Add or improve a service
 
-Use the [guided Sourcey declaration form](https://sourcey.com/agent-readiness/submit)
-when the vendor operates one straightforward product funnel. It resolves the
-existing Sourcey Entity, validates every assessment surface against the current
-policy, shows the exact canonical YAML, and creates one review pull request.
-Use [CONTRIBUTING.md](CONTRIBUTING.md) for a request-only path or advanced
-multi-participant and multi-interface declarations. New identities are
-allocated against Sourcey's existing vendor records before a declaration is
-merged, so the same vendor has one stable identity across catalogs without
-making an Offer part of a readiness profile.
+Use [CONTRIBUTING.md](CONTRIBUTING.md) for the request path and advanced
+multi-participant or multi-interface declarations. New identities are
+allocated against Sourcey's existing Entity authority before a declaration is
+merged, so the same organization or service has one stable identity across
+catalogs without making an Offer part of a readiness profile.
 
 After a declaration is merged, it enters private scope and evidence review.
-Publication happens only when the evidence floor is met. A vendor can then
+Publication happens only when the evidence floor is met. An Entity operator can then
 claim the exact profile, fix a blocker, submit a correction, or request a
 rerun. A stronger released card creates a permanent, citable improvement
 history without rewriting the original evidence.
 
 ## Licence
 
-Vendor declarations are [CC BY 4.0](DATA-LICENSE.md). Documentation and
+Entity declarations are [CC BY 4.0](DATA-LICENSE.md). Documentation and
 repository metadata are [MIT](LICENSE). Third-party names and marks remain the
 property of their owners.
 

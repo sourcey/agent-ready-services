@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Claim a vendor
-    url: https://sourcey.com/claim
-    about: Prove control of a vendor domain before making vendor-authoritative declarations.
+  - name: Claim or correct an Entity record
+    url: https://sourcey.com/support
+    about: Find the exact record and prove authority before making Entity-authoritative declarations.
   - name: Browse Agent Readiness Report Cards
     url: https://sourcey.com/agent-readiness
     about: Inspect released, evidence-bound Sourcey Report Cards.
