@@ -1,0 +1,7 @@
+{
+  "name": "sourcey-agent-ready-services-verifier-runtime",
+  "private": true,
+  "dependencies": {
+    "@sourcey/catalog-verifier": "1.0.0"
+  }
+}

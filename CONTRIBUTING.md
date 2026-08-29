@@ -243,7 +243,7 @@ git commit --signoff -m "data(readiness): declare acme db self-serve funnel"
 ```
 
 The public `sourcey/validation` status parses only changed Entity blobs using the exact
-digest-pinned Sourcey Catalog Verifier and confirms their identity-derived
+lockfile-pinned public `@sourcey/catalog-verifier` package and confirms their identity-derived
 paths and dependency closure. It does not execute pull-request code. A green
 status proves declaration shape, not readiness.
 Validation starts automatically when a pull request is opened or updated; contributors do not
@@ -253,19 +253,30 @@ For an exact local preflight from a checkout with `origin/main` fetched:
 
 ```bash
 base="$(git merge-base HEAD origin/main)"
-digest="$(<.github/sourcey-catalog-verifier.sha256)"
 work="$(mktemp -d)"
-archive="sourcey-catalog-verifier-sha256-${digest}.tar.gz"
-origin="https://artifacts.sourcey.com/catalog/code/catalog-verifier/sha256-${digest}"
-curl --fail --silent --show-error "${origin}/${archive}" --output "${work}/${archive}"
-curl --fail --silent --show-error "${origin}/${archive}.sha256" --output "${work}/${archive}.sha256"
-(cd "${work}" && shasum -a 256 --check "${archive}.sha256")
-mkdir "${work}/verifier"
-tar -xzf "${work}/${archive}" --strip-components=1 -C "${work}/verifier"
-node "${work}/verifier/sourcey-catalog-verify.js" validate-readiness-change \
-  --repository "$PWD" --base "$base" --head HEAD
-rm -rf "${work}"
+npm ci --prefix .github/catalog-verifier --ignore-scripts --no-audit --no-fund
+verifier=".github/catalog-verifier/node_modules/.bin/sourcey-catalog-verify"
+curl --fail-with-body --silent --show-error https://api.sourcey.com/v1/release \
+  --output "${work}/release.json"
+release_id="$(jq -er '.release_id' "${work}/release.json")"
+root_digest="$(<.github/sourcey-root-set.digest)"
+test "$(jq -er '.descriptor.snapshot_core.root_set_digest' "${work}/release.json")" = "$root_digest"
+"$verifier" identity-context-request agent-readiness \
+  --repository "$PWD" --base "$base" --head HEAD \
+  --live-parent-release-id "$release_id" > "${work}/query.json"
+curl --fail-with-body --silent --show-error -H 'content-type: application/json' \
+  --data-binary @"${work}/query.json" \
+  https://api.sourcey.com/v1/catalog-verifier/identity-contexts \
+  | jq -e '.data' > "${work}/identity-context.json"
+"$verifier" validate agent-readiness \
+  --repository "$PWD" --base "$base" --head HEAD \
+  --identity-context "${work}/identity-context.json" \
+  --root-set .github/sourcey-root-set.json --trusted-root-digest "$root_digest" \
+  --verified-at "$(node -p 'new Date().toISOString()')" --format human
 ```
+
+This is the same public package, signed identity-context protocol, and rooted trust input used by
+CI—not a second validator. Context issuance is explicit; final validation is offline over those bytes.
 
 After merge, Sourcey retains the exact repository, commit, path, Git blob OID,
 and SHA-256 blob digest before any private assessment begins. Identity,
