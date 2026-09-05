@@ -21,6 +21,10 @@ sources:
   - { source_id: source_twilio_support, url: https://www.twilio.com/docs/usage/troubleshooting }
   - source_id: source-readiness-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
     url: https://www.twilio.com/en-us/pricing/messaging
+  - source_id: source-readiness-f640bfb2a3f247e81fd4038d810324e1b4c9b8a91951aae133740a3d156b1dd0
+    url: https://www.twilio.com/docs/iam/api/authtoken
+  - source_id: source-readiness-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
+    url: https://www.twilio.com/docs/usage/api/keys
 declarations:
   - declaration_id: declaration_twilio_messaging_api_operations
     scope:
@@ -49,6 +53,20 @@ declarations:
           - pricing
         operated_by_participant_id: twilio
         standard_bindings: []
+      - resource_id: readiness-f640bfb2a3f247e81fd4038d810324e1b4c9b8a91951aae133740a3d156b1dd0
+        uri: https://www.twilio.com/docs/iam/api/authtoken
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: twilio
+        standard_bindings: []
+      - resource_id: readiness-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
+        uri: https://www.twilio.com/docs/usage/api/keys
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: twilio
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account, transport: http, roles: [registration], operated_by_participant_id: twilio, standard_bindings: [] }
       - { endpoint_id: twilio-api, uri: https://api.twilio.com/2010-04-01, transport: http, roles: [service, status], operated_by_participant_id: twilio, standard_bindings: [] }
@@ -60,6 +78,22 @@ declarations:
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: messaging-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: messages-describe-api, kind: describes, from: { node_kind: resource, node_id: message-operations }, to: { node_kind: interface, node_id: messaging-api } }
+      - relation_id: relation-describes-d9d1cf77e39d460f5b418ed8497fd9a1a1556f7ed215ba6221ed6b8568153186
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-f640bfb2a3f247e81fd4038d810324e1b4c9b8a91951aae133740a3d156b1dd0
+        to:
+          node_kind: interface
+          node_id: api-authentication
+      - relation_id: relation-describes-e03bc71777e71b76b6e8833501620049c3dd8b15fea8dbbc184cf231a28be4b3
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
+        to:
+          node_kind: interface
+          node_id: api-authentication
     offer_relations: []
     source_bindings:
       - source_binding_id: twilio_assessment_target
@@ -95,6 +129,42 @@ declarations:
         target:
           node_kind: resource
           node_id: readiness-cfa12ce6e4f5f5ff16c4a65698f5d4c7be599bc6f54d70a6e41dcf742e0637ac
+      - source_binding_id: binding-resource-f640bfb2a3f247e81fd4038d810324e1b4c9b8a91951aae133740a3d156b1dd0
+        source_id: source-readiness-f640bfb2a3f247e81fd4038d810324e1b4c9b8a91951aae133740a3d156b1dd0
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-f640bfb2a3f247e81fd4038d810324e1b4c9b8a91951aae133740a3d156b1dd0
+      - source_binding_id: binding-relation-d9d1cf77e39d460f5b418ed8497fd9a1a1556f7ed215ba6221ed6b8568153186
+        source_id: source-readiness-f640bfb2a3f247e81fd4038d810324e1b4c9b8a91951aae133740a3d156b1dd0
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-d9d1cf77e39d460f5b418ed8497fd9a1a1556f7ed215ba6221ed6b8568153186
+      - source_binding_id: binding-resource-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
+        source_id: source-readiness-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
+      - source_binding_id: binding-relation-e03bc71777e71b76b6e8833501620049c3dd8b15fea8dbbc184cf231a28be4b3
+        source_id: source-readiness-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-e03bc71777e71b76b6e8833501620049c3dd8b15fea8dbbc184cf231a28be4b3
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

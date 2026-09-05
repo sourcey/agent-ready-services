@@ -20,6 +20,10 @@ sources:
   - { source_id: source_digitalocean_terms, url: https://www.digitalocean.com/legal/terms-of-service-agreement }
   - { source_id: source_digitalocean_support, url: https://docs.digitalocean.com/support/ }
   - { source_id: source_digitalocean_billing_checkout, url: https://docs.digitalocean.com/platform/billing/manage-payment-methods/ }
+  - source_id: source-readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+    url: https://docs.digitalocean.com/platform/billing
+  - source_id: source-readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+    url: https://docs.digitalocean.com/platform/billing/pay-bills
 declarations:
   - declaration_id: declaration_digitalocean_api_resource_management
     scope:
@@ -42,6 +46,20 @@ declarations:
       - { resource_id: api-reference, uri: https://docs.digitalocean.com/reference/api/reference/public-apis/, roles: [status, operations, recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.digitalocean.com/support/, roles: [recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://docs.digitalocean.com/platform/billing/manage-payment-methods/, roles: [checkout, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
+      - resource_id: readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+        uri: https://docs.digitalocean.com/platform/billing
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: digitalocean
+        standard_bindings: []
+      - resource_id: readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+        uri: https://docs.digitalocean.com/platform/billing/pay-bills
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: digitalocean
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://cloud.digitalocean.com/registrations/new, transport: http, roles: [registration], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { endpoint_id: digitalocean-api, uri: https://api.digitalocean.com/v2, transport: http, roles: [service, status], operated_by_participant_id: digitalocean, standard_bindings: [] }
@@ -80,6 +98,24 @@ declarations:
       - { source_binding_id: digitalocean-relation-provisioning, source_id: source_digitalocean_droplets, target: { node_kind: relation, node_id: provisioning-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: digitalocean-resource-billing-checkout, source_id: source_digitalocean_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: digitalocean-exclusion-separate-eligibility, source_id: source_digitalocean_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - source_binding_id: binding-resource-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+        source_id: source-readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+      - source_binding_id: binding-resource-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+        source_id: source-readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

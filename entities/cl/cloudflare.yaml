@@ -31,6 +31,8 @@ sources:
   - { source_id: source_cloudflare_public_dns_json, url: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/ }
   - { source_id: source_cloudflare_public_dns_upstream, url: https://developers.cloudflare.com/1.1.1.1/upstream-resolution/ }
   - { source_id: source_cloudflare_public_dns_errors, url: https://developers.cloudflare.com/1.1.1.1/infrastructure/extended-dns-error-codes/ }
+  - source_id: source-readiness-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
+    url: https://developers.cloudflare.com/workers/observability/logs/workers-logs
 declarations:
   - declaration_id: declaration_cloudflare_api_resource_management
     scope:
@@ -74,6 +76,14 @@ declarations:
           - status
         operated_by_participant_id: cloudflare
         standard_bindings: []
+      - resource_id: readiness-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
+        uri: https://developers.cloudflare.com/workers/observability/logs/workers-logs
+        roles:
+          - documentation
+          - provisioning
+          - status
+        operated_by_participant_id: cloudflare
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://dash.cloudflare.com/sign-up, transport: http, roles: [registration], operated_by_participant_id: cloudflare, standard_bindings: [] }
       - { endpoint_id: cloudflare-api, uri: https://api.cloudflare.com/client/v4, transport: http, roles: [service, status], operated_by_participant_id: cloudflare, standard_bindings: [] }
@@ -90,6 +100,14 @@ declarations:
         from:
           node_kind: resource
           node_id: readiness-bc8b49ed87d1f5f8ab2920f8fb566580b21dbc2818786704c4b560b7b364b342
+        to:
+          node_kind: interface
+          node_id: resource-api
+      - relation_id: relation-describes-b10298a375f783dc2ecc4152ecf6b77b9cc83d2f56df5e02bf5969f2a6c5ce3b
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: readiness-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
         to:
           node_kind: interface
           node_id: resource-api
@@ -155,6 +173,24 @@ declarations:
         target:
           node_kind: relation
           node_id: relation-describes-225c96c782ab756fb616d37d053e0fd7f9b4f86e55f67726f3184979e08c37a3
+      - source_binding_id: binding-resource-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
+        source_id: source-readiness-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
+      - source_binding_id: binding-relation-b10298a375f783dc2ecc4152ecf6b77b9cc83d2f56df5e02bf5969f2a6c5ce3b
+        source_id: source-readiness-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: relation-describes-b10298a375f783dc2ecc4152ecf6b77b9cc83d2f56df5e02bf5969f2a6c5ce3b
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

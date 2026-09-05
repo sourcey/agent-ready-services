@@ -30,6 +30,8 @@ sources:
   - { source_id: source_openrouter_llms, url: https://openrouter.ai/llms.txt }
   - { source_id: source_openrouter_agents, url: https://openrouter.ai/agents.md }
   - { source_id: source_openrouter_mcp, url: https://openrouter.ai/docs/guides/overview/mcp-server }
+  - source_id: source-readiness-bd3a229fc6f0de08d49dbcbdc71329a79f87341b81a2308a74db49665a3c2818
+    url: https://openrouter.ai/pricing
 declarations:
   - declaration_id: declaration_openrouter_model_access_lifecycle
     scope:
@@ -67,6 +69,14 @@ declarations:
       - { resource_id: agent-discovery-index, uri: https://openrouter.ai/llms.txt, roles: [discovery, descriptor, documentation], operated_by_participant_id: openrouter, standard_bindings: [] }
       - { resource_id: agent-setup-guide, uri: https://openrouter.ai/agents.md, roles: [discovery, authentication, provisioning, documentation], operated_by_participant_id: openrouter, standard_bindings: [] }
       - { resource_id: mcp-guide, uri: https://openrouter.ai/docs/guides/overview/mcp-server, roles: [discovery, authentication, provisioning, operations, descriptor, documentation], operated_by_participant_id: openrouter, standard_bindings: [{ namespace: mcp, version: "2025-11-25", relation: describes }] }
+      - resource_id: readiness-bd3a229fc6f0de08d49dbcbdc71329a79f87341b81a2308a74db49665a3c2818
+        uri: https://openrouter.ai/pricing
+        roles:
+          - checkout
+          - documentation
+          - pricing
+        operated_by_participant_id: openrouter
+        standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://openrouter.ai/sign-up, transport: http, roles: [registration], operated_by_participant_id: openrouter, standard_bindings: [] }
       - { endpoint_id: chat-completions, uri: https://openrouter.ai/api/v1/chat/completions, transport: http, roles: [service], operated_by_participant_id: openrouter, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }] }
@@ -152,6 +162,15 @@ declarations:
       - { source_binding_id: openrouter-relation-auth-mcp, source_id: source_openrouter_mcp, target: { node_kind: relation, node_id: oauth-authenticates-mcp }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: openrouter-relation-mcp-inference, source_id: source_openrouter_mcp, target: { node_kind: relation, node_id: mcp-alternative-inference }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: openrouter-relation-mcp-catalog, source_id: source_openrouter_mcp, target: { node_kind: relation, node_id: mcp-alternative-catalog }, field_paths: [/kind, /from, /to] }
+      - source_binding_id: binding-resource-bd3a229fc6f0de08d49dbcbdc71329a79f87341b81a2308a74db49665a3c2818
+        source_id: source-readiness-bd3a229fc6f0de08d49dbcbdc71329a79f87341b81a2308a74db49665a3c2818
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-bd3a229fc6f0de08d49dbcbdc71329a79f87341b81a2308a74db49665a3c2818
     surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-21T11:25:00.000Z

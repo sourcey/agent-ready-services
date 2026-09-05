@@ -23,6 +23,8 @@ sources:
     url: https://vercel.com/docs/cli/tokens
   - source_id: source-readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
     url: https://vercel.com/docs/plans/pro-plan
+  - source_id: source-readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
+    url: https://vercel.com/docs/rest-api/billing/purchase-credits
 declarations:
   - declaration_id: declaration_vercel_api_deployment_operations
     scope:
@@ -53,6 +55,13 @@ declarations:
         standard_bindings: []
       - resource_id: readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
         uri: https://vercel.com/docs/plans/pro-plan
+        roles:
+          - checkout
+          - documentation
+        operated_by_participant_id: vercel
+        standard_bindings: []
+      - resource_id: readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
+        uri: https://vercel.com/docs/rest-api/billing/purchase-credits
         roles:
           - checkout
           - documentation
@@ -130,6 +139,15 @@ declarations:
         target:
           node_kind: resource
           node_id: readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
+      - source_binding_id: binding-resource-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
+        source_id: source-readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
