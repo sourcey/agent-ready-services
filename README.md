@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://sourcey.com/agent-readiness">Browse Report Cards</a> ·
-  <a href="https://sourcey.com/log">The Sourcey Log</a> ·
+  <a href="https://sourcey.com/companies">Companies</a> ·
   <a href="CONTRIBUTING.md">Contribution guide</a> ·
   <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml">Request an assessment</a> ·
   <a href="https://sourcey.com/support">Claim or correct a record</a> ·
@@ -28,7 +28,7 @@ endpoints, actors, interfaces, and exact standard bindings.
 Sourcey assesses those declarations independently. The resulting
 [Agent Readiness Report Card](https://sourcey.com/agent-readiness) belongs to
 one Entity, product, and funnel, not vaguely to an entire company. Published
-cards appear on that company's record in [The Sourcey Log](https://sourcey.com/log),
+cards appear on that company's [Sourcey record](https://sourcey.com/companies),
 alongside its other capabilities, offers and evidence. A declaration here is
 not itself a published assessment or grade.
 
