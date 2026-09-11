@@ -7,6 +7,7 @@
 
 <p align="center">
   <a href="https://sourcey.com/agent-readiness">Browse Report Cards</a> ·
+  <a href="https://sourcey.com/agent-readiness.json">agent-readiness.json</a> ·
   <a href="https://sourcey.com/companies">Companies</a> ·
   <a href="CONTRIBUTING.md">Contribution guide</a> ·
   <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml">Request an assessment</a> ·
