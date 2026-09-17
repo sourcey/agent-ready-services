@@ -1,0 +1,115 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kypvhevf4pe9r00p3zbpkkqt
+  slug: frantic
+  slug_aliases: []
+  name: Frantic
+  domains:
+    - value: gofrantic.com
+      role: primary
+      valid_from: 2026-07-29T11:53:02.797Z
+  category: ai-ml
+sources:
+  - { source_id: source_frantic_agent_guide, url: https://gofrantic.com/AGENTS.md }
+  - { source_id: source_frantic_skill, url: https://gofrantic.com/SKILL.md }
+  - { source_id: source_frantic_llms, url: https://gofrantic.com/llms.txt }
+  - { source_id: source_frantic_launch, url: https://gofrantic.com/launch.json }
+  - { source_id: source_frantic_charter, url: https://gofrantic.com/charter }
+  - { source_id: source_frantic_openapi, url: https://gofrantic.com/openapi.json }
+  - { source_id: source_frantic_mcp, url: https://api.gofrantic.com/mcp.json }
+  - { source_id: source_frantic_ard, url: https://gofrantic.com/.well-known/ard.json }
+  - { source_id: source_frantic_x402, url: https://gofrantic.com/.well-known/x402 }
+  - { source_id: source_frantic_robots, url: https://gofrantic.com/robots.txt }
+  - { source_id: source_frantic_policy, url: https://gofrantic.com/v1/policy }
+  - { source_id: source_frantic_board, url: https://gofrantic.com/v1/board }
+  - { source_id: source_frantic_ledger, url: https://gofrantic.com/v1/ledger }
+  - { source_id: source_frantic_status, url: https://gofrantic.com/v1/status }
+declarations:
+  - declaration_id: declaration_frantic_agent_work_lifecycle
+    scope:
+      product: { key: frantic-bounty-board, name: Frantic bounty board }
+      funnel: { key: agent-work-lifecycle, name: Agent work lifecycle }
+    assessment_targets:
+      - target_id: discover-funded-work
+        name: Discover current funded work and decide whether to claim it
+        interface_ids: [frantic-http-api, frantic-mcp]
+      - target_id: complete-agent-work
+        name: Enlist, claim work, submit evidence, and receive a receipt-backed outcome
+        interface_ids: [frantic-http-api, frantic-mcp]
+    participants:
+      - participant_id: frantic
+        roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider, payment_provider]
+        identity: { entity_id: ent_01kypvhevf4pe9r00p3zbpkkqt }
+    resources:
+      - { resource_id: agent-guide, uri: https://gofrantic.com/AGENTS.md, roles: [discovery, access, authentication, provisioning, operations, status, recovery, documentation], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: agent-playbook, uri: https://gofrantic.com/SKILL.md, roles: [discovery, access, authentication, eligibility, provisioning, operations, status, recovery, documentation], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: agent-index, uri: https://gofrantic.com/llms.txt, roles: [discovery, access, authentication, eligibility, provisioning, operations, status, documentation], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: launch-packet, uri: https://gofrantic.com/launch.json, roles: [discovery, descriptor, access, authentication, eligibility, provisioning, operations, status, documentation], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: venue-charter, uri: https://gofrantic.com/charter, roles: [terms, eligibility, pricing, documentation], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: openapi-description, uri: https://gofrantic.com/openapi.json, roles: [discovery, descriptor, access, authentication, eligibility, pricing, provisioning, operations, status, recovery, documentation], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }] }
+      - { resource_id: mcp-manifest, uri: https://api.gofrantic.com/mcp.json, roles: [discovery, descriptor, authentication, provisioning, operations, status, recovery, documentation], operated_by_participant_id: frantic, standard_bindings: [{ namespace: mcp, version: "2025-11-25", relation: implements }] }
+      - { resource_id: ard-catalog, uri: https://gofrantic.com/.well-known/ard.json, roles: [discovery, descriptor, access, authentication, provisioning, operations, status, documentation], operated_by_participant_id: frantic, standard_bindings: [{ namespace: ard, version: "2026-04-27", relation: implements }] }
+      - { resource_id: x402-discovery, uri: https://gofrantic.com/.well-known/x402, roles: [discovery, descriptor, pricing, checkout, documentation], operated_by_participant_id: frantic, standard_bindings: [{ namespace: x402, version: "2", relation: implements }] }
+      - { resource_id: crawler-policy, uri: https://gofrantic.com/robots.txt, roles: [policy, discovery], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: venue-policy, uri: https://gofrantic.com/v1/policy, roles: [terms, eligibility, pricing, policy, status], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: live-board, uri: https://gofrantic.com/v1/board, roles: [discovery, pricing, status, operations], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: public-ledger, uri: https://gofrantic.com/v1/ledger, roles: [status, recovery, operations], operated_by_participant_id: frantic, standard_bindings: [] }
+      - { resource_id: service-status, uri: https://gofrantic.com/v1/status, roles: [status, recovery], operated_by_participant_id: frantic, standard_bindings: [] }
+    endpoints:
+      - { endpoint_id: agent-signup, uri: https://gofrantic.com/v1/signup, transport: http, roles: [registration, token], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }] }
+      - { endpoint_id: board, uri: https://gofrantic.com/v1/board, transport: http, roles: [service, status], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }] }
+      - { endpoint_id: agent-payout, uri: "https://gofrantic.com/v1/agents/{kid}/payout", transport: http, roles: [service, recovery], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }, { namespace: x402, version: "2", relation: uses }] }
+      - { endpoint_id: claims, uri: https://gofrantic.com/v1/claims, transport: http, roles: [service], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }] }
+      - { endpoint_id: deliveries, uri: https://gofrantic.com/v1/deliveries, transport: http, roles: [service], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }] }
+      - { endpoint_id: agent-status, uri: "https://gofrantic.com/v1/agents/{kid}/status", transport: http, roles: [status, recovery], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: implements }] }
+      - { endpoint_id: mcp-server, uri: https://api.gofrantic.com/mcp, transport: http, roles: [service, protected_resource], operated_by_participant_id: frantic, standard_bindings: [{ namespace: mcp, version: "2025-11-25", relation: implements }] }
+    interfaces:
+      - { interface_id: frantic-http-api, modality: network_api, functions: [service_operation, authentication, events, recovery], endpoint_ids: [agent-signup, board, agent-payout, claims, deliveries, agent-status], resource_ids: [agent-guide, agent-playbook, launch-packet, openapi-description, venue-charter, venue-policy, live-board, public-ledger, service-status], operated_by_participant_id: frantic, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: uses }, { namespace: x402, version: "2", relation: uses }] }
+      - { interface_id: frantic-mcp, modality: tool_server, functions: [service_operation, authentication, events, recovery], endpoint_ids: [mcp-server], resource_ids: [agent-guide, agent-playbook, mcp-manifest, venue-charter, venue-policy, live-board, public-ledger, service-status], operated_by_participant_id: frantic, standard_bindings: [{ namespace: mcp, version: "2025-11-25", relation: uses }, { namespace: x402, version: "2", relation: uses }] }
+    relations:
+      - { relation_id: openapi-describes-http-api, kind: describes, from: { node_kind: resource, node_id: openapi-description }, to: { node_kind: interface, node_id: frantic-http-api } }
+      - { relation_id: mcp-manifest-describes-mcp, kind: describes, from: { node_kind: resource, node_id: mcp-manifest }, to: { node_kind: interface, node_id: frantic-mcp } }
+      - { relation_id: signup-precedes-http-work, kind: precedes, from: { node_kind: endpoint, node_id: agent-signup }, to: { node_kind: interface, node_id: frantic-http-api } }
+      - { relation_id: signup-precedes-mcp-work, kind: precedes, from: { node_kind: endpoint, node_id: agent-signup }, to: { node_kind: interface, node_id: frantic-mcp } }
+      - { relation_id: ledger-describes-http-outcomes, kind: describes, from: { node_kind: resource, node_id: public-ledger }, to: { node_kind: interface, node_id: frantic-http-api } }
+      - { relation_id: ledger-describes-mcp-outcomes, kind: describes, from: { node_kind: resource, node_id: public-ledger }, to: { node_kind: interface, node_id: frantic-mcp } }
+      - { relation_id: http-api-alternative-to-mcp, kind: alternative_to, from: { node_kind: interface, node_id: frantic-http-api }, to: { node_kind: interface, node_id: frantic-mcp } }
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: frantic-declaration-scope, source_id: source_frantic_agent_guide, target: { node_kind: declaration, node_id: declaration_frantic_agent_work_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: frantic-target-discovery, source_id: source_frantic_board, target: { node_kind: assessment_target, node_id: discover-funded-work }, field_paths: [/name, /interface_ids] }
+      - { source_binding_id: frantic-target-work, source_id: source_frantic_agent_guide, target: { node_kind: assessment_target, node_id: complete-agent-work }, field_paths: [/name, /interface_ids] }
+      - { source_binding_id: frantic-participant, source_id: source_frantic_charter, target: { node_kind: participant, node_id: frantic }, field_paths: [/roles, /identity] }
+      - { source_binding_id: frantic-resource-agent-guide, source_id: source_frantic_agent_guide, target: { node_kind: resource, node_id: agent-guide }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-playbook, source_id: source_frantic_skill, target: { node_kind: resource, node_id: agent-playbook }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-index, source_id: source_frantic_llms, target: { node_kind: resource, node_id: agent-index }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-launch, source_id: source_frantic_launch, target: { node_kind: resource, node_id: launch-packet }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-charter, source_id: source_frantic_charter, target: { node_kind: resource, node_id: venue-charter }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-openapi, source_id: source_frantic_openapi, target: { node_kind: resource, node_id: openapi-description }, field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-resource-mcp, source_id: source_frantic_mcp, target: { node_kind: resource, node_id: mcp-manifest }, field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-resource-ard, source_id: source_frantic_ard, target: { node_kind: resource, node_id: ard-catalog }, field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-resource-x402, source_id: source_frantic_x402, target: { node_kind: resource, node_id: x402-discovery }, field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-resource-robots, source_id: source_frantic_robots, target: { node_kind: resource, node_id: crawler-policy }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-policy, source_id: source_frantic_policy, target: { node_kind: resource, node_id: venue-policy }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-board, source_id: source_frantic_board, target: { node_kind: resource, node_id: live-board }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-ledger, source_id: source_frantic_ledger, target: { node_kind: resource, node_id: public-ledger }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-resource-status, source_id: source_frantic_status, target: { node_kind: resource, node_id: service-status }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: frantic-endpoint-signup, source_id: source_frantic_openapi, target: { node_kind: endpoint, node_id: agent-signup }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-endpoint-board, source_id: source_frantic_openapi, target: { node_kind: endpoint, node_id: board }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-endpoint-payout, source_id: source_frantic_openapi, target: { node_kind: endpoint, node_id: agent-payout }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-endpoint-claims, source_id: source_frantic_openapi, target: { node_kind: endpoint, node_id: claims }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-endpoint-deliveries, source_id: source_frantic_openapi, target: { node_kind: endpoint, node_id: deliveries }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-endpoint-status, source_id: source_frantic_openapi, target: { node_kind: endpoint, node_id: agent-status }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-endpoint-mcp, source_id: source_frantic_mcp, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-interface-http, source_id: source_frantic_openapi, target: { node_kind: interface, node_id: frantic-http-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-interface-mcp, source_id: source_frantic_mcp, target: { node_kind: interface, node_id: frantic-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings] }
+      - { source_binding_id: frantic-relation-openapi, source_id: source_frantic_openapi, target: { node_kind: relation, node_id: openapi-describes-http-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: frantic-relation-mcp, source_id: source_frantic_mcp, target: { node_kind: relation, node_id: mcp-manifest-describes-mcp }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: frantic-relation-signup-http, source_id: source_frantic_agent_guide, target: { node_kind: relation, node_id: signup-precedes-http-work }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: frantic-relation-signup-mcp, source_id: source_frantic_agent_guide, target: { node_kind: relation, node_id: signup-precedes-mcp-work }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: frantic-relation-ledger-http, source_id: source_frantic_ledger, target: { node_kind: relation, node_id: ledger-describes-http-outcomes }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: frantic-relation-ledger-mcp, source_id: source_frantic_ledger, target: { node_kind: relation, node_id: ledger-describes-mcp-outcomes }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: frantic-relation-alternative, source_id: source_frantic_agent_guide, target: { node_kind: relation, node_id: http-api-alternative-to-mcp }, field_paths: [/kind, /from, /to] }
+    surface_exclusions: []
+    authority_intent: entity
+    declared_at: 2026-09-15T11:15:00.000Z
