@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
+      # -f sends every field as a string; -F would turn the numeric
+      # repository id into a JSON number and the workspace lane pins it as text.
       - name: Dispatch the exact merged head to Sourcey
         env:
           GH_TOKEN: ${{ secrets.SOURCEY_WORKSPACE_DISPATCH_TOKEN }}
@@ -29,6 +31,6 @@ jobs:
           test -n "$GH_TOKEN"
           gh api --method POST repos/sourcey/sourcey-workspace/dispatches \
             -f event_type=agent-ready-services-merge \
-            -F client_payload[base_sha]="$BASE_SHA" \
-            -F client_payload[head_sha]="$HEAD_SHA" \
-            -F client_payload[repository_id]="$REPOSITORY_ID"
+            -f client_payload[base_sha]="$BASE_SHA" \
+            -f client_payload[head_sha]="$HEAD_SHA" \
+            -f client_payload[repository_id]="$REPOSITORY_ID"
