@@ -278,7 +278,9 @@ curl --fail-with-body --silent --show-error -H 'content-type: application/json' 
 This is the same public package, signed identity-context protocol, and rooted trust input used by
 CI—not a second validator. Context issuance is explicit; final validation is offline over those bytes.
 
-After merge, Sourcey retains the exact repository, commit, path, Git blob OID,
-and SHA-256 blob digest before any private assessment begins. Identity,
-authority, evidence coverage, human review, and release admission remain
-separate gates.
+After merge, a workflow in this repository tells Sourcey the exact merged head
+(`notify-merge.yml`; it sends only the base and head commits and this
+repository's id). Sourcey then retains the exact repository, commit, path, Git
+blob OID, and SHA-256 blob digest before any private assessment begins.
+Identity, authority, evidence coverage, human review, and release admission
+remain separate gates.
