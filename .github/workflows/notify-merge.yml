@@ -1,0 +1,36 @@
+name: notify-sourcey-merge
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "entities/**/*.yaml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notify-merge-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    if: github.event.before != '0000000000000000000000000000000000000000'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      # -f sends every field as a string; -F would turn the numeric
+      # repository id into a JSON number and the workspace lane pins it as text.
+      - name: Dispatch the exact merged head to Sourcey
+        env:
+          GH_TOKEN: ${{ secrets.SOURCEY_WORKSPACE_DISPATCH_TOKEN }}
+          BASE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+        run: |
+          test -n "$GH_TOKEN"
+          gh api --method POST repos/sourcey/sourcey-workspace/dispatches \
+            -f event_type=agent-ready-services-merge \
+            -f client_payload[base_sha]="$BASE_SHA" \
+            -f client_payload[head_sha]="$HEAD_SHA" \
+            -f client_payload[repository_id]="$REPOSITORY_ID"
