@@ -1,0 +1,229 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe02zy8c759a19bfsbc
+  slug: algolia
+  slug_aliases: []
+  name: Algolia
+  domains:
+    - value: algolia.com
+      role: primary
+      valid_from: 2026-07-27T07:38:51.225Z
+  category: devtools-other
+sources:
+  - source_id: source_algolia_0f9d4e8c28323e222f8601c1
+    url: https://docsearch.algolia.com/docs/mcp/installation/
+  - source_id: source_algolia_821808bf79031a0dda28ef7d
+    url: https://docsearch.algolia.com/docs/mcp/overview/
+  - source_id: source_algolia_6584b3f97f8ef70c70aaf906
+    url: https://docsearch.algolia.com/docs/mcp/usage/
+  - source_id: source_algolia_9c8af2852c4ada9e1caf66d7
+    url: https://www.algolia.com/
+  - source_id: source_algolia_461ed5ae043781a3bd90555b
+    url: https://www.algolia.com/policies/terms
+declarations:
+  - declaration_id: declaration_algolia_algolia_docsearch_mcp_remote_mcp_access
+    scope:
+      product:
+        key: algolia-docsearch-mcp
+        name: Algolia DocSearch MCP
+      funnel:
+        key: remote-mcp-access
+        name: Remote MCP access
+    assessment_targets:
+      - target_id: search-public-developer-documentation-and-return-cited-sources
+        name: Search public developer documentation and return cited sources
+        interface_ids:
+          - primary-service
+    participants:
+      - participant_id: subject
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe02zy8c759a19bfsbc
+    resources:
+      - resource_id: resource-0f9d4e8c28323e22
+        uri: https://docsearch.algolia.com/docs/mcp/installation/
+        roles:
+          - access
+          - provisioning
+          - status
+          - documentation
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: resource-461ed5ae043781a3
+        uri: https://www.algolia.com/policies/terms
+        roles:
+          - terms
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: resource-6584b3f97f8ef70c
+        uri: https://docsearch.algolia.com/docs/mcp/usage/
+        roles:
+          - operations
+          - documentation
+          - recovery
+          - status
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: resource-821808bf79031a0d
+        uri: https://docsearch.algolia.com/docs/mcp/overview/
+        roles:
+          - discovery
+          - pricing
+          - authentication
+          - descriptor
+          - documentation
+          - checkout
+        operated_by_participant_id: subject
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: endpoint-0f9d4e8c28323e22
+        uri: https://docsearch.algolia.com/docs/mcp/installation/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - endpoint_id: endpoint-3bc11c6d6c5e85d7
+        uri: https://mcp.algolia.com/1/docsearch/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: subject
+        standard_bindings: []
+    interfaces:
+      - interface_id: primary-service
+        modality: tool_server
+        functions:
+          - service_operation
+          - authentication
+          - recovery
+        endpoint_ids:
+          - endpoint-3bc11c6d6c5e85d7
+        resource_ids:
+          - resource-0f9d4e8c28323e22
+          - resource-6584b3f97f8ef70c
+          - resource-821808bf79031a0d
+        operated_by_participant_id: subject
+        standard_bindings: []
+    relations: []
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: binding_declaration_declaration_algolia_algolia_docsearch_mcp_remote_mcp_access_6584b3f97f8ef70c70aaf906
+        source_id: source_algolia_6584b3f97f8ef70c70aaf906
+        field_paths:
+          - /scope/product/name
+          - /scope/funnel/name
+        target:
+          node_kind: declaration
+          node_id: declaration_algolia_algolia_docsearch_mcp_remote_mcp_access
+      - source_binding_id: binding_declaration_declaration_algolia_algolia_docsearch_mcp_remote_mcp_access_821808bf79031a0dda28ef7d
+        source_id: source_algolia_821808bf79031a0dda28ef7d
+        field_paths:
+          - /scope/product/name
+          - /scope/funnel/name
+        target:
+          node_kind: declaration
+          node_id: declaration_algolia_algolia_docsearch_mcp_remote_mcp_access
+      - source_binding_id: binding_participant_subject_9c8af2852c4ada9e1caf66d7
+        source_id: source_algolia_9c8af2852c4ada9e1caf66d7
+        field_paths:
+          - /roles
+          - /identity
+        target:
+          node_kind: participant
+          node_id: subject
+      - source_binding_id: binding_assessment_target_search_public_developer_documentation_and_return_cited_sources_6584b3f97f8ef70c70aaf906
+        source_id: source_algolia_6584b3f97f8ef70c70aaf906
+        field_paths:
+          - /name
+          - /interface_ids
+        target:
+          node_kind: assessment_target
+          node_id: search-public-developer-documentation-and-return-cited-sources
+      - source_binding_id: binding_resource_resource_0f9d4e8c28323e22_0f9d4e8c28323e222f8601c1
+        source_id: source_algolia_0f9d4e8c28323e222f8601c1
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: resource-0f9d4e8c28323e22
+      - source_binding_id: binding_resource_resource_461ed5ae043781a3_461ed5ae043781a3bd90555b
+        source_id: source_algolia_461ed5ae043781a3bd90555b
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: resource-461ed5ae043781a3
+      - source_binding_id: binding_resource_resource_6584b3f97f8ef70c_6584b3f97f8ef70c70aaf906
+        source_id: source_algolia_6584b3f97f8ef70c70aaf906
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: resource-6584b3f97f8ef70c
+      - source_binding_id: binding_resource_resource_821808bf79031a0d_821808bf79031a0dda28ef7d
+        source_id: source_algolia_821808bf79031a0dda28ef7d
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: resource-821808bf79031a0d
+      - source_binding_id: binding_endpoint_endpoint_0f9d4e8c28323e22_0f9d4e8c28323e222f8601c1
+        source_id: source_algolia_0f9d4e8c28323e222f8601c1
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: endpoint
+          node_id: endpoint-0f9d4e8c28323e22
+      - source_binding_id: binding_endpoint_endpoint_3bc11c6d6c5e85d7_6584b3f97f8ef70c70aaf906
+        source_id: source_algolia_6584b3f97f8ef70c70aaf906
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: endpoint
+          node_id: endpoint-3bc11c6d6c5e85d7
+      - source_binding_id: binding_interface_primary_service_6584b3f97f8ef70c70aaf906
+        source_id: source_algolia_6584b3f97f8ef70c70aaf906
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: primary-service
+      - source_binding_id: binding_surface_exclusion_no_separate_eligibility_resource_461ed5ae043781a3bd90555b
+        source_id: source_algolia_461ed5ae043781a3bd90555b
+        field_paths:
+          - /role
+          - /rationale
+        target:
+          node_kind: surface_exclusion
+          node_id: no-separate-eligibility-resource
+    surface_exclusions:
+      - exclusion_id: no-separate-eligibility-resource
+        role: eligibility
+        rationale: Applicable access conditions are documented with the service terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-09-19T23:52:20.260Z
