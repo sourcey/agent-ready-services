@@ -74,6 +74,7 @@ declarations:
         uri: https://docsearch.algolia.com/docs/mcp/overview/
         roles:
           - discovery
+          - eligibility
           - pricing
           - authentication
           - descriptor
@@ -221,17 +222,6 @@ declarations:
         target:
           node_kind: interface
           node_id: primary-service
-      - source_binding_id: binding_surface_exclusion_no_separate_eligibility_resource_461ed5ae043781a3bd90555b
-        source_id: source_algolia_461ed5ae043781a3bd90555b
-        field_paths:
-          - /role
-          - /rationale
-        target:
-          node_kind: surface_exclusion
-          node_id: no-separate-eligibility-resource
-    surface_exclusions:
-      - exclusion_id: no-separate-eligibility-resource
-        role: eligibility
-        rationale: Applicable access conditions are documented with the service terms; no separate eligibility resource is declared.
+    surface_exclusions: []
     authority_intent: community
     declared_at: 2026-09-19T23:52:20.260Z
