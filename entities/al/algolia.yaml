@@ -95,7 +95,10 @@ declarations:
         roles:
           - service
         operated_by_participant_id: subject
-        standard_bindings: []
+        standard_bindings:
+          - namespace: mcp
+            version: 2026-07-28
+            relation: implements
     interfaces:
       - interface_id: primary-service
         modality: tool_server
@@ -110,7 +113,10 @@ declarations:
           - resource-6584b3f97f8ef70c
           - resource-821808bf79031a0d
         operated_by_participant_id: subject
-        standard_bindings: []
+        standard_bindings:
+          - namespace: mcp
+            version: 2026-07-28
+            relation: implements
     relations: []
     offer_relations: []
     source_bindings:
@@ -199,6 +205,7 @@ declarations:
           - /transport
           - /roles
           - /operated_by_participant_id
+          - /standard_bindings
         target:
           node_kind: endpoint
           node_id: endpoint-3bc11c6d6c5e85d7
@@ -210,6 +217,7 @@ declarations:
           - /endpoint_ids
           - /resource_ids
           - /operated_by_participant_id
+          - /standard_bindings
         target:
           node_kind: interface
           node_id: primary-service
