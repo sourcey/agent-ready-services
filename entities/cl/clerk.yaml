@@ -1,0 +1,310 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe1p3qgn8mxp3ev5328
+  slug: clerk
+  slug_aliases: []
+  name: Clerk
+  domains:
+    - value: clerk.com
+      role: primary
+      valid_from: 2026-07-27T07:35:54.459Z
+  category: auth-security
+sources:
+  - source_id: source_clerk_backend_overview
+    url: https://clerk.com/docs/reference/backend/overview
+  - source_id: source_clerk_backend_api
+    url: https://clerk.com/docs/reference/backend-api/2026-05-12/description/introduction
+  - source_id: source_clerk_secret_keys
+    url: https://clerk.com/docs/guides/development/clerk-environment-variables
+  - source_id: source_clerk_create_user
+    url: https://clerk.com/docs/reference/backend/user/create-user
+  - source_id: source_clerk_errors
+    url: https://clerk.com/docs/guides/development/errors/backend-api
+  - source_id: source_clerk_limits
+    url: https://clerk.com/docs/guides/how-clerk-works/system-limits
+  - source_id: source_clerk_m2m
+    url: https://clerk.com/docs/guides/development/machine-auth/m2m-tokens
+  - source_id: source_clerk_pricing
+    url: https://clerk.com/pricing
+  - source_id: source_clerk_terms
+    url: https://clerk.com/terms
+  - source_id: source_clerk_signup
+    url: https://dashboard.clerk.com/sign-up
+  - source_id: source_clerk_status
+    url: https://status.clerk.com/
+  - source_id: source_clerk_robots
+    url: https://clerk.com/robots.txt
+  - source_id: source_clerk_llms
+    url: https://clerk.com/llms.txt
+declarations:
+  - declaration_id: declaration_clerk_backend_api_lifecycle
+    scope:
+      product:
+        key: clerk-backend-api
+        name: Clerk Backend API
+      funnel:
+        key: identity-administration-lifecycle
+        name: Identity administration lifecycle
+    assessment_targets:
+      - target_id: manage-application-identities
+        name: Create, inspect, update, and recover application users and sessions
+        interface_ids: [backend-api]
+    participants:
+      - participant_id: clerk
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe1p3qgn8mxp3ev5328
+    resources:
+      - resource_id: backend-overview
+        uri: https://clerk.com/docs/reference/backend/overview
+        roles: [discovery, authentication, provisioning, operations, status, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: backend-api-reference
+        uri: https://clerk.com/docs/reference/backend-api/2026-05-12/description/introduction
+        roles: [discovery, authentication, descriptor, provisioning, operations, status, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings:
+          - { namespace: openapi, version: "3.0.3", relation: describes }
+      - resource_id: secret-key-configuration
+        uri: https://clerk.com/docs/guides/development/clerk-environment-variables
+        roles: [authentication, provisioning, recovery, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: create-user-operation
+        uri: https://clerk.com/docs/reference/backend/user/create-user
+        roles: [provisioning, operations, status, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: backend-api-errors
+        uri: https://clerk.com/docs/guides/development/errors/backend-api
+        roles: [operations, status, recovery, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: rate-limits
+        uri: https://clerk.com/docs/guides/how-clerk-works/system-limits
+        roles: [operations, status, recovery, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: machine-authentication
+        uri: https://clerk.com/docs/guides/development/machine-auth/m2m-tokens
+        roles: [authentication, provisioning, recovery, operations, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: service-pricing
+        uri: https://clerk.com/pricing
+        roles: [pricing, checkout, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://clerk.com/terms
+        roles: [terms, eligibility]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://dashboard.clerk.com/sign-up
+        roles: [access]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: service-status
+        uri: https://status.clerk.com/
+        roles: [status, recovery]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: crawler-policy
+        uri: https://clerk.com/robots.txt
+        roles: [policy]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - resource_id: agent-discovery-index
+        uri: https://clerk.com/llms.txt
+        roles: [discovery, descriptor, documentation]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://dashboard.clerk.com/sign-up
+        transport: http
+        roles: [registration]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+      - endpoint_id: backend-api
+        uri: https://api.clerk.com/v1
+        transport: http
+        roles: [service, status]
+        operated_by_participant_id: clerk
+        standard_bindings:
+          - { namespace: openapi, version: "3.0.3", relation: implements }
+    interfaces:
+      - interface_id: backend-api
+        modality: network_api
+        functions: [service_operation, events]
+        endpoint_ids: [backend-api]
+        resource_ids:
+          - backend-overview
+          - backend-api-reference
+          - create-user-operation
+          - backend-api-errors
+          - rate-limits
+        operated_by_participant_id: clerk
+        standard_bindings:
+          - { namespace: openapi, version: "3.0.3", relation: uses }
+      - interface_id: api-authentication
+        modality: network_api
+        functions: [authentication, recovery]
+        endpoint_ids: [backend-api]
+        resource_ids: [secret-key-configuration, machine-authentication]
+        operated_by_participant_id: clerk
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-backend-api
+        kind: describes
+        from: { node_kind: resource, node_id: backend-api-reference }
+        to: { node_kind: interface, node_id: backend-api }
+      - relation_id: authentication-authenticates-backend-api
+        kind: authenticates
+        from: { node_kind: interface, node_id: api-authentication }
+        to: { node_kind: interface, node_id: backend-api }
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from: { node_kind: resource, node_id: account-signup }
+        to: { node_kind: interface, node_id: api-authentication }
+      - relation_id: user-operation-describes-backend-api
+        kind: describes
+        from: { node_kind: resource, node_id: create-user-operation }
+        to: { node_kind: interface, node_id: backend-api }
+      - relation_id: errors-describe-backend-api
+        kind: describes
+        from: { node_kind: resource, node_id: backend-api-errors }
+        to: { node_kind: interface, node_id: backend-api }
+      - relation_id: limits-describe-backend-api
+        kind: describes
+        from: { node_kind: resource, node_id: rate-limits }
+        to: { node_kind: interface, node_id: backend-api }
+      - relation_id: llms-describes-backend-api
+        kind: describes
+        from: { node_kind: resource, node_id: agent-discovery-index }
+        to: { node_kind: interface, node_id: backend-api }
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: clerk-scope
+        source_id: source_clerk_backend_api
+        target: { node_kind: declaration, node_id: declaration_clerk_backend_api_lifecycle }
+        field_paths: [/scope/product/name, /scope/funnel/name]
+      - source_binding_id: clerk-assessment-target
+        source_id: source_clerk_create_user
+        target: { node_kind: assessment_target, node_id: manage-application-identities }
+        field_paths: [/name, /interface_ids]
+      - source_binding_id: clerk-participant-identity
+        source_id: source_clerk_backend_api
+        target: { node_kind: participant, node_id: clerk }
+        field_paths: [/identity]
+      - source_binding_id: clerk-participant-roles
+        source_id: source_clerk_pricing
+        target: { node_kind: participant, node_id: clerk }
+        field_paths: [/roles]
+      - source_binding_id: clerk-resource-overview
+        source_id: source_clerk_backend_overview
+        target: { node_kind: resource, node_id: backend-overview }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-api-reference
+        source_id: source_clerk_backend_api
+        target: { node_kind: resource, node_id: backend-api-reference }
+        field_paths: [/uri, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: clerk-resource-secret-keys
+        source_id: source_clerk_secret_keys
+        target: { node_kind: resource, node_id: secret-key-configuration }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-create-user
+        source_id: source_clerk_create_user
+        target: { node_kind: resource, node_id: create-user-operation }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-errors
+        source_id: source_clerk_errors
+        target: { node_kind: resource, node_id: backend-api-errors }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-limits
+        source_id: source_clerk_limits
+        target: { node_kind: resource, node_id: rate-limits }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-machine-authentication
+        source_id: source_clerk_m2m
+        target: { node_kind: resource, node_id: machine-authentication }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-pricing
+        source_id: source_clerk_pricing
+        target: { node_kind: resource, node_id: service-pricing }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-terms
+        source_id: source_clerk_terms
+        target: { node_kind: resource, node_id: service-terms }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-signup
+        source_id: source_clerk_signup
+        target: { node_kind: resource, node_id: account-signup }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-status
+        source_id: source_clerk_status
+        target: { node_kind: resource, node_id: service-status }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-robots
+        source_id: source_clerk_robots
+        target: { node_kind: resource, node_id: crawler-policy }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-resource-llms
+        source_id: source_clerk_llms
+        target: { node_kind: resource, node_id: agent-discovery-index }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-endpoint-registration
+        source_id: source_clerk_signup
+        target: { node_kind: endpoint, node_id: registration }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
+      - source_binding_id: clerk-endpoint-backend-api
+        source_id: source_clerk_backend_api
+        target: { node_kind: endpoint, node_id: backend-api }
+        field_paths: [/uri, /transport, /roles, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: clerk-interface-backend-api
+        source_id: source_clerk_backend_api
+        target: { node_kind: interface, node_id: backend-api }
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id, /standard_bindings]
+      - source_binding_id: clerk-interface-authentication
+        source_id: source_clerk_secret_keys
+        target: { node_kind: interface, node_id: api-authentication }
+        field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
+      - source_binding_id: clerk-relation-reference
+        source_id: source_clerk_backend_api
+        target: { node_kind: relation, node_id: reference-describes-backend-api }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: clerk-relation-authentication
+        source_id: source_clerk_secret_keys
+        target: { node_kind: relation, node_id: authentication-authenticates-backend-api }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: clerk-relation-signup
+        source_id: source_clerk_signup
+        target: { node_kind: relation, node_id: signup-precedes-authentication }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: clerk-relation-user-operation
+        source_id: source_clerk_create_user
+        target: { node_kind: relation, node_id: user-operation-describes-backend-api }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: clerk-relation-errors
+        source_id: source_clerk_errors
+        target: { node_kind: relation, node_id: errors-describe-backend-api }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: clerk-relation-limits
+        source_id: source_clerk_limits
+        target: { node_kind: relation, node_id: limits-describe-backend-api }
+        field_paths: [/kind, /from, /to]
+      - source_binding_id: clerk-relation-llms
+        source_id: source_clerk_llms
+        target: { node_kind: relation, node_id: llms-describes-backend-api }
+        field_paths: [/kind, /from, /to]
+    surface_exclusions: []
+    authority_intent: community
+    declared_at: 2026-09-28T00:00:00.000Z
