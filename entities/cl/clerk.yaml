@@ -63,7 +63,7 @@ declarations:
     resources:
       - resource_id: backend-overview
         uri: https://clerk.com/docs/reference/backend/overview
-        roles: [discovery, authentication, provisioning, operations, status, documentation]
+        roles: [access, discovery, authentication, provisioning, operations, status, documentation]
         operated_by_participant_id: clerk
         standard_bindings: []
       - resource_id: backend-api-reference
