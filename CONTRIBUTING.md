@@ -4,6 +4,13 @@ Contributions declare an exact Entity, product, and funnel for independent
 assessment. They never author a Sourcey observation, readiness state, grade,
 certification, or current Report Card.
 
+Accepted public assessment facts may also appear in facts-only datasets,
+including on Hugging Face, for discovery, analysis and possible AI training.
+Sourcey does not export private submission details, evidence captures or
+findings prose in those datasets. See the
+[public data terms](https://sourcey.com/terms) for reuse, attribution and
+corrections.
+
 ## Choose the smallest honest path
 
 1. **Request an assessment** when the Entity is new to Sourcey, you know the
