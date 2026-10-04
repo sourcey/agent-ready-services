@@ -1,0 +1,478 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe4h2ykh2786fd0krzp
+  slug: posthog
+  slug_aliases: []
+  name: PostHog
+  domains:
+    - value: posthog.com
+      role: primary
+      valid_from: 2026-07-27T07:37:32.419Z
+  category: data-analytics
+sources:
+  - source_id: source_posthog_0062bfbf3d0c5960a21d0cb6
+    url: https://posthog.com
+  - source_id: source_posthog_12da7854f07cba9daf29335a
+    url: https://posthog.com/docs/model-context-protocol
+  - source_id: source_posthog_a35798b9d9674b622819f277
+    url: https://posthog.com/docs/model-context-protocol/codex
+  - source_id: source_posthog_6160fd8bae45d52226003031
+    url: https://posthog.com/docs/model-context-protocol/faq
+  - source_id: source_posthog_edec62d894fd29e7e07bce2a
+    url: https://posthog.com/docs/model-context-protocol/tools
+  - source_id: source_posthog_94f53d64fba49fbf1e614738
+    url: https://posthog.com/docs/support
+  - source_id: source_posthog_6d303378263f651c03c024e3
+    url: https://posthog.com/llms.txt
+  - source_id: source_posthog_acc8fbf6b67f1457a8dc5c00
+    url: https://posthog.com/pricing
+  - source_id: source_posthog_c2e09d8935c08c9d377d9680
+    url: https://posthog.com/robots.txt
+  - source_id: source_posthog_3cd55f508ab05c0d9c3e74c8
+    url: https://posthog.com/terms
+  - source_id: source_posthog_637eed619027418092ac589c
+    url: https://us.posthog.com/signup
+  - source_id: source_posthog_e1d07d179c7b6d90c9cd5f52
+    url: https://www.posthogstatus.com/
+declarations:
+  - declaration_id: declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management
+    scope:
+      product:
+        key: posthog-feature-flags
+        name: PostHog Feature Flags
+      funnel:
+        key: free-mcp-feature-flag-management
+        name: Free-plan feature flag management through MCP
+    assessment_targets:
+      - target_id: manage-feature-flags
+        name: Create, inspect and update feature flags through PostHog MCP
+        interface_ids:
+          - posthog-mcp
+    participants:
+      - participant_id: subject
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe4h2ykh2786fd0krzp
+    resources:
+      - resource_id: mcp-guide
+        uri: https://posthog.com/docs/model-context-protocol
+        roles:
+          - discovery
+          - authentication
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: mcp-tools
+        uri: https://posthog.com/docs/model-context-protocol/tools
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: mcp-faq
+        uri: https://posthog.com/docs/model-context-protocol/faq
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: mcp-setup
+        uri: https://posthog.com/docs/model-context-protocol/codex
+        roles:
+          - access
+          - authentication
+          - provisioning
+          - documentation
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://posthog.com/terms
+        roles:
+          - terms
+          - eligibility
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: free-pricing
+        uri: https://posthog.com/pricing
+        roles:
+          - pricing
+          - eligibility
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://us.posthog.com/signup
+        roles:
+          - access
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: support
+        uri: https://posthog.com/docs/support
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: status
+        uri: https://www.posthogstatus.com/
+        roles:
+          - status
+          - recovery
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: crawler-policy
+        uri: https://posthog.com/robots.txt
+        roles:
+          - policy
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - resource_id: agent-index
+        uri: https://posthog.com/llms.txt
+        roles:
+          - discovery
+          - descriptor
+        operated_by_participant_id: subject
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: mcp-server
+        uri: https://mcp.posthog.com/mcp
+        transport: http
+        roles:
+          - service
+          - protected_resource
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - endpoint_id: registration
+        uri: https://us.posthog.com/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: subject
+        standard_bindings: []
+    interfaces:
+      - interface_id: posthog-mcp
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-guide
+          - mcp-tools
+          - mcp-faq
+          - mcp-setup
+        operated_by_participant_id: subject
+        standard_bindings: []
+      - interface_id: account-authentication
+        modality: web_application
+        functions:
+          - authentication
+        endpoint_ids:
+          - registration
+        resource_ids:
+          - account-signup
+          - mcp-setup
+        operated_by_participant_id: subject
+        standard_bindings: []
+    relations:
+      - relation_id: guide-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-guide
+        to:
+          node_kind: interface
+          node_id: posthog-mcp
+      - relation_id: tools-describe-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-tools
+        to:
+          node_kind: interface
+          node_id: posthog-mcp
+      - relation_id: faq-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-faq
+        to:
+          node_kind: interface
+          node_id: posthog-mcp
+      - relation_id: account-authenticates-mcp
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: account-authentication
+        to:
+          node_kind: interface
+          node_id: posthog-mcp
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: binding_declaration_declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management_12da7854f07cba9daf29335a
+        source_id: source_posthog_12da7854f07cba9daf29335a
+        field_paths:
+          - /scope/product/name
+          - /scope/funnel/name
+        target:
+          node_kind: declaration
+          node_id: declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management
+      - source_binding_id: binding_declaration_declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management_acc8fbf6b67f1457a8dc5c00
+        source_id: source_posthog_acc8fbf6b67f1457a8dc5c00
+        field_paths:
+          - /scope/product/name
+          - /scope/funnel/name
+        target:
+          node_kind: declaration
+          node_id: declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management
+      - source_binding_id: binding_participant_subject_0062bfbf3d0c5960a21d0cb6
+        source_id: source_posthog_0062bfbf3d0c5960a21d0cb6
+        field_paths:
+          - /roles
+          - /identity
+        target:
+          node_kind: participant
+          node_id: subject
+      - source_binding_id: binding_assessment_target_manage_feature_flags_12da7854f07cba9daf29335a
+        source_id: source_posthog_12da7854f07cba9daf29335a
+        field_paths:
+          - /name
+          - /interface_ids
+        target:
+          node_kind: assessment_target
+          node_id: manage-feature-flags
+      - source_binding_id: binding_assessment_target_manage_feature_flags_edec62d894fd29e7e07bce2a
+        source_id: source_posthog_edec62d894fd29e7e07bce2a
+        field_paths:
+          - /name
+          - /interface_ids
+        target:
+          node_kind: assessment_target
+          node_id: manage-feature-flags
+      - source_binding_id: binding_resource_mcp_guide_12da7854f07cba9daf29335a
+        source_id: source_posthog_12da7854f07cba9daf29335a
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: mcp-guide
+      - source_binding_id: binding_resource_mcp_tools_edec62d894fd29e7e07bce2a
+        source_id: source_posthog_edec62d894fd29e7e07bce2a
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: mcp-tools
+      - source_binding_id: binding_resource_mcp_faq_6160fd8bae45d52226003031
+        source_id: source_posthog_6160fd8bae45d52226003031
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: mcp-faq
+      - source_binding_id: binding_resource_mcp_setup_a35798b9d9674b622819f277
+        source_id: source_posthog_a35798b9d9674b622819f277
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: mcp-setup
+      - source_binding_id: binding_resource_service_terms_3cd55f508ab05c0d9c3e74c8
+        source_id: source_posthog_3cd55f508ab05c0d9c3e74c8
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: service-terms
+      - source_binding_id: binding_resource_free_pricing_acc8fbf6b67f1457a8dc5c00
+        source_id: source_posthog_acc8fbf6b67f1457a8dc5c00
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: free-pricing
+      - source_binding_id: binding_resource_account_signup_637eed619027418092ac589c
+        source_id: source_posthog_637eed619027418092ac589c
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: account-signup
+      - source_binding_id: binding_resource_support_94f53d64fba49fbf1e614738
+        source_id: source_posthog_94f53d64fba49fbf1e614738
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: support
+      - source_binding_id: binding_resource_status_e1d07d179c7b6d90c9cd5f52
+        source_id: source_posthog_e1d07d179c7b6d90c9cd5f52
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: status
+      - source_binding_id: binding_resource_crawler_policy_c2e09d8935c08c9d377d9680
+        source_id: source_posthog_c2e09d8935c08c9d377d9680
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: crawler-policy
+      - source_binding_id: binding_resource_agent_index_6d303378263f651c03c024e3
+        source_id: source_posthog_6d303378263f651c03c024e3
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: agent-index
+      - source_binding_id: binding_endpoint_mcp_server_12da7854f07cba9daf29335a
+        source_id: source_posthog_12da7854f07cba9daf29335a
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+      - source_binding_id: binding_endpoint_registration_637eed619027418092ac589c
+        source_id: source_posthog_637eed619027418092ac589c
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: endpoint
+          node_id: registration
+      - source_binding_id: binding_interface_posthog_mcp_12da7854f07cba9daf29335a
+        source_id: source_posthog_12da7854f07cba9daf29335a
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: posthog-mcp
+      - source_binding_id: binding_interface_posthog_mcp_edec62d894fd29e7e07bce2a
+        source_id: source_posthog_edec62d894fd29e7e07bce2a
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: posthog-mcp
+      - source_binding_id: binding_interface_posthog_mcp_6160fd8bae45d52226003031
+        source_id: source_posthog_6160fd8bae45d52226003031
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: posthog-mcp
+      - source_binding_id: binding_interface_account_authentication_a35798b9d9674b622819f277
+        source_id: source_posthog_a35798b9d9674b622819f277
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: account-authentication
+      - source_binding_id: binding_relation_guide_describes_mcp_12da7854f07cba9daf29335a
+        source_id: source_posthog_12da7854f07cba9daf29335a
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: guide-describes-mcp
+      - source_binding_id: binding_relation_tools_describe_mcp_edec62d894fd29e7e07bce2a
+        source_id: source_posthog_edec62d894fd29e7e07bce2a
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: tools-describe-mcp
+      - source_binding_id: binding_relation_faq_describes_mcp_6160fd8bae45d52226003031
+        source_id: source_posthog_6160fd8bae45d52226003031
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: faq-describes-mcp
+      - source_binding_id: binding_relation_account_authenticates_mcp_a35798b9d9674b622819f277
+        source_id: source_posthog_a35798b9d9674b622819f277
+        field_paths:
+          - /kind
+          - /from
+          - /to
+        target:
+          node_kind: relation
+          node_id: account-authenticates-mcp
+      - source_binding_id: binding_surface_exclusion_free_plan_no_checkout_12da7854f07cba9daf29335a
+        source_id: source_posthog_12da7854f07cba9daf29335a
+        field_paths:
+          - /role
+          - /rationale
+        target:
+          node_kind: surface_exclusion
+          node_id: free-plan-no-checkout
+      - source_binding_id: binding_surface_exclusion_free_plan_no_checkout_acc8fbf6b67f1457a8dc5c00
+        source_id: source_posthog_acc8fbf6b67f1457a8dc5c00
+        field_paths:
+          - /role
+          - /rationale
+        target:
+          node_kind: surface_exclusion
+          node_id: free-plan-no-checkout
+    surface_exclusions:
+      - exclusion_id: free-plan-no-checkout
+        role: checkout
+        rationale: The scoped free-plan MCP feature-flag path has no checkout; paid usage is a separate upgrade.
+    authority_intent: community
+    declared_at: 2026-10-04T23:00:00.000Z
