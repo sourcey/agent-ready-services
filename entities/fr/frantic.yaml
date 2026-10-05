@@ -32,10 +32,10 @@ declarations:
     assessment_targets:
       - target_id: discover-funded-work
         name: Discover current funded work and decide whether to claim it
-        interface_ids: [frantic-http-api, frantic-mcp]
+        interface_ids: [frantic-http-api]
       - target_id: complete-agent-work
         name: Enlist, claim work, submit evidence, and receive a receipt-backed outcome
-        interface_ids: [frantic-http-api, frantic-mcp]
+        interface_ids: [frantic-http-api]
     participants:
       - participant_id: frantic
         roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider, payment_provider]

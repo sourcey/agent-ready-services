@@ -40,10 +40,10 @@ declarations:
     assessment_targets:
       - target_id: model-discovery
         name: Discover currently available models, capabilities, and prices
-        interface_ids: [model-catalog-api, openrouter-mcp]
+        interface_ids: [model-catalog-api]
       - target_id: model-inference
         name: Submit streaming inference requests with tool calls and handle results
-        interface_ids: [inference-api, openrouter-mcp]
+        interface_ids: [inference-api]
     participants:
       - participant_id: openrouter
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
