@@ -63,22 +63,22 @@ declarations:
         uri: https://posthog.com/docs/model-context-protocol
         roles:
           - discovery
-          - authentication
-          - provisioning
-          - operations
           - documentation
         operated_by_participant_id: subject
         standard_bindings: []
       - resource_id: mcp-tools
         uri: https://posthog.com/docs/model-context-protocol/tools
         roles:
+          - provisioning
           - operations
+          - status
           - documentation
         operated_by_participant_id: subject
         standard_bindings: []
       - resource_id: mcp-faq
         uri: https://posthog.com/docs/model-context-protocol/faq
         roles:
+          - authentication
           - recovery
           - documentation
         operated_by_participant_id: subject
@@ -88,7 +88,6 @@ declarations:
         roles:
           - access
           - authentication
-          - provisioning
           - documentation
         operated_by_participant_id: subject
         standard_bindings: []
