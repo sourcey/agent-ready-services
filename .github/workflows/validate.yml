@@ -4,6 +4,7 @@ on:
   pull_request_target:
 
 permissions:
+  checks: write
   contents: read
   statuses: write
 
@@ -102,6 +103,13 @@ jobs:
             "$RUNNER_TEMP/sourcey-identity-response.json" >/dev/null
           jq -e '.data' "$RUNNER_TEMP/sourcey-identity-response.json" \
             > "$RUNNER_TEMP/sourcey-identity-context.json"
+          identity_context_digest="$(
+            jq -er '.data.context.context_digest
+              | select(test("^sha256:[a-f0-9]{64}$"))' \
+              "$RUNNER_TEMP/sourcey-identity-response.json"
+          )"
+          echo "SOURCEY_IDENTITY_CONTEXT_DIGEST=${identity_context_digest#sha256:}" \
+            >> "$GITHUB_ENV"
       - name: Validate only the changed declaration closure
         env:
           BASE_REVISION: ${{ github.event.pull_request.base.sha }}
@@ -140,6 +148,76 @@ jobs:
             printf 'Commits missing Signed-off-by certification:\n%s\n' "${missing[*]}" >&2
             exit 1
           fi
+      - name: Publish the App-bound validation result for the exact candidate head
+        id: publish-validation-check
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REVISION: ${{ github.event.pull_request.head.sha }}
+          BASE_REVISION: ${{ github.event.pull_request.base.sha }}
+          VALIDATION_CONCLUSION: ${{ job.status == 'success' && 'success' || 'failure' }}
+        run: |
+          verifier_digest="$(<trusted/.github/sourcey-catalog-verifier.sha256)"
+          [[ "$verifier_digest" =~ ^[a-f0-9]{64}$ ]]
+          identity_context_digest="${SOURCEY_IDENTITY_CONTEXT_DIGEST:-$(printf '%064d' 0)}"
+          [[ "$identity_context_digest" =~ ^[a-f0-9]{64}$ ]]
+          external_id="sourcey-validation-v1:${BASE_REVISION}:${HEAD_REVISION}:${verifier_digest}:${identity_context_digest}"
+          echo "SOURCEY_VALIDATION_EXTERNAL_ID=$external_id" >> "$GITHUB_ENV"
+          echo "SOURCEY_VALIDATION_CONCLUSION=$VALIDATION_CONCLUSION" >> "$GITHUB_ENV"
+          checks="$RUNNER_TEMP/sourcey-validation-checks.json"
+          gh api --method GET \
+            "repos/${GITHUB_REPOSITORY}/commits/${HEAD_REVISION}/check-runs" \
+            -f filter=latest -F per_page=100 > "$checks"
+          mapfile -t existing_ids < <(
+            jq -er --arg external_id "$external_id" \
+              '.check_runs[]
+               | select(.name == "sourcey/validation"
+                   and .app.slug == "github-actions"
+                   and .external_id == $external_id)
+               | .id' "$checks"
+          )
+          if [[ "${#existing_ids[@]}" -gt 1 ]]; then
+            echo "Duplicate exact Sourcey validation checks exist." >&2
+            exit 1
+          fi
+          body="$RUNNER_TEMP/sourcey-validation-check.json"
+          jq -n \
+            --arg name sourcey/validation \
+            --arg head_sha "$HEAD_REVISION" \
+            --arg status completed \
+            --arg conclusion "$VALIDATION_CONCLUSION" \
+            --arg external_id "$external_id" \
+            --arg title "Sourcey readiness validation $VALIDATION_CONCLUSION" \
+            --arg summary "Trusted declaration-closure, signed identity-context, and DCO validation for the exact candidate head." \
+            '{name: $name, head_sha: $head_sha, status: $status,
+              conclusion: $conclusion, external_id: $external_id,
+              output: {title: $title, summary: $summary}}' > "$body"
+          if [[ "${#existing_ids[@]}" -eq 1 ]]; then
+            jq 'del(.head_sha)' "$body" > "$body.patch"
+            gh api --method PATCH \
+              "repos/${GITHUB_REPOSITORY}/check-runs/${existing_ids[0]}" \
+              --input "$body.patch" > "$RUNNER_TEMP/sourcey-validation-written.json"
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/check-runs" \
+              --input "$body" > "$RUNNER_TEMP/sourcey-validation-written.json"
+          fi
+          check_id="$(jq -er '.id' "$RUNNER_TEMP/sourcey-validation-written.json")"
+          gh api "repos/${GITHUB_REPOSITORY}/check-runs/${check_id}" \
+            > "$RUNNER_TEMP/sourcey-validation-readback.json"
+          jq -e \
+            --arg head_sha "$HEAD_REVISION" \
+            --arg conclusion "$VALIDATION_CONCLUSION" \
+            --arg external_id "$external_id" \
+            --arg details_url "https://github.com/${GITHUB_REPOSITORY}/runs/${check_id}" \
+            '.name == "sourcey/validation"
+             and .head_sha == $head_sha
+             and .status == "completed"
+             and .conclusion == $conclusion
+             and .external_id == $external_id
+             and .details_url == $details_url
+             and .html_url == $details_url
+             and .app.slug == "github-actions"' \
+            "$RUNNER_TEMP/sourcey-validation-readback.json" >/dev/null
       - name: Publish the exact Sourcey validation result
         if: always()
         env:
