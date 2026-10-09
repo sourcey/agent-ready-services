@@ -21,15 +21,14 @@ sources:
   - { source_id: source_stripe_signup, url: https://dashboard.stripe.com/register }
   - { source_id: source_stripe_terms, url: https://stripe.com/legal/ssa }
   - { source_id: source_stripe_support, url: https://support.stripe.com/ }
+  - source_id: source_stripe_7927b5c9bfb551a369724cf7
+    url: https://docs.stripe.com/api/payment-link/create
 declarations:
-  - declaration_id: declaration_stripe_payments_api_lifecycle
+  - declaration_id: declaration_stripe_stripe_payments_api_payment_create
     scope:
       product: { key: stripe-payments-api, name: Stripe Payments API }
-      funnel: { key: api-payment-lifecycle, name: API payment lifecycle }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and reconcile payments through the Payments API
-        interface_ids: [payments-api]
+      job: { key: payment-create, name: Create a payment link }
+    job_bindings: []
     participants:
       - { participant_id: stripe, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyygma830fqh16kvj744sk1c } }
     resources:
@@ -59,11 +58,7 @@ declarations:
       - { relation_id: payment-intents-create-describes-api, kind: describes, from: { node_kind: resource, node_id: payment-intents-create }, to: { node_kind: interface, node_id: payments-api } }
     offer_relations: []
     source_bindings:
-      - source_binding_id: stripe_assessment_target
-        source_id: source_stripe_api
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: stripe-scope, source_id: source_stripe_api, target: { node_kind: declaration, node_id: declaration_stripe_payments_api_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: stripe-scope, source_id: source_stripe_7927b5c9bfb551a369724cf7, target: { node_kind: declaration, node_id: declaration_stripe_stripe_payments_api_payment_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: stripe-participant, source_id: source_stripe_api, target: { node_kind: participant, node_id: stripe }, field_paths: [/roles, /identity] }
       - { source_binding_id: stripe-resource-reference, source_id: source_stripe_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: stripe-resource-terms, source_id: source_stripe_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

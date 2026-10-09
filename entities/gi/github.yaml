@@ -43,14 +43,11 @@ sources:
   - { source_id: source_github_enterprise_limits, url: https://docs.github.com/en/enterprise-server@3.21/rest/using-the-rest-api/rate-limits-for-the-rest-api }
   - { source_id: source_github_enterprise_token_lifecycle, url: https://docs.github.com/en/enterprise-server@3.21/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation }
 declarations:
-  - declaration_id: declaration_github_rest_repository_operations
+  - declaration_id: declaration_github_github_rest_api_repository_create
     scope:
       product: { key: github-rest-api, name: GitHub REST API }
-      funnel: { key: repository-operations, name: Repository operations }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and manage GitHub repositories through the REST API
-        interface_ids: [repository-api]
+      job: { key: repository-create, name: Create a repository }
+    job_bindings: []
     participants:
       - { participant_id: github, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3xgjjktffez1t34rn } }
     resources:
@@ -123,11 +120,7 @@ declarations:
           node_id: api-authentication
     offer_relations: []
     source_bindings:
-      - source_binding_id: github_assessment_target
-        source_id: source_github_repositories
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: github-scope, source_id: source_github_repositories, target: { node_kind: declaration, node_id: declaration_github_rest_repository_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: github-scope, source_id: source_github_repositories, target: { node_kind: declaration, node_id: declaration_github_github_rest_api_repository_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: github-participant, source_id: source_github_rest, target: { node_kind: participant, node_id: github }, field_paths: [/roles, /identity] }
       - { source_binding_id: github-resource-rest, source_id: source_github_rest, target: { node_kind: resource, node_id: rest-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-resource-api-versions, source_id: source_github_api_versions, target: { node_kind: resource, node_id: api-versions }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -208,14 +201,11 @@ declarations:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-  - declaration_id: declaration_github_enterprise_server_repository_operations
+  - declaration_id: declaration_github_github_enterprise_server_3_21_repository_create
     scope:
       product: { key: github-enterprise-server-3-21, name: GitHub Enterprise Server 3.21 }
-      funnel: { key: repository-operations, name: Repository operations }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and manage repositories on an authorized GitHub Enterprise Server instance through the REST API
-        interface_ids: [enterprise-repository-api]
+      job: { key: repository-create, name: Create a repository }
+    job_bindings: []
     participants:
       - { participant_id: github-enterprise, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3xgjjktffez1t34rn } }
     resources:
@@ -245,8 +235,7 @@ declarations:
       - { relation_id: enterprise-license-precedes-api, kind: precedes, from: { node_kind: resource, node_id: enterprise-license-upload }, to: { node_kind: interface, node_id: enterprise-repository-api } }
     offer_relations: []
     source_bindings:
-      - { source_binding_id: enterprise-scope, source_id: source_github_enterprise_overview, target: { node_kind: declaration, node_id: declaration_github_enterprise_server_repository_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
-      - { source_binding_id: enterprise-target, source_id: source_github_enterprise_repositories, target: { node_kind: assessment_target, node_id: service-use }, field_paths: [/name, /interface_ids] }
+      - { source_binding_id: enterprise-scope, source_id: source_github_enterprise_repositories, target: { node_kind: declaration, node_id: declaration_github_github_enterprise_server_3_21_repository_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: enterprise-participant, source_id: source_github_enterprise_overview, target: { node_kind: participant, node_id: github-enterprise }, field_paths: [/roles, /identity] }
       - { source_binding_id: enterprise-resource-overview, source_id: source_github_enterprise_overview, target: { node_kind: resource, node_id: enterprise-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-terms, source_id: source_github_terms, target: { node_kind: resource, node_id: enterprise-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

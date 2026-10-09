@@ -28,15 +28,14 @@ sources:
     url: https://developers.hubspot.com/docs/api/private-apps
   - source_id: source-readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
     url: https://legal.hubspot.com/terms-of-service
+  - source_id: source_hubspot_fd9190fb7178d0e285073bfe
+    url: https://developers.hubspot.com/docs/api-reference/2026-03/crm/objects/contacts/create-contact
 declarations:
-  - declaration_id: declaration_hubspot_crm_api_integration_lifecycle
+  - declaration_id: declaration_hubspot_hubspot_crm_api_crm_contact_create
     scope:
       product: { key: hubspot-crm-api, name: HubSpot CRM API }
-      funnel: { key: api-integration-lifecycle, name: API integration lifecycle }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and manage HubSpot CRM records through the API
-        interface_ids: [crm-api]
+      job: { key: crm-contact-create, name: Create a contact }
+    job_bindings: []
     participants:
       - { participant_id: hubspot, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3new9gxd18qs3bskh } }
     resources:
@@ -103,11 +102,7 @@ declarations:
           node_id: integration-authentication
     offer_relations: []
     source_bindings:
-      - source_binding_id: hubspot_assessment_target
-        source_id: source_hubspot_api_overview
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: hubspot-scope, source_id: source_hubspot_api_overview, target: { node_kind: declaration, node_id: declaration_hubspot_crm_api_integration_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: hubspot-scope, source_id: source_hubspot_fd9190fb7178d0e285073bfe, target: { node_kind: declaration, node_id: declaration_hubspot_hubspot_crm_api_crm_contact_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: hubspot-participant, source_id: source_hubspot_api_overview, target: { node_kind: participant, node_id: hubspot }, field_paths: [/roles, /identity] }
       - { source_binding_id: hubspot-resource-overview, source_id: source_hubspot_api_overview, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-terms, source_id: source_hubspot_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

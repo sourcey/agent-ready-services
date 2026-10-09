@@ -33,15 +33,14 @@ sources:
   - { source_id: source_cloudflare_public_dns_errors, url: https://developers.cloudflare.com/1.1.1.1/infrastructure/extended-dns-error-codes/ }
   - source_id: source-readiness-2f2f4cb1780d706856af032c028a37b818b8467ad9cdd5253c074a857263724b
     url: https://developers.cloudflare.com/workers/observability/logs/workers-logs
+  - source_id: source_cloudflare_d527bfcbf9e00114f62ec845
+    url: https://developers.cloudflare.com/api/resources/r2/subresources/buckets/methods/create/
 declarations:
-  - declaration_id: declaration_cloudflare_api_resource_management
+  - declaration_id: declaration_cloudflare_cloudflare_developer_platform_bucket_create
     scope:
       product: { key: cloudflare-developer-platform, name: Cloudflare Developer Platform }
-      funnel: { key: api-resource-management, name: API resource management }
-    assessment_targets:
-      - target_id: service-use
-        name: Upload and manage Cloudflare Worker scripts through the API
-        interface_ids: [resource-api]
+      job: { key: bucket-create, name: Create a storage bucket }
+    job_bindings: []
     participants:
       - { participant_id: cloudflare, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
@@ -113,11 +112,7 @@ declarations:
           node_id: resource-api
     offer_relations: []
     source_bindings:
-      - source_binding_id: cloudflare_assessment_target
-        source_id: source_cloudflare_api
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: cloudflare-scope, source_id: source_cloudflare_api, target: { node_kind: declaration, node_id: declaration_cloudflare_api_resource_management }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: cloudflare-scope, source_id: source_cloudflare_d527bfcbf9e00114f62ec845, target: { node_kind: declaration, node_id: declaration_cloudflare_cloudflare_developer_platform_bucket_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: cloudflare-participant, source_id: source_cloudflare_api, target: { node_kind: participant, node_id: cloudflare }, field_paths: [/roles, /identity] }
       - { source_binding_id: cloudflare-resource-reference, source_id: source_cloudflare_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: cloudflare-resource-terms, source_id: source_cloudflare_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -195,14 +190,11 @@ declarations:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
-  - declaration_id: declaration_cloudflare_public_dns_over_https
+  - declaration_id: declaration_cloudflare_cloudflare_public_dns_dns_resolve
     scope:
       product: { key: cloudflare-public-dns, name: Cloudflare 1.1.1.1 Public DNS }
-      funnel: { key: dns-over-https-query, name: DNS over HTTPS query }
-    assessment_targets:
-      - target_id: service-use
-        name: Resolve public DNS records through DNS over HTTPS
-        interface_ids: [doh-api]
+      job: { key: dns-resolve, name: Resolve a name }
+    job_bindings: []
     participants:
       - { participant_id: cloudflare-public-dns, roles: [subject, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
@@ -223,8 +215,7 @@ declarations:
       - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: extended-errors }, to: { node_kind: interface, node_id: doh-api } }
     offer_relations: []
     source_bindings:
-      - { source_binding_id: public-dns-scope, source_id: source_cloudflare_public_dns_overview, target: { node_kind: declaration, node_id: declaration_cloudflare_public_dns_over_https }, field_paths: [/scope/product/name, /scope/funnel/name] }
-      - { source_binding_id: public-dns-target, source_id: source_cloudflare_public_dns_doh, target: { node_kind: assessment_target, node_id: service-use }, field_paths: [/name, /interface_ids] }
+      - { source_binding_id: public-dns-scope, source_id: source_cloudflare_public_dns_json, target: { node_kind: declaration, node_id: declaration_cloudflare_cloudflare_public_dns_dns_resolve }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: public-dns-participant, source_id: source_cloudflare_public_dns_doh, target: { node_kind: participant, node_id: cloudflare-public-dns }, field_paths: [/roles, /identity] }
       - { source_binding_id: public-dns-resource-overview, source_id: source_cloudflare_public_dns_overview, target: { node_kind: resource, node_id: public-dns-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: public-dns-resource-terms, source_id: source_cloudflare_public_dns_terms, target: { node_kind: resource, node_id: public-dns-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

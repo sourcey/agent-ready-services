@@ -24,14 +24,11 @@ sources:
   - { source_id: source_notion_support, url: https://www.notion.com/help/category/connections/all }
   - { source_id: source_notion_billing_checkout, url: https://www.notion.com/help/upgrade-or-downgrade-your-plan }
 declarations:
-  - declaration_id: declaration_notion_api_integration_lifecycle
+  - declaration_id: declaration_notion_notion_api_workspace_page_create
     scope:
       product: { key: notion-api, name: Notion API }
-      funnel: { key: api-integration-lifecycle, name: API integration lifecycle }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and manage workspace pages through the Notion API
-        interface_ids: [content-api]
+      job: { key: workspace-page-create, name: Create a page }
+    job_bindings: []
     participants:
       - { participant_id: notion, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tbppvx69rh3v86sk2 } }
     resources:
@@ -59,11 +56,7 @@ declarations:
       - { relation_id: status-describes-api, kind: describes, from: { node_kind: resource, node_id: status-codes }, to: { node_kind: interface, node_id: content-api } }
     offer_relations: []
     source_bindings:
-      - source_binding_id: notion_assessment_target
-        source_id: source_notion_overview
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: notion-scope, source_id: source_notion_overview, target: { node_kind: declaration, node_id: declaration_notion_api_integration_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: notion-scope, source_id: source_notion_create_page, target: { node_kind: declaration, node_id: declaration_notion_notion_api_workspace_page_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: notion-participant, source_id: source_notion_overview, target: { node_kind: participant, node_id: notion }, field_paths: [/roles, /identity] }
       - { source_binding_id: notion-resource-overview, source_id: source_notion_overview, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: notion-resource-terms, source_id: source_notion_billing_checkout, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

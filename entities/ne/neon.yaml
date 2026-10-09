@@ -25,14 +25,11 @@ sources:
   - source_id: source-readiness-a75ce7955cfd5f96e15192ecd4ffb6cb37ec27d3c666eca1b31e8b3466a289d8
     url: https://neon.com/docs/introduction/manage-billing
 declarations:
-  - declaration_id: declaration_neon_api_project_database_lifecycle
+  - declaration_id: declaration_neon_neon_api_database_create
     scope:
       product: { key: neon-api, name: Neon API }
-      funnel: { key: project-database-lifecycle, name: Project and database lifecycle }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and manage Neon projects and databases through the API
-        interface_ids: [project-api]
+      job: { key: database-create, name: Create a database deployment }
+    job_bindings: []
     participants:
       - { participant_id: neon, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe42ws3zbxkkaybx2ea } }
     resources:
@@ -73,11 +70,7 @@ declarations:
       - { relation_id: projects-describe-api, kind: describes, from: { node_kind: resource, node_id: create-project }, to: { node_kind: interface, node_id: project-api } }
     offer_relations: []
     source_bindings:
-      - source_binding_id: neon_assessment_target
-        source_id: source_neon_api
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: neon-scope, source_id: source_neon_api, target: { node_kind: declaration, node_id: declaration_neon_api_project_database_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: neon-scope, source_id: source_neon_create_project, target: { node_kind: declaration, node_id: declaration_neon_neon_api_database_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: neon-participant, source_id: source_neon_api, target: { node_kind: participant, node_id: neon }, field_paths: [/roles, /identity] }
       - { source_binding_id: neon-resource-reference, source_id: source_neon_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: neon-resource-terms, source_id: source_neon_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

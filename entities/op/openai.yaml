@@ -22,15 +22,16 @@ sources:
   - { source_id: source_openai_prepaid_billing, url: https://help.openai.com/en/articles/8264644-how-can-i-set-up-prepaid-billing }
   - source_id: source-readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
     url: https://help.openai.com/en/articles/4936850-best-practices-for-api-key-safety
+  - source_id: source_openai_90f2bf11e4fb71c8f42ae128
+    url: https://developers.openai.com/api/docs/guides/function-calling
+  - source_id: source_openai_f9a3ddf07408f8c10367dde5
+    url: https://developers.openai.com/api/reference/resources/models/methods/list
 declarations:
-  - declaration_id: declaration_openai_api_service_lifecycle
+  - declaration_id: declaration_openai_openai_api_model_chat_stream_tool
     scope:
       product: { key: openai-api, name: OpenAI API }
-      funnel: { key: api-service-lifecycle, name: API service lifecycle }
-    assessment_targets:
-      - target_id: service-use
-        name: Submit Responses API requests and receive model output
-        interface_ids: [api-service]
+      job: { key: model-chat-stream-tool, name: Stream a completion with a tool call }
+    job_bindings: []
     participants:
       - participant_id: openai
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -75,11 +76,8 @@ declarations:
           node_id: api-authentication
     offer_relations: []
     source_bindings:
-      - source_binding_id: openai_assessment_target
-        source_id: source_openai_api_reference
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: openai-scope, source_id: source_openai_api_reference, target: { node_kind: declaration, node_id: declaration_openai_api_service_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: openai-scope, source_id: source_openai_90f2bf11e4fb71c8f42ae128, target: { node_kind: declaration, node_id: declaration_openai_openai_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: binding_declaration_declaration_openai_openai_api_model_chat_stream_tool_f9a3ddf07408f8c10367dde5, source_id: source_openai_f9a3ddf07408f8c10367dde5, target: { node_kind: declaration, node_id: declaration_openai_openai_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: openai-participant, source_id: source_openai_api_reference, target: { node_kind: participant, node_id: openai }, field_paths: [/roles, /identity] }
       - { source_binding_id: openai-resource-reference, source_id: source_openai_api_reference, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-terms, source_id: source_openai_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
