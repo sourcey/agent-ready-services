@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Claim or correct an Entity record
+  - name: Claim or correct a company record
     url: https://sourcey.com/support
-    about: Find the exact record and prove authority before making Entity-authoritative declarations.
-  - name: Browse Agent Readiness Report Cards
+    about: Find the company's Sourcey record, and prove control of its domain before listing with Entity authority.
+  - name: Browse Agent Readiness report cards
     url: https://sourcey.com/agent-readiness
-    about: Inspect released, evidence-bound Sourcey Report Cards.
+    about: See the report cards Sourcey has published.
