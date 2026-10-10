@@ -1,5 +1,5 @@
 name: Report outdated evidence or request a rerun
-description: Identify one released Report Card finding that may no longer reflect the tested funnel.
+description: Point to one report card step that may no longer match the service.
 title: "Evidence review: "
 labels:
   - evidence-review
@@ -7,28 +7,35 @@ body:
   - type: input
     id: report_card
     attributes:
-      label: Sourcey Report Card URL
+      label: Sourcey report card URL
     validations:
       required: true
-  - type: input
-    id: finding
+  - type: dropdown
+    id: step
     attributes:
-      label: Finding or stage
-      description: Name the exact finding, such as signup being blocked by CAPTCHA.
+      label: Step
+      options:
+        - Discover
+        - Delegation
+        - Pay
+        - Job
+        - Confirm
+        - Sustain
+        - Onboard level
     validations:
       required: true
   - type: textarea
     id: changed
     attributes:
       label: What changed
-      description: Explain why the released evidence may be stale or why a rerun is useful.
+      description: Explain what the service does now, and why the card may be out of date or a rerun would help.
     validations:
       required: true
   - type: textarea
     id: public_sources
     attributes:
       label: Public supporting URLs
-      description: Include current public URLs. Do not upload credentials, personal data, or authenticated captures.
+      description: Current public URLs only. Do not include keys, tokens, personal data or captures from a signed-in session.
     validations:
       required: true
   - type: dropdown
@@ -37,7 +44,7 @@ body:
       label: Your relationship
       options:
         - Community reporter or customer
-        - Employee or authorized representative of the Entity
+        - Employee or authorized representative of the company
         - Sourcey maintainer
     validations:
       required: true

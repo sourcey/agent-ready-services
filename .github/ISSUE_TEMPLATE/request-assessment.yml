@@ -1,94 +1,98 @@
-name: Request an assessment
-description: Propose one exact Entity, service, product, and funnel for independent Agent Readiness assessment.
-title: "Assessment request: "
+name: Request a listing
+description: Ask Sourcey to list one product and the job an agent should be able to do with it.
+title: "Listing request: "
 labels:
   - assessment-request
 body:
   - type: markdown
     attributes:
       value: |
-        A request is not a readiness claim. Do not include credentials, personal data, private captures, or unpublished material.
+        A request is not a readiness claim. Do not include keys, tokens, personal data, captures from a signed-in session or unpublished material.
   - type: input
     id: entity
     attributes:
-      label: Entity
-      description: The public party responsible for the service or product.
+      label: Company
+      description: The public company or organization responsible for the product.
     validations:
       required: true
   - type: input
     id: product
     attributes:
-      label: Product or service
-      description: The exact product, API, platform, or externally obtainable service.
+      label: Product
+      description: The exact product, API, platform or service an agent would use.
     validations:
       required: true
-  - type: input
-    id: funnel
+  - type: dropdown
+    id: job
     attributes:
-      label: Funnel
-      description: The exact service-access or operating journey to assess, such as API resource management or workspace integration.
+      label: Job
+      description: The job from Sourcey's job library for this kind of service. Choose "None of these fit" if no job matches.
+      options:
+        - bounty-claim (Claim a bounty)
+        - bucket-create (Create a storage bucket)
+        - chat-message-post (Post a message)
+        - crm-contact-create (Create a contact)
+        - database-create (Create a database deployment)
+        - deployment-create (Create a deployment)
+        - dns-resolve (Resolve a name)
+        - email-send (Send an email)
+        - error-event-report (Report an error)
+        - feature-flag-create (Create a feature flag)
+        - model-chat-stream-tool (Stream a completion with a tool call)
+        - monitor-create (Create a monitor)
+        - payment-create (Create a payment link)
+        - repository-create (Create a repository)
+        - search-record-find (Find a record by search)
+        - sms-send (Send a text message)
+        - user-create (Create a user)
+        - vector-upsert-query (Find a vector by query)
+        - workspace-page-create (Create a page)
+        - None of these fit
     validations:
       required: true
   - type: textarea
-    id: useful_action
+    id: documentation
     attributes:
-      label: Essential useful action
-      description: Name the real outcome an authorized agent should be able to complete, such as create and recover a database or send and inspect a message.
+      label: Documentation, terms and pricing
+      description: Public HTTPS URLs that describe the product, its terms and what it costs.
     validations:
       required: true
   - type: textarea
-    id: discovery_terms_pricing
+    id: interface
     attributes:
-      label: Discovery, terms, eligibility, and pricing
-      description: Public HTTPS URLs an agent can use to find the service and decide applicable commitment, access conditions, and cost.
+      label: How an agent does the job
+      description: Public URLs for the API reference, MCP server, CLI or other interface an agent would use, and the endpoint it calls if one is published.
     validations:
       required: true
   - type: textarea
-    id: access_authentication
+    id: access
     attributes:
-      label: Access and Authentication
-      description: Public signup, authorization, token, API-key, credential lifecycle, delegated identity, CAPTCHA, phone, or other access-boundary URLs and notes.
-  - type: textarea
-    id: payment
-    attributes:
-      label: Payment
-      description: Public pricing, checkout, billing API, payment-protocol, or explicit no-charge material when payment is part of this service funnel.
-  - type: textarea
-    id: provisioning
-    attributes:
-      label: Provisioning
-      description: Public create, activate, completion-status, credential-delivery, or bounded-delay resources and endpoints.
-  - type: textarea
-    id: operation_recovery
-    attributes:
-      label: Operation, errors, and recovery
-      description: Public service interfaces, API or tool endpoints, inputs and outputs, limits, errors, retries, idempotency, reconciliation, and recovery material.
-    validations:
-      required: true
+      label: Sign-up, keys and payment
+      description: Public URLs for signing up, getting a key or login, OAuth, payment or billing, if the job needs them.
   - type: textarea
     id: published_standards
     attributes:
       label: Published standards
-      description: Exact standard names, versions, requirement documents, and implementation descriptors such as OpenAPI, MCP, A2A, OAuth or OIDC, Web Bot Auth, ACP, UCP, AP2, or x402. Leave blank when none is declared.
+      description: Exact standards and versions the service publishes, such as OpenAPI, MCP, OAuth, OpenID Connect or x402. Leave blank when none is declared.
   - type: input
     id: sourcey_record
     attributes:
-      label: Existing Sourcey Entity or Offer URL
-      description: Include it when this Entity or an exact related Offer already appears in Sourcey.
+      label: Existing Sourcey record
+      description: The company's Sourcey URL, if it already has one.
   - type: dropdown
     id: relationship
     attributes:
       label: Your relationship
       options:
         - Community contributor or customer
-        - Employee or authorized representative of the Entity
+        - Employee or authorized representative of the company
         - Sourcey maintainer
     validations:
       required: true
   - type: textarea
     id: reason
     attributes:
-      label: Why this funnel should be assessed
+      label: Why list this service
     validations:
       required: true
   - type: checkboxes

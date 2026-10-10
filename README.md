@@ -1,96 +1,102 @@
-<h1 align="center">Agent-ready services, APIs and operating funnels</h1>
+<h1 align="center">Agent-ready services</h1>
 
 <p align="center">
-  <b>Open declarations. Independent Agent Readiness Report Cards.</b><br>
-  <sub><em>Not every listed service is ready. Every published rating is evidence-bound.</em></sub>
+  <b>Open listings of services and the job an agent should be able to do with each.</b><br>
+  <sub><em>A listing is not a rating. Sourcey checks each service and publishes what it found.</em></sub>
 </p>
 
 <p align="center">
-  <a href="https://sourcey.com/agent-readiness">Browse Report Cards</a> ·
+  <a href="https://sourcey.com/agent-readiness">Browse report cards</a> ·
   <a href="https://sourcey.com/agent-readiness.json">agent-readiness.json</a> ·
   <a href="https://sourcey.com/companies">Companies</a> ·
   <a href="CONTRIBUTING.md">Contribution guide</a> ·
-  <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml">Request an assessment</a> ·
+  <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml">Request a listing</a> ·
   <a href="https://sourcey.com/support">Claim or correct a record</a> ·
   <a href="https://github.com/sourcey/agent-ready-services/issues/new?template=report-outdated.yml">Report outdated evidence</a>
 </p>
 
 ---
 
-Can an AI agent discover a service, understand the commitment, obtain
-authorized access, pay when required, provision what it needs, and use the
-service safely?
+Can an AI agent do a service's job on its own: create a repository, send a
+text message, stream a completion that calls a tool?
 
-This repository is the open contribution front door for answering that
-question. Each Entity file uses Sourcey's shared identity envelope and declares
-one or more exact product funnels, essential service targets, public resources, callable
-endpoints, actors, interfaces, and exact standard bindings.
+This repository lists services for Sourcey to check. Each file describes one
+company. Each listing in it names one product and one job from Sourcey's job
+library, and the public pages, endpoints and interfaces a person already knows
+about. Sourcey runs the job against the service and publishes the result as
+an [Agent Readiness report card](https://sourcey.com/agent-readiness) on the
+company's [Sourcey record](https://sourcey.com/companies).
 
-Sourcey assesses those declarations independently. The resulting
-[Agent Readiness Report Card](https://sourcey.com/agent-readiness) belongs to
-one Entity, product, and funnel, not vaguely to an entire company. Published
-cards appear on that company's [Sourcey record](https://sourcey.com/companies),
-alongside its other capabilities, offers and evidence. A declaration here is
-not itself a published assessment or grade.
+A card belongs to one company, one product and one job. GitHub REST API and
+GitHub Enterprise Server are listed separately, each with the job "Create a
+repository".
 
-## What a Report Card covers
+## What a report card shows
 
-| Stage | Questions the assessment can answer |
+Sourcey follows the job along six steps:
+
+| Step | What Sourcey checks |
 | --- | --- |
-| Evaluate | Can an agent find the exact service and decide its terms, eligibility, and cost from stable readable material? |
-| Sign up | Can an agent begin access, operate the controls, cross any CAPTCHA or phone boundary lawfully, and obtain scoped identity authority? |
-| Pay | When payment applies, is the commitment disclosed and can checkout and payment authorization complete through safe, resumable boundaries? |
-| Provision | Can provisioning start, deliver usable access material, and expose a bounded, reconcilable result? |
-| Operate | Can an agent use every essential service target with scoped authentication, stable operation and failure contracts, and supported credential recovery? |
+| Discover | Can an agent find the service's endpoint from the service's own published descriptors? |
+| Delegation | Can the agent get its own key or login, or does a person have to hand one over? |
+| Pay | When the job costs money, can the agent pay on its own? |
+| Job | Does the job itself complete through the service's interface? |
+| Confirm | Does a bad request get a clear, typed error the agent can read? |
+| Sustain | Can the agent renew and revoke its own key? |
 
-The public card leads with the overall grade, the primary supported finding,
-and plain-language context—for example, “Blocked by CAPTCHA at sign up.” It
-shows each stage and the specific Ready, Limited, Blocked, or Not applicable
-findings that compose the grade. Every conclusion remains tied to exact
-evidence, method, tested surface, and date. Missing, failed, stale, or
-contradictory evidence makes a profile unrated; Not applicable must itself be
-established by evidence.
+The card gives a letter from A+ to F. A+ means the agent, or a decision you
+made as its principal, did every step. Lower letters mean a person had to step
+in: once at setup, to keep a key alive, or on every run. D and F mean the
+service refused the agent's key or payment, or the job itself. The card also
+gives an Onboard level from 1 (no sign-up needed) to 6 (talk to sales first)
+for how an agent gets started, and it names every step that has not been
+checked yet.
+
+A service that is only listed has had no job run yet. Its card shows a dash,
+says "The job has not run yet." and shows what discovery found. The job runs
+once a job binding exists. A binding says exactly how one interface performs
+the job, and it can come from the vendor or from Sourcey. The next run rates
+the job.
 
 ## What lives here
 
-Only source declarations live here:
+Only listings live here:
 
-- shared Entity identity plus repository-specific public sources;
-- an exact product and service-access/operating funnel with essential targets;
-- declared participants, resources, endpoints, interfaces, and their relations;
-- source-bound surface exclusions that explain an omitted assessment surface
-  without claiming a result;
-- exact standard/version bindings and field-level source bindings;
-- optional explicit relations to existing Sourcey Offers; and
-- an Entity-authority or community request for independent assessment.
+- the company's shared Sourcey identity and the public sources the listing
+  cites;
+- each product and its job from the library;
+- the participants, resources, endpoints and interfaces an agent would use,
+  and how they relate;
+- surface exclusions, which say why a contributor left a surface out;
+- standard bindings and a source for every field;
+- optional relations to existing Sourcey Offers;
+- optional job bindings, for vendors who want their job run now.
 
-This repository does **not** contain observations, screenshots, private
-evidence, stage outcomes, grades, freshness projections, generated indexes, or
-release state. A merged declaration is an assessment trigger, not a rating or
-endorsement. Sourcey's Catalog contracts, evidence pipeline, policy, and
-release ledger remain the authority for every published Report Card and its
-history.
+Nothing else belongs here: no run records, captures, step outcomes, letters,
+credentials, freshness data, generated indexes or release state. A merged
+listing asks Sourcey to run the job. It is not a rating or an endorsement.
+Sourcey's Catalog holds every published card and its history.
 
 ## Add or improve a service
 
-Use [CONTRIBUTING.md](CONTRIBUTING.md) for the request path and advanced
-multi-participant or multi-interface declarations. New identities are
-allocated against Sourcey's existing Entity authority before a declaration is
-merged, so the same organization or service has one stable identity across
-catalogs without making an Offer part of a readiness profile.
+[CONTRIBUTING.md](CONTRIBUTING.md) shows a listing first, then how to add a job
+binding. If you know the service but not the file format, open a
+[listing request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
+instead. Sourcey checks every company against its existing identity records
+before a listing merges, so one company has one identity across all of
+Sourcey.
 
-After a declaration is merged, it enters private scope and evidence review.
-Publication happens only when the evidence floor is met. An Entity operator can then
-claim the exact profile, fix a blocker, submit a correction, or request a
-rerun. A stronger released card creates a permanent, citable improvement
-history without rewriting the original evidence.
+After a listing merges, Sourcey reads the merged commit and runs discovery,
+then the job once a binding exists. A company can then claim its card, fix
+what blocked the agent and ask for a rerun. Each published card keeps its
+history, so an improvement never rewrites the earlier evidence.
 
 ## Licence
 
-Entity declarations are [CC BY 4.0](DATA-LICENSE.md). Documentation and
-repository metadata are [MIT](LICENSE). Third-party names and marks remain the
-property of their owners.
+Listings are [CC BY 4.0](DATA-LICENSE.md). Documentation and repository
+metadata are [MIT](LICENSE). Third-party names and marks remain the property
+of their owners.
 
 ---
 
-<p align="center">Know a service agents should be able to use? <a href="CONTRIBUTING.md">Declare the exact funnel.</a></p>
+<p align="center">Know a service agents should be able to use? <a href="CONTRIBUTING.md">List it and its job.</a></p>
