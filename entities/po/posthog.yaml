@@ -35,19 +35,15 @@ sources:
   - source_id: source_posthog_e1d07d179c7b6d90c9cd5f52
     url: https://www.posthogstatus.com/
 declarations:
-  - declaration_id: declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management
+  - declaration_id: declaration_posthog_posthog_feature_flags_feature_flag_create
     scope:
       product:
         key: posthog-feature-flags
         name: PostHog Feature Flags
-      funnel:
-        key: free-mcp-feature-flag-management
-        name: Free-plan feature flag management through MCP
-    assessment_targets:
-      - target_id: manage-feature-flags
-        name: Create, inspect and update feature flags through PostHog MCP
-        interface_ids:
-          - posthog-mcp
+      job:
+        key: feature-flag-create
+        name: Create a feature flag
+    job_bindings: []
     participants:
       - participant_id: subject
         roles:
@@ -214,22 +210,14 @@ declarations:
           node_id: posthog-mcp
     offer_relations: []
     source_bindings:
-      - source_binding_id: binding_declaration_declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management_12da7854f07cba9daf29335a
-        source_id: source_posthog_12da7854f07cba9daf29335a
+      - source_binding_id: binding_declaration_declaration_posthog_posthog_feature_flags_feature_flag_create_edec62d894fd29e7e07bce2a
+        source_id: source_posthog_edec62d894fd29e7e07bce2a
         field_paths:
           - /scope/product/name
-          - /scope/funnel/name
+          - /scope/job/name
         target:
           node_kind: declaration
-          node_id: declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management
-      - source_binding_id: binding_declaration_declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management_acc8fbf6b67f1457a8dc5c00
-        source_id: source_posthog_acc8fbf6b67f1457a8dc5c00
-        field_paths:
-          - /scope/product/name
-          - /scope/funnel/name
-        target:
-          node_kind: declaration
-          node_id: declaration_posthog_posthog_feature_flags_free_mcp_feature_flag_management
+          node_id: declaration_posthog_posthog_feature_flags_feature_flag_create
       - source_binding_id: binding_participant_subject_0062bfbf3d0c5960a21d0cb6
         source_id: source_posthog_0062bfbf3d0c5960a21d0cb6
         field_paths:
@@ -238,22 +226,6 @@ declarations:
         target:
           node_kind: participant
           node_id: subject
-      - source_binding_id: binding_assessment_target_manage_feature_flags_12da7854f07cba9daf29335a
-        source_id: source_posthog_12da7854f07cba9daf29335a
-        field_paths:
-          - /name
-          - /interface_ids
-        target:
-          node_kind: assessment_target
-          node_id: manage-feature-flags
-      - source_binding_id: binding_assessment_target_manage_feature_flags_edec62d894fd29e7e07bce2a
-        source_id: source_posthog_edec62d894fd29e7e07bce2a
-        field_paths:
-          - /name
-          - /interface_ids
-        target:
-          node_kind: assessment_target
-          node_id: manage-feature-flags
       - source_binding_id: binding_resource_mcp_guide_12da7854f07cba9daf29335a
         source_id: source_posthog_12da7854f07cba9daf29335a
         field_paths:

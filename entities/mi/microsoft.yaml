@@ -41,22 +41,18 @@ sources:
   - { source_id: source_microsoft_billing_checkout, url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card }
   - source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
     url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription
+  - source_id: source_microsoft_832a71439f1525fb0a21bd41
+    url: https://learn.microsoft.com/en-us/rest/api/storagerp/blob-containers/create?view=rest-storagerp-2026-09-01
 declarations:
-  - declaration_id: declaration_microsoft_azure_api_resource_management
+  - declaration_id: declaration_microsoft_microsoft_azure_bucket_create
     scope:
       product:
         key: microsoft-azure
         name: Microsoft Azure
-      funnel:
-        key: api-resource-management
-        name: API resource management
-    assessment_targets:
-      - target_id: service-use
-        name: Create and reconcile Azure resource groups through the API
-        interface_ids: [azure-resource-manager]
-      - target_id: cost-visibility
-        name: Microsoft Azure cost visibility
-        interface_ids: [pricing-and-cost]
+      job:
+        key: bucket-create
+        name: Create a storage bucket
+    job_bindings: []
     participants:
       - participant_id: microsoft
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -220,18 +216,10 @@ declarations:
         to: { node_kind: interface, node_id: pricing-and-cost }
     offer_relations: []
     source_bindings:
-      - source_binding_id: microsoft_cost_visibility_target
-        source_id: source_azure_retail_prices_api
-        target: { node_kind: assessment_target, node_id: cost-visibility }
-        field_paths: [/name, /interface_ids]
-      - source_binding_id: microsoft_assessment_target
-        source_id: source_azure_resource_manager_rest
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
       - source_binding_id: microsoft-declaration-scope
-        source_id: source_azure_resource_manager_rest
-        target: { node_kind: declaration, node_id: declaration_microsoft_azure_api_resource_management }
-        field_paths: [/scope/product/name, /scope/funnel/name]
+        source_id: source_microsoft_832a71439f1525fb0a21bd41
+        target: { node_kind: declaration, node_id: declaration_microsoft_microsoft_azure_bucket_create }
+        field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: microsoft-participant
         source_id: source_azure_rest_api
         target: { node_kind: participant, node_id: microsoft }

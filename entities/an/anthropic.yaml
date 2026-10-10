@@ -34,14 +34,11 @@ sources:
     url: https://support.claude.com/en/articles/8114535-where-can-i-go-for-claude-api-support-and-assistance
   - { source_id: source_anthropic_billing_checkout, url: https://support.claude.com/en/articles/8977456-how-do-i-pay-for-my-claude-api-usage }
 declarations:
-  - declaration_id: declaration_anthropic_api_service_lifecycle
+  - declaration_id: declaration_anthropic_anthropic_api_model_chat_stream_tool
     scope:
       product: { key: anthropic-api, name: Anthropic API }
-      funnel: { key: api-service-lifecycle, name: API service lifecycle }
-    assessment_targets:
-      - target_id: service-use
-        name: Submit Messages API requests and receive model responses
-        interface_ids: [api-service]
+      job: { key: model-chat-stream-tool, name: Stream a completion with a tool call }
+    job_bindings: []
     participants:
       - participant_id: anthropic
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -157,11 +154,7 @@ declarations:
         to: { node_kind: interface, node_id: api-service }
     offer_relations: []
     source_bindings:
-      - source_binding_id: anthropic_assessment_target
-        source_id: source_anthropic_api_overview
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: anthropic-scope, source_id: source_anthropic_api_overview, target: { node_kind: declaration, node_id: declaration_anthropic_api_service_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: anthropic-scope, source_id: source_anthropic_messages_create, target: { node_kind: declaration, node_id: declaration_anthropic_anthropic_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: anthropic-participant, source_id: source_anthropic_api_overview, target: { node_kind: participant, node_id: anthropic }, field_paths: [/roles, /identity] }
       - { source_binding_id: anthropic-resource-overview, source_id: source_anthropic_api_overview, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-resource-terms, source_id: source_anthropic_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

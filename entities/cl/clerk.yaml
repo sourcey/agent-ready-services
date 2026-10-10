@@ -37,18 +37,15 @@ sources:
   - source_id: source_clerk_llms
     url: https://clerk.com/llms.txt
 declarations:
-  - declaration_id: declaration_clerk_backend_api_lifecycle
+  - declaration_id: declaration_clerk_clerk_backend_api_user_create
     scope:
       product:
         key: clerk-backend-api
         name: Clerk Backend API
-      funnel:
-        key: identity-administration-lifecycle
-        name: Identity administration lifecycle
-    assessment_targets:
-      - target_id: manage-application-identities
-        name: Create, inspect, update, and recover application users and sessions
-        interface_ids: [backend-api]
+      job:
+        key: user-create
+        name: Create a user
+    job_bindings: []
     participants:
       - participant_id: clerk
         roles:
@@ -194,13 +191,9 @@ declarations:
     offer_relations: []
     source_bindings:
       - source_binding_id: clerk-scope
-        source_id: source_clerk_backend_api
-        target: { node_kind: declaration, node_id: declaration_clerk_backend_api_lifecycle }
-        field_paths: [/scope/product/name, /scope/funnel/name]
-      - source_binding_id: clerk-assessment-target
         source_id: source_clerk_create_user
-        target: { node_kind: assessment_target, node_id: manage-application-identities }
-        field_paths: [/name, /interface_ids]
+        target: { node_kind: declaration, node_id: declaration_clerk_clerk_backend_api_user_create }
+        field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: clerk-participant-identity
         source_id: source_clerk_backend_api
         target: { node_kind: participant, node_id: clerk }

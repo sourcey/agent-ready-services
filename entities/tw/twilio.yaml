@@ -26,14 +26,11 @@ sources:
   - source_id: source-readiness-47aea8764f65bef5ae609e63da151056f2bd9524f1ca17ae649c7581d80055ed
     url: https://www.twilio.com/docs/usage/api/keys
 declarations:
-  - declaration_id: declaration_twilio_messaging_api_operations
+  - declaration_id: declaration_twilio_twilio_messaging_api_sms_send
     scope:
       product: { key: twilio-messaging-api, name: Twilio Messaging API }
-      funnel: { key: message-operations, name: Message operations }
-    assessment_targets:
-      - target_id: service-use
-        name: Send messages and inspect delivery state through the API
-        interface_ids: [messaging-api]
+      job: { key: sms-send, name: Send a text message }
+    job_bindings: []
     participants:
       - { participant_id: twilio, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tg62epymp01r8t62x } }
     resources:
@@ -96,11 +93,7 @@ declarations:
           node_id: api-authentication
     offer_relations: []
     source_bindings:
-      - source_binding_id: twilio_assessment_target
-        source_id: source_twilio_messages
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: twilio-scope, source_id: source_twilio_messages, target: { node_kind: declaration, node_id: declaration_twilio_messaging_api_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: twilio-scope, source_id: source_twilio_messages, target: { node_kind: declaration, node_id: declaration_twilio_twilio_messaging_api_sms_send }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: twilio-participant, source_id: source_twilio_api, target: { node_kind: participant, node_id: twilio }, field_paths: [/roles, /identity] }
       - { source_binding_id: twilio-resource-overview, source_id: source_twilio_api, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: twilio-resource-terms, source_id: source_twilio_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

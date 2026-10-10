@@ -28,14 +28,11 @@ sources:
   - source_id: source-readiness-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
     url: https://docs.datadoghq.com/account_management/org_settings
 declarations:
-  - declaration_id: declaration_datadog_api_monitor_operations
+  - declaration_id: declaration_datadog_datadog_api_monitor_create
     scope:
       product: { key: datadog-api, name: Datadog API }
-      funnel: { key: monitor-operations, name: Monitor operations }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and manage Datadog monitors through the API
-        interface_ids: [monitor-api]
+      job: { key: monitor-create, name: Create a monitor }
+    job_bindings: []
     participants:
       - { participant_id: datadog, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe2hwmmvk3eex1hq433 } }
     resources:
@@ -109,11 +106,7 @@ declarations:
           node_id: api-authentication
     offer_relations: []
     source_bindings:
-      - source_binding_id: datadog_assessment_target
-        source_id: source_datadog_monitors
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: datadog-scope, source_id: source_datadog_monitors, target: { node_kind: declaration, node_id: declaration_datadog_api_monitor_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: datadog-scope, source_id: source_datadog_monitors, target: { node_kind: declaration, node_id: declaration_datadog_datadog_api_monitor_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: datadog-participant, source_id: source_datadog_api, target: { node_kind: participant, node_id: datadog }, field_paths: [/roles, /identity] }
       - { source_binding_id: datadog-resource-reference, source_id: source_datadog_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-terms, source_id: source_datadog_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

@@ -25,15 +25,14 @@ sources:
     url: https://vercel.com/docs/plans/pro-plan
   - source_id: source-readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
     url: https://vercel.com/docs/rest-api/billing/purchase-credits
+  - source_id: source_vercel_6dc7c9f0ba3a272546f39862
+    url: https://vercel.com/docs/rest-api/deployments/create-a-new-deployment
 declarations:
-  - declaration_id: declaration_vercel_api_deployment_operations
+  - declaration_id: declaration_vercel_vercel_rest_api_deployment_create
     scope:
       product: { key: vercel-rest-api, name: Vercel REST API }
-      funnel: { key: deployment-operations, name: Deployment operations }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and inspect deployments through the REST API
-        interface_ids: [deployment-api]
+      job: { key: deployment-create, name: Create a deployment }
+    job_bindings: []
     participants:
       - { participant_id: vercel, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe5dk9hex187x4g03fn } }
     resources:
@@ -88,11 +87,7 @@ declarations:
           node_id: api-authentication
     offer_relations: []
     source_bindings:
-      - source_binding_id: vercel_assessment_target
-        source_id: source_vercel_deployments
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: vercel-scope, source_id: source_vercel_deployments, target: { node_kind: declaration, node_id: declaration_vercel_api_deployment_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: vercel-scope, source_id: source_vercel_6dc7c9f0ba3a272546f39862, target: { node_kind: declaration, node_id: declaration_vercel_vercel_rest_api_deployment_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: vercel-participant, source_id: source_vercel_api, target: { node_kind: participant, node_id: vercel }, field_paths: [/roles, /identity] }
       - { source_binding_id: vercel-resource-reference, source_id: source_vercel_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-terms, source_id: source_vercel_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

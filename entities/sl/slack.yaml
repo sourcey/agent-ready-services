@@ -23,14 +23,11 @@ sources:
   - source_id: source-readiness-5cf60e6ed44cb7227b1e801c24793d749277f1ac820a2a2d1a2e3aaea9e3ae94
     url: https://slack.com/help/articles/202035138-Slack-plans-and-features
 declarations:
-  - declaration_id: declaration_slack_web_api_workspace_operations
+  - declaration_id: declaration_slack_slack_web_api_chat_message_post
     scope:
       product: { key: slack-web-api, name: Slack Web API }
-      funnel: { key: workspace-app-operations, name: Workspace app operations }
-    assessment_targets:
-      - target_id: service-use
-        name: Install an app and post messages through the Web API
-        interface_ids: [workspace-api]
+      job: { key: chat-message-post, name: Post a message }
+    job_bindings: []
     participants:
       - { participant_id: slack, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tdz1rtzzt919cthny } }
     resources:
@@ -65,11 +62,7 @@ declarations:
       - { relation_id: messages-describe-api, kind: describes, from: { node_kind: resource, node_id: message-operations }, to: { node_kind: interface, node_id: workspace-api } }
     offer_relations: []
     source_bindings:
-      - source_binding_id: slack_assessment_target
-        source_id: source_slack_web_api
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: slack-scope, source_id: source_slack_web_api, target: { node_kind: declaration, node_id: declaration_slack_web_api_workspace_operations }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: slack-scope, source_id: source_slack_messages, target: { node_kind: declaration, node_id: declaration_slack_slack_web_api_chat_message_post }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: slack-participant, source_id: source_slack_web_api, target: { node_kind: participant, node_id: slack }, field_paths: [/roles, /identity] }
       - { source_binding_id: slack-resource-web, source_id: source_slack_web_api, target: { node_kind: resource, node_id: web-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: slack-resource-terms, source_id: source_slack_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

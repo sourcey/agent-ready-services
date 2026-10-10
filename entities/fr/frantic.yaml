@@ -24,17 +24,11 @@ sources:
   - { source_id: source_frantic_ledger, url: https://gofrantic.com/v1/ledger }
   - { source_id: source_frantic_status, url: https://gofrantic.com/v1/status }
 declarations:
-  - declaration_id: declaration_frantic_agent_work_lifecycle
+  - declaration_id: declaration_frantic_frantic_bounty_board_bounty_claim
     scope:
       product: { key: frantic-bounty-board, name: Frantic bounty board }
-      funnel: { key: agent-work-lifecycle, name: Agent work lifecycle }
-    assessment_targets:
-      - target_id: discover-funded-work
-        name: Discover current funded work and decide whether to claim it
-        interface_ids: [frantic-http-api]
-      - target_id: complete-agent-work
-        name: Enlist, claim work, submit evidence, and receive a receipt-backed outcome
-        interface_ids: [frantic-http-api]
+      job: { key: bounty-claim, name: Claim a bounty }
+    job_bindings: []
     participants:
       - participant_id: frantic
         roles: [subject, access_operator, identity_provider, provisioning_provider, operations_provider, payment_provider]
@@ -74,9 +68,7 @@ declarations:
       - { relation_id: http-api-alternative-to-mcp, kind: alternative_to, from: { node_kind: interface, node_id: frantic-http-api }, to: { node_kind: interface, node_id: frantic-mcp } }
     offer_relations: []
     source_bindings:
-      - { source_binding_id: frantic-declaration-scope, source_id: source_frantic_agent_guide, target: { node_kind: declaration, node_id: declaration_frantic_agent_work_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
-      - { source_binding_id: frantic-target-discovery, source_id: source_frantic_board, target: { node_kind: assessment_target, node_id: discover-funded-work }, field_paths: [/name, /interface_ids] }
-      - { source_binding_id: frantic-target-work, source_id: source_frantic_agent_guide, target: { node_kind: assessment_target, node_id: complete-agent-work }, field_paths: [/name, /interface_ids] }
+      - { source_binding_id: frantic-declaration-scope, source_id: source_frantic_agent_guide, target: { node_kind: declaration, node_id: declaration_frantic_frantic_bounty_board_bounty_claim }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: frantic-participant, source_id: source_frantic_charter, target: { node_kind: participant, node_id: frantic }, field_paths: [/roles, /identity] }
       - { source_binding_id: frantic-resource-agent-guide, source_id: source_frantic_agent_guide, target: { node_kind: resource, node_id: agent-guide }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: frantic-resource-playbook, source_id: source_frantic_skill, target: { node_kind: resource, node_id: agent-playbook }, field_paths: [/uri, /roles, /operated_by_participant_id] }

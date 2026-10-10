@@ -33,17 +33,11 @@ sources:
   - source_id: source-readiness-bd3a229fc6f0de08d49dbcbdc71329a79f87341b81a2308a74db49665a3c2818
     url: https://openrouter.ai/pricing
 declarations:
-  - declaration_id: declaration_openrouter_model_access_lifecycle
+  - declaration_id: declaration_openrouter_openrouter_api_model_chat_stream_tool
     scope:
       product: { key: openrouter-api, name: OpenRouter API }
-      funnel: { key: model-access-lifecycle, name: Model access lifecycle }
-    assessment_targets:
-      - target_id: model-discovery
-        name: Discover currently available models, capabilities, and prices
-        interface_ids: [model-catalog-api]
-      - target_id: model-inference
-        name: Submit streaming inference requests with tool calls and handle results
-        interface_ids: [inference-api]
+      job: { key: model-chat-stream-tool, name: Stream a completion with a tool call }
+    job_bindings: []
     participants:
       - participant_id: openrouter
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -110,9 +104,7 @@ declarations:
       - { relation_id: mcp-alternative-catalog, kind: alternative_to, from: { node_kind: interface, node_id: model-catalog-api }, to: { node_kind: interface, node_id: openrouter-mcp } }
     offer_relations: []
     source_bindings:
-      - { source_binding_id: openrouter-scope, source_id: source_openrouter_quickstart, target: { node_kind: declaration, node_id: declaration_openrouter_model_access_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
-      - { source_binding_id: openrouter-target-models, source_id: source_openrouter_models, target: { node_kind: assessment_target, node_id: model-discovery }, field_paths: [/name, /interface_ids] }
-      - { source_binding_id: openrouter-target-inference, source_id: source_openrouter_quickstart, target: { node_kind: assessment_target, node_id: model-inference }, field_paths: [/name, /interface_ids] }
+      - { source_binding_id: openrouter-scope, source_id: source_openrouter_tools, target: { node_kind: declaration, node_id: declaration_openrouter_openrouter_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: openrouter-participant, source_id: source_openrouter_terms, target: { node_kind: participant, node_id: openrouter }, field_paths: [/roles, /identity] }
       - { source_binding_id: openrouter-resource-quickstart, source_id: source_openrouter_quickstart, target: { node_kind: resource, node_id: quickstart }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openrouter-resource-terms, source_id: source_openrouter_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

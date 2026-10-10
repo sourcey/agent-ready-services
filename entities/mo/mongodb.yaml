@@ -24,14 +24,11 @@ sources:
   - source_id: source-readiness-a2ebb552da0020dafded21f72ec21bd8489c921b3f9fe1dc7114df92bc3852f3
     url: https://www.mongodb.com/docs/atlas/tutorial/create-atlas-account
 declarations:
-  - declaration_id: declaration_mongodb_atlas_api_cluster_lifecycle
+  - declaration_id: declaration_mongodb_mongodb_atlas_api_database_create
     scope:
       product: { key: mongodb-atlas-api, name: MongoDB Atlas Administration API }
-      funnel: { key: cluster-lifecycle, name: Cluster lifecycle }
-    assessment_targets:
-      - target_id: service-use
-        name: Create and manage Atlas clusters through the Administration API
-        interface_ids: [cluster-api]
+      job: { key: database-create, name: Create a database deployment }
+    job_bindings: []
     participants:
       - { participant_id: mongodb, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe4ys74qx1k4zfcqpjv } }
     resources:
@@ -67,11 +64,7 @@ declarations:
       - { relation_id: cluster-create-describes-api, kind: describes, from: { node_kind: resource, node_id: cluster-create }, to: { node_kind: interface, node_id: cluster-api } }
     offer_relations: []
     source_bindings:
-      - source_binding_id: mongodb_assessment_target
-        source_id: source_mongodb_clusters
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - { source_binding_id: mongodb-scope, source_id: source_mongodb_clusters, target: { node_kind: declaration, node_id: declaration_mongodb_atlas_api_cluster_lifecycle }, field_paths: [/scope/product/name, /scope/funnel/name] }
+      - { source_binding_id: mongodb-scope, source_id: source_mongodb_cluster_create, target: { node_kind: declaration, node_id: declaration_mongodb_mongodb_atlas_api_database_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: mongodb-participant, source_id: source_mongodb_atlas_api, target: { node_kind: participant, node_id: mongodb }, field_paths: [/roles, /identity] }
       - { source_binding_id: mongodb-resource-reference, source_id: source_mongodb_atlas_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-terms, source_id: source_mongodb_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }

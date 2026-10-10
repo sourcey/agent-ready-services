@@ -45,22 +45,18 @@ sources:
     url: https://docs.cloud.google.com/billing/docs/how-to/manage-billing-account
   - source_id: source-readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
     url: https://docs.cloud.google.com/free/docs/free-cloud-features
+  - source_id: source_google_cloud_b54fac0408b03e5427dfb4cb
+    url: https://docs.cloud.google.com/storage/docs/json_api/v1/buckets/insert
 declarations:
-  - declaration_id: declaration_google_cloud_api_resource_management
+  - declaration_id: declaration_google_cloud_google_cloud_bucket_create
     scope:
       product:
         key: google-cloud
         name: Google Cloud
-      funnel:
-        key: api-resource-management
-        name: API resource management
-    assessment_targets:
-      - target_id: service-use
-        name: Create and reconcile Google Cloud projects through the API
-        interface_ids: [resource-manager]
-      - target_id: cost-visibility
-        name: Google Cloud cost visibility
-        interface_ids: [cloud-billing]
+      job:
+        key: bucket-create
+        name: Create a storage bucket
+    job_bindings: []
     participants:
       - participant_id: google-cloud
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -241,18 +237,10 @@ declarations:
         to: { node_kind: interface, node_id: cloud-billing }
     offer_relations: []
     source_bindings:
-      - source_binding_id: google_cloud_cost_visibility_target
-        source_id: source_google_billing_api
-        target: { node_kind: assessment_target, node_id: cost-visibility }
-        field_paths: [/name, /interface_ids]
-      - source_binding_id: google_cloud_assessment_target
-        source_id: source_google_resource_manager_rest
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
       - source_binding_id: google-declaration-scope
-        source_id: source_google_resource_manager_rest
-        target: { node_kind: declaration, node_id: declaration_google_cloud_api_resource_management }
-        field_paths: [/scope/product/name, /scope/funnel/name]
+        source_id: source_google_cloud_b54fac0408b03e5427dfb4cb
+        target: { node_kind: declaration, node_id: declaration_google_cloud_google_cloud_bucket_create }
+        field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: google-participant
         source_id: source_google_cloud_overview
         target: { node_kind: participant, node_id: google-cloud }
