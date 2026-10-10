@@ -20,14 +20,13 @@ sources:
   - { source_id: source_github_signup, url: https://github.com/signup }
   - { source_id: source_github_terms, url: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service }
   - { source_id: source_github_support, url: https://support.github.com/ }
-  - { source_id: source_github_billing_checkout, url: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses/upgrade-plan }
-  - source_id: source-readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+  - source_id: source_github_creating_an_account_on_github
     url: https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
-  - source_id: source-readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+  - source_id: source_github_generating_a_user_access_token_for_a_github_app
     url: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app
-  - source_id: source-readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+  - source_id: source_github_token_expiration_and_revocation
     url: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation
-  - source_id: source-readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+  - source_id: source_github_impact_of_plan_changes
     url: https://docs.github.com/en/billing/concepts/impact-of-plan-changes
   - { source_id: source_github_enterprise_overview, url: https://docs.github.com/en/enterprise-server@3.21/admin/overview/about-github-enterprise-server }
   - { source_id: source_github_enterprise_trial, url: https://docs.github.com/en/enterprise-server@3.21/admin/overview/setting-up-a-trial-of-github-enterprise-server }
@@ -42,11 +41,17 @@ sources:
   - { source_id: source_github_enterprise_errors, url: https://docs.github.com/en/enterprise-server@3.21/rest/using-the-rest-api/troubleshooting-the-rest-api }
   - { source_id: source_github_enterprise_limits, url: https://docs.github.com/en/enterprise-server@3.21/rest/using-the-rest-api/rate-limits-for-the-rest-api }
   - { source_id: source_github_enterprise_token_lifecycle, url: https://docs.github.com/en/enterprise-server@3.21/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation }
+  - { source_id: source_github_mcp, url: https://github.com/github/github-mcp-server }
+  - { source_id: source_github_openapi, url: https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json }
+  - { source_id: source_github_ghes_openapi, url: https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/ghes-3.21/ghes-3.21.json }
 declarations:
   - declaration_id: declaration_github_github_rest_api_repository_create
     scope:
       product: { key: github-rest-api, name: GitHub REST API }
       job: { key: repository-create, name: Create a repository }
+    job_operations:
+      - { operation_id: create-repository, interface_id: repository-api, kind: http, endpoint_id: github-api, method: POST, url: https://api.github.com/user/repos, headers: [], body: { media_type: application/json }, spec: { url: https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json, key_operations: null } }
+      - { operation_id: github-mcp, interface_id: github-mcp, kind: mcp, endpoint_id: mcp-server, tool: create_repository }
     job_bindings: []
     participants:
       - { participant_id: github, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3xgjjktffez1t34rn } }
@@ -61,63 +66,66 @@ declarations:
       - { resource_id: rate-limits, uri: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api, roles: [status, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: troubleshooting, uri: https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api, roles: [status, operations, recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
       - { resource_id: support, uri: https://support.github.com/, roles: [recovery, documentation], operated_by_participant_id: github, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://docs.github.com/en/billing/how-tos/manage-plan-and-licenses/upgrade-plan, roles: [checkout, documentation], operated_by_participant_id: github, standard_bindings: [] }
-      - resource_id: readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+      - resource_id: creating-an-account-on-github
         uri: https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github
         roles:
           - access
           - documentation
         operated_by_participant_id: github
         standard_bindings: []
-      - resource_id: readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+      - resource_id: generating-a-user-access-token-for-a-github-app
         uri: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app
         roles:
           - authentication
           - documentation
         operated_by_participant_id: github
         standard_bindings: []
-      - resource_id: readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+      - resource_id: token-expiration-and-revocation
         uri: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation
         roles:
           - authentication
           - documentation
         operated_by_participant_id: github
         standard_bindings: []
-      - resource_id: readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+      - resource_id: impact-of-plan-changes
         uri: https://docs.github.com/en/billing/concepts/impact-of-plan-changes
         roles:
           - documentation
           - pricing
         operated_by_participant_id: github
         standard_bindings: []
+      - { resource_id: mcp-docs, uri: https://github.com/github/github-mcp-server, roles: [discovery, operations, documentation], operated_by_participant_id: github, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://github.com/signup, transport: http, roles: [registration], operated_by_participant_id: github, standard_bindings: [] }
       - { endpoint_id: github-api, uri: https://api.github.com, transport: http, roles: [service, status], operated_by_participant_id: github, standard_bindings: [] }
+      - { endpoint_id: mcp-server, uri: https://api.githubcopilot.com/mcp/, transport: http, roles: [service, protected_resource], operated_by_participant_id: github, standard_bindings: [] }
     interfaces:
       - { interface_id: repository-api, modality: network_api, functions: [service_operation], endpoint_ids: [github-api], resource_ids: [rest-api, repository-operations, rate-limits, troubleshooting], operated_by_participant_id: github, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: github, standard_bindings: [] }
+      - { interface_id: github-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server], resource_ids: [mcp-docs], operated_by_participant_id: github, standard_bindings: [] }
     relations:
       - { relation_id: rest-describes-api, kind: describes, from: { node_kind: resource, node_id: rest-api }, to: { node_kind: interface, node_id: repository-api } }
       - { relation_id: api-versions-describe-api, kind: describes, from: { node_kind: resource, node_id: api-versions }, to: { node_kind: interface, node_id: repository-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: repository-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: repository-docs-describe-api, kind: describes, from: { node_kind: resource, node_id: repository-operations }, to: { node_kind: interface, node_id: repository-api } }
-      - relation_id: relation-describes-b89359e774bb9820b9086ea0765f3845898f0e18b10eb3b73d4687dcdfa31509
+      - relation_id: generating-a-user-access-token-for-a-github-app-describes-api-authentication
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+          node_id: generating-a-user-access-token-for-a-github-app
         to:
           node_kind: interface
           node_id: api-authentication
-      - relation_id: relation-describes-3bdc2359067fbad866b74feffe97cfc028acfd5b0c8af44807854b8247bd4ab1
+      - relation_id: token-expiration-and-revocation-describes-api-authentication
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+          node_id: token-expiration-and-revocation
         to:
           node_kind: interface
           node_id: api-authentication
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: github-mcp } }
     offer_relations: []
     source_bindings:
       - { source_binding_id: github-scope, source_id: source_github_repositories, target: { node_kind: declaration, node_id: declaration_github_github_rest_api_repository_create }, field_paths: [/scope/product/name, /scope/job/name] }
@@ -141,70 +149,81 @@ declarations:
       - { source_binding_id: github-relation-auth, source_id: source_github_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: github-relation-signup, source_id: source_github_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: github-relation-repositories, source_id: source_github_repositories, target: { node_kind: relation, node_id: repository-docs-describe-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: github-resource-billing-checkout, source_id: source_github_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: github-exclusion-separate-eligibility, source_id: source_github_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-resource-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
-        source_id: source-readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
+      - source_binding_id: github-resource-creating-an-account-on-github
+        source_id: source_github_creating_an_account_on_github
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-84f7c6a9cbd0ddb3894bfc8e8f683912f976ff3f81d9c876a991c820f941f5a4
-      - source_binding_id: binding-resource-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
-        source_id: source-readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+          node_id: creating-an-account-on-github
+      - source_binding_id: github-resource-generating-a-user-access-token-for-a-github-app
+        source_id: source_github_generating_a_user_access_token_for_a_github_app
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
-      - source_binding_id: binding-relation-b89359e774bb9820b9086ea0765f3845898f0e18b10eb3b73d4687dcdfa31509
-        source_id: source-readiness-f867e853c07445bd6dd0ae50798b4fbbc4ef188327ba924a55ea9570e8b772bf
+          node_id: generating-a-user-access-token-for-a-github-app
+      - source_binding_id: github-relation-generating-a-user-access-token-for-a-github-app-describes-api-authentication
+        source_id: source_github_generating_a_user_access_token_for_a_github_app
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-b89359e774bb9820b9086ea0765f3845898f0e18b10eb3b73d4687dcdfa31509
-      - source_binding_id: binding-resource-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
-        source_id: source-readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+          node_id: generating-a-user-access-token-for-a-github-app-describes-api-authentication
+      - source_binding_id: github-resource-token-expiration-and-revocation
+        source_id: source_github_token_expiration_and_revocation
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
-      - source_binding_id: binding-relation-3bdc2359067fbad866b74feffe97cfc028acfd5b0c8af44807854b8247bd4ab1
-        source_id: source-readiness-fa223501e9d5b0e1e036c133ac492ac85e4f34ddae80c84c00750d943c5df22d
+          node_id: token-expiration-and-revocation
+      - source_binding_id: github-relation-token-expiration-and-revocation-describes-api-authentication
+        source_id: source_github_token_expiration_and_revocation
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-3bdc2359067fbad866b74feffe97cfc028acfd5b0c8af44807854b8247bd4ab1
-      - source_binding_id: binding-resource-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
-        source_id: source-readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+          node_id: token-expiration-and-revocation-describes-api-authentication
+      - source_binding_id: github-resource-impact-of-plan-changes
+        source_id: source_github_impact_of_plan_changes
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-95d77362fd899c300c1f448b97f23506087073a3e419a630603bc05f3b89eb42
+          node_id: impact-of-plan-changes
+      - { source_binding_id: github-operation-create-repository, source_id: source_github_repositories, target: { node_kind: job_operation, node_id: create-repository }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: github-resource-mcp-docs, source_id: source_github_mcp, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-endpoint-mcp-server, source_id: source_github_mcp, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: github-interface-mcp, source_id: source_github_mcp, target: { node_kind: interface, node_id: github-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: github-relation-mcp-docs, source_id: source_github_mcp, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: github-operation-github-mcp, source_id: source_github_mcp, target: { node_kind: job_operation, node_id: github-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: github-operation-create-repository-spec, source_id: source_github_openapi, target: { node_kind: job_operation, node_id: create-repository }, field_paths: [/spec] }
+      - { source_binding_id: github-operation-github-mcp-tool, source_id: source_github_mcp, target: { node_kind: job_operation, node_id: github-mcp }, field_paths: [/tool] }
+      - { source_binding_id: github-exclusion-free-job-no-checkout, source_id: source_github_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - { exclusion_id: free-job-no-checkout, role: checkout, rationale: GitHub Free creates repositories with no payment. }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z
   - declaration_id: declaration_github_github_enterprise_server_3_21_repository_create
     scope:
       product: { key: github-enterprise-server-3-21, name: GitHub Enterprise Server 3.21 }
       job: { key: repository-create, name: Create a repository }
+    job_operations:
+      - { operation_id: create-repository, interface_id: enterprise-repository-api, kind: spec, spec_url: https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/ghes-3.21/ghes-3.21.json, method: POST, path: /user/repos, key_operations: null }
     job_bindings: []
     participants:
       - { participant_id: github-enterprise, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3xgjjktffez1t34rn } }
@@ -215,7 +234,8 @@ declarations:
       - { resource_id: enterprise-combined-use, uri: https://docs.github.com/en/enterprise-server@3.21/billing/concepts/enterprise-billing/combined-enterprise-use, roles: [eligibility, pricing], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-pricing, uri: https://github.com/pricing, roles: [pricing], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-trial, uri: https://docs.github.com/en/enterprise-server@3.21/admin/overview/setting-up-a-trial-of-github-enterprise-server, roles: [access, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
-      - { resource_id: enterprise-license-acquisition, uri: https://docs.github.com/en/enterprise-server@3.21/billing/how-tos/manage-server-licenses/download-your-license, roles: [access, checkout, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
+      - { resource_id: enterprise-license-acquisition, uri: https://docs.github.com/en/enterprise-server@3.21/billing/how-tos/manage-server-licenses/download-your-license, roles: [access, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
+      - { resource_id: enterprise-portal, uri: https://enterprise.github.com/login, roles: [checkout], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-license-upload, uri: https://docs.github.com/en/enterprise-server@3.21/billing/how-tos/manage-server-licenses/upload-new-license, roles: [provisioning, status, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-rest, uri: https://docs.github.com/en/enterprise-server@3.21/rest, roles: [discovery, operations, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-repositories, uri: https://docs.github.com/en/enterprise-server@3.21/rest/repos/repos, roles: [provisioning, status, operations, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
@@ -223,7 +243,8 @@ declarations:
       - { resource_id: enterprise-errors, uri: https://docs.github.com/en/enterprise-server@3.21/rest/using-the-rest-api/troubleshooting-the-rest-api, roles: [status, operations, recovery, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-limits, uri: https://docs.github.com/en/enterprise-server@3.21/rest/using-the-rest-api/rate-limits-for-the-rest-api, roles: [status, operations, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { resource_id: enterprise-token-lifecycle, uri: https://docs.github.com/en/enterprise-server@3.21/authentication/keeping-your-account-and-data-secure/token-expiration-and-revocation, roles: [authentication, recovery, documentation], operated_by_participant_id: github-enterprise, standard_bindings: [] }
-    endpoints: []
+    endpoints:
+      - { endpoint_id: trial-request, uri: https://enterprise.github.com/trial, transport: http, roles: [registration], operated_by_participant_id: github-enterprise, standard_bindings: [] }
     interfaces:
       - { interface_id: enterprise-repository-api, modality: network_api, functions: [service_operation], endpoint_ids: [], resource_ids: [enterprise-rest, enterprise-repositories, enterprise-errors, enterprise-limits], operated_by_participant_id: github-enterprise, standard_bindings: [] }
       - { interface_id: enterprise-api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [enterprise-authentication, enterprise-token-lifecycle], operated_by_participant_id: github-enterprise, standard_bindings: [] }
@@ -244,6 +265,7 @@ declarations:
       - { source_binding_id: enterprise-resource-pricing, source_id: source_github_enterprise_pricing, target: { node_kind: resource, node_id: enterprise-pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-trial, source_id: source_github_enterprise_trial, target: { node_kind: resource, node_id: enterprise-trial }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-license-acquisition, source_id: source_github_enterprise_license, target: { node_kind: resource, node_id: enterprise-license-acquisition }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: enterprise-resource-portal, source_id: source_github_enterprise_trial, target: { node_kind: resource, node_id: enterprise-portal }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-license-upload, source_id: source_github_enterprise_license_upload, target: { node_kind: resource, node_id: enterprise-license-upload }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-rest, source_id: source_github_enterprise_rest, target: { node_kind: resource, node_id: enterprise-rest }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: enterprise-resource-repositories, source_id: source_github_enterprise_repositories, target: { node_kind: resource, node_id: enterprise-repositories }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -258,6 +280,9 @@ declarations:
       - { source_binding_id: enterprise-relation-authentication, source_id: source_github_enterprise_auth, target: { node_kind: relation, node_id: enterprise-authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: enterprise-relation-trial-license, source_id: source_github_enterprise_trial, target: { node_kind: relation, node_id: enterprise-trial-precedes-license }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: enterprise-relation-license-api, source_id: source_github_enterprise_license_upload, target: { node_kind: relation, node_id: enterprise-license-precedes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: enterprise-operation-create-repository, source_id: source_github_enterprise_repositories, target: { node_kind: job_operation, node_id: create-repository }, field_paths: [/interface_id, /method, /path] }
+      - { source_binding_id: enterprise-operation-create-repository-spec, source_id: source_github_ghes_openapi, target: { node_kind: job_operation, node_id: create-repository }, field_paths: [/spec_url] }
+      - { source_binding_id: enterprise-endpoint-trial-request, source_id: source_github_enterprise_trial, target: { node_kind: endpoint, node_id: trial-request }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
     surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-20T06:15:00.000Z

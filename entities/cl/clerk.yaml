@@ -36,6 +36,7 @@ sources:
     url: https://clerk.com/robots.txt
   - source_id: source_clerk_llms
     url: https://clerk.com/llms.txt
+  - { source_id: source_clerk_openapi, url: https://clerk.com/docs/reference/spec/bapi/latest.json }
 declarations:
   - declaration_id: declaration_clerk_clerk_backend_api_user_create
     scope:
@@ -45,6 +46,8 @@ declarations:
       job:
         key: user-create
         name: Create a user
+    job_operations:
+      - { operation_id: create-user, interface_id: backend-api, kind: http, endpoint_id: backend-api, method: POST, url: https://api.clerk.com/v1/users, headers: [], body: { media_type: application/json }, spec: { url: https://clerk.com/docs/reference/spec/bapi/latest.json, key_operations: null } }
     job_bindings: []
     participants:
       - participant_id: clerk
@@ -96,7 +99,7 @@ declarations:
         standard_bindings: []
       - resource_id: service-pricing
         uri: https://clerk.com/pricing
-        roles: [pricing, checkout, documentation]
+        roles: [pricing, documentation]
         operated_by_participant_id: clerk
         standard_bindings: []
       - resource_id: service-terms
@@ -298,6 +301,9 @@ declarations:
         source_id: source_clerk_llms
         target: { node_kind: relation, node_id: llms-describes-backend-api }
         field_paths: [/kind, /from, /to]
-    surface_exclusions: []
+      - { source_binding_id: clerk-operation-create-user, source_id: source_clerk_create_user, target: { node_kind: job_operation, node_id: create-user }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: clerk-operation-create-user-spec, source_id: source_clerk_openapi, target: { node_kind: job_operation, node_id: create-user }, field_paths: [/spec] }
+      - { source_binding_id: clerk-exclusion-free-job-no-checkout, source_id: source_clerk_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
+    surface_exclusions: [{ exclusion_id: free-job-no-checkout, role: checkout, rationale: Clerk's free Hobby plan creates users with no credit card. }]
     authority_intent: community
     declared_at: 2026-09-28T00:00:00.000Z

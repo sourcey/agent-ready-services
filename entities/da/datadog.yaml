@@ -16,22 +16,28 @@ sources:
   - { source_id: source_datadog_monitors, url: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor.md }
   - { source_id: source_datadog_limits, url: https://docs.datadoghq.com/api/latest/rate-limits/ }
   - { source_id: source_datadog_pricing, url: https://www.datadoghq.com/pricing/ }
+  - { source_id: source_datadog_credit_card, url: https://docs.datadoghq.com/account_management/billing/credit_card/ }
   - { source_id: source_datadog_signup, url: https://app.datadoghq.com/signup }
   - { source_id: source_datadog_account_access, url: https://docs.datadoghq.com/getting_started/dashboards/ }
   - { source_id: source_datadog_terms, url: https://www.datadoghq.com/legal/msa/ }
   - { source_id: source_datadog_support, url: https://docs.datadoghq.com/help/ }
-  - { source_id: source_datadog_billing_checkout, url: https://docs.datadoghq.com/account_management/billing/credit_card/ }
-  - source_id: source-readiness-2510d2b19b16536149aac000eacc548ecb4f28562ca31c694e0b29c767ba80eb
+  - source_id: source_datadog_monitors_reference
     url: https://docs.datadoghq.com/api/latest/monitors
-  - source_id: source-readiness-23992904c6b2ab637669394cb6ad93ffada1c2e3a32fb56e0b21bb6294ec519b
+  - source_id: source_datadog_users
     url: https://docs.datadoghq.com/account_management/users
-  - source_id: source-readiness-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
+  - source_id: source_datadog_org_settings
     url: https://docs.datadoghq.com/account_management/org_settings
+  - { source_id: source_datadog_openapi, url: https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml }
+  - { source_id: source_datadog_mcp_tools, url: https://docs.datadoghq.com/mcp_server/tools }
+  - { source_id: source_datadog_mcp_setup, url: https://docs.datadoghq.com/mcp_server/setup }
 declarations:
   - declaration_id: declaration_datadog_datadog_api_monitor_create
     scope:
       product: { key: datadog-api, name: Datadog API }
       job: { key: monitor-create, name: Create a monitor }
+    job_operations:
+      - { operation_id: create-monitor, interface_id: monitor-api, kind: http, endpoint_id: datadog-api, method: POST, url: https://api.datadoghq.com/api/v1/monitor, headers: [], body: { media_type: application/json }, spec: { url: https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml, key_operations: null } }
+      - { operation_id: datadog-mcp, interface_id: datadog-mcp, kind: mcp, endpoint_id: mcp-server, tool: create_datadog_monitor }
     job_bindings: []
     participants:
       - { participant_id: datadog, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe2hwmmvk3eex1hq433 } }
@@ -39,6 +45,7 @@ declarations:
       - { resource_id: api-reference, uri: https://docs.datadoghq.com/api/latest/, roles: [discovery, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://www.datadoghq.com/legal/msa/, roles: [terms], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.datadoghq.com/pricing/, roles: [pricing], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { resource_id: billing-checkout, uri: https://app.datadoghq.com/account/billing, roles: [checkout], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://app.datadoghq.com/signup, roles: [access, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: account-access-guide, uri: https://docs.datadoghq.com/getting_started/dashboards/, roles: [access, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.datadoghq.com/api/latest/authentication/, roles: [authentication, descriptor, documentation, provisioning], operated_by_participant_id: datadog, standard_bindings: [] }
@@ -46,41 +53,44 @@ declarations:
       - { resource_id: monitor-operations, uri: https://docs.datadoghq.com/api/latest/monitors/create-a-monitor.md, roles: [provisioning, status, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.datadoghq.com/api/latest/rate-limits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.datadoghq.com/help/, roles: [recovery, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://docs.datadoghq.com/account_management/billing/credit_card/, roles: [checkout, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
-      - resource_id: readiness-2510d2b19b16536149aac000eacc548ecb4f28562ca31c694e0b29c767ba80eb
+      - resource_id: monitors-reference
         uri: https://docs.datadoghq.com/api/latest/monitors
         roles:
           - documentation
           - provisioning
         operated_by_participant_id: datadog
         standard_bindings: []
-      - resource_id: readiness-23992904c6b2ab637669394cb6ad93ffada1c2e3a32fb56e0b21bb6294ec519b
+      - resource_id: users
         uri: https://docs.datadoghq.com/account_management/users
         roles:
           - access
           - documentation
         operated_by_participant_id: datadog
         standard_bindings: []
-      - resource_id: readiness-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
+      - resource_id: org-settings
         uri: https://docs.datadoghq.com/account_management/org_settings
         roles:
           - authentication
           - documentation
         operated_by_participant_id: datadog
         standard_bindings: []
+      - { resource_id: mcp-docs, uri: https://docs.datadoghq.com/mcp_server/tools, roles: [discovery, operations, documentation], operated_by_participant_id: datadog, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://app.datadoghq.com/signup, transport: http, roles: [registration], operated_by_participant_id: datadog, standard_bindings: [] }
       - { endpoint_id: datadog-api, uri: https://api.datadoghq.com/api, transport: http, roles: [service, status], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { endpoint_id: mcp-server, uri: "https://mcp.datadoghq.com/v1/mcp?toolsets=alerting", transport: http, roles: [service, protected_resource], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { endpoint_id: mcp-organization-settings, uri: https://app.datadoghq.com/organization-settings/mcp, transport: http, roles: [access_setting], operated_by_participant_id: datadog, standard_bindings: [] }
     interfaces:
       - { interface_id: monitor-api, modality: network_api, functions: [service_operation], endpoint_ids: [datadog-api], resource_ids: [api-reference, monitor-operations, rate-limits], operated_by_participant_id: datadog, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: datadog, standard_bindings: [] }
+      - { interface_id: datadog-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server, mcp-organization-settings], resource_ids: [mcp-docs], operated_by_participant_id: datadog, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: monitor-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: monitor-api } }
       - { relation_id: access-material-describes-authentication, kind: describes, from: { node_kind: resource, node_id: access-material-delivery }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: monitors-describe-api, kind: describes, from: { node_kind: resource, node_id: monitor-operations }, to: { node_kind: interface, node_id: monitor-api } }
-      - relation_id: relation-describes-8931d3e23334363abd1948f3b345243399c2f98fcc71a09a3f8b0f4f3ece96bb
+      - relation_id: authentication-describes-api-authentication
         kind: describes
         from:
           node_kind: resource
@@ -88,22 +98,23 @@ declarations:
         to:
           node_kind: interface
           node_id: api-authentication
-      - relation_id: relation-describes-ad4036e1186544417550bb7a7ccbb191df08d92cd7745a75fdff094439cd1265
+      - relation_id: monitors-reference-describes-monitor-api
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-2510d2b19b16536149aac000eacc548ecb4f28562ca31c694e0b29c767ba80eb
+          node_id: monitors-reference
         to:
           node_kind: interface
           node_id: monitor-api
-      - relation_id: relation-describes-7d6a5f1c85f0c684188bb93c9bf14a8f05020d26613eb56afee403f066c13c67
+      - relation_id: org-settings-describes-api-authentication
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
+          node_id: org-settings
         to:
           node_kind: interface
           node_id: api-authentication
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: datadog-mcp } }
     offer_relations: []
     source_bindings:
       - { source_binding_id: datadog-scope, source_id: source_datadog_monitors, target: { node_kind: declaration, node_id: declaration_datadog_datadog_api_monitor_create }, field_paths: [/scope/product/name, /scope/job/name] }
@@ -111,6 +122,7 @@ declarations:
       - { source_binding_id: datadog-resource-reference, source_id: source_datadog_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-terms, source_id: source_datadog_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-pricing, source_id: source_datadog_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-resource-billing-checkout, source_id: source_datadog_credit_card, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-signup, source_id: source_datadog_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-resource-account-access, source_id: source_datadog_account_access, target: { node_kind: resource, node_id: account-access-guide }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-endpoint-registration, source_id: source_datadog_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
@@ -127,9 +139,8 @@ declarations:
       - { source_binding_id: datadog-relation-access-material, source_id: source_datadog_access_material, target: { node_kind: relation, node_id: access-material-describes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: datadog-relation-signup, source_id: source_datadog_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: datadog-relation-monitors, source_id: source_datadog_monitors, target: { node_kind: relation, node_id: monitors-describe-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: datadog-resource-billing-checkout, source_id: source_datadog_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: datadog-exclusion-separate-eligibility, source_id: source_datadog_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-relation-8931d3e23334363abd1948f3b345243399c2f98fcc71a09a3f8b0f4f3ece96bb
+      - source_binding_id: datadog-relation-authentication-describes-api-authentication
         source_id: source_datadog_auth
         field_paths:
           - /kind
@@ -137,52 +148,62 @@ declarations:
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-8931d3e23334363abd1948f3b345243399c2f98fcc71a09a3f8b0f4f3ece96bb
-      - source_binding_id: binding-resource-2510d2b19b16536149aac000eacc548ecb4f28562ca31c694e0b29c767ba80eb
-        source_id: source-readiness-2510d2b19b16536149aac000eacc548ecb4f28562ca31c694e0b29c767ba80eb
+          node_id: authentication-describes-api-authentication
+      - source_binding_id: datadog-resource-monitors-reference
+        source_id: source_datadog_monitors_reference
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-2510d2b19b16536149aac000eacc548ecb4f28562ca31c694e0b29c767ba80eb
-      - source_binding_id: binding-relation-ad4036e1186544417550bb7a7ccbb191df08d92cd7745a75fdff094439cd1265
-        source_id: source-readiness-2510d2b19b16536149aac000eacc548ecb4f28562ca31c694e0b29c767ba80eb
+          node_id: monitors-reference
+      - source_binding_id: datadog-relation-monitors-reference-describes-monitor-api
+        source_id: source_datadog_monitors_reference
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-ad4036e1186544417550bb7a7ccbb191df08d92cd7745a75fdff094439cd1265
-      - source_binding_id: binding-resource-23992904c6b2ab637669394cb6ad93ffada1c2e3a32fb56e0b21bb6294ec519b
-        source_id: source-readiness-23992904c6b2ab637669394cb6ad93ffada1c2e3a32fb56e0b21bb6294ec519b
+          node_id: monitors-reference-describes-monitor-api
+      - source_binding_id: datadog-resource-users
+        source_id: source_datadog_users
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-23992904c6b2ab637669394cb6ad93ffada1c2e3a32fb56e0b21bb6294ec519b
-      - source_binding_id: binding-resource-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
-        source_id: source-readiness-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
+          node_id: users
+      - source_binding_id: datadog-resource-org-settings
+        source_id: source_datadog_org_settings
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
-      - source_binding_id: binding-relation-7d6a5f1c85f0c684188bb93c9bf14a8f05020d26613eb56afee403f066c13c67
-        source_id: source-readiness-bd1ac8b328987d87bac6a0d05ad31b3da68d475268173fb9ec0102888368342a
+          node_id: org-settings
+      - source_binding_id: datadog-relation-org-settings-describes-api-authentication
+        source_id: source_datadog_org_settings
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-7d6a5f1c85f0c684188bb93c9bf14a8f05020d26613eb56afee403f066c13c67
+          node_id: org-settings-describes-api-authentication
+      - { source_binding_id: datadog-operation-create-monitor, source_id: source_datadog_monitors, target: { node_kind: job_operation, node_id: create-monitor }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: datadog-operation-create-monitor-spec, source_id: source_datadog_openapi, target: { node_kind: job_operation, node_id: create-monitor }, field_paths: [/spec] }
+      - { source_binding_id: datadog-resource-mcp-docs, source_id: source_datadog_mcp_tools, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-endpoint-mcp-server, source_id: source_datadog_mcp_setup, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-endpoint-mcp-organization-settings, source_id: source_datadog_mcp_setup, target: { node_kind: endpoint, node_id: mcp-organization-settings }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: datadog-interface-datadog-mcp, source_id: source_datadog_mcp_tools, target: { node_kind: interface, node_id: datadog-mcp }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: datadog-interface-datadog-mcp-endpoints, source_id: source_datadog_mcp_setup, target: { node_kind: interface, node_id: datadog-mcp }, field_paths: [/endpoint_ids] }
+      - { source_binding_id: datadog-relation-mcp-docs, source_id: source_datadog_mcp_tools, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: datadog-operation-datadog-mcp, source_id: source_datadog_mcp_setup, target: { node_kind: job_operation, node_id: datadog-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: datadog-operation-datadog-mcp-tool, source_id: source_datadog_mcp_tools, target: { node_kind: job_operation, node_id: datadog-mcp }, field_paths: [/tool] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

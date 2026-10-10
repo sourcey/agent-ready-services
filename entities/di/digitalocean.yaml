@@ -20,15 +20,21 @@ sources:
   - { source_id: source_digitalocean_terms, url: https://www.digitalocean.com/legal/terms-of-service-agreement }
   - { source_id: source_digitalocean_support, url: https://docs.digitalocean.com/support/ }
   - { source_id: source_digitalocean_billing_checkout, url: https://docs.digitalocean.com/platform/billing/manage-payment-methods/ }
-  - source_id: source-readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+  - source_id: source_digitalocean_billing
     url: https://docs.digitalocean.com/platform/billing
-  - source_id: source-readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+  - source_id: source_digitalocean_pay_bills
     url: https://docs.digitalocean.com/platform/billing/pay-bills
+  - { source_id: source_digitalocean_mcp, url: https://github.com/digitalocean-labs/mcp-digitalocean/blob/main/pkg/registry/dbaas/README.md }
+  - { source_id: source_digitalocean_openapi, url: https://api-engineering.nyc3.digitaloceanspaces.com/spec-ci/DigitalOcean-public.v2.yaml }
+  - { source_id: source_digitalocean_databases_reference, url: https://docs.digitalocean.com/reference/api/reference/databases/ }
 declarations:
   - declaration_id: declaration_digitalocean_digitalocean_managed_databases_database_create
     scope:
       product: { key: digitalocean-managed-databases, name: DigitalOcean Managed Databases }
       job: { key: database-create, name: Create a database deployment }
+    job_operations:
+      - { operation_id: create-database, interface_id: resource-api, kind: http, endpoint_id: digitalocean-api, method: POST, url: https://api.digitalocean.com/v2/databases, headers: [], body: { media_type: application/json }, spec: { url: https://api-engineering.nyc3.digitaloceanspaces.com/spec-ci/DigitalOcean-public.v2.yaml, key_operations: null } }
+      - { operation_id: digitalocean-mcp, interface_id: digitalocean-mcp, kind: mcp, endpoint_id: mcp-server, tool: db-cluster-create }
     job_bindings: []
     participants:
       - { participant_id: digitalocean, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe29kn3bm05h7kyqyka } }
@@ -43,32 +49,36 @@ declarations:
       - { resource_id: api-reference, uri: https://docs.digitalocean.com/reference/api/reference/public-apis/, roles: [status, operations, recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.digitalocean.com/support/, roles: [recovery, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { resource_id: billing-checkout, uri: https://docs.digitalocean.com/platform/billing/manage-payment-methods/, roles: [checkout, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
-      - resource_id: readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+      - resource_id: billing
         uri: https://docs.digitalocean.com/platform/billing
         roles:
           - checkout
           - documentation
         operated_by_participant_id: digitalocean
         standard_bindings: []
-      - resource_id: readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+      - resource_id: pay-bills
         uri: https://docs.digitalocean.com/platform/billing/pay-bills
         roles:
           - checkout
           - documentation
         operated_by_participant_id: digitalocean
         standard_bindings: []
+      - { resource_id: mcp-docs, uri: https://github.com/digitalocean-labs/mcp-digitalocean/blob/main/pkg/registry/dbaas/README.md, roles: [discovery, operations, documentation], operated_by_participant_id: digitalocean, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://cloud.digitalocean.com/registrations/new, transport: http, roles: [registration], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { endpoint_id: digitalocean-api, uri: https://api.digitalocean.com/v2, transport: http, roles: [service, status], operated_by_participant_id: digitalocean, standard_bindings: [] }
+      - { endpoint_id: mcp-server, uri: https://databases.mcp.digitalocean.com/mcp, transport: http, roles: [service, protected_resource], operated_by_participant_id: digitalocean, standard_bindings: [] }
     interfaces:
       - { interface_id: resource-api, modality: network_api, functions: [service_operation], endpoint_ids: [digitalocean-api], resource_ids: [api-overview, api-reference, database-provisioning, database-api-reference], operated_by_participant_id: digitalocean, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [personal-access-tokens], operated_by_participant_id: digitalocean, standard_bindings: [] }
+      - { interface_id: digitalocean-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server], resource_ids: [mcp-docs], operated_by_participant_id: digitalocean, standard_bindings: [] }
     relations:
       - { relation_id: overview-describes-api, kind: describes, from: { node_kind: resource, node_id: api-overview }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: cloud-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: provisioning-describes-api, kind: describes, from: { node_kind: resource, node_id: database-provisioning }, to: { node_kind: interface, node_id: resource-api } }
       - { relation_id: database-reference-describes-api, kind: describes, from: { node_kind: resource, node_id: database-api-reference }, to: { node_kind: interface, node_id: resource-api } }
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: digitalocean-mcp } }
     offer_relations: []
     source_bindings:
       - { source_binding_id: digitalocean-scope-create, source_id: source_digitalocean_database_create, target: { node_kind: declaration, node_id: declaration_digitalocean_digitalocean_managed_databases_database_create }, field_paths: [/scope/product/name, /scope/job/name] }
@@ -94,24 +104,32 @@ declarations:
       - { source_binding_id: digitalocean-relation-database-reference, source_id: source_digitalocean_api_reference, target: { node_kind: relation, node_id: database-reference-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: digitalocean-resource-billing-checkout, source_id: source_digitalocean_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: digitalocean-exclusion-separate-eligibility, source_id: source_digitalocean_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-resource-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
-        source_id: source-readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
+      - source_binding_id: digitalocean-resource-billing
+        source_id: source_digitalocean_billing
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-38ac9cba1fc5f5f32a94af7307a6e0f09887bd79aaedfdc203e639bb6955ff01
-      - source_binding_id: binding-resource-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
-        source_id: source-readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+          node_id: billing
+      - source_binding_id: digitalocean-resource-pay-bills
+        source_id: source_digitalocean_pay_bills
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-1fac3de1ea82adc8a281ea3f3224ba5fe051ec585a30748fa13495f0d8db102f
+          node_id: pay-bills
+      - { source_binding_id: digitalocean-operation-create-database, source_id: source_digitalocean_databases_reference, target: { node_kind: job_operation, node_id: create-database }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: digitalocean-resource-mcp-docs, source_id: source_digitalocean_mcp, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: digitalocean-endpoint-mcp-server, source_id: source_digitalocean_mcp, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: digitalocean-interface-mcp, source_id: source_digitalocean_mcp, target: { node_kind: interface, node_id: digitalocean-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: digitalocean-relation-mcp-docs, source_id: source_digitalocean_mcp, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: digitalocean-operation-digitalocean-mcp, source_id: source_digitalocean_mcp, target: { node_kind: job_operation, node_id: digitalocean-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: digitalocean-operation-create-database-spec, source_id: source_digitalocean_openapi, target: { node_kind: job_operation, node_id: create-database }, field_paths: [/spec] }
+      - { source_binding_id: digitalocean-operation-digitalocean-mcp-tool, source_id: source_digitalocean_mcp, target: { node_kind: job_operation, node_id: digitalocean-mcp }, field_paths: [/tool] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

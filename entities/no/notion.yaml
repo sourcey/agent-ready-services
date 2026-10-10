@@ -23,17 +23,23 @@ sources:
   - { source_id: source_notion_signup, url: https://app.notion.com/signup }
   - { source_id: source_notion_support, url: https://www.notion.com/help/category/connections/all }
   - { source_id: source_notion_billing_checkout, url: https://www.notion.com/help/upgrade-or-downgrade-your-plan }
+  - { source_id: source_notion_mcp, url: https://developers.notion.com/guides/mcp/mcp-supported-tools }
+  - { source_id: source_notion_versioning, url: https://developers.notion.com/reference/versioning }
+  - { source_id: source_notion_openapi, url: https://developers.notion.com/openapi.json }
 declarations:
   - declaration_id: declaration_notion_notion_api_workspace_page_create
     scope:
       product: { key: notion-api, name: Notion API }
       job: { key: workspace-page-create, name: Create a page }
+    job_operations:
+      - { operation_id: create-page, interface_id: content-api, kind: http, endpoint_id: notion-api, method: POST, url: https://api.notion.com/v1/pages, headers: [{ name: notion-version, value: "2026-03-11" }], body: { media_type: application/json }, spec: { url: https://developers.notion.com/openapi.json, key_operations: null } }
+      - { operation_id: notion-mcp, interface_id: notion-mcp, kind: mcp, endpoint_id: mcp-server, tool: notion-create-pages }
     job_bindings: []
     participants:
       - { participant_id: notion, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyyts97tbppvx69rh3v86sk2 } }
     resources:
       - { resource_id: api-overview, uri: https://developers.notion.com/guides/get-started/overview, roles: [discovery, eligibility, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
-      - { resource_id: service-terms, uri: https://www.notion.com/help/upgrade-or-downgrade-your-plan, roles: [terms, checkout, documentation], operated_by_participant_id: notion, standard_bindings: [] }
+      - { resource_id: service-terms, uri: https://www.notion.com/help/upgrade-or-downgrade-your-plan, roles: [terms, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: pricing, uri: https://www.notion.com/pricing, roles: [pricing], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: workspace-signup, uri: https://app.notion.com/signup, roles: [access], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: authorization, uri: https://developers.notion.com/guides/get-started/authorization, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: notion, standard_bindings: [] }
@@ -42,18 +48,22 @@ declarations:
       - { resource_id: request-limits, uri: https://developers.notion.com/reference/request-limits, roles: [status, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: status-codes, uri: https://developers.notion.com/reference/status-codes, roles: [status, operations, recovery, documentation], operated_by_participant_id: notion, standard_bindings: [] }
       - { resource_id: support, uri: https://www.notion.com/help/category/connections/all, roles: [recovery, documentation], operated_by_participant_id: notion, standard_bindings: [] }
+      - { resource_id: mcp-docs, uri: https://developers.notion.com/guides/mcp/mcp-supported-tools, roles: [discovery, operations, documentation], operated_by_participant_id: notion, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://app.notion.com/signup, transport: http, roles: [registration], operated_by_participant_id: notion, standard_bindings: [] }
       - { endpoint_id: notion-api, uri: https://api.notion.com/v1, transport: http, roles: [service, status], operated_by_participant_id: notion, standard_bindings: [] }
       - { endpoint_id: oauth-token, uri: https://api.notion.com/v1/oauth/token, transport: http, roles: [authorization, token], operated_by_participant_id: notion, standard_bindings: [{ namespace: oauth, version: "2.0", relation: implements }] }
+      - { endpoint_id: mcp-server, uri: https://mcp.notion.com/mcp, transport: http, roles: [service, protected_resource], operated_by_participant_id: notion, standard_bindings: [] }
     interfaces:
       - { interface_id: content-api, modality: network_api, functions: [service_operation], endpoint_ids: [notion-api], resource_ids: [api-overview, quickstart, create-page, request-limits, status-codes], operated_by_participant_id: notion, standard_bindings: [] }
       - { interface_id: integration-authentication, modality: network_api, functions: [authentication], endpoint_ids: [oauth-token], resource_ids: [authorization], operated_by_participant_id: notion, standard_bindings: [{ namespace: oauth, version: "2.0", relation: uses }] }
+      - { interface_id: notion-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server], resource_ids: [mcp-docs], operated_by_participant_id: notion, standard_bindings: [] }
     relations:
       - { relation_id: overview-describes-api, kind: describes, from: { node_kind: resource, node_id: api-overview }, to: { node_kind: interface, node_id: content-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: integration-authentication }, to: { node_kind: interface, node_id: content-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: workspace-signup }, to: { node_kind: interface, node_id: integration-authentication } }
       - { relation_id: status-describes-api, kind: describes, from: { node_kind: resource, node_id: status-codes }, to: { node_kind: interface, node_id: content-api } }
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: notion-mcp } }
     offer_relations: []
     source_bindings:
       - { source_binding_id: notion-scope, source_id: source_notion_create_page, target: { node_kind: declaration, node_id: declaration_notion_notion_api_workspace_page_create }, field_paths: [/scope/product/name, /scope/job/name] }
@@ -77,6 +87,16 @@ declarations:
       - { source_binding_id: notion-relation-auth, source_id: source_notion_authorization, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: notion-relation-signup, source_id: source_notion_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: notion-relation-status, source_id: source_notion_status_codes, target: { node_kind: relation, node_id: status-describes-api }, field_paths: [/kind, /from, /to] }
-    surface_exclusions: []
+      - { source_binding_id: notion-operation-create-page, source_id: source_notion_create_page, target: { node_kind: job_operation, node_id: create-page }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: notion-resource-mcp-docs, source_id: source_notion_mcp, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: notion-endpoint-mcp-server, source_id: source_notion_mcp, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: notion-interface-mcp, source_id: source_notion_mcp, target: { node_kind: interface, node_id: notion-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: notion-relation-mcp-docs, source_id: source_notion_mcp, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: notion-operation-notion-mcp, source_id: source_notion_mcp, target: { node_kind: job_operation, node_id: notion-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: notion-operation-create-page-headers, source_id: source_notion_versioning, target: { node_kind: job_operation, node_id: create-page }, field_paths: [/headers] }
+      - { source_binding_id: notion-operation-create-page-spec, source_id: source_notion_openapi, target: { node_kind: job_operation, node_id: create-page }, field_paths: [/spec] }
+      - { source_binding_id: notion-operation-notion-mcp-tool, source_id: source_notion_mcp, target: { node_kind: job_operation, node_id: notion-mcp }, field_paths: [/tool] }
+      - { source_binding_id: notion-exclusion-free-job-no-checkout, source_id: source_notion_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
+    surface_exclusions: [{ exclusion_id: free-job-no-checkout, role: checkout, rationale: Notion's free plan creates pages with no payment. }]
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

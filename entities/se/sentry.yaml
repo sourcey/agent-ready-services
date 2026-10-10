@@ -14,7 +14,7 @@ sources:
   - { source_id: source_sentry_auth, url: https://docs.sentry.io/api/auth/ }
   - { source_id: source_sentry_projects, url: https://docs.sentry.io/api/projects/create-a-new-project/ }
   - { source_id: source_sentry_issues, url: https://docs.sentry.io/api/events/ }
-  - { source_id: source_sentry_envelopes, url: https://develop.sentry.dev/sdk/data-model/envelopes/ }
+  - { source_id: source_sentry_envelopes, url: https://develop.sentry.dev/sdk/foundations/envelopes/ }
   - { source_id: source_sentry_event_retrieval, url: https://docs.sentry.io/api/events/retrieve-an-event-for-a-project/ }
   - { source_id: source_sentry_permissions, url: https://docs.sentry.io/api/permissions/ }
   - { source_id: source_sentry_limits, url: https://docs.sentry.io/api/ratelimits/ }
@@ -22,43 +22,45 @@ sources:
   - { source_id: source_sentry_signup, url: https://sentry.io/signup/ }
   - { source_id: source_sentry_terms, url: https://sentry.io/terms/ }
   - { source_id: source_sentry_support, url: https://sentry.zendesk.com/hc/en-us }
-  - { source_id: source_sentry_self_service_plan, url: https://www.sentry.help/en/articles/13965054-can-i-get-a-quote-for-sentry }
+  - { source_id: source_sentry_ingest_authentication, url: https://develop.sentry.dev/sdk/foundations/transport/authentication/ }
 declarations:
   - declaration_id: declaration_sentry_sentry_error_monitoring_error_event_report
     scope:
       product: { key: sentry-error-monitoring, name: Sentry Error Monitoring }
       job: { key: error-event-report, name: Report an error }
+    job_operations:
+      - { operation_id: report-event, interface_id: event-api, kind: http, endpoint_id: ingest-api, method: POST, url: https://o0.ingest.us.sentry.io/api/0/envelope/, headers: [], body: { media_type: application/x-sentry-envelope }, spec: null }
     job_bindings: []
     participants:
       - { participant_id: sentry, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyxthgq3w0q894h0tadvr0cq } }
     resources:
       - { resource_id: api-reference, uri: https://docs.sentry.io/api/, roles: [discovery, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: service-terms, uri: https://sentry.io/terms/, roles: [terms], operated_by_participant_id: sentry, standard_bindings: [] }
-      - { resource_id: pricing, uri: https://sentry.io/pricing/, roles: [checkout, documentation, pricing], operated_by_participant_id: sentry, standard_bindings: [] }
-      - { resource_id: self-service-plan, uri: https://www.sentry.help/en/articles/13965054-can-i-get-a-quote-for-sentry, roles: [checkout, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { resource_id: pricing, uri: https://sentry.io/pricing/, roles: [documentation, pricing], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: account-signup, uri: https://sentry.io/signup/, roles: [access], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.sentry.io/api/auth/, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: permissions, uri: https://docs.sentry.io/api/permissions/, roles: [descriptor, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: project-provisioning, uri: https://docs.sentry.io/api/projects/create-a-new-project/, roles: [provisioning, status, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: issue-operations, uri: https://docs.sentry.io/api/events/, roles: [status, operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
-      - { resource_id: event-ingestion, uri: https://develop.sentry.dev/sdk/data-model/envelopes/, roles: [operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { resource_id: event-ingestion, uri: https://develop.sentry.dev/sdk/foundations/envelopes/, roles: [operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: event-retrieval, uri: https://docs.sentry.io/api/events/retrieve-an-event-for-a-project/, roles: [operations, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: rate-limits, uri: https://docs.sentry.io/api/ratelimits/, roles: [status, operations, recovery, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
       - { resource_id: support, uri: https://sentry.zendesk.com/hc/en-us, roles: [recovery, documentation], operated_by_participant_id: sentry, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://sentry.io/signup/, transport: http, roles: [registration], operated_by_participant_id: sentry, standard_bindings: [] }
       - { endpoint_id: sentry-api, uri: https://sentry.io/api/0, transport: http, roles: [service, status], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { endpoint_id: sentry-us-api, uri: https://us.sentry.io/api/0, transport: http, roles: [service, status], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { endpoint_id: ingest-api, uri: https://o0.ingest.us.sentry.io, transport: http, roles: [service], operated_by_participant_id: sentry, standard_bindings: [] }
     interfaces:
-      - { interface_id: issue-api, modality: network_api, functions: [service_operation], endpoint_ids: [sentry-api], resource_ids: [api-reference, permissions, project-provisioning, issue-operations, event-retrieval, rate-limits], operated_by_participant_id: sentry, standard_bindings: [] }
-      - { interface_id: event-ingestion, modality: network_api, functions: [service_operation], endpoint_ids: [], resource_ids: [event-ingestion], operated_by_participant_id: sentry, standard_bindings: [] }
+      - { interface_id: event-api, modality: network_api, functions: [service_operation], endpoint_ids: [ingest-api, sentry-api, sentry-us-api], resource_ids: [api-reference, permissions, project-provisioning, event-ingestion, issue-operations, event-retrieval, rate-limits], operated_by_participant_id: sentry, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: sentry, standard_bindings: [] }
     relations:
-      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: issue-api } }
-      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: issue-api } }
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: event-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: event-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
-      - { relation_id: projects-describe-api, kind: describes, from: { node_kind: resource, node_id: project-provisioning }, to: { node_kind: interface, node_id: issue-api } }
-      - { relation_id: issues-describe-api, kind: describes, from: { node_kind: resource, node_id: issue-operations }, to: { node_kind: interface, node_id: issue-api } }
-      - { relation_id: envelopes-describe-ingestion, kind: describes, from: { node_kind: resource, node_id: event-ingestion }, to: { node_kind: interface, node_id: event-ingestion } }
+      - { relation_id: projects-describe-api, kind: describes, from: { node_kind: resource, node_id: project-provisioning }, to: { node_kind: interface, node_id: event-api } }
+      - { relation_id: issues-describe-api, kind: describes, from: { node_kind: resource, node_id: issue-operations }, to: { node_kind: interface, node_id: event-api } }
+      - { relation_id: envelopes-describe-ingestion, kind: describes, from: { node_kind: resource, node_id: event-ingestion }, to: { node_kind: interface, node_id: event-api } }
     offer_relations: []
     source_bindings:
       - { source_binding_id: sentry-scope-report, source_id: source_sentry_envelopes, target: { node_kind: declaration, node_id: declaration_sentry_sentry_error_monitoring_error_event_report }, field_paths: [/scope/product/name, /scope/job/name] }
@@ -67,7 +69,6 @@ declarations:
       - { source_binding_id: sentry-resource-reference, source_id: source_sentry_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-terms, source_id: source_sentry_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-pricing, source_id: source_sentry_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: sentry-resource-self-service-plan, source_id: source_sentry_self_service_plan, target: { node_kind: resource, node_id: self-service-plan }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-signup, source_id: source_sentry_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-endpoint-registration, source_id: source_sentry_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-auth, source_id: source_sentry_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -79,8 +80,8 @@ declarations:
       - { source_binding_id: sentry-resource-limits, source_id: source_sentry_limits, target: { node_kind: resource, node_id: rate-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-resource-support, source_id: source_sentry_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: sentry-endpoint-api, source_id: source_sentry_api, target: { node_kind: endpoint, node_id: sentry-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
-      - { source_binding_id: sentry-interface-api, source_id: source_sentry_issues, target: { node_kind: interface, node_id: issue-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
-      - { source_binding_id: sentry-interface-ingestion, source_id: source_sentry_envelopes, target: { node_kind: interface, node_id: event-ingestion }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: sentry-interface-api, source_id: source_sentry_issues, target: { node_kind: interface, node_id: event-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: sentry-interface-ingestion, source_id: source_sentry_envelopes, target: { node_kind: interface, node_id: event-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: sentry-interface-auth, source_id: source_sentry_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: sentry-relation-reference, source_id: source_sentry_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-relation-auth, source_id: source_sentry_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
@@ -89,7 +90,13 @@ declarations:
       - { source_binding_id: sentry-relation-issues, source_id: source_sentry_issues, target: { node_kind: relation, node_id: issues-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-relation-ingestion, source_id: source_sentry_envelopes, target: { node_kind: relation, node_id: envelopes-describe-ingestion }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: sentry-exclusion-separate-eligibility, source_id: source_sentry_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - { source_binding_id: sentry-endpoint-us-api, source_id: source_sentry_api, target: { node_kind: endpoint, node_id: sentry-us-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: sentry-endpoint-ingest-api, source_id: source_sentry_ingest_authentication, target: { node_kind: endpoint, node_id: ingest-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: sentry-operation-report-event, source_id: source_sentry_envelopes, target: { node_kind: job_operation, node_id: report-event }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: sentry-operation-report-event-host, source_id: source_sentry_ingest_authentication, target: { node_kind: job_operation, node_id: report-event }, field_paths: [/endpoint_id, /url] }
+      - { source_binding_id: sentry-exclusion-free-job-no-checkout, source_id: source_sentry_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - { exclusion_id: free-job-no-checkout, role: checkout, rationale: Sentry's free Developer plan reports errors with no payment. }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

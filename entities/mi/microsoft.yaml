@@ -39,10 +39,12 @@ sources:
   - source_id: source_azure_support
     url: https://azure.microsoft.com/en-us/support/options/
   - { source_id: source_microsoft_billing_checkout, url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card }
-  - source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+  - source_id: source_microsoft_create_subscription
     url: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription
-  - source_id: source_microsoft_832a71439f1525fb0a21bd41
+  - source_id: source_microsoft_create
     url: https://learn.microsoft.com/en-us/rest/api/storagerp/blob-containers/create?view=rest-storagerp-2026-09-01
+  - { source_id: source_azure_arm_mcp, url: https://github.com/Azure/Azure-Resource-Manager-MCP }
+  - { source_id: source_azure_arm_mcp_install, url: https://aka.ms/JoinARMMCP }
 declarations:
   - declaration_id: declaration_microsoft_microsoft_azure_bucket_create
     scope:
@@ -52,6 +54,9 @@ declarations:
       job:
         key: bucket-create
         name: Create a storage bucket
+    job_operations:
+      - { operation_id: create-container, interface_id: azure-resource-manager, kind: http, endpoint_id: azure-resource-manager, method: PUT, url: "https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sourcey-probe/providers/Microsoft.Storage/storageAccounts/sourceyprobe/blobServices/default/containers/sourcey-probe?api-version=2026-09-01", headers: [], body: { media_type: application/json }, spec: null }
+      - { operation_id: arm-mcp, interface_id: arm-mcp, kind: mcp, endpoint_id: arm-mcp-server, tool: create_or_update_resource }
     job_bindings: []
     participants:
       - participant_id: microsoft
@@ -136,11 +141,12 @@ declarations:
         operated_by_participant_id: microsoft
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/change-credit-card, roles: [checkout, documentation], operated_by_participant_id: microsoft, standard_bindings: [] }
-      - resource_id: readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+      - resource_id: create-subscription
         uri: https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/create-subscription
         roles: [access, checkout, documentation]
         operated_by_participant_id: microsoft
         standard_bindings: []
+      - { resource_id: arm-mcp-docs, uri: https://github.com/Azure/Azure-Resource-Manager-MCP, roles: [discovery, operations, documentation], operated_by_participant_id: microsoft, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://signup.azure.com/, transport: http, roles: [registration], operated_by_participant_id: microsoft, standard_bindings: [] }
       - endpoint_id: azure-resource-manager
@@ -164,6 +170,7 @@ declarations:
         roles: [service]
         operated_by_participant_id: microsoft
         standard_bindings: []
+      - { endpoint_id: arm-mcp-server, uri: https://mcp.management.azure.com, transport: http, roles: [service, protected_resource], operated_by_participant_id: microsoft, standard_bindings: [] }
     interfaces:
       - interface_id: azure-resource-manager
         modality: network_api
@@ -174,7 +181,7 @@ declarations:
         standard_bindings: []
       - interface_id: workload-authentication
         modality: network_api
-        functions: [service_operation, authentication]
+        functions: [authentication]
         endpoint_ids: [entra-token]
         resource_ids: [service-principals, client-credentials]
         operated_by_participant_id: microsoft
@@ -184,11 +191,12 @@ declarations:
             relation: uses
       - interface_id: pricing-and-cost
         modality: network_api
-        functions: [service_operation, commerce]
+        functions: [commerce]
         endpoint_ids: [retail-prices]
         resource_ids: [azure-pricing, retail-prices-api, cost-management-permissions]
         operated_by_participant_id: microsoft
         standard_bindings: []
+      - { interface_id: arm-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [arm-mcp-server], resource_ids: [arm-mcp-docs], operated_by_participant_id: microsoft, standard_bindings: [] }
     relations:
       - relation_id: resource-manager-docs-describe-interface
         kind: describes
@@ -214,10 +222,11 @@ declarations:
         kind: describes
         from: { node_kind: resource, node_id: retail-prices-api }
         to: { node_kind: interface, node_id: pricing-and-cost }
+      - { relation_id: arm-mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: arm-mcp-docs }, to: { node_kind: interface, node_id: arm-mcp } }
     offer_relations: []
     source_bindings:
       - source_binding_id: microsoft-declaration-scope
-        source_id: source_microsoft_832a71439f1525fb0a21bd41
+        source_id: source_microsoft_create
         target: { node_kind: declaration, node_id: declaration_microsoft_microsoft_azure_bucket_create }
         field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: microsoft-participant
@@ -333,15 +342,22 @@ declarations:
         target: { node_kind: relation, node_id: pricing-docs-describe-interface }
         field_paths: [/kind, /from, /to]
       - { source_binding_id: microsoft-resource-billing-checkout, source_id: source_microsoft_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - source_binding_id: binding-resource-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
-        source_id: source-readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+      - source_binding_id: microsoft-resource-create-subscription
+        source_id: source_microsoft_create_subscription
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-2c5e3e9374587cf94c00720160f0e60599f3d9aa340b5adf2c017bf2fc97eea2
+          node_id: create-subscription
+      - { source_binding_id: microsoft-operation-create-container, source_id: source_microsoft_create, target: { node_kind: job_operation, node_id: create-container }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: microsoft-resource-arm-mcp-docs, source_id: source_azure_arm_mcp, target: { node_kind: resource, node_id: arm-mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: microsoft-endpoint-arm-mcp-server, source_id: source_azure_arm_mcp_install, target: { node_kind: endpoint, node_id: arm-mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: microsoft-interface-arm-mcp, source_id: source_azure_arm_mcp, target: { node_kind: interface, node_id: arm-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: microsoft-relation-arm-mcp-docs, source_id: source_azure_arm_mcp, target: { node_kind: relation, node_id: arm-mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: microsoft-operation-arm-mcp, source_id: source_azure_arm_mcp_install, target: { node_kind: job_operation, node_id: arm-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: microsoft-operation-arm-mcp-tool, source_id: source_azure_arm_mcp, target: { node_kind: job_operation, node_id: arm-mcp }, field_paths: [/tool] }
     surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z

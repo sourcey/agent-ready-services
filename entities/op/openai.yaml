@@ -20,17 +20,21 @@ sources:
   - { source_id: source_openai_terms, url: https://openai.com/policies/services-agreement/ }
   - { source_id: source_openai_support, url: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage }
   - { source_id: source_openai_prepaid_billing, url: https://help.openai.com/en/articles/8264644-how-can-i-set-up-prepaid-billing }
-  - source_id: source-readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
+  - source_id: source_openai_best_practices_for_api_key_safety
     url: https://help.openai.com/en/articles/4936850-best-practices-for-api-key-safety
-  - source_id: source_openai_90f2bf11e4fb71c8f42ae128
+  - source_id: source_openai_function_calling
     url: https://developers.openai.com/api/docs/guides/function-calling
-  - source_id: source_openai_f9a3ddf07408f8c10367dde5
+  - source_id: source_openai_list
     url: https://developers.openai.com/api/reference/resources/models/methods/list
+  - { source_id: source_openai_responses_create, url: https://developers.openai.com/api/reference/resources/responses/methods/create }
+  - { source_id: source_openai_openapi, url: https://raw.githubusercontent.com/openai/openai-openapi/main/openapi.json }
 declarations:
   - declaration_id: declaration_openai_openai_api_model_chat_stream_tool
     scope:
       product: { key: openai-api, name: OpenAI API }
       job: { key: model-chat-stream-tool, name: Stream a completion with a tool call }
+    job_operations:
+      - { operation_id: create-response, interface_id: api-service, kind: http, endpoint_id: responses-api, method: POST, url: https://api.openai.com/v1/responses, headers: [], body: { media_type: application/json }, spec: { url: https://raw.githubusercontent.com/openai/openai-openapi/main/openapi.json, key_operations: null } }
     job_bindings: []
     participants:
       - participant_id: openai
@@ -47,7 +51,7 @@ declarations:
       - { resource_id: rate-limits, uri: https://developers.openai.com/api/docs/guides/rate-limits, roles: [status, operations, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: billing-support, uri: https://help.openai.com/en/collections/3675945-understanding-openai-api-billing-usage, roles: [recovery, documentation], operated_by_participant_id: openai, standard_bindings: [] }
       - { resource_id: prepaid-billing, uri: https://help.openai.com/en/articles/8264644-how-can-i-set-up-prepaid-billing, roles: [pricing, checkout, documentation], operated_by_participant_id: openai, standard_bindings: [] }
-      - resource_id: readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
+      - resource_id: best-practices-for-api-key-safety
         uri: https://help.openai.com/en/articles/4936850-best-practices-for-api-key-safety
         roles:
           - authentication
@@ -66,18 +70,18 @@ declarations:
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: platform-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: errors-describe-api, kind: describes, from: { node_kind: resource, node_id: api-errors }, to: { node_kind: interface, node_id: api-service } }
       - { relation_id: responses-guide-describes-api, kind: describes, from: { node_kind: resource, node_id: responses-guide }, to: { node_kind: interface, node_id: api-service } }
-      - relation_id: relation-describes-11bdd29edd85e9d60a95b586c2db646cdf514d60dd5f2c97cbf0b2979b5fa8f6
+      - relation_id: best-practices-for-api-key-safety-describes-api-authentication
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
+          node_id: best-practices-for-api-key-safety
         to:
           node_kind: interface
           node_id: api-authentication
     offer_relations: []
     source_bindings:
-      - { source_binding_id: openai-scope, source_id: source_openai_90f2bf11e4fb71c8f42ae128, target: { node_kind: declaration, node_id: declaration_openai_openai_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
-      - { source_binding_id: binding_declaration_declaration_openai_openai_api_model_chat_stream_tool_f9a3ddf07408f8c10367dde5, source_id: source_openai_f9a3ddf07408f8c10367dde5, target: { node_kind: declaration, node_id: declaration_openai_openai_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: openai-scope, source_id: source_openai_function_calling, target: { node_kind: declaration, node_id: declaration_openai_openai_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: openai-scope-2, source_id: source_openai_list, target: { node_kind: declaration, node_id: declaration_openai_openai_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: openai-participant, source_id: source_openai_api_reference, target: { node_kind: participant, node_id: openai }, field_paths: [/roles, /identity] }
       - { source_binding_id: openai-resource-reference, source_id: source_openai_api_reference, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openai-resource-terms, source_id: source_openai_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -99,24 +103,26 @@ declarations:
       - { source_binding_id: openai-relation-errors, source_id: source_openai_errors, target: { node_kind: relation, node_id: errors-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: openai-relation-responses, source_id: source_openai_responses, target: { node_kind: relation, node_id: responses-guide-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: openai-exclusion-separate-eligibility, source_id: source_openai_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-resource-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
-        source_id: source-readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
+      - source_binding_id: openai-resource-best-practices-for-api-key-safety
+        source_id: source_openai_best_practices_for_api_key_safety
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
-      - source_binding_id: binding-relation-11bdd29edd85e9d60a95b586c2db646cdf514d60dd5f2c97cbf0b2979b5fa8f6
-        source_id: source-readiness-b40f6dd9ecf10bde91b1d804002877ffaa0484272ccd4856be863bfdab5a5b7c
+          node_id: best-practices-for-api-key-safety
+      - source_binding_id: openai-relation-best-practices-for-api-key-safety-describes-api-authentication
+        source_id: source_openai_best_practices_for_api_key_safety
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-11bdd29edd85e9d60a95b586c2db646cdf514d60dd5f2c97cbf0b2979b5fa8f6
+          node_id: best-practices-for-api-key-safety-describes-api-authentication
+      - { source_binding_id: openai-operation-create-response, source_id: source_openai_responses_create, target: { node_kind: job_operation, node_id: create-response }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: openai-operation-create-response-spec, source_id: source_openai_openapi, target: { node_kind: job_operation, node_id: create-response }, field_paths: [/spec] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

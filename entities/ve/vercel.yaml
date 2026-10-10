@@ -19,19 +19,22 @@ sources:
   - { source_id: source_vercel_terms, url: https://vercel.com/legal/terms }
   - { source_id: source_vercel_support, url: https://vercel.com/help }
   - { source_id: source_vercel_billing_checkout, url: https://vercel.com/docs/plans/pro-plan/billing }
-  - source_id: source-readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+  - source_id: source_vercel_cli_tokens
     url: https://vercel.com/docs/cli/tokens
-  - source_id: source-readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
-    url: https://vercel.com/docs/plans/pro-plan
-  - source_id: source-readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
-    url: https://vercel.com/docs/rest-api/billing/purchase-credits
-  - source_id: source_vercel_6dc7c9f0ba3a272546f39862
+  - source_id: source_vercel_create_a_new_deployment
     url: https://vercel.com/docs/rest-api/deployments/create-a-new-deployment
+  - { source_id: source_vercel_mcp, url: https://vercel.com/docs/agent-resources/vercel-mcp/tools/deployments }
+  - { source_id: source_vercel_mcp_clients, url: https://vercel.com/docs/agent-resources/vercel-mcp }
+  - { source_id: source_vercel_openapi, url: https://openapi.vercel.sh/ }
+  - { source_id: source_vercel_hobby, url: https://vercel.com/docs/plans/hobby }
 declarations:
   - declaration_id: declaration_vercel_vercel_rest_api_deployment_create
     scope:
       product: { key: vercel-rest-api, name: Vercel REST API }
       job: { key: deployment-create, name: Create a deployment }
+    job_operations:
+      - { operation_id: create-deployment, interface_id: deployment-api, kind: http, endpoint_id: vercel-api, method: POST, url: https://api.vercel.com/v13/deployments, headers: [], body: { media_type: application/json }, spec: { url: https://openapi.vercel.sh/, key_operations: { create: { method: POST, path: /v3/user/tokens }, revoke: { method: DELETE, path: "/v3/user/tokens/{tokenId}" } } } }
+      - { operation_id: vercel-mcp, interface_id: vercel-mcp, kind: mcp, endpoint_id: mcp-server, tool: create_deployment }
     job_bindings: []
     participants:
       - { participant_id: vercel, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe5dk9hex187x4g03fn } }
@@ -44,50 +47,41 @@ declarations:
       - { resource_id: deployment-operations, uri: https://vercel.com/docs/rest-api/reference/endpoints/deployments/create-a-new-deployment, roles: [provisioning, status, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://vercel.com/docs/rest-api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
       - { resource_id: support, uri: https://vercel.com/help, roles: [recovery, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://vercel.com/docs/plans/pro-plan/billing, roles: [pricing, checkout, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
-      - resource_id: readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+      - { resource_id: billing-checkout, uri: https://vercel.com/docs/plans/pro-plan/billing, roles: [pricing, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
+      - resource_id: cli-tokens
         uri: https://vercel.com/docs/cli/tokens
         roles:
           - authentication
           - documentation
         operated_by_participant_id: vercel
         standard_bindings: []
-      - resource_id: readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
-        uri: https://vercel.com/docs/plans/pro-plan
-        roles:
-          - checkout
-          - documentation
-        operated_by_participant_id: vercel
-        standard_bindings: []
-      - resource_id: readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
-        uri: https://vercel.com/docs/rest-api/billing/purchase-credits
-        roles:
-          - checkout
-          - documentation
-        operated_by_participant_id: vercel
-        standard_bindings: []
+      - { resource_id: mcp-docs, uri: https://vercel.com/docs/agent-resources/vercel-mcp/tools/deployments, roles: [discovery, operations, documentation], operated_by_participant_id: vercel, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://vercel.com/signup, transport: http, roles: [registration], operated_by_participant_id: vercel, standard_bindings: [] }
       - { endpoint_id: vercel-api, uri: https://api.vercel.com, transport: http, roles: [service, status], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { endpoint_id: mcp-server, uri: https://mcp.vercel.com, transport: http, roles: [service, protected_resource], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { endpoint_id: mcp-client-review, uri: https://forms.gle/FQ3nYPbovoHvbfmz9, transport: http, roles: [access_request], operated_by_participant_id: vercel, standard_bindings: [] }
     interfaces:
       - { interface_id: deployment-api, modality: network_api, functions: [service_operation], endpoint_ids: [vercel-api], resource_ids: [api-reference, deployment-operations, api-errors], operated_by_participant_id: vercel, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [access-tokens], operated_by_participant_id: vercel, standard_bindings: [] }
+      - { interface_id: vercel-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server, mcp-client-review], resource_ids: [mcp-docs], operated_by_participant_id: vercel, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: deployment-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: deployment-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: deployments-describe-api, kind: describes, from: { node_kind: resource, node_id: deployment-operations }, to: { node_kind: interface, node_id: deployment-api } }
-      - relation_id: relation-describes-6d02ed10c0b4e2431680d2306b1792c88939522d69d3aff8487cdc71565ad520
+      - relation_id: cli-tokens-describes-api-authentication
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+          node_id: cli-tokens
         to:
           node_kind: interface
           node_id: api-authentication
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: vercel-mcp } }
     offer_relations: []
     source_bindings:
-      - { source_binding_id: vercel-scope, source_id: source_vercel_6dc7c9f0ba3a272546f39862, target: { node_kind: declaration, node_id: declaration_vercel_vercel_rest_api_deployment_create }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: vercel-scope, source_id: source_vercel_create_a_new_deployment, target: { node_kind: declaration, node_id: declaration_vercel_vercel_rest_api_deployment_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: vercel-participant, source_id: source_vercel_api, target: { node_kind: participant, node_id: vercel }, field_paths: [/roles, /identity] }
       - { source_binding_id: vercel-resource-reference, source_id: source_vercel_api, target: { node_kind: resource, node_id: api-reference }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-resource-terms, source_id: source_vercel_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -107,43 +101,37 @@ declarations:
       - { source_binding_id: vercel-relation-deployments, source_id: source_vercel_deployments, target: { node_kind: relation, node_id: deployments-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: vercel-resource-billing-checkout, source_id: source_vercel_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: vercel-exclusion-separate-eligibility, source_id: source_vercel_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-resource-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
-        source_id: source-readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+      - source_binding_id: vercel-resource-cli-tokens
+        source_id: source_vercel_cli_tokens
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
-      - source_binding_id: binding-relation-6d02ed10c0b4e2431680d2306b1792c88939522d69d3aff8487cdc71565ad520
-        source_id: source-readiness-55d5a3246b49c5978d9cd909619ea57cb2e9a92593283460fba3bdd38e64a609
+          node_id: cli-tokens
+      - source_binding_id: vercel-relation-cli-tokens-describes-api-authentication
+        source_id: source_vercel_cli_tokens
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-6d02ed10c0b4e2431680d2306b1792c88939522d69d3aff8487cdc71565ad520
-      - source_binding_id: binding-resource-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
-        source_id: source-readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
-        field_paths:
-          - /uri
-          - /roles
-          - /operated_by_participant_id
-        target:
-          node_kind: resource
-          node_id: readiness-54635e0ef5c0510ed84229bf9da667a7aa6eae5d7bde501e7987da45a62b4c64
-      - source_binding_id: binding-resource-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
-        source_id: source-readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
-        field_paths:
-          - /uri
-          - /roles
-          - /operated_by_participant_id
-        target:
-          node_kind: resource
-          node_id: readiness-74d9faecf8e412bdc34272487dd9c3b5ccc64ea4c6ef4f0027ebbd1f3651c877
+          node_id: cli-tokens-describes-api-authentication
+      - { source_binding_id: vercel-operation-create-deployment, source_id: source_vercel_deployments, target: { node_kind: job_operation, node_id: create-deployment }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: vercel-resource-mcp-docs, source_id: source_vercel_mcp, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: vercel-endpoint-mcp-server, source_id: source_vercel_mcp, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: vercel-interface-mcp, source_id: source_vercel_mcp, target: { node_kind: interface, node_id: vercel-mcp }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: vercel-interface-mcp-endpoints, source_id: source_vercel_mcp_clients, target: { node_kind: interface, node_id: vercel-mcp }, field_paths: [/endpoint_ids] }
+      - { source_binding_id: vercel-endpoint-mcp-client-review, source_id: source_vercel_mcp_clients, target: { node_kind: endpoint, node_id: mcp-client-review }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: vercel-relation-mcp-docs, source_id: source_vercel_mcp, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: vercel-operation-vercel-mcp, source_id: source_vercel_mcp, target: { node_kind: job_operation, node_id: vercel-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: vercel-operation-create-deployment-spec, source_id: source_vercel_openapi, target: { node_kind: job_operation, node_id: create-deployment }, field_paths: [/spec] }
+      - { source_binding_id: vercel-operation-vercel-mcp-tool, source_id: source_vercel_mcp, target: { node_kind: job_operation, node_id: vercel-mcp }, field_paths: [/tool] }
+      - { source_binding_id: vercel-exclusion-free-job-no-checkout, source_id: source_vercel_hobby, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - { exclusion_id: free-job-no-checkout, role: checkout, rationale: Vercel's free Hobby plan creates deployments with no payment. }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

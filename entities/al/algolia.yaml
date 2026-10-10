@@ -10,14 +10,16 @@ entity:
       valid_from: 2026-07-27T07:38:51.225Z
   category: devtools-other
 sources:
-  - source_id: source_algolia_9c8af2852c4ada9e1caf66d7
+  - source_id: source_algolia_home
     url: https://www.algolia.com/
-  - source_id: source_algolia_461ed5ae043781a3bd90555b
+  - source_id: source_algolia_terms
     url: https://www.algolia.com/policies/terms
-  - source_id: source_algolia_006bba09b08519bffa6b2b20
+  - source_id: source_algolia_save_object
     url: https://www.algolia.com/doc/rest-api/search/save-object
-  - source_id: source_algolia_54c68d3e0271551e7f8e6e28
+  - source_id: source_algolia_search_single_index
     url: https://www.algolia.com/doc/rest-api/search/search-single-index
+  - { source_id: source_algolia_openapi, url: https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/bundled/search.yml }
+  - { source_id: source_algolia_pricing, url: https://www.algolia.com/pricing/ }
 declarations:
   - declaration_id: declaration_algolia_algolia_search_api_search_record_find
     scope:
@@ -27,6 +29,8 @@ declarations:
       job:
         key: search-record-find
         name: Find a record by search
+    job_operations:
+      - { operation_id: search-records, interface_id: search-api, kind: spec, spec_url: https://raw.githubusercontent.com/algolia/api-clients-automation/main/specs/bundled/search.yml, method: POST, path: "/1/indexes/{indexName}/query", key_operations: { create: { method: POST, path: /1/keys }, revoke: { method: DELETE, path: "/1/keys/{key}" } } }
     job_bindings: []
     participants:
       - participant_id: subject
@@ -40,20 +44,20 @@ declarations:
         identity:
           entity_id: ent_01kyh8fpe02zy8c759a19bfsbc
     resources:
-      - resource_id: resource-006bba09b08519bf
+      - resource_id: save-object
         uri: https://www.algolia.com/doc/rest-api/search/save-object
         roles:
           - operations
           - documentation
         operated_by_participant_id: subject
         standard_bindings: []
-      - resource_id: resource-461ed5ae043781a3
+      - resource_id: terms
         uri: https://www.algolia.com/policies/terms
         roles:
           - terms
         operated_by_participant_id: subject
         standard_bindings: []
-      - resource_id: resource-54c68d3e0271551e
+      - resource_id: search-single-index
         uri: https://www.algolia.com/doc/rest-api/search/search-single-index
         roles:
           - operations
@@ -68,66 +72,66 @@ declarations:
           - service_operation
         endpoint_ids: []
         resource_ids:
-          - resource-006bba09b08519bf
-          - resource-54c68d3e0271551e
+          - save-object
+          - search-single-index
         operated_by_participant_id: subject
         standard_bindings: []
     relations: []
     offer_relations: []
     source_bindings:
-      - source_binding_id: binding_declaration_declaration_algolia_algolia_search_api_search_record_find_006bba09b08519bffa6b2b20
-        source_id: source_algolia_006bba09b08519bffa6b2b20
+      - source_binding_id: algolia-scope
+        source_id: source_algolia_save_object
         field_paths:
           - /scope/product/name
           - /scope/job/name
         target:
           node_kind: declaration
           node_id: declaration_algolia_algolia_search_api_search_record_find
-      - source_binding_id: binding_declaration_declaration_algolia_algolia_search_api_search_record_find_54c68d3e0271551e7f8e6e28
-        source_id: source_algolia_54c68d3e0271551e7f8e6e28
+      - source_binding_id: algolia-scope-2
+        source_id: source_algolia_search_single_index
         field_paths:
           - /scope/product/name
           - /scope/job/name
         target:
           node_kind: declaration
           node_id: declaration_algolia_algolia_search_api_search_record_find
-      - source_binding_id: binding_participant_subject_9c8af2852c4ada9e1caf66d7
-        source_id: source_algolia_9c8af2852c4ada9e1caf66d7
+      - source_binding_id: algolia-participant
+        source_id: source_algolia_home
         field_paths:
           - /roles
           - /identity
         target:
           node_kind: participant
           node_id: subject
-      - source_binding_id: binding_resource_resource_006bba09b08519bf_006bba09b08519bffa6b2b20
-        source_id: source_algolia_006bba09b08519bffa6b2b20
+      - source_binding_id: algolia-resource-save-object
+        source_id: source_algolia_save_object
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: resource-006bba09b08519bf
-      - source_binding_id: binding_resource_resource_461ed5ae043781a3_461ed5ae043781a3bd90555b
-        source_id: source_algolia_461ed5ae043781a3bd90555b
+          node_id: save-object
+      - source_binding_id: algolia-resource-terms
+        source_id: source_algolia_terms
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: resource-461ed5ae043781a3
-      - source_binding_id: binding_resource_resource_54c68d3e0271551e_54c68d3e0271551e7f8e6e28
-        source_id: source_algolia_54c68d3e0271551e7f8e6e28
+          node_id: terms
+      - source_binding_id: algolia-resource-search-single-index
+        source_id: source_algolia_search_single_index
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: resource-54c68d3e0271551e
-      - source_binding_id: binding_interface_search_api_006bba09b08519bffa6b2b20
-        source_id: source_algolia_006bba09b08519bffa6b2b20
+          node_id: search-single-index
+      - source_binding_id: algolia-interface-search-api
+        source_id: source_algolia_save_object
         field_paths:
           - /modality
           - /functions
@@ -136,8 +140,8 @@ declarations:
         target:
           node_kind: interface
           node_id: search-api
-      - source_binding_id: binding_interface_search_api_54c68d3e0271551e7f8e6e28
-        source_id: source_algolia_54c68d3e0271551e7f8e6e28
+      - source_binding_id: algolia-interface-search-api-2
+        source_id: source_algolia_search_single_index
         field_paths:
           - /modality
           - /functions
@@ -146,6 +150,10 @@ declarations:
         target:
           node_kind: interface
           node_id: search-api
-    surface_exclusions: []
+      - { source_binding_id: algolia-operation-search-records, source_id: source_algolia_search_single_index, target: { node_kind: job_operation, node_id: search-records }, field_paths: [/interface_id, /method, /path] }
+      - { source_binding_id: algolia-operation-search-records-spec, source_id: source_algolia_openapi, target: { node_kind: job_operation, node_id: search-records }, field_paths: [/spec_url] }
+      - { source_binding_id: algolia-operation-search-records-keys, source_id: source_algolia_openapi, target: { node_kind: job_operation, node_id: search-records }, field_paths: [/key_operations] }
+      - { source_binding_id: algolia-exclusion-free-job-no-checkout, source_id: source_algolia_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
+    surface_exclusions: [{ exclusion_id: free-job-no-checkout, role: checkout, rationale: Algolia's free Build plan indexes records and searches them with no card on file. }]
     authority_intent: community
     declared_at: 2026-10-09T08:56:17.000Z

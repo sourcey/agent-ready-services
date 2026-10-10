@@ -12,25 +12,26 @@ entity:
 sources:
   - { source_id: source_pinecone_api, url: https://docs.pinecone.io/reference/api/introduction }
   - { source_id: source_pinecone_auth, url: https://docs.pinecone.io/reference/api/authentication }
-  - { source_id: source_pinecone_create_index, url: https://docs.pinecone.io/reference/api/2025-04/control-plane/create_index }
-  - { source_id: source_pinecone_upsert, url: https://docs.pinecone.io/reference/api/2025-04/data-plane/upsert }
-  - { source_id: source_pinecone_query, url: https://docs.pinecone.io/reference/api/2025-04/data-plane/query }
+  - { source_id: source_pinecone_create_index, url: https://docs.pinecone.io/reference/api/2026-07/control-plane/create_index }
+  - { source_id: source_pinecone_upsert, url: https://docs.pinecone.io/reference/api/2026-07/data-plane/upsert }
+  - { source_id: source_pinecone_query, url: https://docs.pinecone.io/reference/api/2026-07/data-plane/query }
   - { source_id: source_pinecone_limits, url: https://docs.pinecone.io/reference/api/database-limits }
   - { source_id: source_pinecone_errors, url: https://docs.pinecone.io/reference/api/errors }
   - { source_id: source_pinecone_pricing, url: https://www.pinecone.io/pricing/ }
   - { source_id: source_pinecone_signup, url: https://app.pinecone.io/ }
   - { source_id: source_pinecone_terms, url: https://www.pinecone.io/legal/master-subscription-agreement/ }
   - { source_id: source_pinecone_support, url: https://docs.pinecone.io/troubleshooting/how-to-work-with-support }
-  - { source_id: source_pinecone_billing_checkout, url: https://docs.pinecone.io/guides/organizations/manage-billing/change-payment-method }
-  - source_id: source-readiness-d071de696fe778be745100ce82afc8f60c9a2e0e1ebe9847436a528e9a96957b
+  - source_id: source_pinecone_manage_service_accounts
     url: https://docs.pinecone.io/guides/organizations/manage-service-accounts
-  - source_id: source-readiness-e8834e7c1bfd2395c514fd62ceeb0233b6ea73c6af2544509e27277d1cdee13d
+  - source_id: source_pinecone_understanding_organizations
     url: https://docs.pinecone.io/guides/organizations/understanding-organizations
 declarations:
   - declaration_id: declaration_pinecone_pinecone_database_api_vector_upsert_query
     scope:
       product: { key: pinecone-database-api, name: Pinecone Database API }
       job: { key: vector-upsert-query, name: Find a vector by query }
+    job_operations:
+      - { operation_id: query-vectors, interface_id: data-plane-api, kind: spec, spec_url: https://raw.githubusercontent.com/pinecone-io/pinecone-api/refs/heads/main/2026-07/db_data_2026-07.oas.yaml, method: POST, path: /query, key_operations: null }
     job_bindings: []
     participants:
       - { participant_id: pinecone, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe4a7e0sp2h5gjz9xbm } }
@@ -40,21 +41,20 @@ declarations:
       - { resource_id: pricing, uri: https://www.pinecone.io/pricing/, roles: [pricing], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: console-access, uri: https://app.pinecone.io/, roles: [access], allowed_redirect_hosts: [login.pinecone.io], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: authentication, uri: https://docs.pinecone.io/reference/api/authentication, roles: [authentication, descriptor, provisioning, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - { resource_id: create-index, uri: https://docs.pinecone.io/reference/api/2025-04/control-plane/create_index, roles: [provisioning, status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - { resource_id: upsert-vectors, uri: https://docs.pinecone.io/reference/api/2025-04/data-plane/upsert, roles: [operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - { resource_id: query-vectors, uri: https://docs.pinecone.io/reference/api/2025-04/data-plane/query, roles: [operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: create-index, uri: https://docs.pinecone.io/reference/api/2026-07/control-plane/create_index, roles: [provisioning, status, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: upsert-vectors, uri: https://docs.pinecone.io/reference/api/2026-07/data-plane/upsert, roles: [operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { resource_id: query-vectors, uri: https://docs.pinecone.io/reference/api/2026-07/data-plane/query, roles: [operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: database-limits, uri: https://docs.pinecone.io/reference/api/database-limits, roles: [status, operations, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://docs.pinecone.io/reference/api/errors, roles: [status, operations, recovery, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { resource_id: support, uri: https://docs.pinecone.io/troubleshooting/how-to-work-with-support, roles: [recovery, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://docs.pinecone.io/guides/organizations/manage-billing/change-payment-method, roles: [checkout, documentation], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - resource_id: readiness-d071de696fe778be745100ce82afc8f60c9a2e0e1ebe9847436a528e9a96957b
+      - resource_id: manage-service-accounts
         uri: https://docs.pinecone.io/guides/organizations/manage-service-accounts
         roles:
           - authentication
           - documentation
         operated_by_participant_id: pinecone
         standard_bindings: []
-      - resource_id: readiness-e8834e7c1bfd2395c514fd62ceeb0233b6ea73c6af2544509e27277d1cdee13d
+      - resource_id: understanding-organizations
         uri: https://docs.pinecone.io/guides/organizations/understanding-organizations
         roles:
           - access
@@ -63,20 +63,19 @@ declarations:
         standard_bindings: []
     endpoints:
       - { endpoint_id: registration, uri: https://app.pinecone.io/, transport: http, roles: [registration], allowed_redirect_hosts: [login.pinecone.io], operated_by_participant_id: pinecone, standard_bindings: [] }
-      - { endpoint_id: control-plane-api, uri: https://api.pinecone.io, transport: http, roles: [service, status], operated_by_participant_id: pinecone, standard_bindings: [] }
     interfaces:
-      - { interface_id: index-api, modality: network_api, functions: [service_operation], endpoint_ids: [control-plane-api], resource_ids: [api-reference, create-index, upsert-vectors, query-vectors, database-limits, api-errors], operated_by_participant_id: pinecone, standard_bindings: [] }
+      - { interface_id: data-plane-api, modality: network_api, functions: [service_operation], endpoint_ids: [], resource_ids: [api-reference, create-index, upsert-vectors, query-vectors, database-limits, api-errors], operated_by_participant_id: pinecone, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: pinecone, standard_bindings: [] }
     relations:
-      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: index-api } }
-      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: index-api } }
+      - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: data-plane-api } }
+      - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: data-plane-api } }
       - { relation_id: console-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: console-access }, to: { node_kind: interface, node_id: api-authentication } }
-      - { relation_id: create-index-describes-api, kind: describes, from: { node_kind: resource, node_id: create-index }, to: { node_kind: interface, node_id: index-api } }
-      - relation_id: relation-describes-55929b53f57ecd7278ff26842c4a8a886b0996c33c7f0eb4e486df1398d7f604
+      - { relation_id: create-index-describes-api, kind: describes, from: { node_kind: resource, node_id: create-index }, to: { node_kind: interface, node_id: data-plane-api } }
+      - relation_id: manage-service-accounts-describes-api-authentication
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-d071de696fe778be745100ce82afc8f60c9a2e0e1ebe9847436a528e9a96957b
+          node_id: manage-service-accounts
         to:
           node_kind: interface
           node_id: api-authentication
@@ -97,43 +96,44 @@ declarations:
       - { source_binding_id: pinecone-resource-limits, source_id: source_pinecone_limits, target: { node_kind: resource, node_id: database-limits }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-resource-errors, source_id: source_pinecone_errors, target: { node_kind: resource, node_id: api-errors }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-resource-support, source_id: source_pinecone_support, target: { node_kind: resource, node_id: support }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: pinecone-endpoint-api, source_id: source_pinecone_api, target: { node_kind: endpoint, node_id: control-plane-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
-      - { source_binding_id: pinecone-interface-api, source_id: source_pinecone_create_index, target: { node_kind: interface, node_id: index-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: pinecone-interface-api, source_id: source_pinecone_upsert, target: { node_kind: interface, node_id: data-plane-api }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: pinecone-interface-auth, source_id: source_pinecone_auth, target: { node_kind: interface, node_id: api-authentication }, field_paths: [/modality, /functions, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: pinecone-relation-reference, source_id: source_pinecone_api, target: { node_kind: relation, node_id: reference-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: pinecone-relation-auth, source_id: source_pinecone_auth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: pinecone-relation-console, source_id: source_pinecone_signup, target: { node_kind: relation, node_id: console-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: pinecone-relation-create, source_id: source_pinecone_create_index, target: { node_kind: relation, node_id: create-index-describes-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: pinecone-resource-billing-checkout, source_id: source_pinecone_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: pinecone-exclusion-separate-eligibility, source_id: source_pinecone_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-resource-d071de696fe778be745100ce82afc8f60c9a2e0e1ebe9847436a528e9a96957b
-        source_id: source-readiness-d071de696fe778be745100ce82afc8f60c9a2e0e1ebe9847436a528e9a96957b
+      - source_binding_id: pinecone-resource-manage-service-accounts
+        source_id: source_pinecone_manage_service_accounts
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-d071de696fe778be745100ce82afc8f60c9a2e0e1ebe9847436a528e9a96957b
-      - source_binding_id: binding-relation-55929b53f57ecd7278ff26842c4a8a886b0996c33c7f0eb4e486df1398d7f604
-        source_id: source-readiness-d071de696fe778be745100ce82afc8f60c9a2e0e1ebe9847436a528e9a96957b
+          node_id: manage-service-accounts
+      - source_binding_id: pinecone-relation-manage-service-accounts-describes-api-authentication
+        source_id: source_pinecone_manage_service_accounts
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-55929b53f57ecd7278ff26842c4a8a886b0996c33c7f0eb4e486df1398d7f604
-      - source_binding_id: binding-resource-e8834e7c1bfd2395c514fd62ceeb0233b6ea73c6af2544509e27277d1cdee13d
-        source_id: source-readiness-e8834e7c1bfd2395c514fd62ceeb0233b6ea73c6af2544509e27277d1cdee13d
+          node_id: manage-service-accounts-describes-api-authentication
+      - source_binding_id: pinecone-resource-understanding-organizations
+        source_id: source_pinecone_understanding_organizations
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-e8834e7c1bfd2395c514fd62ceeb0233b6ea73c6af2544509e27277d1cdee13d
+          node_id: understanding-organizations
+      - { source_binding_id: pinecone-operation-query-vectors, source_id: source_pinecone_query, target: { node_kind: job_operation, node_id: query-vectors }, field_paths: [/interface_id, /spec_url, /method, /path] }
+      - { source_binding_id: pinecone-exclusion-free-job-no-checkout, source_id: source_pinecone_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - { exclusion_id: free-job-no-checkout, role: checkout, rationale: Pinecone's free Starter plan upserts and queries vectors with no card on file. }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

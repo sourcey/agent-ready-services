@@ -20,21 +20,24 @@ sources:
   - { source_id: source_hubspot_signup, url: https://app.hubspot.com/signup-hubspot/crm }
   - { source_id: source_hubspot_terms, url: https://legal.hubspot.com/legal-stuff }
   - { source_id: source_hubspot_support, url: https://knowledge.hubspot.com/ }
-  - { source_id: source_hubspot_billing_checkout, url: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription }
-  - { source_id: source_hubspot_upgrade, url: https://knowledge.hubspot.com/account-management/how-do-i-upgrade-my-hubspot-account }
-  - source_id: source-readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+  - source_id: source_hubspot_developer_terms
     url: https://legal.hubspot.com/developer-terms
-  - source_id: source-readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+  - source_id: source_hubspot_private_apps
     url: https://developers.hubspot.com/docs/api/private-apps
-  - source_id: source-readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+  - source_id: source_hubspot_terms_of_service
     url: https://legal.hubspot.com/terms-of-service
-  - source_id: source_hubspot_fd9190fb7178d0e285073bfe
+  - source_id: source_hubspot_contacts_create_contact
     url: https://developers.hubspot.com/docs/api-reference/2026-03/crm/objects/contacts/create-contact
+  - { source_id: source_hubspot_mcp, url: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server }
+  - { source_id: source_hubspot_create_contact, url: https://developers.hubspot.com/docs/api-reference/legacy/crm/objects/contacts/create-contact }
 declarations:
   - declaration_id: declaration_hubspot_hubspot_crm_api_crm_contact_create
     scope:
       product: { key: hubspot-crm-api, name: HubSpot CRM API }
       job: { key: crm-contact-create, name: Create a contact }
+    job_operations:
+      - { operation_id: create-contact, interface_id: crm-api, kind: http, endpoint_id: hubspot-api, method: POST, url: https://api.hubapi.com/crm/v3/objects/contacts, headers: [], body: { media_type: application/json }, spec: null }
+      - { operation_id: hubspot-mcp, interface_id: hubspot-mcp, kind: mcp, endpoint_id: mcp-server, tool: manage_crm_objects }
     job_bindings: []
     participants:
       - { participant_id: hubspot, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe3new9gxd18qs3bskh } }
@@ -49,42 +52,43 @@ declarations:
       - { resource_id: api-errors, uri: https://developers.hubspot.com/docs/api-reference/error-handling, roles: [status, operations, recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: api-limits, uri: https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines, roles: [status, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { resource_id: support, uri: https://knowledge.hubspot.com/, roles: [recovery, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://knowledge.hubspot.com/account/manage-your-hubspot-subscription, roles: [checkout, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - { resource_id: subscription-upgrade, uri: https://knowledge.hubspot.com/account-management/how-do-i-upgrade-my-hubspot-account, roles: [checkout, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
-      - resource_id: readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+      - resource_id: developer-terms
         uri: https://legal.hubspot.com/developer-terms
         roles:
           - documentation
           - eligibility
         operated_by_participant_id: hubspot
         standard_bindings: []
-      - resource_id: readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+      - resource_id: private-apps
         uri: https://developers.hubspot.com/docs/api/private-apps
         roles:
           - authentication
           - documentation
         operated_by_participant_id: hubspot
         standard_bindings: []
-      - resource_id: readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+      - resource_id: terms-of-service
         uri: https://legal.hubspot.com/terms-of-service
         roles:
           - documentation
           - terms
         operated_by_participant_id: hubspot
         standard_bindings: []
+      - { resource_id: mcp-docs, uri: https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server, roles: [discovery, operations, documentation], operated_by_participant_id: hubspot, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://app.hubspot.com/signup-hubspot/crm, transport: http, roles: [registration], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { endpoint_id: hubspot-api, uri: https://api.hubapi.com, transport: http, roles: [service, status], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { endpoint_id: oauth-token, uri: https://api.hubapi.com/oauth/v1/token, transport: http, roles: [authorization, token], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: implements }] }
+      - { endpoint_id: mcp-server, uri: https://mcp.hubspot.com, transport: http, roles: [service, protected_resource], operated_by_participant_id: hubspot, standard_bindings: [] }
     interfaces:
       - { interface_id: crm-api, modality: network_api, functions: [service_operation], endpoint_ids: [hubspot-api], resource_ids: [api-overview, crm-operations, api-errors, api-limits], operated_by_participant_id: hubspot, standard_bindings: [] }
       - { interface_id: integration-authentication, modality: network_api, functions: [authentication], endpoint_ids: [oauth-token], resource_ids: [oauth], operated_by_participant_id: hubspot, standard_bindings: [{ namespace: oauth, version: "2.0", relation: uses }] }
+      - { interface_id: hubspot-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server], resource_ids: [mcp-docs], operated_by_participant_id: hubspot, standard_bindings: [] }
     relations:
       - { relation_id: overview-describes-api, kind: describes, from: { node_kind: resource, node_id: api-overview }, to: { node_kind: interface, node_id: crm-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: integration-authentication }, to: { node_kind: interface, node_id: crm-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: crm-signup }, to: { node_kind: interface, node_id: integration-authentication } }
       - { relation_id: crm-describes-api, kind: describes, from: { node_kind: resource, node_id: crm-operations }, to: { node_kind: interface, node_id: crm-api } }
-      - relation_id: relation-describes-b393d1b40a6a6b010018783b7b2272f9b811ed8dc1f6da3d7422cb2cec3f8fb7
+      - relation_id: oauth-describes-integration-authentication
         kind: describes
         from:
           node_kind: resource
@@ -92,17 +96,18 @@ declarations:
         to:
           node_kind: interface
           node_id: integration-authentication
-      - relation_id: relation-describes-091810ae56e2e84f96a64120fd2a5ad4b8bc336eb4c3abbdcaca07a2bd23c18a
+      - relation_id: private-apps-describes-integration-authentication
         kind: describes
         from:
           node_kind: resource
-          node_id: readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+          node_id: private-apps
         to:
           node_kind: interface
           node_id: integration-authentication
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: hubspot-mcp } }
     offer_relations: []
     source_bindings:
-      - { source_binding_id: hubspot-scope, source_id: source_hubspot_fd9190fb7178d0e285073bfe, target: { node_kind: declaration, node_id: declaration_hubspot_hubspot_crm_api_crm_contact_create }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: hubspot-scope, source_id: source_hubspot_contacts_create_contact, target: { node_kind: declaration, node_id: declaration_hubspot_hubspot_crm_api_crm_contact_create }, field_paths: [/scope/product/name, /scope/job/name] }
       - { source_binding_id: hubspot-participant, source_id: source_hubspot_api_overview, target: { node_kind: participant, node_id: hubspot }, field_paths: [/roles, /identity] }
       - { source_binding_id: hubspot-resource-overview, source_id: source_hubspot_api_overview, target: { node_kind: resource, node_id: api-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: hubspot-resource-terms, source_id: source_hubspot_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -123,18 +128,16 @@ declarations:
       - { source_binding_id: hubspot-relation-auth, source_id: source_hubspot_oauth, target: { node_kind: relation, node_id: authentication-authenticates-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: hubspot-relation-signup, source_id: source_hubspot_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: hubspot-relation-crm, source_id: source_hubspot_crm, target: { node_kind: relation, node_id: crm-describes-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: hubspot-resource-billing-checkout, source_id: source_hubspot_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: hubspot-resource-subscription-upgrade, source_id: source_hubspot_upgrade, target: { node_kind: resource, node_id: subscription-upgrade }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - source_binding_id: binding-resource-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
-        source_id: source-readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
+      - source_binding_id: hubspot-resource-developer-terms
+        source_id: source_hubspot_developer_terms
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-237735cc5ba6ecc44afc3287e10b76ffb4c73481fb6a5a1f2ca6e1fa98a8ee41
-      - source_binding_id: binding-relation-b393d1b40a6a6b010018783b7b2272f9b811ed8dc1f6da3d7422cb2cec3f8fb7
+          node_id: developer-terms
+      - source_binding_id: hubspot-relation-oauth-describes-integration-authentication
         source_id: source_hubspot_oauth
         field_paths:
           - /kind
@@ -142,34 +145,42 @@ declarations:
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-b393d1b40a6a6b010018783b7b2272f9b811ed8dc1f6da3d7422cb2cec3f8fb7
-      - source_binding_id: binding-resource-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
-        source_id: source-readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+          node_id: oauth-describes-integration-authentication
+      - source_binding_id: hubspot-resource-private-apps
+        source_id: source_hubspot_private_apps
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
-      - source_binding_id: binding-relation-091810ae56e2e84f96a64120fd2a5ad4b8bc336eb4c3abbdcaca07a2bd23c18a
-        source_id: source-readiness-ae84fdbaa51b9b88febbd2301b4157e03f052892fed3e42d69d878696fe3944c
+          node_id: private-apps
+      - source_binding_id: hubspot-relation-private-apps-describes-integration-authentication
+        source_id: source_hubspot_private_apps
         field_paths:
           - /kind
           - /from
           - /to
         target:
           node_kind: relation
-          node_id: relation-describes-091810ae56e2e84f96a64120fd2a5ad4b8bc336eb4c3abbdcaca07a2bd23c18a
-      - source_binding_id: binding-resource-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
-        source_id: source-readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
+          node_id: private-apps-describes-integration-authentication
+      - source_binding_id: hubspot-resource-terms-of-service
+        source_id: source_hubspot_terms_of_service
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-fedf565215bcde83431a45666a9a0edc7be9032ca5dbd43956ab753094c89a09
-    surface_exclusions: []
+          node_id: terms-of-service
+      - { source_binding_id: hubspot-operation-create-contact, source_id: source_hubspot_create_contact, target: { node_kind: job_operation, node_id: create-contact }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: hubspot-resource-mcp-docs, source_id: source_hubspot_mcp, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: hubspot-endpoint-mcp-server, source_id: source_hubspot_mcp, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: hubspot-interface-mcp, source_id: source_hubspot_mcp, target: { node_kind: interface, node_id: hubspot-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: hubspot-relation-mcp-docs, source_id: source_hubspot_mcp, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: hubspot-operation-hubspot-mcp, source_id: source_hubspot_mcp, target: { node_kind: job_operation, node_id: hubspot-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: hubspot-operation-hubspot-mcp-tool, source_id: source_hubspot_mcp, target: { node_kind: job_operation, node_id: hubspot-mcp }, field_paths: [/tool] }
+      - { source_binding_id: hubspot-exclusion-free-job-no-checkout, source_id: source_hubspot_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
+    surface_exclusions: [{ exclusion_id: free-job-no-checkout, role: checkout, rationale: HubSpot's free CRM creates contacts with no credit card. }]
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

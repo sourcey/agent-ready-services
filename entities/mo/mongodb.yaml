@@ -20,14 +20,23 @@ sources:
   - { source_id: source_mongodb_signup, url: https://account.mongodb.com/account/register }
   - { source_id: source_mongodb_terms, url: https://www.mongodb.com/legal/terms-and-conditions/cloud }
   - { source_id: source_mongodb_support, url: https://www.mongodb.com/docs/atlas/support/ }
-  - { source_id: source_mongodb_billing_checkout, url: https://www.mongodb.com/docs/atlas/billing/ }
-  - source_id: source-readiness-a2ebb552da0020dafded21f72ec21bd8489c921b3f9fe1dc7114df92bc3852f3
+  - source_id: source_mongodb_create_atlas_account
     url: https://www.mongodb.com/docs/atlas/tutorial/create-atlas-account
+  - { source_id: source_mongodb_versioning, url: https://www.mongodb.com/docs/atlas/api/versioned-api-overview/ }
+  - { source_id: source_mongodb_openapi, url: https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2.json }
+  - { source_id: source_mongodb_mcp_tools, url: https://www.mongodb.com/docs/mcp-server/tools/ }
+  - { source_id: source_mongodb_mcp_start, url: https://www.mongodb.com/docs/mcp-server/get-started/ }
+  - { source_id: source_mongodb_ephemeral, url: https://www.mongodb.com/docs/atlas/tutorial/create-ephemeral-cluster/ }
+  - { source_id: source_mongodb_openapi_v2, url: https://raw.githubusercontent.com/mongodb/openapi/main/openapi/v2.json }
 declarations:
   - declaration_id: declaration_mongodb_mongodb_atlas_api_database_create
     scope:
       product: { key: mongodb-atlas-api, name: MongoDB Atlas Administration API }
       job: { key: database-create, name: Create a database deployment }
+    job_operations:
+      - { operation_id: create-cluster, interface_id: cluster-api, kind: http, endpoint_id: atlas-api, method: POST, url: https://cloud.mongodb.com/api/atlas/v2/groups/000000000000000000000000/clusters, headers: [{ name: accept, value: application/vnd.atlas.2024-10-23+json }], body: { media_type: application/json }, spec: { url: https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2.json, key_operations: { create: { method: POST, path: "/api/atlas/v2/orgs/{orgId}/apiKeys" }, revoke: { method: DELETE, path: "/api/atlas/v2/orgs/{orgId}/apiKeys/{apiUserId}" } } } }
+      - { operation_id: atlas-mcp, interface_id: atlas-mcp, kind: mcp, endpoint_id: mcp-server, tool: atlas-create-cluster }
+      - { operation_id: create-ephemeral-cluster, interface_id: ephemeral-cluster-api, kind: http, endpoint_id: ephemeral-clusters, method: POST, url: https://cloud.mongodb.com/api/atlas/v2/unauth/ephemeralClusters:create, headers: [{ name: accept, value: application/vnd.atlas.preview+json }], body: { media_type: application/json }, spec: { url: https://raw.githubusercontent.com/mongodb/openapi/main/openapi/v2.json, key_operations: null } }
     job_bindings: []
     participants:
       - { participant_id: mongodb, roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider], identity: { entity_id: ent_01kyh8fpe4ys74qx1k4zfcqpjv } }
@@ -42,26 +51,33 @@ declarations:
       - { resource_id: rate-limits, uri: https://www.mongodb.com/docs/atlas/api/api-rate-limit/, roles: [status, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: api-errors, uri: https://www.mongodb.com/docs/atlas/reference/api-errors/, roles: [status, operations, recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { resource_id: support, uri: https://www.mongodb.com/docs/atlas/support/, roles: [recovery, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
-      - { resource_id: billing-checkout, uri: https://www.mongodb.com/docs/atlas/billing/, roles: [checkout, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
-      - resource_id: readiness-a2ebb552da0020dafded21f72ec21bd8489c921b3f9fe1dc7114df92bc3852f3
+      - resource_id: create-atlas-account
         uri: https://www.mongodb.com/docs/atlas/tutorial/create-atlas-account
         roles:
           - access
           - documentation
         operated_by_participant_id: mongodb
         standard_bindings: []
+      - { resource_id: mcp-docs, uri: https://www.mongodb.com/docs/mcp-server/tools/, roles: [discovery, operations, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { resource_id: ephemeral-cluster-guide, uri: https://www.mongodb.com/docs/atlas/tutorial/create-ephemeral-cluster/, roles: [discovery, provisioning, documentation], operated_by_participant_id: mongodb, standard_bindings: [] }
     endpoints:
-      - { endpoint_id: registration, uri: https://account.mongodb.com/account/register, transport: http, roles: [registration], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { endpoint_id: registration, uri: https://account.mongodb.com/account/register, transport: http, roles: [registration, claim], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { endpoint_id: atlas-api, uri: https://cloud.mongodb.com/api/atlas/v2, transport: http, roles: [service, status], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { endpoint_id: mcp-server, uri: https://mcp.mongodb.com, transport: http, roles: [service, protected_resource], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { endpoint_id: ephemeral-clusters, uri: https://cloud.mongodb.com/api/atlas/v2/unauth/ephemeralClusters, transport: http, roles: [service], operated_by_participant_id: mongodb, standard_bindings: [] }
     interfaces:
       - { interface_id: cluster-api, modality: network_api, functions: [service_operation], endpoint_ids: [atlas-api], resource_ids: [api-reference, cluster-operations, rate-limits, api-errors], operated_by_participant_id: mongodb, standard_bindings: [] }
       - { interface_id: api-authentication, modality: network_api, functions: [authentication], endpoint_ids: [], resource_ids: [authentication], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { interface_id: atlas-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server], resource_ids: [mcp-docs], operated_by_participant_id: mongodb, standard_bindings: [] }
+      - { interface_id: ephemeral-cluster-api, modality: network_api, functions: [service_operation], endpoint_ids: [ephemeral-clusters, registration], resource_ids: [ephemeral-cluster-guide], operated_by_participant_id: mongodb, standard_bindings: [] }
     relations:
       - { relation_id: reference-describes-api, kind: describes, from: { node_kind: resource, node_id: api-reference }, to: { node_kind: interface, node_id: cluster-api } }
       - { relation_id: authentication-authenticates-api, kind: authenticates, from: { node_kind: interface, node_id: api-authentication }, to: { node_kind: interface, node_id: cluster-api } }
       - { relation_id: signup-precedes-authentication, kind: precedes, from: { node_kind: resource, node_id: account-signup }, to: { node_kind: interface, node_id: api-authentication } }
       - { relation_id: clusters-describe-api, kind: describes, from: { node_kind: resource, node_id: cluster-operations }, to: { node_kind: interface, node_id: cluster-api } }
       - { relation_id: cluster-create-describes-api, kind: describes, from: { node_kind: resource, node_id: cluster-create }, to: { node_kind: interface, node_id: cluster-api } }
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: atlas-mcp } }
+      - { relation_id: ephemeral-guide-describes-api, kind: describes, from: { node_kind: resource, node_id: ephemeral-cluster-guide }, to: { node_kind: interface, node_id: ephemeral-cluster-api } }
     offer_relations: []
     source_bindings:
       - { source_binding_id: mongodb-scope, source_id: source_mongodb_cluster_create, target: { node_kind: declaration, node_id: declaration_mongodb_mongodb_atlas_api_database_create }, field_paths: [/scope/product/name, /scope/job/name] }
@@ -70,7 +86,8 @@ declarations:
       - { source_binding_id: mongodb-resource-terms, source_id: source_mongodb_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-pricing, source_id: source_mongodb_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-signup, source_id: source_mongodb_signup, target: { node_kind: resource, node_id: account-signup }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - { source_binding_id: mongodb-endpoint-registration, source_id: source_mongodb_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-endpoint-registration, source_id: source_mongodb_signup, target: { node_kind: endpoint, node_id: registration }, field_paths: [/uri, /transport, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-endpoint-registration-claim, source_id: source_mongodb_ephemeral, target: { node_kind: endpoint, node_id: registration }, field_paths: [/roles] }
       - { source_binding_id: mongodb-resource-auth, source_id: source_mongodb_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-clusters, source_id: source_mongodb_clusters, target: { node_kind: resource, node_id: cluster-operations }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-resource-cluster-create, source_id: source_mongodb_cluster_create, target: { node_kind: resource, node_id: cluster-create }, field_paths: [/uri, /roles, /operated_by_participant_id] }
@@ -85,18 +102,34 @@ declarations:
       - { source_binding_id: mongodb-relation-signup, source_id: source_mongodb_signup, target: { node_kind: relation, node_id: signup-precedes-authentication }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: mongodb-relation-clusters, source_id: source_mongodb_clusters, target: { node_kind: relation, node_id: clusters-describe-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: mongodb-relation-cluster-create, source_id: source_mongodb_cluster_create, target: { node_kind: relation, node_id: cluster-create-describes-api }, field_paths: [/kind, /from, /to] }
-      - { source_binding_id: mongodb-resource-billing-checkout, source_id: source_mongodb_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: mongodb-exclusion-separate-eligibility, source_id: source_mongodb_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-resource-a2ebb552da0020dafded21f72ec21bd8489c921b3f9fe1dc7114df92bc3852f3
-        source_id: source-readiness-a2ebb552da0020dafded21f72ec21bd8489c921b3f9fe1dc7114df92bc3852f3
+      - source_binding_id: mongodb-resource-create-atlas-account
+        source_id: source_mongodb_create_atlas_account
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-a2ebb552da0020dafded21f72ec21bd8489c921b3f9fe1dc7114df92bc3852f3
+          node_id: create-atlas-account
+      - { source_binding_id: mongodb-operation-create-cluster, source_id: source_mongodb_cluster_create, target: { node_kind: job_operation, node_id: create-cluster }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: mongodb-operation-create-cluster-headers, source_id: source_mongodb_versioning, target: { node_kind: job_operation, node_id: create-cluster }, field_paths: [/headers] }
+      - { source_binding_id: mongodb-operation-create-cluster-spec, source_id: source_mongodb_openapi, target: { node_kind: job_operation, node_id: create-cluster }, field_paths: [/spec] }
+      - { source_binding_id: mongodb-resource-mcp-docs, source_id: source_mongodb_mcp_tools, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-endpoint-mcp-server, source_id: source_mongodb_mcp_start, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-interface-atlas-mcp, source_id: source_mongodb_mcp_tools, target: { node_kind: interface, node_id: atlas-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-relation-mcp-docs, source_id: source_mongodb_mcp_tools, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: mongodb-operation-atlas-mcp, source_id: source_mongodb_mcp_start, target: { node_kind: job_operation, node_id: atlas-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: mongodb-operation-atlas-mcp-tool, source_id: source_mongodb_mcp_tools, target: { node_kind: job_operation, node_id: atlas-mcp }, field_paths: [/tool] }
+      - { source_binding_id: mongodb-exclusion-free-job-no-checkout, source_id: source_mongodb_pricing, target: { node_kind: surface_exclusion, node_id: free-job-no-checkout }, field_paths: [/role, /rationale] }
+      - { source_binding_id: mongodb-resource-ephemeral-guide, source_id: source_mongodb_ephemeral, target: { node_kind: resource, node_id: ephemeral-cluster-guide }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-endpoint-ephemeral-clusters, source_id: source_mongodb_ephemeral, target: { node_kind: endpoint, node_id: ephemeral-clusters }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-interface-ephemeral-cluster-api, source_id: source_mongodb_ephemeral, target: { node_kind: interface, node_id: ephemeral-cluster-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: mongodb-relation-ephemeral-guide, source_id: source_mongodb_ephemeral, target: { node_kind: relation, node_id: ephemeral-guide-describes-api }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: mongodb-operation-create-ephemeral-cluster, source_id: source_mongodb_ephemeral, target: { node_kind: job_operation, node_id: create-ephemeral-cluster }, field_paths: [/interface_id, /endpoint_id, /method, /url, /headers, /body] }
+      - { source_binding_id: mongodb-operation-create-ephemeral-cluster-spec, source_id: source_mongodb_openapi_v2, target: { node_kind: job_operation, node_id: create-ephemeral-cluster }, field_paths: [/spec] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
+      - { exclusion_id: free-job-no-checkout, role: checkout, rationale: Atlas's free M0 cluster and its ephemeral clusters need no payment. }
     authority_intent: community
     declared_at: 2026-08-07T06:30:00.000Z

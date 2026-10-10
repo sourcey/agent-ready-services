@@ -13,22 +13,20 @@ entity:
       valid_from: 2026-09-06T22:29:47.342Z
   category: hosting-infra
 sources:
-  - source_id: source_aws_cloud_control_overview
-    url: https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/what-is-cloudcontrolapi.html
-  - source_id: source_aws_cloud_control_getting_started
-    url: https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/getting-started.html
-  - source_id: source_aws_cloud_control_resource_operations
-    url: https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-operations.html
-  - source_id: source_aws_cloud_control_create_api
-    url: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_CreateResource.html
-  - source_id: source_aws_cloud_control_status_api
-    url: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResourceRequestStatus.html
-  - source_id: source_aws_cloud_control_get_api
-    url: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResource.html
-  - source_id: source_aws_s3_bucket_resource_type
-    url: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-s3-bucket.html
-  - source_id: source_aws_cloud_control_endpoints
-    url: https://docs.aws.amazon.com/general/latest/gr/cloudcontrolapi.html
+  - source_id: source_aws_s3_overview
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
+  - source_id: source_aws_s3_getting_started
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html
+  - source_id: source_aws_s3_buckets
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html
+  - source_id: source_aws_s3_create_bucket
+    url: https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html
+  - source_id: source_aws_s3_error_responses
+    url: https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
+  - source_id: source_aws_s3_head_bucket
+    url: https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html
+  - source_id: source_aws_s3_endpoints
+    url: https://docs.aws.amazon.com/general/latest/gr/s3.html
   - source_id: source_aws_temporary_credentials
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html
   - source_id: source_aws_sigv4
@@ -48,8 +46,10 @@ sources:
   - source_id: source_aws_sign_in_recovery
     url: https://docs.aws.amazon.com/signin/latest/userguide/troubleshooting-sign-in-issues.html
   - { source_id: source_aws_billing_checkout, url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-payments.html }
-  - source_id: source-readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+  - source_id: source_aws_orgs_manage_accounts_create
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html
+  - { source_id: source_aws_mcp_tools, url: https://docs.aws.amazon.com/agent-toolkit/latest/userguide/understanding-mcp-server-tools.html }
+  - { source_id: source_aws_mcp_start, url: https://docs.aws.amazon.com/agent-toolkit/latest/userguide/getting-started-aws-mcp-server.html }
 declarations:
   - declaration_id: declaration_aws_aws_cloud_bucket_create
     scope:
@@ -59,6 +59,9 @@ declarations:
       job:
         key: bucket-create
         name: Create a storage bucket
+    job_operations:
+      - { operation_id: create-bucket, interface_id: s3, kind: http, endpoint_id: s3-api, method: PUT, url: https://s3.us-east-1.amazonaws.com/sourcey-probe-0000, headers: [], body: null, spec: null }
+      - { operation_id: aws-mcp, interface_id: aws-mcp, kind: mcp, endpoint_id: mcp-server, tool: aws___run_script }
     job_bindings: []
     participants:
       - participant_id: aws
@@ -66,8 +69,8 @@ declarations:
         identity:
           entity_id: ent_01kyh8fpe10b164tj935t8k5zb
     resources:
-      - resource_id: cloud-control-overview
-        uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/what-is-cloudcontrolapi.html
+      - resource_id: s3-overview
+        uri: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
         roles: [discovery, documentation, operations]
         operated_by_participant_id: aws
         standard_bindings: []
@@ -106,38 +109,33 @@ declarations:
         roles: [documentation]
         operated_by_participant_id: aws
         standard_bindings: []
-      - resource_id: cloud-control-getting-started
-        uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/getting-started.html
+      - resource_id: s3-getting-started
+        uri: https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html
         roles: [provisioning, status, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
-      - resource_id: cloud-control-resource-operations
-        uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-operations.html
+      - resource_id: s3-buckets
+        uri: https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html
         roles: [operations, status, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
-      - resource_id: cloud-control-create-api
-        uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_CreateResource.html
-        roles: [provisioning, recovery, documentation]
-        operated_by_participant_id: aws
-        standard_bindings: []
-      - resource_id: cloud-control-get-api
-        uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResource.html
-        roles: [status, operations, documentation]
-        operated_by_participant_id: aws
-        standard_bindings: []
-      - resource_id: s3-bucket-resource-type
-        uri: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-s3-bucket.html
+      - resource_id: s3-create-bucket-api
+        uri: https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html
         roles: [provisioning, operations, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
-      - resource_id: cloud-control-status-api
-        uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResourceRequestStatus.html
-        roles: [provisioning, status, recovery, documentation]
+      - resource_id: s3-head-bucket-api
+        uri: https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html
+        roles: [status, operations, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
-      - resource_id: cloud-control-endpoints
-        uri: https://docs.aws.amazon.com/general/latest/gr/cloudcontrolapi.html
+      - resource_id: s3-error-responses
+        uri: https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
+        roles: [status, recovery, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: s3-endpoints
+        uri: https://docs.aws.amazon.com/general/latest/gr/s3.html
         roles: [documentation]
         operated_by_participant_id: aws
         standard_bindings: []
@@ -152,17 +150,18 @@ declarations:
         operated_by_participant_id: aws
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-payments.html, roles: [checkout, documentation], operated_by_participant_id: aws, standard_bindings: [] }
-      - resource_id: readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+      - resource_id: orgs-manage-accounts-create
         uri: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html
         roles:
           - access
           - documentation
         operated_by_participant_id: aws
         standard_bindings: []
+      - { resource_id: mcp-docs, uri: https://docs.aws.amazon.com/agent-toolkit/latest/userguide/understanding-mcp-server-tools.html, roles: [discovery, operations, documentation], operated_by_participant_id: aws, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: "https://signin.aws.amazon.com/signup?request_type=register", transport: http, roles: [registration], operated_by_participant_id: aws, standard_bindings: [] }
-      - endpoint_id: cloud-control-api
-        uri: https://cloudcontrolapi.us-east-1.amazonaws.com
+      - endpoint_id: s3-api
+        uri: https://s3.us-east-1.amazonaws.com
         transport: http
         roles: [service, status]
         operated_by_participant_id: aws
@@ -179,74 +178,73 @@ declarations:
         roles: [service]
         operated_by_participant_id: aws
         standard_bindings: []
+      - { endpoint_id: mcp-server, uri: https://aws-mcp.us-east-1.api.aws/mcp, transport: http, roles: [service, protected_resource], operated_by_participant_id: aws, standard_bindings: [] }
     interfaces:
-      - interface_id: cloud-control
+      - interface_id: s3
         modality: network_api
         functions: [service_operation]
-        endpoint_ids: [cloud-control-api]
-        resource_ids: [cloud-control-overview, cloud-control-getting-started, cloud-control-resource-operations, cloud-control-create-api, cloud-control-get-api, s3-bucket-resource-type, cloud-control-status-api, cloud-control-endpoints]
+        endpoint_ids: [s3-api]
+        resource_ids: [s3-overview, s3-getting-started, s3-buckets, s3-create-bucket-api, s3-head-bucket-api, s3-error-responses, s3-endpoints]
         operated_by_participant_id: aws
         standard_bindings: []
       - interface_id: workload-authentication
         modality: network_api
-        functions: [service_operation, authentication]
+        functions: [authentication]
         endpoint_ids: [security-token-service]
         resource_ids: [temporary-credentials, request-signing]
         operated_by_participant_id: aws
         standard_bindings: []
       - interface_id: public-pricing
         modality: network_api
-        functions: [service_operation, commerce]
+        functions: [commerce]
         endpoint_ids: [pricing-api]
         resource_ids: [pricing, price-list-api]
         operated_by_participant_id: aws
         standard_bindings: []
+      - { interface_id: aws-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server], resource_ids: [mcp-docs], operated_by_participant_id: aws, standard_bindings: [] }
     relations:
-      - relation_id: cloud-control-docs-describe-interface
+      - relation_id: s3-docs-describe-interface
         kind: describes
-        from: { node_kind: resource, node_id: cloud-control-overview }
-        to: { node_kind: interface, node_id: cloud-control }
+        from: { node_kind: resource, node_id: s3-overview }
+        to: { node_kind: interface, node_id: s3 }
       - relation_id: request-signing-describes-authentication
         kind: describes
         from: { node_kind: resource, node_id: request-signing }
         to: { node_kind: interface, node_id: workload-authentication }
-      - relation_id: authentication-authenticates-cloud-control
+      - relation_id: authentication-authenticates-s3
         kind: authenticates
         from: { node_kind: interface, node_id: workload-authentication }
-        to: { node_kind: interface, node_id: cloud-control }
+        to: { node_kind: interface, node_id: s3 }
       - relation_id: account-precedes-authentication
         kind: precedes
         from: { node_kind: resource, node_id: account-creation }
         to: { node_kind: interface, node_id: workload-authentication }
       - relation_id: getting-started-precedes-resource-operations
         kind: precedes
-        from: { node_kind: resource, node_id: cloud-control-getting-started }
-        to: { node_kind: resource, node_id: cloud-control-resource-operations }
+        from: { node_kind: resource, node_id: s3-getting-started }
+        to: { node_kind: resource, node_id: s3-buckets }
       - relation_id: pricing-docs-describe-interface
         kind: describes
         from: { node_kind: resource, node_id: price-list-api }
         to: { node_kind: interface, node_id: public-pricing }
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: aws-mcp } }
     offer_relations: []
     source_bindings:
       - source_binding_id: aws-scope-create
-        source_id: source_aws_cloud_control_create_api
-        target: { node_kind: declaration, node_id: declaration_aws_aws_cloud_bucket_create }
-        field_paths: [/scope/product/name, /scope/job/name]
-      - source_binding_id: aws-scope-bucket
-        source_id: source_aws_s3_bucket_resource_type
+        source_id: source_aws_s3_create_bucket
         target: { node_kind: declaration, node_id: declaration_aws_aws_cloud_bucket_create }
         field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: aws-scope-read-back
-        source_id: source_aws_cloud_control_get_api
+        source_id: source_aws_s3_head_bucket
         target: { node_kind: declaration, node_id: declaration_aws_aws_cloud_bucket_create }
         field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: aws-participant
-        source_id: source_aws_cloud_control_overview
+        source_id: source_aws_s3_overview
         target: { node_kind: participant, node_id: aws }
         field_paths: [/roles, /identity]
-      - source_binding_id: aws-resource-cloud-control-overview
-        source_id: source_aws_cloud_control_overview
-        target: { node_kind: resource, node_id: cloud-control-overview }
+      - source_binding_id: aws-resource-s3-overview
+        source_id: source_aws_s3_overview
+        target: { node_kind: resource, node_id: s3-overview }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-service-terms
         source_id: source_aws_service_terms
@@ -281,32 +279,28 @@ declarations:
         target: { node_kind: resource, node_id: request-signing }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-getting-started
-        source_id: source_aws_cloud_control_getting_started
-        target: { node_kind: resource, node_id: cloud-control-getting-started }
+        source_id: source_aws_s3_getting_started
+        target: { node_kind: resource, node_id: s3-getting-started }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-operations
-        source_id: source_aws_cloud_control_resource_operations
-        target: { node_kind: resource, node_id: cloud-control-resource-operations }
+        source_id: source_aws_s3_buckets
+        target: { node_kind: resource, node_id: s3-buckets }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-create-api
-        source_id: source_aws_cloud_control_create_api
-        target: { node_kind: resource, node_id: cloud-control-create-api }
+        source_id: source_aws_s3_create_bucket
+        target: { node_kind: resource, node_id: s3-create-bucket-api }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-get-api
-        source_id: source_aws_cloud_control_get_api
-        target: { node_kind: resource, node_id: cloud-control-get-api }
-        field_paths: [/uri, /roles, /operated_by_participant_id]
-      - source_binding_id: aws-resource-s3-bucket-type
-        source_id: source_aws_s3_bucket_resource_type
-        target: { node_kind: resource, node_id: s3-bucket-resource-type }
+        source_id: source_aws_s3_head_bucket
+        target: { node_kind: resource, node_id: s3-head-bucket-api }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-status-api
-        source_id: source_aws_cloud_control_status_api
-        target: { node_kind: resource, node_id: cloud-control-status-api }
+        source_id: source_aws_s3_error_responses
+        target: { node_kind: resource, node_id: s3-error-responses }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-endpoints
-        source_id: source_aws_cloud_control_endpoints
-        target: { node_kind: resource, node_id: cloud-control-endpoints }
+        source_id: source_aws_s3_endpoints
+        target: { node_kind: resource, node_id: s3-endpoints }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-price-list
         source_id: source_aws_price_list_api
@@ -316,9 +310,9 @@ declarations:
         source_id: source_aws_sign_in_recovery
         target: { node_kind: resource, node_id: sign-in-recovery }
         field_paths: [/uri, /roles, /operated_by_participant_id]
-      - source_binding_id: aws-endpoint-cloud-control
-        source_id: source_aws_cloud_control_endpoints
-        target: { node_kind: endpoint, node_id: cloud-control-api }
+      - source_binding_id: aws-endpoint-s3
+        source_id: source_aws_s3_endpoints
+        target: { node_kind: endpoint, node_id: s3-api }
         field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
       - source_binding_id: aws-endpoint-sts
         source_id: source_aws_temporary_credentials
@@ -328,9 +322,9 @@ declarations:
         source_id: source_aws_price_list_api
         target: { node_kind: endpoint, node_id: pricing-api }
         field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
-      - source_binding_id: aws-interface-cloud-control
-        source_id: source_aws_cloud_control_overview
-        target: { node_kind: interface, node_id: cloud-control }
+      - source_binding_id: aws-interface-s3
+        source_id: source_aws_s3_overview
+        target: { node_kind: interface, node_id: s3 }
         field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: aws-interface-authentication
         source_id: source_aws_temporary_credentials
@@ -340,9 +334,9 @@ declarations:
         source_id: source_aws_price_list_api
         target: { node_kind: interface, node_id: public-pricing }
         field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
-      - source_binding_id: aws-relation-cloud-control-docs
-        source_id: source_aws_cloud_control_overview
-        target: { node_kind: relation, node_id: cloud-control-docs-describe-interface }
+      - source_binding_id: aws-relation-s3-docs
+        source_id: source_aws_s3_overview
+        target: { node_kind: relation, node_id: s3-docs-describe-interface }
         field_paths: [/kind, /from, /to]
       - source_binding_id: aws-relation-signing-docs
         source_id: source_aws_sigv4
@@ -350,14 +344,14 @@ declarations:
         field_paths: [/kind, /from, /to]
       - source_binding_id: aws-relation-authentication
         source_id: source_aws_temporary_credentials
-        target: { node_kind: relation, node_id: authentication-authenticates-cloud-control }
+        target: { node_kind: relation, node_id: authentication-authenticates-s3 }
         field_paths: [/kind, /from, /to]
       - source_binding_id: aws-relation-account-authentication
         source_id: source_aws_account_creation
         target: { node_kind: relation, node_id: account-precedes-authentication }
         field_paths: [/kind, /from, /to]
       - source_binding_id: aws-relation-provision-operations
-        source_id: source_aws_cloud_control_getting_started
+        source_id: source_aws_s3_getting_started
         target: { node_kind: relation, node_id: getting-started-precedes-resource-operations }
         field_paths: [/kind, /from, /to]
       - source_binding_id: aws-relation-pricing-docs
@@ -366,15 +360,22 @@ declarations:
         field_paths: [/kind, /from, /to]
       - { source_binding_id: aws-resource-billing-checkout, source_id: source_aws_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: aws-exclusion-separate-eligibility, source_id: source_aws_service_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
-      - source_binding_id: binding-resource-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
-        source_id: source-readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+      - source_binding_id: aws-resource-orgs-manage-accounts-create
+        source_id: source_aws_orgs_manage_accounts_create
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
+          node_id: orgs-manage-accounts-create
+      - { source_binding_id: aws-operation-create-bucket, source_id: source_aws_s3_create_bucket, target: { node_kind: job_operation, node_id: create-bucket }, field_paths: [/interface_id, /endpoint_id, /method, /url] }
+      - { source_binding_id: aws-resource-mcp-docs, source_id: source_aws_mcp_tools, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: aws-endpoint-mcp-server, source_id: source_aws_mcp_start, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: aws-interface-aws-mcp, source_id: source_aws_mcp_tools, target: { node_kind: interface, node_id: aws-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: aws-relation-mcp-docs, source_id: source_aws_mcp_tools, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: aws-operation-aws-mcp, source_id: source_aws_mcp_start, target: { node_kind: job_operation, node_id: aws-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: aws-operation-aws-mcp-tool, source_id: source_aws_mcp_tools, target: { node_kind: job_operation, node_id: aws-mcp }, field_paths: [/tool] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community

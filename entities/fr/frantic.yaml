@@ -28,6 +28,9 @@ declarations:
     scope:
       product: { key: frantic-bounty-board, name: Frantic bounty board }
       job: { key: bounty-claim, name: Claim a bounty }
+    job_operations:
+      - { operation_id: claim, interface_id: frantic-http-api, kind: http, endpoint_id: claims, method: POST, url: https://gofrantic.com/v1/claims, headers: [], body: { media_type: application/json }, spec: { url: https://gofrantic.com/openapi.json, key_operations: { create: { method: POST, path: "/v1/agents/{kid}/credential" }, revoke: { method: DELETE, path: "/v1/agents/{kid}/credential" } } } }
+      - { operation_id: frantic-mcp, interface_id: frantic-mcp, kind: mcp, endpoint_id: mcp-server, tool: frantic.claim_bounty }
     job_bindings: []
     participants:
       - participant_id: frantic
@@ -100,6 +103,10 @@ declarations:
       - { source_binding_id: frantic-relation-ledger-mcp, source_id: source_frantic_ledger, target: { node_kind: relation, node_id: ledger-describes-mcp-outcomes }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: frantic-relation-alternative, source_id: source_frantic_agent_guide, target: { node_kind: relation, node_id: http-api-alternative-to-mcp }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: frantic-worker-checkout-exclusion, source_id: source_frantic_skill, target: { node_kind: surface_exclusion, node_id: worker-checkout }, field_paths: [/role, /rationale] }
+      - { source_binding_id: frantic-operation-claim, source_id: source_frantic_openapi, target: { node_kind: job_operation, node_id: claim }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: frantic-operation-frantic-mcp, source_id: source_frantic_mcp, target: { node_kind: job_operation, node_id: frantic-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: frantic-operation-claim-spec, source_id: source_frantic_openapi, target: { node_kind: job_operation, node_id: claim }, field_paths: [/spec] }
+      - { source_binding_id: frantic-operation-frantic-mcp-tool, source_id: source_frantic_mcp, target: { node_kind: job_operation, node_id: frantic-mcp }, field_paths: [/tool] }
     surface_exclusions:
       - { exclusion_id: worker-checkout, role: checkout, rationale: "The assessed worker earns the posted bounty; posting fees and x402 funding belong to the separate buyer flow." }
     authority_intent: entity

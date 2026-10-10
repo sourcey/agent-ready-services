@@ -41,12 +41,18 @@ sources:
   - source_id: source_google_cloud_support
     url: https://docs.cloud.google.com/support/docs
   - { source_id: source_google_cloud_billing_checkout, url: https://docs.cloud.google.com/billing/docs/how-to/payment-methods }
-  - source_id: source-readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+  - source_id: source_google_cloud_manage_billing_account
     url: https://docs.cloud.google.com/billing/docs/how-to/manage-billing-account
-  - source_id: source-readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+  - source_id: source_google_cloud_free_cloud_features
     url: https://docs.cloud.google.com/free/docs/free-cloud-features
-  - source_id: source_google_cloud_b54fac0408b03e5427dfb4cb
+  - source_id: source_google_cloud_insert
     url: https://docs.cloud.google.com/storage/docs/json_api/v1/buckets/insert
+  - { source_id: source_google_storage_json_api, url: https://cloud.google.com/storage/docs/json_api }
+  - { source_id: source_google_storage_buckets_insert, url: https://cloud.google.com/storage/docs/json_api/v1/buckets/insert }
+  - { source_id: source_google_storage_xml_create, url: https://docs.cloud.google.com/storage/docs/xml-api/put-bucket-create }
+  - { source_id: source_google_storage_request_endpoints, url: https://docs.cloud.google.com/storage/docs/request-endpoints }
+  - { source_id: source_google_storage_mcp_reference, url: https://docs.cloud.google.com/storage/docs/reference/mcp }
+  - { source_id: source_google_storage_mcp_use, url: https://docs.cloud.google.com/storage/docs/use-cloud-storage-mcp }
 declarations:
   - declaration_id: declaration_google_cloud_google_cloud_bucket_create
     scope:
@@ -56,6 +62,10 @@ declarations:
       job:
         key: bucket-create
         name: Create a storage bucket
+    job_operations:
+      - { operation_id: create-bucket, interface_id: cloud-storage, kind: http, endpoint_id: storage-api, method: POST, url: "https://storage.googleapis.com/storage/v1/b?project=sourcey-probe", headers: [], body: { media_type: application/json }, spec: null }
+      - { operation_id: storage-mcp, interface_id: storage-mcp, kind: mcp, endpoint_id: mcp-server, tool: create_bucket }
+      - { operation_id: create-bucket-xml, interface_id: cloud-storage-xml, kind: http, endpoint_id: storage-xml-api, method: PUT, url: https://storage.googleapis.com/sourcey-probe-bucket, headers: [{ name: x-goog-project-id, value: sourcey-probe }], body: null, spec: null }
     job_bindings: []
     participants:
       - participant_id: google-cloud
@@ -126,7 +136,7 @@ declarations:
         standard_bindings: []
       - resource_id: billing-api-guide
         uri: https://docs.cloud.google.com/billing/docs/apis
-        roles: [checkout, operations, documentation]
+        roles: [operations, documentation]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - resource_id: resource-manager-limits
@@ -145,24 +155,28 @@ declarations:
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - { resource_id: billing-checkout, uri: https://docs.cloud.google.com/billing/docs/how-to/payment-methods, roles: [checkout, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
-      - resource_id: readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+      - resource_id: manage-billing-account
         uri: https://docs.cloud.google.com/billing/docs/how-to/manage-billing-account
         roles:
           - checkout
           - documentation
         operated_by_participant_id: google-cloud
         standard_bindings: []
-      - resource_id: readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+      - resource_id: free-cloud-features
         uri: https://docs.cloud.google.com/free/docs/free-cloud-features
         roles:
           - documentation
           - eligibility
         operated_by_participant_id: google-cloud
         standard_bindings: []
+      - { resource_id: storage-json-api, uri: https://cloud.google.com/storage/docs/json_api, roles: [discovery, operations, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
+      - { resource_id: storage-buckets-insert, uri: https://cloud.google.com/storage/docs/json_api/v1/buckets/insert, roles: [provisioning, operations, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
+      - { resource_id: storage-xml-create, uri: https://docs.cloud.google.com/storage/docs/xml-api/put-bucket-create, roles: [provisioning, operations, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
+      - { resource_id: mcp-docs, uri: https://docs.cloud.google.com/storage/docs/reference/mcp, roles: [discovery, operations, documentation], operated_by_participant_id: google-cloud, standard_bindings: [] }
     endpoints:
       - { endpoint_id: registration, uri: https://cloud.google.com/free, transport: http, roles: [registration], operated_by_participant_id: google-cloud, standard_bindings: [] }
-      - endpoint_id: resource-manager-api
-        uri: https://cloudresourcemanager.googleapis.com
+      - endpoint_id: storage-api
+        uri: https://storage.googleapis.com/storage/v1
         transport: http
         roles: [service, status]
         operated_by_participant_id: google-cloud
@@ -182,17 +196,20 @@ declarations:
         roles: [service, status]
         operated_by_participant_id: google-cloud
         standard_bindings: []
+      - { endpoint_id: mcp-server, uri: https://storage.googleapis.com/storage/mcp, transport: http, roles: [service, protected_resource], operated_by_participant_id: google-cloud, standard_bindings: [] }
+      - { endpoint_id: storage-xml-api, uri: https://storage.googleapis.com, transport: http, roles: [service], operated_by_participant_id: google-cloud, standard_bindings: [] }
     interfaces:
-      - interface_id: resource-manager
+      - { interface_id: cloud-storage-xml, modality: network_api, functions: [service_operation], endpoint_ids: [storage-xml-api], resource_ids: [storage-xml-create], operated_by_participant_id: google-cloud, standard_bindings: [] }
+      - interface_id: cloud-storage
         modality: network_api
         functions: [service_operation]
-        endpoint_ids: [resource-manager-api]
-        resource_ids: [resource-manager-rest, project-create-api, operation-status-api, api-discovery, resource-manager-limits, resource-manager-errors]
+        endpoint_ids: [storage-api]
+        resource_ids: [storage-json-api, storage-buckets-insert, api-discovery]
         operated_by_participant_id: google-cloud
         standard_bindings: []
       - interface_id: workload-authentication
         modality: network_api
-        functions: [service_operation, authentication]
+        functions: [authentication]
         endpoint_ids: [oauth-token]
         resource_ids: [rest-authentication, workload-identity]
         operated_by_participant_id: google-cloud
@@ -205,24 +222,25 @@ declarations:
             relation: uses
       - interface_id: cloud-billing
         modality: network_api
-        functions: [service_operation, commerce]
+        functions: [commerce]
         endpoint_ids: [cloud-billing-api]
         resource_ids: [pricing, billing-api-reference, billing-api-guide]
         operated_by_participant_id: google-cloud
         standard_bindings: []
+      - { interface_id: storage-mcp, modality: tool_server, functions: [service_operation], endpoint_ids: [mcp-server], resource_ids: [mcp-docs], operated_by_participant_id: google-cloud, standard_bindings: [] }
     relations:
-      - relation_id: resource-manager-docs-describe-interface
+      - relation_id: storage-docs-describe-interface
         kind: describes
-        from: { node_kind: resource, node_id: resource-manager-rest }
-        to: { node_kind: interface, node_id: resource-manager }
+        from: { node_kind: resource, node_id: storage-json-api }
+        to: { node_kind: interface, node_id: cloud-storage }
       - relation_id: authentication-docs-describe-interface
         kind: describes
         from: { node_kind: resource, node_id: rest-authentication }
         to: { node_kind: interface, node_id: workload-authentication }
-      - relation_id: authentication-authenticates-resource-manager
+      - relation_id: authentication-authenticates-cloud-storage
         kind: authenticates
         from: { node_kind: interface, node_id: workload-authentication }
-        to: { node_kind: interface, node_id: resource-manager }
+        to: { node_kind: interface, node_id: cloud-storage }
       - relation_id: account-precedes-authentication
         kind: precedes
         from: { node_kind: resource, node_id: account-setup }
@@ -235,10 +253,12 @@ declarations:
         kind: describes
         from: { node_kind: resource, node_id: billing-api-reference }
         to: { node_kind: interface, node_id: cloud-billing }
+      - { relation_id: project-create-precedes-cloud-storage, kind: precedes, from: { node_kind: resource, node_id: project-create-api }, to: { node_kind: interface, node_id: cloud-storage } }
+      - { relation_id: mcp-docs-describe-server, kind: describes, from: { node_kind: resource, node_id: mcp-docs }, to: { node_kind: interface, node_id: storage-mcp } }
     offer_relations: []
     source_bindings:
       - source_binding_id: google-declaration-scope
-        source_id: source_google_cloud_b54fac0408b03e5427dfb4cb
+        source_id: source_google_cloud_insert
         target: { node_kind: declaration, node_id: declaration_google_cloud_google_cloud_bucket_create }
         field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: google-participant
@@ -309,9 +329,9 @@ declarations:
         source_id: source_google_cloud_support
         target: { node_kind: resource, node_id: cloud-support }
         field_paths: [/uri, /roles, /operated_by_participant_id]
-      - source_binding_id: google-endpoint-resource-manager
-        source_id: source_google_resource_manager_rest
-        target: { node_kind: endpoint, node_id: resource-manager-api }
+      - source_binding_id: google-endpoint-storage
+        source_id: source_google_storage_json_api
+        target: { node_kind: endpoint, node_id: storage-api }
         field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
       - source_binding_id: google-endpoint-oauth
         source_id: source_google_rest_authentication
@@ -321,9 +341,9 @@ declarations:
         source_id: source_google_billing_api
         target: { node_kind: endpoint, node_id: cloud-billing-api }
         field_paths: [/uri, /transport, /roles, /operated_by_participant_id]
-      - source_binding_id: google-interface-resource-manager
-        source_id: source_google_resource_manager_rest
-        target: { node_kind: interface, node_id: resource-manager }
+      - source_binding_id: google-interface-storage
+        source_id: source_google_storage_json_api
+        target: { node_kind: interface, node_id: cloud-storage }
         field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
       - source_binding_id: google-interface-authentication
         source_id: source_google_workload_identity
@@ -333,9 +353,9 @@ declarations:
         source_id: source_google_billing_api
         target: { node_kind: interface, node_id: cloud-billing }
         field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id]
-      - source_binding_id: google-relation-resource-manager-docs
-        source_id: source_google_resource_manager_rest
-        target: { node_kind: relation, node_id: resource-manager-docs-describe-interface }
+      - source_binding_id: google-relation-storage-docs
+        source_id: source_google_storage_json_api
+        target: { node_kind: relation, node_id: storage-docs-describe-interface }
         field_paths: [/kind, /from, /to]
       - source_binding_id: google-relation-authentication-docs
         source_id: source_google_rest_authentication
@@ -343,7 +363,7 @@ declarations:
         field_paths: [/kind, /from, /to]
       - source_binding_id: google-relation-authentication
         source_id: source_google_rest_authentication
-        target: { node_kind: relation, node_id: authentication-authenticates-resource-manager }
+        target: { node_kind: relation, node_id: authentication-authenticates-cloud-storage }
         field_paths: [/kind, /from, /to]
       - source_binding_id: google-relation-account-authentication
         source_id: source_google_cloud_account_setup
@@ -358,24 +378,38 @@ declarations:
         target: { node_kind: relation, node_id: billing-docs-describe-interface }
         field_paths: [/kind, /from, /to]
       - { source_binding_id: google-cloud-resource-billing-checkout, source_id: source_google_cloud_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
-      - source_binding_id: binding-resource-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
-        source_id: source-readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
+      - source_binding_id: google-resource-manage-billing-account
+        source_id: source_google_cloud_manage_billing_account
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-a724fa3120826ef2ffa40e6507b02369fbbb1930da0be31b4cd064ff71f158b5
-      - source_binding_id: binding-resource-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
-        source_id: source-readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+          node_id: manage-billing-account
+      - source_binding_id: google-resource-free-cloud-features
+        source_id: source_google_cloud_free_cloud_features
         field_paths:
           - /uri
           - /roles
           - /operated_by_participant_id
         target:
           node_kind: resource
-          node_id: readiness-bb14655b5e870879563fab4d990f6cd2727d9acddac03d9b966b396f433f84e9
+          node_id: free-cloud-features
+      - { source_binding_id: google-resource-storage-json-api, source_id: source_google_storage_json_api, target: { node_kind: resource, node_id: storage-json-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: google-resource-storage-buckets-insert, source_id: source_google_storage_buckets_insert, target: { node_kind: resource, node_id: storage-buckets-insert }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: google-relation-project-precedes-storage, source_id: source_google_storage_buckets_insert, target: { node_kind: relation, node_id: project-create-precedes-cloud-storage }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: google-operation-create-bucket, source_id: source_google_storage_buckets_insert, target: { node_kind: job_operation, node_id: create-bucket }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: google-resource-storage-xml-create, source_id: source_google_storage_xml_create, target: { node_kind: resource, node_id: storage-xml-create }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: google-endpoint-storage-xml, source_id: source_google_storage_request_endpoints, target: { node_kind: endpoint, node_id: storage-xml-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: google-interface-storage-xml, source_id: source_google_storage_xml_create, target: { node_kind: interface, node_id: cloud-storage-xml }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: google-operation-create-bucket-xml, source_id: source_google_storage_xml_create, target: { node_kind: job_operation, node_id: create-bucket-xml }, field_paths: [/interface_id, /endpoint_id, /method, /url, /headers] }
+      - { source_binding_id: google-resource-mcp-docs, source_id: source_google_storage_mcp_reference, target: { node_kind: resource, node_id: mcp-docs }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: google-endpoint-mcp-server, source_id: source_google_storage_mcp_use, target: { node_kind: endpoint, node_id: mcp-server }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: google-interface-storage-mcp, source_id: source_google_storage_mcp_reference, target: { node_kind: interface, node_id: storage-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: google-relation-mcp-docs, source_id: source_google_storage_mcp_reference, target: { node_kind: relation, node_id: mcp-docs-describe-server }, field_paths: [/kind, /from, /to] }
+      - { source_binding_id: google-operation-storage-mcp, source_id: source_google_storage_mcp_use, target: { node_kind: job_operation, node_id: storage-mcp }, field_paths: [/interface_id, /endpoint_id] }
+      - { source_binding_id: google-operation-storage-mcp-tool, source_id: source_google_storage_mcp_reference, target: { node_kind: job_operation, node_id: storage-mcp }, field_paths: [/tool] }
     surface_exclusions: []
     authority_intent: community
     declared_at: 2026-08-07T03:06:52.000Z

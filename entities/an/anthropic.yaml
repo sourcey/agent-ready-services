@@ -33,11 +33,14 @@ sources:
   - source_id: source_anthropic_support
     url: https://support.claude.com/en/articles/8114535-where-can-i-go-for-claude-api-support-and-assistance
   - { source_id: source_anthropic_billing_checkout, url: https://support.claude.com/en/articles/8977456-how-do-i-pay-for-my-claude-api-usage }
+  - { source_id: source_anthropic_versioning, url: https://platform.claude.com/docs/en/api/versioning }
 declarations:
   - declaration_id: declaration_anthropic_anthropic_api_model_chat_stream_tool
     scope:
       product: { key: anthropic-api, name: Anthropic API }
       job: { key: model-chat-stream-tool, name: Stream a completion with a tool call }
+    job_operations:
+      - { operation_id: create-message, interface_id: api-service, kind: http, endpoint_id: messages-api, method: POST, url: https://api.anthropic.com/v1/messages, headers: [{ name: anthropic-version, value: "2023-06-01" }], body: { media_type: application/json }, spec: null }
     job_bindings: []
     participants:
       - participant_id: anthropic
@@ -180,6 +183,8 @@ declarations:
       - { source_binding_id: anthropic-relation-messages-guide, source_id: source_anthropic_messages_guide, target: { node_kind: relation, node_id: messages-guide-describes-api }, field_paths: [/kind, /from, /to] }
       - { source_binding_id: anthropic-resource-billing-checkout, source_id: source_anthropic_billing_checkout, target: { node_kind: resource, node_id: billing-checkout }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: anthropic-exclusion-separate-eligibility, source_id: source_anthropic_terms, target: { node_kind: surface_exclusion, node_id: separate-eligibility-resource }, field_paths: [/role, /rationale] }
+      - { source_binding_id: anthropic-operation-create-message, source_id: source_anthropic_messages_create, target: { node_kind: job_operation, node_id: create-message }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
+      - { source_binding_id: anthropic-operation-create-message-headers, source_id: source_anthropic_versioning, target: { node_kind: job_operation, node_id: create-message }, field_paths: [/headers] }
     surface_exclusions:
       - { exclusion_id: separate-eligibility-resource, role: eligibility, rationale: "Applicable access conditions are published within the service terms; no separate eligibility resource is declared." }
     authority_intent: community
