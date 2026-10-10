@@ -23,6 +23,10 @@ sources:
     url: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_CreateResource.html
   - source_id: source_aws_cloud_control_status_api
     url: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResourceRequestStatus.html
+  - source_id: source_aws_cloud_control_get_api
+    url: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResource.html
+  - source_id: source_aws_s3_bucket_resource_type
+    url: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-s3-bucket.html
   - source_id: source_aws_cloud_control_endpoints
     url: https://docs.aws.amazon.com/general/latest/gr/cloudcontrolapi.html
   - source_id: source_aws_temporary_credentials
@@ -47,21 +51,15 @@ sources:
   - source_id: source-readiness-914498557291a986d5a6b102afef10bb5c0c85d7d80c2791cb316fc2b3abf984
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html
 declarations:
-  - declaration_id: declaration_aws_cloud_api_resource_management
+  - declaration_id: declaration_aws_aws_cloud_bucket_create
     scope:
       product:
         key: aws-cloud
         name: AWS Cloud
-      funnel:
-        key: api-resource-management
-        name: API resource management
-    assessment_targets:
-      - target_id: service-use
-        name: Create and reconcile AWS resources through Cloud Control API
-        interface_ids: [cloud-control]
-      - target_id: cost-visibility
-        name: AWS Cloud cost visibility
-        interface_ids: [public-pricing]
+      job:
+        key: bucket-create
+        name: Create a storage bucket
+    job_bindings: []
     participants:
       - participant_id: aws
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -123,6 +121,16 @@ declarations:
         roles: [provisioning, recovery, documentation]
         operated_by_participant_id: aws
         standard_bindings: []
+      - resource_id: cloud-control-get-api
+        uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResource.html
+        roles: [status, operations, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
+      - resource_id: s3-bucket-resource-type
+        uri: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-s3-bucket.html
+        roles: [provisioning, operations, documentation]
+        operated_by_participant_id: aws
+        standard_bindings: []
       - resource_id: cloud-control-status-api
         uri: https://docs.aws.amazon.com/cloudcontrolapi/latest/APIReference/API_GetResourceRequestStatus.html
         roles: [provisioning, status, recovery, documentation]
@@ -176,7 +184,7 @@ declarations:
         modality: network_api
         functions: [service_operation]
         endpoint_ids: [cloud-control-api]
-        resource_ids: [cloud-control-overview, cloud-control-getting-started, cloud-control-resource-operations, cloud-control-create-api, cloud-control-status-api, cloud-control-endpoints]
+        resource_ids: [cloud-control-overview, cloud-control-getting-started, cloud-control-resource-operations, cloud-control-create-api, cloud-control-get-api, s3-bucket-resource-type, cloud-control-status-api, cloud-control-endpoints]
         operated_by_participant_id: aws
         standard_bindings: []
       - interface_id: workload-authentication
@@ -220,18 +228,18 @@ declarations:
         to: { node_kind: interface, node_id: public-pricing }
     offer_relations: []
     source_bindings:
-      - source_binding_id: aws_cost_visibility_target
-        source_id: source_aws_price_list_api
-        target: { node_kind: assessment_target, node_id: cost-visibility }
-        field_paths: [/name, /interface_ids]
-      - source_binding_id: aws_assessment_target
-        source_id: source_aws_cloud_control_overview
-        target: { node_kind: assessment_target, node_id: service-use }
-        field_paths: [/name, /interface_ids]
-      - source_binding_id: aws-declaration-scope
-        source_id: source_aws_cloud_control_overview
-        target: { node_kind: declaration, node_id: declaration_aws_cloud_api_resource_management }
-        field_paths: [/scope/product/name, /scope/funnel/name]
+      - source_binding_id: aws-scope-create
+        source_id: source_aws_cloud_control_create_api
+        target: { node_kind: declaration, node_id: declaration_aws_aws_cloud_bucket_create }
+        field_paths: [/scope/product/name, /scope/job/name]
+      - source_binding_id: aws-scope-bucket
+        source_id: source_aws_s3_bucket_resource_type
+        target: { node_kind: declaration, node_id: declaration_aws_aws_cloud_bucket_create }
+        field_paths: [/scope/product/name, /scope/job/name]
+      - source_binding_id: aws-scope-read-back
+        source_id: source_aws_cloud_control_get_api
+        target: { node_kind: declaration, node_id: declaration_aws_aws_cloud_bucket_create }
+        field_paths: [/scope/product/name, /scope/job/name]
       - source_binding_id: aws-participant
         source_id: source_aws_cloud_control_overview
         target: { node_kind: participant, node_id: aws }
@@ -283,6 +291,14 @@ declarations:
       - source_binding_id: aws-resource-create-api
         source_id: source_aws_cloud_control_create_api
         target: { node_kind: resource, node_id: cloud-control-create-api }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-get-api
+        source_id: source_aws_cloud_control_get_api
+        target: { node_kind: resource, node_id: cloud-control-get-api }
+        field_paths: [/uri, /roles, /operated_by_participant_id]
+      - source_binding_id: aws-resource-s3-bucket-type
+        source_id: source_aws_s3_bucket_resource_type
+        target: { node_kind: resource, node_id: s3-bucket-resource-type }
         field_paths: [/uri, /roles, /operated_by_participant_id]
       - source_binding_id: aws-resource-status-api
         source_id: source_aws_cloud_control_status_api
