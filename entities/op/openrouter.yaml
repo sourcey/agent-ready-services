@@ -37,7 +37,81 @@ declarations:
     scope:
       product: { key: openrouter-api, name: OpenRouter API }
       job: { key: model-chat-stream-tool, name: Stream a completion with a tool call }
-    job_bindings: []
+    job_bindings:
+      - binding_id: chat-stream-tool
+        interface_id: inference-api
+        calls:
+          - kind: http
+            call_id: models
+            endpoint_id: models
+            method: GET
+            url: "https://openrouter.ai/api/v1/models?q=gpt-4o-mini&supported_parameters=tools"
+            headers: []
+            body: null
+            credentials: []
+          - kind: http
+            call_id: completion
+            endpoint_id: chat-completions
+            method: POST
+            url: https://openrouter.ai/api/v1/chat/completions
+            headers: []
+            body:
+              media_type: application/json
+              json:
+                model: openai/gpt-4o-mini
+                stream: true
+                max_tokens: 64
+                messages:
+                  - { role: user, content: "Call sourcey_probe with the nonce {{run.nonce}}." }
+                tools:
+                  - type: function
+                    function:
+                      name: sourcey_probe
+                      description: Report the nonce you were given.
+                      parameters:
+                        type: object
+                        properties: { nonce: { type: string } }
+                        required: [nonce]
+                tool_choice: { type: function, function: { name: sourcey_probe } }
+            credentials: [api_key]
+        assertions:
+          - assertion: model_listed
+            observations:
+              - { name: models, call: models, source: json, pointer: /data }
+              - { name: used_model, call: completion, source: stream, pointer: /model }
+          - assertion: stream_chunks
+            observations:
+              - { name: chunks, call: completion, source: stream, pointer: "" }
+          - assertion: tool_call_emitted
+            observations:
+              - { name: tool_name, call: completion, source: stream, pointer: /choices/0/delta/tool_calls/0/function/name }
+              - { name: tool_arguments, call: completion, source: stream, pointer: /choices/0/delta/tool_calls/0/function/arguments }
+        error_probe:
+          call:
+            kind: http
+            call_id: unknown-model
+            endpoint_id: chat-completions
+            method: POST
+            url: https://openrouter.ai/api/v1/chat/completions
+            headers: []
+            body:
+              media_type: application/json
+              json:
+                model: sourcey/no-such-model
+                max_tokens: 1
+                messages: [{ role: user, content: ping }]
+            credentials: [api_key]
+          expect: { kind: http_error, status_class: 4xx, error_pointer: /error/message }
+        delegation:
+          kind: entered
+          credentials:
+            - role: api_key
+              placement: { scheme: bearer, header_name: authorization }
+              endpoint_ids: [chat-completions]
+              methods: [POST]
+        payment: { kind: prepaid_balance }
+        sustain: { rotation: { kind: manual }, revocation: { kind: manual } }
+        cleanup: []
     participants:
       - participant_id: openrouter
         roles: [subject, access_operator, identity_provider, payment_provider, provisioning_provider, operations_provider]
@@ -82,7 +156,7 @@ declarations:
       - { endpoint_id: checkout, uri: https://openrouter.ai/settings/credits, transport: http, roles: [checkout], operated_by_participant_id: openrouter, standard_bindings: [] }
       - { endpoint_id: mcp-server, uri: https://mcp.openrouter.ai/mcp, transport: http, roles: [service, protected_resource], operated_by_participant_id: openrouter, standard_bindings: [{ namespace: mcp, version: "2025-11-25", relation: implements }] }
     interfaces:
-      - { interface_id: inference-api, modality: network_api, functions: [service_operation], endpoint_ids: [chat-completions], resource_ids: [quickstart, openapi-description, streaming-guide, tool-calling-guide, error-contract, rate-limits], operated_by_participant_id: openrouter, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: uses }] }
+      - { interface_id: inference-api, modality: network_api, functions: [service_operation], endpoint_ids: [chat-completions, models], resource_ids: [quickstart, openapi-description, streaming-guide, tool-calling-guide, error-contract, rate-limits], operated_by_participant_id: openrouter, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: uses }] }
       - { interface_id: model-catalog-api, modality: network_api, functions: [service_operation], endpoint_ids: [models], resource_ids: [model-catalog-guide, live-model-catalog, openapi-description], operated_by_participant_id: openrouter, standard_bindings: [{ namespace: openapi, version: "3.1.0", relation: uses }] }
       - { interface_id: delegated-authentication, modality: network_api, functions: [authentication, recovery], endpoint_ids: [oauth-authorization, oauth-key-exchange, key-management], resource_ids: [oauth-pkce, api-key-management], operated_by_participant_id: openrouter, standard_bindings: [{ namespace: oauth, version: "2.0", relation: uses }] }
       - { interface_id: credit-commerce, modality: web_application, functions: [commerce], endpoint_ids: [checkout], resource_ids: [pricing-and-billing, credit-checkout, credits-api], operated_by_participant_id: openrouter, standard_bindings: [] }
@@ -105,6 +179,7 @@ declarations:
     offer_relations: []
     source_bindings:
       - { source_binding_id: openrouter-scope, source_id: source_openrouter_tools, target: { node_kind: declaration, node_id: declaration_openrouter_openrouter_api_model_chat_stream_tool }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: openrouter-binding-chat-stream-tool, source_id: source_openrouter_openapi, target: { node_kind: job_binding, node_id: chat-stream-tool }, field_paths: [/interface_id, /calls] }
       - { source_binding_id: openrouter-participant, source_id: source_openrouter_terms, target: { node_kind: participant, node_id: openrouter }, field_paths: [/roles, /identity] }
       - { source_binding_id: openrouter-resource-quickstart, source_id: source_openrouter_quickstart, target: { node_kind: resource, node_id: quickstart }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: openrouter-resource-terms, source_id: source_openrouter_terms, target: { node_kind: resource, node_id: service-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
