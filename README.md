@@ -22,9 +22,12 @@ text message, stream a completion that calls a tool?
 
 This repository lists services for Sourcey to check. Each file describes one
 company. Each listing in it names one product and one job from Sourcey's job
-library, and the public pages, endpoints and interfaces a person already knows
-about. Sourcey runs the job against the service and publishes the result as
-an [Agent Readiness report card](https://sourcey.com/agent-readiness) on the
+library, the public pages, endpoints and interfaces a person already knows
+about, and the request that does the job on each interface. Sourcey sends that
+request with no key (or, where the job has no public endpoint, reads it in the
+vendor's OpenAPI document), follows where the answer leads, reads the vendor's
+own machine-readable documents, and publishes what it found as an
+[Agent Readiness report card](https://sourcey.com/agent-readiness) on the
 company's [Sourcey record](https://sourcey.com/companies).
 
 A card belongs to one company, one product and one job. GitHub REST API and
@@ -37,26 +40,44 @@ Sourcey follows the job along six steps:
 
 | Step | What Sourcey checks |
 | --- | --- |
-| Discover | Can an agent find the service's endpoint from the service's own published descriptors? |
-| Delegation | Can the agent get its own key or login, or does a person have to hand one over? |
-| Pay | When the job costs money, can the agent pay on its own? |
-| Job | Does the job itself complete through the service's interface? |
-| Confirm | Does a bad request get a clear, typed error the agent can read? |
-| Sustain | Can the agent renew and revoke its own key? |
+| Discover | Can an agent find the job's interface, and a machine-readable description that covers the job, from the company's own documents (descriptors on its domains, OpenAPI, `llms.txt`, auth.md, documentation served as markdown)? |
+| Authority | What does the job's request need: nothing, a payment inside it, a credential the agent obtains itself, your consent, a key a person hands over, or the vendor's decision? |
+| Onboard | Can the agent register itself (auth.md, a sign-up API, its own OAuth client), does a person claim later what it made or turn its access on once, or does a person sign up for it? |
+| Pay | How is the job paid for: nothing, within the request, a card a person puts on file at the vendor's checkout, or a balance a person tops up by hand? |
+| Confirm | Can the agent tell a failure from a success by typed errors? |
+| Sustain | Can the agent keep its access alive and revoke it without a person? |
 
-The card gives a letter from A+ to F. A+ means the agent, or a decision you
-made as its principal, did every step. Lower letters mean a person had to step
-in: once at setup, to keep a key alive, or on every run. D and F mean the
-service refused the agent's key or payment, or the job itself. The card also
-gives an Onboard level from 1 (no sign-up needed) to 6 (talk to sales first)
-for how an agent gets started, and it names every step that has not been
-checked yet.
+Each card also says where the job itself stands: **Job verified** once a run
+has done it, **Job reachable, not yet run** when an interface for it answers
+(or, where it has no public endpoint, the vendor's spec covers it), or no
+machine interface performs it.
 
-A service that is only listed has had no job run yet. Its card shows a dash,
-says "The job has not run yet." and shows what discovery found. The job runs
-once a job binding exists. A binding says exactly how one interface performs
-the job, and it can come from the vendor or from Sourcey. The next run rates
-the job.
+Every card carries one letter, from A+ to F, for the kind of person-step the
+path needs: the heaviest kind anywhere on the path sets it, and A allows one
+step (a listing that names no interface for the job is F):
+
+| Letter | The path |
+| --- | --- |
+| A+ | An agent gets in, pays and recovers with no person: no account needed, payment within the request, or the agent registers itself. |
+| A | One light, one-time human step: your consent to the agent's own OAuth client, or claiming the account later. |
+| B+ | A person signs up and hands over a key. |
+| B | A card on file. |
+| C | Human steps that recur, such as manual top-ups or keys that expire with no renewal API, or checking results the agent cannot read. |
+| D | Access depends on sales or approval. |
+| F | No machine interface for the job. |
+
+Every published card is graded from its listing and its probes (labelled
+**Probed** until a run of the job verifies it). A
+request the service did not answer (a timeout, a 5xx, a rate limit) sets no
+fact, and the service is probed again; a document left unanswered on every
+probe for at least an hour, with no answer between, is read as absent. A job
+binding adds the verified tier. It says exactly how one
+interface performs the job, and a run of it is proof, not the grade: it marks
+the job verified and never changes a step or the letter. Sourcey runs a binding itself only where no account
+is needed and the job only reads (**Sourcey-run**); an account holder runs one with Sourcey's GitHub
+Action, which attests the result (**Vendor-run, verified**). The Action is not
+yet published; until it is, every verified run is Sourcey's own. Sourcey holds
+no keys for any listed service.
 
 ## What lives here
 
@@ -64,32 +85,35 @@ Only listings live here:
 
 - the company's shared Sourcey identity and the public sources the listing
   cites;
-- each product and its job from the library;
+- each product and its job from the library, and the job's request on each
+  interface that performs it;
 - the participants, resources, endpoints and interfaces an agent would use,
   and how they relate;
 - surface exclusions, which say why a contributor left a surface out;
 - standard bindings and a source for every field;
 - optional relations to existing Sourcey Offers;
-- optional job bindings, for vendors who want their job run now.
+- optional job bindings, for the verified tier.
 
 Nothing else belongs here: no run records, captures, step outcomes, letters,
 credentials, freshness data, generated indexes or release state. A merged
-listing asks Sourcey to run the job. It is not a rating or an endorsement.
+listing asks Sourcey to probe it. It is not a rating or an endorsement.
 Sourcey's Catalog holds every published card and its history.
 
 ## Add or improve a service
 
-[CONTRIBUTING.md](CONTRIBUTING.md) shows a listing first, then how to add a job
-binding. If you know the service but not the file format, open a
+[CONTRIBUTING.md](CONTRIBUTING.md) shows a listing and its job request first,
+then how to add a job binding. If you know the service but not the file format, open a
 [listing request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
 instead. Sourcey checks every company against its existing identity records
 before a listing merges, so one company has one identity across all of
 Sourcey.
 
-After a listing merges, Sourcey reads the merged commit and runs discovery,
-then the job once a binding exists. A company can then claim its card, fix
-what blocked the agent and ask for a rerun. Each published card keeps its
-history, so an improvement never rewrites the earlier evidence.
+After a listing merges, Sourcey reads the merged commit, runs discovery, the
+probes and any binding it may run, and publishes the card once every step of
+a path is settled, or at once as F when the listing names no interface for
+the job. A company can then claim its card, fix what stops the agent
+and ask for a re-probe. Each published card keeps its history, so an
+improvement never rewrites the earlier evidence.
 
 ## Licence
 

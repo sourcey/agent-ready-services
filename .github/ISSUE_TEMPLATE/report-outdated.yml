@@ -1,4 +1,4 @@
-name: Report outdated evidence or request a rerun
+name: Report outdated evidence or request a re-probe
 description: Point to one report card step that may no longer match the service.
 title: "Evidence review: "
 labels:
@@ -13,22 +13,22 @@ body:
   - type: dropdown
     id: step
     attributes:
-      label: Step
+      label: Step, or the job
       options:
         - Discover
-        - Delegation
+        - Authority
+        - Onboard
         - Pay
-        - Job
         - Confirm
         - Sustain
-        - Onboard level
+        - The job itself
     validations:
       required: true
   - type: textarea
     id: changed
     attributes:
       label: What changed
-      description: Explain what the service does now, and why the card may be out of date or a rerun would help.
+      description: Explain what the service does now, and why the card may be out of date or a re-probe would help.
     validations:
       required: true
   - type: textarea

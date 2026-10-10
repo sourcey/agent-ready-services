@@ -61,14 +61,14 @@ body:
     id: interface
     attributes:
       label: How an agent does the job
-      description: Public URLs for the API reference, MCP server, CLI or other interface an agent would use, and the endpoint it calls if one is published.
+      description: Public URLs for the API reference, OpenAPI document, MCP server (and the tool that does the job), CLI or other interface an agent would use, the endpoint it calls if one is published, and the documented request that does the job.
     validations:
       required: true
   - type: textarea
     id: access
     attributes:
       label: Sign-up, keys and payment
-      description: Public URLs for signing up, getting a key or login, OAuth, payment or billing, if the job needs them.
+      description: Public URLs for signing up, getting a key or login, OAuth, payment or billing, or asking sales for access, if the job needs them.
   - type: textarea
     id: published_standards
     attributes:
