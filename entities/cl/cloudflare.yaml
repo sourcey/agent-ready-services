@@ -194,7 +194,41 @@ declarations:
     scope:
       product: { key: cloudflare-public-dns, name: Cloudflare 1.1.1.1 Public DNS }
       job: { key: dns-resolve, name: Resolve a name }
-    job_bindings: []
+    job_bindings:
+      - binding_id: doh-json
+        interface_id: doh-api
+        calls:
+          - kind: http
+            call_id: resolve
+            endpoint_id: doh-endpoint
+            method: GET
+            url: "https://cloudflare-dns.com/dns-query?name={{input.name}}&type=A"
+            headers: [{ name: accept, value: application/dns-json }]
+            body: null
+            credentials: []
+        assertions:
+          - assertion: answer_for_query
+            observations:
+              - { name: query_name, call: resolve, source: json, pointer: /Question/0/name }
+              - { name: records, call: resolve, source: json, pointer: /Answer }
+          - assertion: resolution_succeeded
+            observations:
+              - { name: status, call: resolve, source: json, pointer: /Status }
+        error_probe:
+          call:
+            kind: http
+            call_id: invalid-type
+            endpoint_id: doh-endpoint
+            method: GET
+            url: "https://cloudflare-dns.com/dns-query?name={{input.name}}&type=NOTATYPE"
+            headers: [{ name: accept, value: application/dns-json }]
+            body: null
+            credentials: []
+          expect: { kind: http_error, status_class: 4xx, error_pointer: /error }
+        delegation: { kind: none }
+        payment: { kind: none }
+        sustain: { rotation: { kind: not_applicable }, revocation: { kind: not_applicable } }
+        cleanup: []
     participants:
       - { participant_id: cloudflare-public-dns, roles: [subject, operations_provider], identity: { entity_id: ent_01kyh8jtf535570d9z2bng6j1t } }
     resources:
@@ -216,6 +250,7 @@ declarations:
     offer_relations: []
     source_bindings:
       - { source_binding_id: public-dns-scope, source_id: source_cloudflare_public_dns_json, target: { node_kind: declaration, node_id: declaration_cloudflare_cloudflare_public_dns_dns_resolve }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: public-dns-binding-doh-json, source_id: source_cloudflare_public_dns_json, target: { node_kind: job_binding, node_id: doh-json }, field_paths: [/interface_id, /calls] }
       - { source_binding_id: public-dns-participant, source_id: source_cloudflare_public_dns_doh, target: { node_kind: participant, node_id: cloudflare-public-dns }, field_paths: [/roles, /identity] }
       - { source_binding_id: public-dns-resource-overview, source_id: source_cloudflare_public_dns_overview, target: { node_kind: resource, node_id: public-dns-overview }, field_paths: [/uri, /roles, /operated_by_participant_id] }
       - { source_binding_id: public-dns-resource-terms, source_id: source_cloudflare_public_dns_terms, target: { node_kind: resource, node_id: public-dns-terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
