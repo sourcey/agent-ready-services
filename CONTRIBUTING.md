@@ -16,8 +16,8 @@ attribution and corrections.
 
 ## Choose a path
 
-1. **Request a listing** when the company is new to Sourcey, or when you know
-   the service but not the file format. Open a
+1. **Request a listing** when you know the service but not the file format.
+   Open a
    [listing request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
    and Sourcey writes the listing.
 2. **Write the listing yourself** as YAML in a pull request. The example below
@@ -30,12 +30,11 @@ format.
 ## Before you edit
 
 1. Search the open issues and pull requests for the company and product.
-2. Open a [listing request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
-   first if the company has no file here yet, so Sourcey can confirm its
-   identity.
-3. Sourcey confirms the company's stable `entity_id`. Startup Offers and Agent
-   Readiness share that identity but stay separate catalogs, so do not copy a
-   credit or deal into a listing.
+2. Use the company's `entity_id` from Sourcey when Sourcey lists it. Startup
+   Offers and Agent Readiness share that identity but stay separate catalogs,
+   so do not copy a credit or deal into a listing.
+3. If Sourcey does not list the company yet, see
+   [A company new to Sourcey](#a-company-new-to-sourcey).
 4. Use `authority_intent: entity` only when Sourcey has already confirmed that
    you control the company's own domain. Otherwise use `community`.
 
@@ -380,6 +379,38 @@ listing and those probes and labelled Probed, until a run verifies the job.
 
 Never add a field for a result, such as "ready", a step outcome, a letter or a
 fix. Sourcey's policy derives those from the listing and its probes.
+
+## A company new to Sourcey
+
+A listing can name a company Sourcey does not list yet. Give the company a
+fresh `entity_id` and add a `company` block after `entity`:
+
+```yaml
+company:
+  summary: Acme runs managed databases for small teams.
+  site_url: https://acme.example
+```
+
+- `summary` is one or two plain sentences about what the company does, at
+  most 240 characters.
+- `site_url` is the company's own website, with no tracking parameters.
+
+Generate the `entity_id` with Node:
+
+```bash
+node -e 'const{randomBytes}=require("node:crypto"),a="0123456789abcdefghjkmnpqrstvwxyz",e=(n,l)=>{let s="";while(l--)s=a[Number(n&31n)]+s,n>>=5n;return s};console.log("ent_"+e(BigInt(Date.now()),10)+e(BigInt("0x"+randomBytes(10).toString("hex")),16))'
+```
+
+Sourcey lists the company first, the same way it lists any new company. A
+company that meets the automatic listing rule is listed for free. One that
+does not is offered a US$29 verification by a person, which your pull
+request's check links to. While the company is being listed, the check says
+so. It runs again by itself once the company is live, and you do not need to
+change your pull request.
+
+A pull request can add one new company. Its listings use
+`authority_intent: community` and `offer_relations: []`, since Sourcey has not
+confirmed who controls the company or any Offer it makes.
 
 ## Optional: add a job binding
 
