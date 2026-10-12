@@ -1,0 +1,346 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe2f0v3g3q3v99cvqsr
+  slug: docusign
+  slug_aliases: []
+  name: Docusign
+  domains:
+    - value: docusign.com
+      role: primary
+      valid_from: 2026-07-27T07:40:57.129Z
+  category: legal-compliance
+sources:
+  - source_id: source_docusign_envelopes
+    url: https://developers.docusign.com/docs/esign-rest-api/reference/envelopes/envelopes/create/
+  - source_id: source_docusign_go_live
+    url: https://developers.docusign.com/platform/go-live/
+  - source_id: source_docusign_go_live_faq
+    url: https://support.docusign.com/s/articles/DocuSign-Developer-FAQs-Integration-Keys-and-Go-Live?language=en_US
+  - source_id: source_docusign_auth
+    url: https://developers.docusign.com/platform/auth/
+  - source_id: source_docusign_plans
+    url: https://ecom.docusign.com/plans-and-pricing/esignature
+  - source_id: source_docusign_trial
+    url: https://www.docusign.com/free-trial
+  - source_id: source_docusign_terms
+    url: https://www.docusign.com/legal/terms-and-conditions
+declarations:
+  - declaration_id: declaration_docusign_docusign_esignature_signature_envelope_send
+    scope:
+      product:
+        key: docusign-esignature
+        name: Docusign eSignature
+      job:
+        key: signature-envelope-send
+        name: Send an envelope for signature
+    job_operations:
+      - operation_id: create-envelope
+        interface_id: esign-api
+        kind: http
+        endpoint_id: esign-api
+        method: POST
+        url: https://www.docusign.net/restapi/v2.1/accounts/00000000-0000-0000-0000-000000000000/envelopes
+        headers: []
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: docusign
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe2f0v3g3q3v99cvqsr
+    resources:
+      - resource_id: envelopes-reference
+        uri: https://developers.docusign.com/docs/esign-rest-api/reference/envelopes/envelopes/create/
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - resource_id: go-live
+        uri: https://developers.docusign.com/platform/go-live/
+        roles:
+          - access
+          - policy
+          - documentation
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - resource_id: go-live-faq
+        uri: https://support.docusign.com/s/articles/DocuSign-Developer-FAQs-Integration-Keys-and-Go-Live?language=en_US
+        roles:
+          - documentation
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developers.docusign.com/platform/auth/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - resource_id: plans
+        uri: https://ecom.docusign.com/plans-and-pricing/esignature
+        roles:
+          - pricing
+          - checkout
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.docusign.com/legal/terms-and-conditions
+        roles:
+          - terms
+        operated_by_participant_id: docusign
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.docusign.com/free-trial
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - endpoint_id: esign-api
+        uri: https://www.docusign.net/restapi
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - endpoint_id: go-live-review
+        uri: https://admindemo.docusign.com/apps-and-keys
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: docusign
+        standard_bindings: []
+    interfaces:
+      - interface_id: esign-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - esign-api
+          - go-live-review
+        resource_ids:
+          - envelopes-reference
+          - go-live
+        operated_by_participant_id: docusign
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: docusign
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: envelopes-reference
+        to:
+          node_kind: interface
+          node_id: esign-api
+      - relation_id: go-live-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: go-live
+        to:
+          node_kind: interface
+          node_id: esign-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: esign-api
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: docusign-scope-0
+        source_id: source_docusign_envelopes
+        target:
+          node_kind: declaration
+          node_id: declaration_docusign_docusign_esignature_signature_envelope_send
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: docusign-participant
+        source_id: source_docusign_terms
+        target:
+          node_kind: participant
+          node_id: docusign
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: docusign-resource-envelopes-reference
+        source_id: source_docusign_envelopes
+        target:
+          node_kind: resource
+          node_id: envelopes-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-resource-go-live
+        source_id: source_docusign_go_live
+        target:
+          node_kind: resource
+          node_id: go-live
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-resource-go-live-faq
+        source_id: source_docusign_go_live_faq
+        target:
+          node_kind: resource
+          node_id: go-live-faq
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-resource-authentication
+        source_id: source_docusign_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-resource-plans
+        source_id: source_docusign_plans
+        target:
+          node_kind: resource
+          node_id: plans
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-resource-service-terms
+        source_id: source_docusign_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-endpoint-registration
+        source_id: source_docusign_trial
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-endpoint-esign-api
+        source_id: source_docusign_envelopes
+        target:
+          node_kind: endpoint
+          node_id: esign-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-endpoint-go-live-review
+        source_id: source_docusign_go_live
+        target:
+          node_kind: endpoint
+          node_id: go-live-review
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: docusign-interface-esign-api
+        source_id: source_docusign_envelopes
+        target:
+          node_kind: interface
+          node_id: esign-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: docusign-interface-api-authentication
+        source_id: source_docusign_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: docusign-relation-reference-describes-api
+        source_id: source_docusign_envelopes
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: docusign-relation-go-live-describes-api
+        source_id: source_docusign_go_live
+        target:
+          node_kind: relation
+          node_id: go-live-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: docusign-relation-authentication-authenticates-api
+        source_id: source_docusign_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: docusign-operation-create-envelope-0
+        source_id: source_docusign_envelopes
+        target:
+          node_kind: job_operation
+          node_id: create-envelope
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: docusign-exclusion-separate-eligibility-resource
+        source_id: source_docusign_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within Docusign's terms and its go-live requirements.
+    authority_intent: community
+    declared_at: 2026-10-12T12:00:00.000Z

@@ -1,0 +1,402 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyxthgq20tdr3fcw7pwzjp96
+  slug: plain
+  slug_aliases: []
+  name: Plain
+  domains:
+    - value: plain.com
+      role: primary
+      valid_from: 2026-07-31T23:27:43.072Z
+  category: support
+sources:
+  - source_id: source_plain_introduction
+    url: https://www.plain.com/docs/graphql/introduction
+  - source_id: source_plain_authentication
+    url: https://www.plain.com/docs/graphql/authentication
+  - source_id: source_plain_create_threads
+    url: https://www.plain.com/docs/graphql/threads/create
+  - source_id: source_plain_errors
+    url: https://www.plain.com/docs/graphql/error-handling
+  - source_id: source_plain_pricing_doc
+    url: https://www.plain.com/docs/product/billing/pricing
+  - source_id: source_plain_pricing
+    url: https://www.plain.com/pricing
+  - source_id: source_plain_signup
+    url: https://www.plain.com/get/trial
+  - source_id: source_plain_terms
+    url: https://www.plain.com/legal/terms-and-conditions
+  - source_id: source_plain_billing_settings
+    url: https://www.plain.com/docs/product/billing/credits
+declarations:
+  - declaration_id: declaration_plain_plain_api_support_ticket_create
+    scope:
+      product:
+        key: plain-api
+        name: Plain API
+      job:
+        key: support-ticket-create
+        name: Create a support ticket
+    job_operations:
+      - operation_id: create-thread
+        interface_id: graphql-api
+        kind: http
+        endpoint_id: graphql-api
+        method: POST
+        url: https://core-api.uk.plain.com/graphql/v1
+        headers: []
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: plain
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyxthgq20tdr3fcw7pwzjp96
+    resources:
+      - resource_id: graphql-introduction
+        uri: https://www.plain.com/docs/graphql/introduction
+        roles:
+          - discovery
+          - documentation
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: create-threads
+        uri: https://www.plain.com/docs/graphql/threads/create
+        roles:
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: error-handling
+        uri: https://www.plain.com/docs/graphql/error-handling
+        roles:
+          - status
+          - recovery
+          - documentation
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://www.plain.com/docs/graphql/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: pricing-doc
+        uri: https://www.plain.com/docs/product/billing/pricing
+        roles:
+          - documentation
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.plain.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.plain.com/get/trial
+        roles:
+          - access
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.plain.com/legal/terms-and-conditions
+        roles:
+          - terms
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://app.plain.com/~/settings/billing/
+        roles:
+          - checkout
+        operated_by_participant_id: plain
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.plain.com/get/trial
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - endpoint_id: graphql-api
+        uri: https://core-api.uk.plain.com/graphql/v1
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: plain
+        standard_bindings: []
+    interfaces:
+      - interface_id: graphql-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - graphql-api
+        resource_ids:
+          - graphql-introduction
+          - create-threads
+          - error-handling
+        operated_by_participant_id: plain
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: plain
+        standard_bindings: []
+    relations:
+      - relation_id: introduction-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: graphql-introduction
+        to:
+          node_kind: interface
+          node_id: graphql-api
+      - relation_id: threads-describe-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: create-threads
+        to:
+          node_kind: interface
+          node_id: graphql-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: graphql-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: plain-scope-0
+        source_id: source_plain_create_threads
+        target:
+          node_kind: declaration
+          node_id: declaration_plain_plain_api_support_ticket_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: plain-participant
+        source_id: source_plain_terms
+        target:
+          node_kind: participant
+          node_id: plain
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: plain-resource-graphql-introduction
+        source_id: source_plain_introduction
+        target:
+          node_kind: resource
+          node_id: graphql-introduction
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-create-threads
+        source_id: source_plain_create_threads
+        target:
+          node_kind: resource
+          node_id: create-threads
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-error-handling
+        source_id: source_plain_errors
+        target:
+          node_kind: resource
+          node_id: error-handling
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-authentication
+        source_id: source_plain_authentication
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-pricing-doc
+        source_id: source_plain_pricing_doc
+        target:
+          node_kind: resource
+          node_id: pricing-doc
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-pricing
+        source_id: source_plain_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-account-signup
+        source_id: source_plain_signup
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-service-terms
+        source_id: source_plain_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-resource-checkout
+        source_id: source_plain_billing_settings
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-endpoint-registration
+        source_id: source_plain_signup
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-endpoint-graphql-api
+        source_id: source_plain_introduction
+        target:
+          node_kind: endpoint
+          node_id: graphql-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: plain-interface-graphql-api
+        source_id: source_plain_introduction
+        target:
+          node_kind: interface
+          node_id: graphql-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: plain-interface-api-authentication
+        source_id: source_plain_authentication
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: plain-relation-introduction-describes-api
+        source_id: source_plain_introduction
+        target:
+          node_kind: relation
+          node_id: introduction-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: plain-relation-threads-describe-api
+        source_id: source_plain_create_threads
+        target:
+          node_kind: relation
+          node_id: threads-describe-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: plain-relation-authentication-authenticates-api
+        source_id: source_plain_authentication
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: plain-relation-signup-precedes-authentication
+        source_id: source_plain_signup
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: plain-operation-create-thread-0
+        source_id: source_plain_introduction
+        target:
+          node_kind: job_operation
+          node_id: create-thread
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: plain-operation-create-thread-1
+        source_id: source_plain_create_threads
+        target:
+          node_kind: job_operation
+          node_id: create-thread
+        field_paths:
+          - /interface_id
+          - /method
+      - source_binding_id: plain-exclusion-separate-eligibility-resource
+        source_id: source_plain_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within Plain's terms and conditions.
+    authority_intent: community
+    declared_at: 2026-10-12T12:00:00.000Z

@@ -1,0 +1,499 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe1p0gsjf95gc5t1785
+  slug: atlassian
+  slug_aliases: []
+  name: Atlassian
+  domains:
+    - value: atlassian.com
+      role: primary
+      valid_from: 2026-07-27T07:39:12.506Z
+  category: devtools-other
+sources:
+  - source_id: source_atlassian_jira_rest
+    url: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/
+  - source_id: source_atlassian_jira_spec
+    url: https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
+  - source_id: source_atlassian_basic_auth
+    url: https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/
+  - source_id: source_atlassian_api_tokens
+    url: https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/
+  - source_id: source_atlassian_mcp_tools
+    url: https://support.atlassian.com/atlassian-rovo-mcp-server/docs/supported-tools/
+  - source_id: source_atlassian_mcp_settings
+    url: https://support.atlassian.com/security-and-access-policies/docs/control-atlassian-mcp-server-settings/
+  - source_id: source_atlassian_licensing
+    url: https://www.atlassian.com/licensing/jira-software
+  - source_id: source_atlassian_signup
+    url: https://www.atlassian.com/try/cloud/signup?bundle=jira-software
+  - source_id: source_atlassian_terms
+    url: https://www.atlassian.com/legal/atlassian-customer-agreement
+declarations:
+  - declaration_id: declaration_atlassian_jira_task_create
+    scope:
+      product:
+        key: jira
+        name: Jira
+      job:
+        key: task-create
+        name: Create a task
+    job_operations:
+      - operation_id: create-issue
+        interface_id: jira-api
+        kind: spec
+        spec_url: https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
+        method: POST
+        path: /rest/api/3/issue
+        key_operations: null
+      - operation_id: create-issue-mcp
+        interface_id: rovo-mcp
+        kind: mcp
+        endpoint_id: rovo-mcp
+        tool: createJiraIssue
+    job_bindings: []
+    participants:
+      - participant_id: atlassian
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe1p0gsjf95gc5t1785
+    resources:
+      - resource_id: rest-reference
+        uri: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: openapi
+        uri: https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
+        roles:
+          - descriptor
+          - documentation
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: api-tokens
+        uri: https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: mcp-tools
+        uri: https://support.atlassian.com/atlassian-rovo-mcp-server/docs/supported-tools/
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: mcp-settings
+        uri: https://support.atlassian.com/security-and-access-policies/docs/control-atlassian-mcp-server-settings/
+        roles:
+          - policy
+          - documentation
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.atlassian.com/licensing/jira-software
+        roles:
+          - pricing
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.atlassian.com/try/cloud/signup?bundle=jira-software
+        roles:
+          - access
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.atlassian.com/legal/atlassian-customer-agreement
+        roles:
+          - terms
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.atlassian.com/try/cloud/signup?bundle=jira-software
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - endpoint_id: token-renewal
+        uri: https://id.atlassian.com/manage-profile/security/api-tokens
+        transport: http
+        roles:
+          - key_renewal
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - endpoint_id: rovo-mcp
+        uri: https://mcp.atlassian.com/v2/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - endpoint_id: mcp-domains
+        uri: https://admin.atlassian.com/
+        transport: http
+        roles:
+          - access_setting
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+    interfaces:
+      - interface_id: jira-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - token-renewal
+        resource_ids:
+          - rest-reference
+          - openapi
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - interface_id: rovo-mcp
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - rovo-mcp
+          - mcp-domains
+        resource_ids:
+          - mcp-tools
+          - mcp-settings
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+          - api-tokens
+        operated_by_participant_id: atlassian
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: rest-reference
+        to:
+          node_kind: interface
+          node_id: jira-api
+      - relation_id: openapi-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: openapi
+        to:
+          node_kind: interface
+          node_id: jira-api
+      - relation_id: tools-describe-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-tools
+        to:
+          node_kind: interface
+          node_id: rovo-mcp
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: jira-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: atlassian-scope-0
+        source_id: source_atlassian_jira_rest
+        target:
+          node_kind: declaration
+          node_id: declaration_atlassian_jira_task_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: atlassian-scope-1
+        source_id: source_atlassian_mcp_tools
+        target:
+          node_kind: declaration
+          node_id: declaration_atlassian_jira_task_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: atlassian-participant
+        source_id: source_atlassian_terms
+        target:
+          node_kind: participant
+          node_id: atlassian
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: atlassian-resource-rest-reference
+        source_id: source_atlassian_jira_rest
+        target:
+          node_kind: resource
+          node_id: rest-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-openapi
+        source_id: source_atlassian_jira_spec
+        target:
+          node_kind: resource
+          node_id: openapi
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-authentication
+        source_id: source_atlassian_basic_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-api-tokens
+        source_id: source_atlassian_api_tokens
+        target:
+          node_kind: resource
+          node_id: api-tokens
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-mcp-tools
+        source_id: source_atlassian_mcp_tools
+        target:
+          node_kind: resource
+          node_id: mcp-tools
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-mcp-settings
+        source_id: source_atlassian_mcp_settings
+        target:
+          node_kind: resource
+          node_id: mcp-settings
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-pricing
+        source_id: source_atlassian_licensing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-account-signup
+        source_id: source_atlassian_signup
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-resource-service-terms
+        source_id: source_atlassian_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-endpoint-registration
+        source_id: source_atlassian_signup
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-endpoint-token-renewal
+        source_id: source_atlassian_api_tokens
+        target:
+          node_kind: endpoint
+          node_id: token-renewal
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-endpoint-rovo-mcp
+        source_id: source_atlassian_mcp_tools
+        target:
+          node_kind: endpoint
+          node_id: rovo-mcp
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-endpoint-mcp-domains
+        source_id: source_atlassian_mcp_settings
+        target:
+          node_kind: endpoint
+          node_id: mcp-domains
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-interface-jira-api
+        source_id: source_atlassian_jira_rest
+        target:
+          node_kind: interface
+          node_id: jira-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-interface-rovo-mcp
+        source_id: source_atlassian_mcp_tools
+        target:
+          node_kind: interface
+          node_id: rovo-mcp
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-interface-api-authentication
+        source_id: source_atlassian_basic_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: atlassian-relation-reference-describes-api
+        source_id: source_atlassian_jira_rest
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: atlassian-relation-openapi-describes-api
+        source_id: source_atlassian_jira_spec
+        target:
+          node_kind: relation
+          node_id: openapi-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: atlassian-relation-tools-describe-mcp
+        source_id: source_atlassian_mcp_tools
+        target:
+          node_kind: relation
+          node_id: tools-describe-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: atlassian-relation-authentication-authenticates-api
+        source_id: source_atlassian_basic_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: atlassian-relation-signup-precedes-authentication
+        source_id: source_atlassian_signup
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: atlassian-operation-create-issue-0
+        source_id: source_atlassian_jira_spec
+        target:
+          node_kind: job_operation
+          node_id: create-issue
+        field_paths:
+          - /interface_id
+          - /spec_url
+          - /method
+          - /path
+      - source_binding_id: atlassian-operation-create-issue-mcp-0
+        source_id: source_atlassian_mcp_tools
+        target:
+          node_kind: job_operation
+          node_id: create-issue-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: atlassian-exclusion-free-job-no-checkout
+        source_id: source_atlassian_licensing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: atlassian-exclusion-separate-eligibility-resource
+        source_id: source_atlassian_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Jira Cloud's Free plan, for up to 10 users, creates work items with no payment.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the Atlassian Customer Agreement; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-12T12:00:00.000Z

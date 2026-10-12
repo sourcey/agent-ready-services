@@ -1,0 +1,141 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyxthgq36x1akfx7cy4k7268
+  slug: solidworks
+  slug_aliases: []
+  name: SOLIDWORKS
+  domains:
+    - value: solidworks.com
+      role: primary
+      valid_from: 2026-07-31T23:29:28.594Z
+  category: design
+sources:
+  - source_id: source_solidworks_api
+    url: https://help.solidworks.com/2020/English/SolidWorks/sldworks/c_solidworks_api.htm
+  - source_id: source_solidworks_terms
+    url: https://www.3ds.com/terms-of-use
+declarations:
+  - declaration_id: declaration_solidworks_solidworks_cad_document_create
+    scope:
+      product:
+        key: solidworks
+        name: SOLIDWORKS
+      job:
+        key: cad-document-create
+        name: Create a CAD document
+    job_operations: []
+    job_bindings: []
+    participants:
+      - participant_id: solidworks
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyxthgq36x1akfx7cy4k7268
+    resources:
+      - resource_id: api-overview
+        uri: https://help.solidworks.com/2020/English/SolidWorks/sldworks/c_solidworks_api.htm
+        roles:
+          - discovery
+          - documentation
+        operated_by_participant_id: solidworks
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.3ds.com/terms-of-use
+        roles:
+          - terms
+        operated_by_participant_id: solidworks
+        standard_bindings: []
+    endpoints: []
+    interfaces:
+      - interface_id: solidworks-api
+        modality: software_library
+        functions:
+          - service_operation
+        endpoint_ids: []
+        resource_ids:
+          - api-overview
+        operated_by_participant_id: solidworks
+        standard_bindings: []
+    relations:
+      - relation_id: overview-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-overview
+        to:
+          node_kind: interface
+          node_id: solidworks-api
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: solidworks-scope-0
+        source_id: source_solidworks_api
+        target:
+          node_kind: declaration
+          node_id: declaration_solidworks_solidworks_cad_document_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: solidworks-participant
+        source_id: source_solidworks_terms
+        target:
+          node_kind: participant
+          node_id: solidworks
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: solidworks-resource-api-overview
+        source_id: source_solidworks_api
+        target:
+          node_kind: resource
+          node_id: api-overview
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: solidworks-resource-service-terms
+        source_id: source_solidworks_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: solidworks-interface-solidworks-api
+        source_id: source_solidworks_api
+        target:
+          node_kind: interface
+          node_id: solidworks-api
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: solidworks-relation-overview-describes-api
+        source_id: source_solidworks_api
+        target:
+          node_kind: relation
+          node_id: overview-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: solidworks-exclusion-separate-eligibility-resource
+        source_id: source_solidworks_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the terms of use; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-12T12:00:00.000Z

@@ -1,0 +1,336 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyyn497fymbxq5b9t4er223p
+  slug: mercury-technologies-inc
+  slug_aliases: []
+  name: Mercury Technologies, Inc
+  domains:
+    - value: mercury.com
+      role: primary
+      valid_from: 2026-08-01T07:24:19.717Z
+  category: banking
+sources:
+  - source_id: source_mercury_technologies_inc_recipients
+    url: https://docs.mercury.com/reference/createrecipient
+  - source_id: source_mercury_technologies_inc_getting_started
+    url: https://docs.mercury.com/docs/getting-started
+  - source_id: source_mercury_technologies_inc_token_policies
+    url: https://docs.mercury.com/docs/api-token-security-policies
+  - source_id: source_mercury_technologies_inc_pricing
+    url: https://mercury.com/pricing
+  - source_id: source_mercury_technologies_inc_terms
+    url: https://mercury.com/legal/terms
+  - source_id: source_mercury_technologies_inc_application_review
+    url: https://support.mercury.com/hc/en-us/articles/28771494745364-What-happens-after-I-submit-my-Mercury-business-account-application
+declarations:
+  - declaration_id: declaration_mercury_technologies_inc_mercury_api_payee_create
+    scope:
+      product:
+        key: mercury-api
+        name: Mercury API
+      job:
+        key: payee-create
+        name: Add a payee
+    job_operations:
+      - operation_id: create-recipient
+        interface_id: recipients-api
+        kind: http
+        endpoint_id: mercury-api
+        method: POST
+        url: https://api.mercury.com/api/v1/recipients
+        headers: []
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: mercury-technologies-inc
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyyn497fymbxq5b9t4er223p
+    resources:
+      - resource_id: recipients-reference
+        uri: https://docs.mercury.com/reference/createrecipient
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.mercury.com/docs/getting-started
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+      - resource_id: token-policies
+        uri: https://docs.mercury.com/docs/api-token-security-policies
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://mercury.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://mercury.com/legal/terms
+        roles:
+          - terms
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+      - resource_id: application-review
+        uri: https://support.mercury.com/hc/en-us/articles/28771494745364-What-happens-after-I-submit-my-Mercury-business-account-application
+        roles:
+          - access
+          - documentation
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: account-application
+        uri: https://app.mercury.com/signup
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+      - endpoint_id: mercury-api
+        uri: https://api.mercury.com/api/v1
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+    interfaces:
+      - interface_id: recipients-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mercury-api
+        resource_ids:
+          - recipients-reference
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+          - token-policies
+        operated_by_participant_id: mercury-technologies-inc
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: recipients-reference
+        to:
+          node_kind: interface
+          node_id: recipients-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: recipients-api
+      - relation_id: application-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: application-review
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: mercury-technologies-inc-scope-0
+        source_id: source_mercury_technologies_inc_recipients
+        target:
+          node_kind: declaration
+          node_id: declaration_mercury_technologies_inc_mercury_api_payee_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: mercury-technologies-inc-participant
+        source_id: source_mercury_technologies_inc_terms
+        target:
+          node_kind: participant
+          node_id: mercury-technologies-inc
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: mercury-technologies-inc-resource-recipients-reference
+        source_id: source_mercury_technologies_inc_recipients
+        target:
+          node_kind: resource
+          node_id: recipients-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-resource-authentication
+        source_id: source_mercury_technologies_inc_getting_started
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-resource-token-policies
+        source_id: source_mercury_technologies_inc_token_policies
+        target:
+          node_kind: resource
+          node_id: token-policies
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-resource-pricing
+        source_id: source_mercury_technologies_inc_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-resource-service-terms
+        source_id: source_mercury_technologies_inc_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-resource-application-review
+        source_id: source_mercury_technologies_inc_application_review
+        target:
+          node_kind: resource
+          node_id: application-review
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-endpoint-account-application
+        source_id: source_mercury_technologies_inc_application_review
+        target:
+          node_kind: endpoint
+          node_id: account-application
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-endpoint-mercury-api
+        source_id: source_mercury_technologies_inc_recipients
+        target:
+          node_kind: endpoint
+          node_id: mercury-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-interface-recipients-api
+        source_id: source_mercury_technologies_inc_recipients
+        target:
+          node_kind: interface
+          node_id: recipients-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-interface-api-authentication
+        source_id: source_mercury_technologies_inc_getting_started
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: mercury-technologies-inc-relation-reference-describes-api
+        source_id: source_mercury_technologies_inc_recipients
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: mercury-technologies-inc-relation-authentication-authenticates-api
+        source_id: source_mercury_technologies_inc_getting_started
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: mercury-technologies-inc-relation-application-precedes-authentication
+        source_id: source_mercury_technologies_inc_application_review
+        target:
+          node_kind: relation
+          node_id: application-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: mercury-technologies-inc-operation-create-recipient-0
+        source_id: source_mercury_technologies_inc_recipients
+        target:
+          node_kind: job_operation
+          node_id: create-recipient
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: mercury-technologies-inc-exclusion-free-job-no-checkout
+        source_id: source_mercury_technologies_inc_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: mercury-technologies-inc-exclusion-separate-eligibility-resource
+        source_id: source_mercury_technologies_inc_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Mercury's $0/month plan includes sending and receiving money; adding a recipient costs nothing.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Who may open an account is set out in Mercury's terms and decided on each application.
+    authority_intent: community
+    declared_at: 2026-10-12T12:00:00.000Z

@@ -1,0 +1,385 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe43gqa08cvashmf19y
+  slug: modal
+  slug_aliases: []
+  name: Modal
+  domains:
+    - value: modal.com
+      role: primary
+      valid_from: 2026-07-27T07:36:53.450Z
+  category: ai-ml
+sources:
+  - source_id: source_modal_sandboxes
+    url: https://modal.com/docs/guide/sandboxes
+  - source_id: source_modal_workspaces
+    url: https://modal.com/docs/guide/workspaces
+  - source_id: source_modal_billing
+    url: https://modal.com/docs/guide/billing
+  - source_id: source_modal_pricing
+    url: https://modal.com/pricing
+  - source_id: source_modal_signup
+    url: https://modal.com/signup
+  - source_id: source_modal_terms
+    url: https://modal.com/legal/terms
+  - source_id: source_modal_proto
+    url: https://github.com/modal-labs/modal-client/blob/main/modal_proto/api.proto
+  - source_id: source_modal_client_config
+    url: https://github.com/modal-labs/modal-client/blob/main/js/src/config.ts
+declarations:
+  - declaration_id: declaration_modal_modal_sandboxes_sandbox_code_run
+    scope:
+      product:
+        key: modal-sandboxes
+        name: Modal Sandboxes
+      job:
+        key: sandbox-code-run
+        name: Run code in a sandbox
+    job_operations:
+      - operation_id: create-sandbox
+        interface_id: sandbox-api
+        kind: http
+        endpoint_id: modal-api
+        method: POST
+        url: https://api.modal.com/modal.client.ModalClient/SandboxCreate
+        headers: []
+        body:
+          media_type: application/grpc
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: modal
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe43gqa08cvashmf19y
+    resources:
+      - resource_id: sandboxes-guide
+        uri: https://modal.com/docs/guide/sandboxes
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - resource_id: api-protocol
+        uri: https://github.com/modal-labs/modal-client/blob/main/modal_proto/api.proto
+        roles:
+          - descriptor
+          - documentation
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://modal.com/legal/terms
+        roles:
+          - terms
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://modal.com/pricing
+        roles:
+          - pricing
+          - documentation
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://modal.com/signup
+        roles:
+          - access
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://modal.com/docs/guide/workspaces
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - resource_id: billing
+        uri: https://modal.com/docs/guide/billing
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://modal.com/settings/usage
+        roles:
+          - checkout
+        operated_by_participant_id: modal
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://modal.com/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - endpoint_id: modal-api
+        uri: https://api.modal.com
+        transport: grpc
+        roles:
+          - service
+        operated_by_participant_id: modal
+        standard_bindings: []
+    interfaces:
+      - interface_id: sandbox-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - modal-api
+        resource_ids:
+          - sandboxes-guide
+          - api-protocol
+        operated_by_participant_id: modal
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: modal
+        standard_bindings: []
+    relations:
+      - relation_id: guide-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: sandboxes-guide
+        to:
+          node_kind: interface
+          node_id: sandbox-api
+      - relation_id: protocol-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-protocol
+        to:
+          node_kind: interface
+          node_id: sandbox-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: sandbox-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: modal-scope-0
+        source_id: source_modal_sandboxes
+        target:
+          node_kind: declaration
+          node_id: declaration_modal_modal_sandboxes_sandbox_code_run
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: modal-participant
+        source_id: source_modal_terms
+        target:
+          node_kind: participant
+          node_id: modal
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: modal-resource-sandboxes-guide
+        source_id: source_modal_sandboxes
+        target:
+          node_kind: resource
+          node_id: sandboxes-guide
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-resource-api-protocol
+        source_id: source_modal_proto
+        target:
+          node_kind: resource
+          node_id: api-protocol
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-resource-service-terms
+        source_id: source_modal_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-resource-pricing
+        source_id: source_modal_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-resource-account-signup
+        source_id: source_modal_signup
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-resource-authentication
+        source_id: source_modal_workspaces
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-resource-billing
+        source_id: source_modal_billing
+        target:
+          node_kind: resource
+          node_id: billing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-resource-checkout
+        source_id: source_modal_billing
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-endpoint-registration
+        source_id: source_modal_signup
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-endpoint-modal-api
+        source_id: source_modal_client_config
+        target:
+          node_kind: endpoint
+          node_id: modal-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: modal-interface-sandbox-api
+        source_id: source_modal_proto
+        target:
+          node_kind: interface
+          node_id: sandbox-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: modal-interface-api-authentication
+        source_id: source_modal_workspaces
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: modal-relation-guide-describes-api
+        source_id: source_modal_sandboxes
+        target:
+          node_kind: relation
+          node_id: guide-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: modal-relation-protocol-describes-api
+        source_id: source_modal_proto
+        target:
+          node_kind: relation
+          node_id: protocol-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: modal-relation-authentication-authenticates-api
+        source_id: source_modal_workspaces
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: modal-relation-signup-precedes-authentication
+        source_id: source_modal_signup
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: modal-operation-create-sandbox-0
+        source_id: source_modal_proto
+        target:
+          node_kind: job_operation
+          node_id: create-sandbox
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: modal-operation-create-sandbox-1
+        source_id: source_modal_client_config
+        target:
+          node_kind: job_operation
+          node_id: create-sandbox
+        field_paths:
+          - /endpoint_id
+          - /url
+      - source_binding_id: modal-exclusion-separate-eligibility-resource
+        source_id: source_modal_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within Modal's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-12T12:00:00.000Z
