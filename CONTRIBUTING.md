@@ -320,16 +320,24 @@ listing and those probes and labelled Probed, until a run verifies the job.
   does one of these.
 - **`job_operations`** give the request that does the job, one for each
   interface the vendor currently offers that performs it (leave out one the
-  vendor has deprecated in favour of another, and one a probe can neither call
-  nor read: an API only at hosts each account gets with no OpenAPI 3 document,
-  or GraphQL alone), in one of three kinds:
+  vendor has deprecated in favour of another, and a second interface a probe
+  can neither call nor read: an API only at hosts each account gets with no
+  OpenAPI 3 document, or GraphQL only inside a self-hosted product), in one of
+  three kinds. A public GraphQL API is declared like any other: a POST with a
+  JSON body.
   - `kind: http`: the HTTP method, the URL on its endpoint's origin, any plain
     headers every request needs (such as an API version header) and the
     body's media type exactly as the vendor documents it (such as
     `{ media_type: application/json }`,
-    `{ media_type: application/x-www-form-urlencoded }` or
-    `{ media_type: application/x-sentry-envelope }`) or `null`. No header or
-    query parameter may carry a credential. Put a
+    `{ media_type: application/x-www-form-urlencoded }`,
+    `{ media_type: application/x-sentry-envelope }`, or
+    `{ media_type: application/grpc }` for a gRPC call, a POST to the method's
+    path, such as `/modal.client.ModalClient/SandboxCreate`) or `null`. No
+    header or query parameter may carry a credential. Where the vendor takes
+    its key in the request body rather than a header, name the field that
+    carries it (`{ media_type: application/json, credential_field: api_key }`
+    for Amplitude's): OpenAPI has no security scheme for a key in the body, so
+    the vendor's document cannot say the request needs one. Put a
     well-formed placeholder where an account-specific identifier or host label
     goes. In `spec`, name the vendor's OpenAPI 3 document that covers the
     request, with the operations in it that create and revoke an API key when
