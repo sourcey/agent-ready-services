@@ -340,9 +340,15 @@ listing and those probes and labelled Probed, until a run verifies the job.
     headers every request needs (such as an API version header) and the
     body's media type exactly as the vendor documents it (such as
     `{ media_type: application/json }`,
-    `{ media_type: application/x-www-form-urlencoded }` or
-    `{ media_type: application/x-sentry-envelope }`) or `null`. No header or
-    query parameter may carry a credential. Put a
+    `{ media_type: application/x-www-form-urlencoded }`,
+    `{ media_type: application/x-sentry-envelope }`, or
+    `{ media_type: application/grpc }` for a gRPC call, a POST to the method's
+    path, such as `/modal.client.ModalClient/SandboxCreate`) or `null`. No
+    header or query parameter may carry a credential. Where the vendor takes
+    its key in the request body rather than a header, name the field that
+    carries it (`{ media_type: application/json, credential_field: api_key }`
+    for Amplitude's): OpenAPI has no security scheme for a key in the body, so
+    the vendor's document cannot say the request needs one. Put a
     well-formed placeholder where an account-specific identifier or host label
     goes. In `spec`, name the vendor's OpenAPI 3 document that covers the
     request, with the operations in it that create and revoke an API key when
