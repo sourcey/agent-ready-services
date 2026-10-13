@@ -334,9 +334,10 @@ listing and those probes and labelled Probed, until a run verifies the job.
   does one of these.
 - **`job_operations`** give the request that does the job, one for each
   interface the vendor currently offers that performs it (leave out one the
-  vendor has deprecated in favour of another, and one a probe can neither call
-  nor read: an API only at hosts each account gets with no OpenAPI 3 document,
-  or GraphQL alone), in one of three kinds:
+  vendor has deprecated in favour of another, and an alternate one a probe can
+  neither call nor read: an API only at hosts each account gets with no
+  OpenAPI 3 document, or GraphQL behind a self-hosted product; a public
+  GraphQL API is declared like any JSON API), in one of three kinds:
   - `kind: http`: the HTTP method, the URL on its endpoint's origin, any plain
     headers every request needs (such as an API version header) and the
     body's media type exactly as the vendor documents it (such as
