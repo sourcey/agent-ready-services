@@ -1,0 +1,329 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyypqp9x4hw483erw4fnzdgy
+  slug: xero
+  slug_aliases: []
+  name: Xero
+  domains:
+    - value: xero.com
+      role: primary
+      valid_from: 2026-08-01T12:57:23.902Z
+  category: finance-accounting
+sources:
+  - source_id: source_xero_invoices
+    url: https://developer.xero.com/documentation/api/accounting/invoices
+  - source_id: source_xero_openapi
+    url: https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml
+  - source_id: source_xero_oauth2
+    url: https://developer.xero.com/documentation/guides/oauth2/overview/
+  - source_id: source_xero_errors
+    url: https://developer.xero.com/documentation/api/accounting/responsecodes
+  - source_id: source_xero_pricing
+    url: https://www.xero.com/us/pricing-plans/
+  - source_id: source_xero_terms
+    url: https://www.xero.com/us/legal/terms/
+declarations:
+  - declaration_id: declaration_xero_xero_accounting_invoice_create
+    scope:
+      product:
+        key: xero-accounting
+        name: Xero Accounting
+      job:
+        key: invoice-create
+        name: Create an invoice
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: PUT
+        url: https://api.xero.com/api.xro/2.0/Invoices
+        body:
+          media_type: application/json
+        spec:
+          url: https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: xero
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyypqp9x4hw483erw4fnzdgy
+    resources:
+      - resource_id: api-reference
+        uri: https://developer.xero.com/documentation/api/accounting/invoices
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: xero
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.xero.com/documentation/guides/oauth2/overview/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: xero
+        standard_bindings: []
+      - resource_id: api-errors
+        uri: https://developer.xero.com/documentation/api/accounting/responsecodes
+        roles:
+          - status
+          - recovery
+          - documentation
+        operated_by_participant_id: xero
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.xero.com/us/pricing-plans/
+        roles:
+          - pricing
+        operated_by_participant_id: xero
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://www.xero.com/us/signup/early/
+        roles:
+          - checkout
+          - access
+        operated_by_participant_id: xero
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.xero.com/us/legal/terms/
+        roles:
+          - terms
+        operated_by_participant_id: xero
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.xero.com/us/signup/early/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: xero
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.xero.com/api.xro/2.0
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: xero
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - api-errors
+        operated_by_participant_id: xero
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: xero
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: checkout
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: xero-scope-0
+        source_id: source_xero_invoices
+        target:
+          node_kind: declaration
+          node_id: declaration_xero_xero_accounting_invoice_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: xero-participant
+        source_id: source_xero_terms
+        target:
+          node_kind: participant
+          node_id: xero
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: xero-resource-api-reference
+        source_id: source_xero_invoices
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-resource-authentication
+        source_id: source_xero_oauth2
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-resource-api-errors
+        source_id: source_xero_errors
+        target:
+          node_kind: resource
+          node_id: api-errors
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-resource-pricing
+        source_id: source_xero_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-resource-checkout
+        source_id: source_xero_pricing
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-resource-service-terms
+        source_id: source_xero_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-endpoint-registration
+        source_id: source_xero_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-endpoint-service-api
+        source_id: source_xero_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: xero-interface-service-api
+        source_id: source_xero_invoices
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: xero-interface-api-authentication
+        source_id: source_xero_oauth2
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: xero-relation-reference-describes-api
+        source_id: source_xero_invoices
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: xero-relation-authentication-authenticates-api
+        source_id: source_xero_oauth2
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: xero-relation-signup-precedes-authentication
+        source_id: source_xero_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: xero-operation-job-0
+        source_id: source_xero_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: xero-exclusion-separate-eligibility-resource
+        source_id: source_xero_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

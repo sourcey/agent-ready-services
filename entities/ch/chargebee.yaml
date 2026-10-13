@@ -1,0 +1,326 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe1grkqm2hf1qpqm3he
+  slug: chargebee
+  slug_aliases: []
+  name: Chargebee
+  domains:
+    - value: chargebee.com
+      role: primary
+      valid_from: 2026-07-27T07:39:34.183Z
+  category: finance-accounting
+sources:
+  - source_id: source_chargebee_create_invoice
+    url: https://apidocs.chargebee.com/docs/api/invoices/create-invoice-for-items-and-one-time-charges
+  - source_id: source_chargebee_openapi
+    url: https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_api_v2_pc_v2_spec.yaml
+  - source_id: source_chargebee_auth
+    url: https://apidocs.chargebee.com/docs/api/auth
+  - source_id: source_chargebee_errors
+    url: https://apidocs.chargebee.com/docs/api/error-handling
+  - source_id: source_chargebee_pricing
+    url: https://www.chargebee.com/pricing/
+  - source_id: source_chargebee_go_live
+    url: https://www.chargebee.com/docs/billing/2.0/implementing-chargebee/activate-live-site
+  - source_id: source_chargebee_terms
+    url: https://www.chargebee.com/company/terms/
+declarations:
+  - declaration_id: declaration_chargebee_chargebee_billing_invoice_create
+    scope:
+      product:
+        key: chargebee-billing
+        name: Chargebee Billing
+      job:
+        key: invoice-create
+        name: Create an invoice
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: spec
+        spec_url: https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_api_v2_pc_v2_spec.yaml
+        method: POST
+        path: /invoices/create_for_charge_items_and_charges
+        key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: chargebee
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe1grkqm2hf1qpqm3he
+    resources:
+      - resource_id: api-reference
+        uri: https://apidocs.chargebee.com/docs/api/invoices/create-invoice-for-items-and-one-time-charges
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://apidocs.chargebee.com/docs/api/auth
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+      - resource_id: api-errors
+        uri: https://apidocs.chargebee.com/docs/api/error-handling
+        roles:
+          - status
+          - recovery
+          - documentation
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.chargebee.com/pricing/
+        roles:
+          - pricing
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://www.chargebee.com/docs/billing/2.0/implementing-chargebee/activate-live-site
+        roles:
+          - checkout
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.chargebee.com/trial-signup/
+        roles:
+          - access
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.chargebee.com/company/terms/
+        roles:
+          - terms
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.chargebee.com/trial-signup/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids: []
+        resource_ids:
+          - api-reference
+          - api-errors
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: chargebee
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: chargebee-scope-0
+        source_id: source_chargebee_create_invoice
+        target:
+          node_kind: declaration
+          node_id: declaration_chargebee_chargebee_billing_invoice_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: chargebee-participant
+        source_id: source_chargebee_terms
+        target:
+          node_kind: participant
+          node_id: chargebee
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: chargebee-resource-api-reference
+        source_id: source_chargebee_create_invoice
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-resource-authentication
+        source_id: source_chargebee_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-resource-api-errors
+        source_id: source_chargebee_errors
+        target:
+          node_kind: resource
+          node_id: api-errors
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-resource-pricing
+        source_id: source_chargebee_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-resource-checkout
+        source_id: source_chargebee_go_live
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-resource-account-signup
+        source_id: source_chargebee_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-resource-service-terms
+        source_id: source_chargebee_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-endpoint-registration
+        source_id: source_chargebee_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-interface-service-api
+        source_id: source_chargebee_create_invoice
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-interface-api-authentication
+        source_id: source_chargebee_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: chargebee-relation-reference-describes-api
+        source_id: source_chargebee_create_invoice
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: chargebee-relation-authentication-authenticates-api
+        source_id: source_chargebee_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: chargebee-relation-signup-precedes-authentication
+        source_id: source_chargebee_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: chargebee-operation-job-0
+        source_id: source_chargebee_create_invoice
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /spec_url
+          - /method
+          - /path
+      - source_binding_id: chargebee-operation-job-1
+        source_id: source_chargebee_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec_url
+      - source_binding_id: chargebee-exclusion-separate-eligibility-resource
+        source_id: source_chargebee_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
