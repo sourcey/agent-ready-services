@@ -1,0 +1,346 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyygma83yg4pyars3qr8vcxk
+  slug: telnyx
+  slug_aliases: []
+  name: Telnyx
+  domains:
+    - value: telnyx.com
+      role: primary
+      valid_from: 2026-08-01T10:30:06.973Z
+  category: communication
+sources:
+  - source_id: source_telnyx_send_message
+    url: https://developers.telnyx.com/api/messaging/send-message
+  - source_id: source_telnyx_auth
+    url: https://developers.telnyx.com/docs/development/api-fundamentals/authentication
+  - source_id: source_telnyx_openapi
+    url: https://raw.githubusercontent.com/team-telnyx/openapi/master/openapi/spec3.json
+  - source_id: source_telnyx_pricing
+    url: https://telnyx.com/pricing/messaging
+  - source_id: source_telnyx_signup
+    url: https://telnyx.com/sign-up
+  - source_id: source_telnyx_agent_signup
+    url: https://telnyx.com/agent-signup.md
+  - source_id: source_telnyx_billing
+    url: https://support.telnyx.com/en/articles/4280500-billing-setup-billing-groups
+  - source_id: source_telnyx_terms
+    url: https://telnyx.com/terms-and-conditions-of-service
+declarations:
+  - declaration_id: declaration_telnyx_telnyx_messaging_sms_send
+    scope:
+      product:
+        key: telnyx-messaging
+        name: Telnyx Messaging
+      job:
+        key: sms-send
+        name: Send a text message
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.telnyx.com/v2/messages
+        body:
+          media_type: application/json
+        spec:
+          url: https://raw.githubusercontent.com/team-telnyx/openapi/master/openapi/spec3.json
+          key_operations: null
+    account_operations:
+      - { operation_id: bot-signup, interface_id: service-api, role: registration, endpoint_id: service-api, method: POST, url: https://api.telnyx.com/v2/bot_signup, spec_url: https://raw.githubusercontent.com/team-telnyx/openapi/master/openapi/spec3.json }
+      - { operation_id: account-credit, interface_id: service-api, role: top_up, endpoint_id: service-api, method: POST, url: https://api.telnyx.com/v2/machine-payments/account-credit, spec_url: https://raw.githubusercontent.com/team-telnyx/openapi/master/openapi/spec3.json }
+    job_bindings: []
+    participants:
+      - participant_id: telnyx
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyygma83yg4pyars3qr8vcxk
+    resources:
+      - resource_id: api-reference
+        uri: https://developers.telnyx.com/api/messaging/send-message
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developers.telnyx.com/docs/development/api-fundamentals/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://telnyx.com/pricing/messaging
+        roles:
+          - pricing
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://telnyx.com/sign-up
+        roles:
+          - access
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://telnyx.com/terms-and-conditions-of-service
+        roles:
+          - terms
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://telnyx.com/sign-up
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.telnyx.com/v2
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+      - endpoint_id: top-up
+        uri: https://support.telnyx.com/en/articles/4280500-billing-setup-billing-groups
+        transport: http
+        roles:
+          - top_up
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+          - top-up
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: telnyx
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: telnyx-scope-0
+        source_id: source_telnyx_send_message
+        target:
+          node_kind: declaration
+          node_id: declaration_telnyx_telnyx_messaging_sms_send
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: telnyx-participant
+        source_id: source_telnyx_terms
+        target:
+          node_kind: participant
+          node_id: telnyx
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: telnyx-resource-api-reference
+        source_id: source_telnyx_send_message
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-resource-authentication
+        source_id: source_telnyx_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-resource-pricing
+        source_id: source_telnyx_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-resource-account-signup
+        source_id: source_telnyx_signup
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-resource-service-terms
+        source_id: source_telnyx_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-endpoint-registration
+        source_id: source_telnyx_signup
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-endpoint-service-api
+        source_id: source_telnyx_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-endpoint-top-up
+        source_id: source_telnyx_billing
+        target:
+          node_kind: endpoint
+          node_id: top-up
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-interface-service-api
+        source_id: source_telnyx_send_message
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-interface-api-authentication
+        source_id: source_telnyx_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: telnyx-relation-reference-describes-api
+        source_id: source_telnyx_send_message
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: telnyx-relation-authentication-authenticates-api
+        source_id: source_telnyx_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: telnyx-relation-signup-precedes-authentication
+        source_id: source_telnyx_signup
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: telnyx-operation-job-0
+        source_id: source_telnyx_send_message
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: telnyx-operation-job-1
+        source_id: source_telnyx_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - { source_binding_id: telnyx-account-bot-signup, source_id: source_telnyx_agent_signup, target: { node_kind: account_operation, node_id: bot-signup }, field_paths: [/interface_id, /role, /endpoint_id, /method, /url] }
+      - { source_binding_id: telnyx-account-bot-signup-spec, source_id: source_telnyx_openapi, target: { node_kind: account_operation, node_id: bot-signup }, field_paths: [/spec_url, /method] }
+      - { source_binding_id: telnyx-account-credit, source_id: source_telnyx_openapi, target: { node_kind: account_operation, node_id: account-credit }, field_paths: [/interface_id, /role, /endpoint_id, /method, /url, /spec_url] }
+      - source_binding_id: telnyx-exclusion-separate-eligibility-resource
+        source_id: source_telnyx_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
