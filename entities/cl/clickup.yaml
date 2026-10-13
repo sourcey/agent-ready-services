@@ -1,0 +1,335 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe2yssb5vzxghvddssm
+  slug: clickup
+  slug_aliases: []
+  name: ClickUp
+  domains:
+    - value: clickup.com
+      role: primary
+      valid_from: 2026-07-27T07:35:53.156Z
+  category: productivity
+sources:
+  - source_id: source_clickup_create_task
+    url: https://developer.clickup.com/reference/createtask
+  - source_id: source_clickup_spec_page
+    url: https://developer.clickup.com/docs/open-api-spec
+  - source_id: source_clickup_openapi
+    url: https://developer.clickup.com/openapi/clickup-api-v2-reference.json
+  - source_id: source_clickup_auth
+    url: https://developer.clickup.com/docs/authentication
+  - source_id: source_clickup_pricing
+    url: https://clickup.com/pricing
+  - source_id: source_clickup_terms
+    url: https://clickup.com/terms
+declarations:
+  - declaration_id: declaration_clickup_clickup_api_task_create
+    scope:
+      product:
+        key: clickup-api
+        name: ClickUp API
+      job:
+        key: task-create
+        name: Create a task
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.clickup.com/api/v2/list/123/task
+        body:
+          media_type: application/json
+        spec:
+          url: https://developer.clickup.com/openapi/clickup-api-v2-reference.json
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: clickup
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe2yssb5vzxghvddssm
+    resources:
+      - resource_id: api-reference
+        uri: https://developer.clickup.com/reference/createtask
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: clickup
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.clickup.com/docs/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: clickup
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://clickup.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: clickup
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://app.clickup.com/login
+        roles:
+          - access
+        operated_by_participant_id: clickup
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://clickup.com/terms
+        roles:
+          - terms
+        operated_by_participant_id: clickup
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://app.clickup.com/login
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: clickup
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.clickup.com/api
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: clickup
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: clickup
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: clickup
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: clickup-scope-0
+        source_id: source_clickup_create_task
+        target:
+          node_kind: declaration
+          node_id: declaration_clickup_clickup_api_task_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: clickup-participant
+        source_id: source_clickup_terms
+        target:
+          node_kind: participant
+          node_id: clickup
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: clickup-resource-api-reference
+        source_id: source_clickup_create_task
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: clickup-resource-authentication
+        source_id: source_clickup_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: clickup-resource-pricing
+        source_id: source_clickup_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: clickup-resource-account-signup
+        source_id: source_clickup_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: clickup-resource-service-terms
+        source_id: source_clickup_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: clickup-endpoint-registration
+        source_id: source_clickup_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: clickup-endpoint-service-api
+        source_id: source_clickup_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: clickup-interface-service-api
+        source_id: source_clickup_create_task
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: clickup-interface-api-authentication
+        source_id: source_clickup_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: clickup-relation-reference-describes-api
+        source_id: source_clickup_create_task
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: clickup-relation-authentication-authenticates-api
+        source_id: source_clickup_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: clickup-relation-signup-precedes-authentication
+        source_id: source_clickup_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: clickup-operation-job-0
+        source_id: source_clickup_create_task
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: clickup-operation-job-1
+        source_id: source_clickup_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+      - source_binding_id: clickup-operation-job-2
+        source_id: source_clickup_spec_page
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec
+      - source_binding_id: clickup-exclusion-free-job-no-checkout
+        source_id: source_clickup_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: clickup-exclusion-separate-eligibility-resource
+        source_id: source_clickup_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: ClickUp's Free Forever plan is free per user and includes unlimited tasks.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
