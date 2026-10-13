@@ -1,0 +1,335 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kz2a2wj1kjbz8rnxmgrfyv61
+  slug: daytona
+  slug_aliases: []
+  name: Daytona
+  domains:
+    - value: daytona.io
+      role: primary
+      valid_from: 2026-08-02T22:39:02.726Z
+  category: hosting-infra
+sources:
+  - source_id: source_daytona_sandboxes
+    url: https://www.daytona.io/docs/en/sandboxes
+  - source_id: source_daytona_api_keys
+    url: https://www.daytona.io/docs/en/api-keys
+  - source_id: source_daytona_billing
+    url: https://www.daytona.io/docs/en/billing
+  - source_id: source_daytona_pricing
+    url: https://www.daytona.io/pricing
+  - source_id: source_daytona_terms
+    url: https://www.daytona.io/terms-of-service
+declarations:
+  - declaration_id: declaration_daytona_daytona_sandboxes_sandbox_code_run
+    scope:
+      product:
+        key: daytona-sandboxes
+        name: Daytona Sandboxes
+      job:
+        key: sandbox-code-run
+        name: Run code in a sandbox
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://app.daytona.io/api/sandbox
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: daytona
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kz2a2wj1kjbz8rnxmgrfyv61
+    resources:
+      - resource_id: api-reference
+        uri: https://www.daytona.io/docs/en/sandboxes
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://www.daytona.io/docs/en/api-keys
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.daytona.io/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://app.daytona.io/dashboard/billing/wallet
+        roles:
+          - checkout
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://app.daytona.io
+        roles:
+          - access
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.daytona.io/terms-of-service
+        roles:
+          - terms
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - resource_id: billing
+        uri: https://www.daytona.io/docs/en/billing
+        roles:
+          - documentation
+        operated_by_participant_id: daytona
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://app.daytona.io
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://app.daytona.io/api
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: daytona
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: daytona
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: daytona
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: daytona-scope-0
+        source_id: source_daytona_sandboxes
+        target:
+          node_kind: declaration
+          node_id: declaration_daytona_daytona_sandboxes_sandbox_code_run
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: daytona-participant
+        source_id: source_daytona_terms
+        target:
+          node_kind: participant
+          node_id: daytona
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: daytona-resource-api-reference
+        source_id: source_daytona_sandboxes
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-resource-authentication
+        source_id: source_daytona_api_keys
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-resource-pricing
+        source_id: source_daytona_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-resource-checkout
+        source_id: source_daytona_billing
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-resource-account-signup
+        source_id: source_daytona_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-resource-service-terms
+        source_id: source_daytona_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-resource-billing
+        source_id: source_daytona_billing
+        target:
+          node_kind: resource
+          node_id: billing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-endpoint-registration
+        source_id: source_daytona_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-endpoint-service-api
+        source_id: source_daytona_sandboxes
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: daytona-interface-service-api
+        source_id: source_daytona_sandboxes
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: daytona-interface-api-authentication
+        source_id: source_daytona_api_keys
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: daytona-relation-reference-describes-api
+        source_id: source_daytona_sandboxes
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: daytona-relation-authentication-authenticates-api
+        source_id: source_daytona_api_keys
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: daytona-relation-signup-precedes-authentication
+        source_id: source_daytona_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: daytona-operation-job-0
+        source_id: source_daytona_sandboxes
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: daytona-exclusion-separate-eligibility-resource
+        source_id: source_daytona_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
