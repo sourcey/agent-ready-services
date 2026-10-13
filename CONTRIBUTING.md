@@ -389,11 +389,9 @@ not the grade: it marks the job verified and never changes a step or the
 letter. The job library still says what success is, so a binding can
 locate the evidence but never decide whether it passes.
 
-Sourcey runs a binding itself only where no account is needed
-(`delegation: { kind: none }` and `payment: { kind: none }`) and the job only
-reads, such as resolving a DNS name. A binding that needs an account's key is run by the account
-holder, with the key in their own GitHub secrets, through Sourcey's GitHub
-Action, which attests the run. The Action is not yet published.
+Sourcey never runs a binding itself. The account holder runs it, with any
+key in their own GitHub secrets, through Sourcey's GitHub Action, which
+attests the run. The Action is not yet published.
 
 To bind the Acme DB listing above, add the binding in place of
 `job_bindings: []`:

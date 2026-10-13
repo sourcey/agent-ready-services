@@ -73,11 +73,11 @@ fact, and the service is probed again; a document left unanswered on every
 probe for at least an hour, with no answer between, is read as absent. A job
 binding adds the verified tier. It says exactly how one
 interface performs the job, and a run of it is proof, not the grade: it marks
-the job verified and never changes a step or the letter. Sourcey runs a binding itself only where no account
-is needed and the job only reads (**Sourcey-run**); an account holder runs one with Sourcey's GitHub
-Action, which attests the result (**Vendor-run, verified**). The Action is not
-yet published; until it is, every verified run is Sourcey's own. Sourcey holds
-no keys for any listed service.
+the job verified and never changes a step or the letter. Only an account
+holder runs one, with Sourcey's GitHub Action, which attests the result
+(**Vendor-run, verified**); Sourcey never runs a job itself. The Action is not
+yet published; until it is, every card is Probed. Sourcey holds no keys for
+any listed service.
 
 ## What lives here
 
