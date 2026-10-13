@@ -289,18 +289,17 @@ listing and those probes and labelled Probed, until a run verifies the job.
 - **Resources** are pages and documents a person or agent can read. A URL
   appears once and carries every role it serves.
 - **Endpoints** are network locations an agent calls. List an endpoint only
-  when a public source names it. A `registration` endpoint is where a person
-  or an agent signs up, declared only where signing up there gets an account
-  that can do the job: Sourcey requests it, and one that is there and answers
-  the GET with a success, an offer or a typed 405 (it signs up by POST) is a
-  sign-up API, a path for the agent to register itself; one that asks a person
-  for something (a CAPTCHA answering a typed error, a credential) is a sign-up
-  for people. An `access_request` endpoint is the vendor's own page where a
+  when a public source names it. A `registration` endpoint is the page where a
+  person signs up, declared only where signing up there gets an account that
+  can do the job; Sourcey requests it only to see that it is there. A sign-up
+  API an agent calls itself is an account operation instead (below). An
+  `access_request` endpoint is the vendor's own page where a
   person asks for access, through sales or approval. Once that page is there,
   access is the vendor's decision (Onboard `gated`): for the interface that
   lists it among its `endpoint_ids`, where the vendor approves who calls that
   interface whatever sign-up sits beside it; for every interface when no
-  interface lists it and no `registration` endpoint is declared. An
+  interface lists it and no `registration` endpoint or account operation is
+  declared. An
   `access_setting` endpoint is the page where a person on the account turns an
   interface on for agents once, where it starts off (an organization setting
   that allows an MCP server's write tools); the interface lists it among its
@@ -364,6 +363,27 @@ listing and those probes and labelled Probed, until a run verifies the job.
   answer it keeps only the shape. The answer shows what authority, payment or
   account the job needs. A spec operation sends nothing: its steps are read
   from the document.
+- **`account_operations`** are what an agent does on its own account beside
+  the job, declared only where the vendor documents them for agents. Leave
+  the section out when there is none. Each names its `operation_id`, the
+  `interface_id` whose job it serves, a `role`, where the agent calls it (an
+  `endpoint_id` the interface lists, and the `method` and `url` on that
+  endpoint's origin) and the vendor's OpenAPI 3 document that holds it under
+  one of its servers (`spec_url`), each field bound to the vendor's source:
+  - `role: registration`: a sign-up API that issues the agent its own
+    credential (Telnyx's `POST /v2/bot_signup`). Where the document covers it
+    and requires no credential for it (an empty requirement, or none in a
+    document that requires one on its other operations), the agent registers
+    itself (Authority and Onboard `machine`). A document that states no
+    security anywhere says nothing about it.
+  - `role: top_up`: an operation the agent funds the balance the job draws on
+    with, paid by the agent itself. Where the document covers it and declares
+    a machine payment (`x-payment-info`, or a 402 response with a
+    `WWW-Authenticate` challenge, MPP's), Pay is `machine`.
+
+  Sourcey sends nothing to an account operation: it never signs up or pays.
+  It reads the operation in the document, following the references the
+  reading needs to documents on the same host.
 - **Interfaces** are what an agent uses. Each one points at its resources or
   endpoints. `modality` says how it is used (`web_application`,
   `network_api`, `command_line`, `software_library`, `tool_server` or
