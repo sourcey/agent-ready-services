@@ -1,0 +1,350 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe1hg8kexnwp1e8t7ha
+  slug: braze
+  slug_aliases: []
+  name: Braze
+  domains:
+    - value: braze.com
+      role: primary
+      valid_from: 2026-07-27T07:39:33.841Z
+  category: marketing
+sources:
+  - source_id: source_braze_send_messages
+    url: https://www.braze.com/docs/api/endpoints/messaging/send_messages/post_send_messages
+  - source_id: source_braze_basics
+    url: https://www.braze.com/docs/api/basics
+  - source_id: source_braze_trial
+    url: https://www.braze.com/resources/articles/braze-free-trial
+  - source_id: source_braze_pricing
+    url: https://www.braze.com/pricing
+  - source_id: source_braze_terms
+    url: https://www.braze.com/company/legal
+declarations:
+  - declaration_id: declaration_braze_braze_messaging_api_email_send
+    scope:
+      product:
+        key: braze-messaging-api
+        name: Braze Messaging API
+      job:
+        key: email-send
+        name: Send an email
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://rest.iad-01.braze.com/messages/send
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: braze
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe1hg8kexnwp1e8t7ha
+    resources:
+      - resource_id: api-reference
+        uri: https://www.braze.com/docs/api/endpoints/messaging/send_messages/post_send_messages
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://www.braze.com/docs/api/basics
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.braze.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://www.braze.com/get-started
+        roles:
+          - checkout
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.braze.com/free-trial
+        roles:
+          - access
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.braze.com/company/legal
+        roles:
+          - terms
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - resource_id: free-trial
+        uri: https://www.braze.com/resources/articles/braze-free-trial
+        roles:
+          - eligibility
+          - documentation
+        operated_by_participant_id: braze
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.braze.com/free-trial
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://rest.iad-01.braze.com
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - endpoint_id: sales
+        uri: https://www.braze.com/get-started
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: braze
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+          - sales
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: braze
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: braze
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: braze-scope-0
+        source_id: source_braze_send_messages
+        target:
+          node_kind: declaration
+          node_id: declaration_braze_braze_messaging_api_email_send
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: braze-participant
+        source_id: source_braze_terms
+        target:
+          node_kind: participant
+          node_id: braze
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: braze-resource-api-reference
+        source_id: source_braze_send_messages
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-resource-authentication
+        source_id: source_braze_basics
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-resource-pricing
+        source_id: source_braze_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-resource-checkout
+        source_id: source_braze_pricing
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-resource-account-signup
+        source_id: source_braze_trial
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-resource-service-terms
+        source_id: source_braze_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-resource-free-trial
+        source_id: source_braze_trial
+        target:
+          node_kind: resource
+          node_id: free-trial
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-endpoint-registration
+        source_id: source_braze_trial
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-endpoint-service-api
+        source_id: source_braze_basics
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-endpoint-sales
+        source_id: source_braze_pricing
+        target:
+          node_kind: endpoint
+          node_id: sales
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: braze-interface-service-api
+        source_id: source_braze_send_messages
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: braze-interface-api-authentication
+        source_id: source_braze_basics
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: braze-relation-reference-describes-api
+        source_id: source_braze_send_messages
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: braze-relation-authentication-authenticates-api
+        source_id: source_braze_basics
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: braze-relation-signup-precedes-authentication
+        source_id: source_braze_trial
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: braze-operation-job-0
+        source_id: source_braze_send_messages
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: braze-operation-job-1
+        source_id: source_braze_basics
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+    surface_exclusions: []
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

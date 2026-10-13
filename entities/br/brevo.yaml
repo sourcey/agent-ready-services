@@ -1,0 +1,347 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe1572wzf5nnqqg7rd2
+  slug: brevo
+  slug_aliases: []
+  name: Brevo
+  domains:
+    - value: brevo.com
+      role: primary
+      valid_from: 2026-07-27T07:39:33.783Z
+  category: marketing
+sources:
+  - source_id: source_brevo_send_email
+    url: https://developers.brevo.com/docs/send-a-transactional-email
+  - source_id: source_brevo_openapi
+    url: https://developers.brevo.com/openapi/email-api.json
+  - source_id: source_brevo_llms
+    url: https://developers.brevo.com/llms.txt
+  - source_id: source_brevo_auth
+    url: https://developers.brevo.com/docs/api-key-authentication
+  - source_id: source_brevo_pricing
+    url: https://www.brevo.com/pricing/
+  - source_id: source_brevo_terms
+    url: https://www.brevo.com/legal/termsofuse/
+declarations:
+  - declaration_id: declaration_brevo_brevo_transactional_email_email_send
+    scope:
+      product:
+        key: brevo-transactional-email
+        name: Brevo Transactional Email
+      job:
+        key: email-send
+        name: Send an email
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.brevo.com/v3/smtp/email
+        body:
+          media_type: application/json
+        spec:
+          url: https://developers.brevo.com/openapi/email-api.json
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: brevo
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe1572wzf5nnqqg7rd2
+    resources:
+      - resource_id: api-reference
+        uri: https://developers.brevo.com/docs/send-a-transactional-email
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: brevo
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developers.brevo.com/docs/api-key-authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: brevo
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.brevo.com/pricing/
+        roles:
+          - pricing
+        operated_by_participant_id: brevo
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://onboarding.brevo.com/account/register
+        roles:
+          - access
+        operated_by_participant_id: brevo
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.brevo.com/legal/termsofuse/
+        roles:
+          - terms
+        operated_by_participant_id: brevo
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://onboarding.brevo.com/account/register
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: brevo
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.brevo.com/v3
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: brevo
+        standard_bindings: []
+      - endpoint_id: sending-approval
+        uri: https://app.brevo.com
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: brevo
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+          - sending-approval
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: brevo
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: brevo
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: brevo-scope-0
+        source_id: source_brevo_send_email
+        target:
+          node_kind: declaration
+          node_id: declaration_brevo_brevo_transactional_email_email_send
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: brevo-participant
+        source_id: source_brevo_terms
+        target:
+          node_kind: participant
+          node_id: brevo
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: brevo-resource-api-reference
+        source_id: source_brevo_send_email
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-resource-authentication
+        source_id: source_brevo_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-resource-pricing
+        source_id: source_brevo_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-resource-account-signup
+        source_id: source_brevo_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-resource-service-terms
+        source_id: source_brevo_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-endpoint-registration
+        source_id: source_brevo_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-endpoint-service-api
+        source_id: source_brevo_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-endpoint-sending-approval
+        source_id: source_brevo_pricing
+        target:
+          node_kind: endpoint
+          node_id: sending-approval
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brevo-interface-service-api
+        source_id: source_brevo_send_email
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: brevo-interface-api-authentication
+        source_id: source_brevo_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: brevo-relation-reference-describes-api
+        source_id: source_brevo_send_email
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: brevo-relation-authentication-authenticates-api
+        source_id: source_brevo_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: brevo-relation-signup-precedes-authentication
+        source_id: source_brevo_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: brevo-operation-job-0
+        source_id: source_brevo_send_email
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: brevo-operation-job-1
+        source_id: source_brevo_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: brevo-exclusion-free-job-no-checkout
+        source_id: source_brevo_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: brevo-exclusion-separate-eligibility-resource
+        source_id: source_brevo_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Brevo's Free plan is free forever with no credit card needed and sends up to 300 emails a day once Brevo approves the account for sending.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
