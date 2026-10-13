@@ -1,0 +1,324 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe55a2m2njc8y4xs2df
+  slug: salesforce
+  slug_aliases: []
+  name: Salesforce
+  domains:
+    - value: salesforce.com
+      role: primary
+      valid_from: 2026-07-27T07:43:44.281Z
+  category: crm-sales
+sources:
+  - source_id: source_salesforce_mutations
+    url: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-mutations.html
+  - source_id: source_salesforce_mutations_guide
+    url: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/sobject-mutations.html
+  - source_id: source_salesforce_overview
+    url: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/hosted-mcp-servers-overview.html
+  - source_id: source_salesforce_eca
+    url: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/create-external-client-app.html
+  - source_id: source_salesforce_pricing
+    url: https://www.salesforce.com/pricing/
+  - source_id: source_salesforce_terms
+    url: https://www.salesforce.com/company/legal/
+declarations:
+  - declaration_id: declaration_salesforce_salesforce_platform_crm_contact_create
+    scope:
+      product:
+        key: salesforce-platform
+        name: Salesforce Platform
+      job:
+        key: crm-contact-create
+        name: Create a contact
+    job_operations:
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: createSobjectRecord
+    job_bindings: []
+    participants:
+      - participant_id: salesforce
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe55a2m2njc8y4xs2df
+    resources:
+      - resource_id: api-reference
+        uri: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-mutations.html
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/create-external-client-app.html
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.salesforce.com/pricing/
+        roles:
+          - pricing
+          - checkout
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.salesforce.com/form/signup/freetrial-sales/
+        roles:
+          - access
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.salesforce.com/company/legal/
+        roles:
+          - terms
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - resource_id: hosted-mcp-overview
+        uri: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/hosted-mcp-servers-overview.html
+        roles:
+          - discovery
+          - eligibility
+          - documentation
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/sobject-mutations.html
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.salesforce.com/form/signup/freetrial-sales/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://api.salesforce.com/platform/mcp/v1/platform/sobject-mutations
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - endpoint_id: flex-credits
+        uri: https://www.salesforce.com/ca/crm/foundations/
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+    interfaces:
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+          - flex-credits
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: salesforce
+        standard_bindings: []
+    relations:
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: salesforce-scope-0
+        source_id: source_salesforce_mutations
+        target:
+          node_kind: declaration
+          node_id: declaration_salesforce_salesforce_platform_crm_contact_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: salesforce-participant
+        source_id: source_salesforce_terms
+        target:
+          node_kind: participant
+          node_id: salesforce
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: salesforce-resource-api-reference
+        source_id: source_salesforce_mutations
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-resource-authentication
+        source_id: source_salesforce_eca
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-resource-pricing
+        source_id: source_salesforce_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-resource-account-signup
+        source_id: source_salesforce_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-resource-service-terms
+        source_id: source_salesforce_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-resource-hosted-mcp-overview
+        source_id: source_salesforce_overview
+        target:
+          node_kind: resource
+          node_id: hosted-mcp-overview
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-resource-mcp-documentation
+        source_id: source_salesforce_mutations_guide
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-endpoint-registration
+        source_id: source_salesforce_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-endpoint-mcp-server
+        source_id: source_salesforce_mutations
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-endpoint-flex-credits
+        source_id: source_salesforce_overview
+        target:
+          node_kind: endpoint
+          node_id: flex-credits
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-interface-mcp-server
+        source_id: source_salesforce_mutations
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-interface-api-authentication
+        source_id: source_salesforce_eca
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: salesforce-relation-documentation-describes-mcp
+        source_id: source_salesforce_mutations_guide
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: salesforce-relation-signup-precedes-authentication
+        source_id: source_salesforce_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: salesforce-operation-job-mcp-0
+        source_id: source_salesforce_mutations
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+    surface_exclusions: []
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

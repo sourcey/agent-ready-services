@@ -1,0 +1,363 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe6n1xs5jjkcz991h2x
+  slug: zoho
+  slug_aliases: []
+  name: Zoho
+  domains:
+    - value: zoho.com
+      role: primary
+      valid_from: 2026-07-27T07:42:27.994Z
+  category: productivity
+sources:
+  - source_id: source_zoho_insert_records
+    url: https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html
+  - source_id: source_zoho_openapi
+    url: https://raw.githubusercontent.com/zoho/crm-oas/main/v8.0/record/record.yaml
+  - source_id: source_zoho_oas_repo
+    url: https://github.com/zoho/crm-oas
+  - source_id: source_zoho_oauth
+    url: https://www.zoho.com/crm/developer/docs/api/v8/oauth-overview.html
+  - source_id: source_zoho_api_limits
+    url: https://www.zoho.com/crm/developer/docs/api/v8/api-limits.html
+  - source_id: source_zoho_pricing
+    url: https://www.zoho.com/crm/zohocrm-pricing.html
+  - source_id: source_zoho_terms
+    url: https://www.zoho.com/terms.html
+declarations:
+  - declaration_id: declaration_zoho_zoho_crm_crm_contact_create
+    scope:
+      product:
+        key: zoho-crm
+        name: Zoho CRM
+      job:
+        key: crm-contact-create
+        name: Create a contact
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://zohoapis.com/crm/v8/Contacts
+        body:
+          media_type: application/json
+        spec:
+          url: https://raw.githubusercontent.com/zoho/crm-oas/main/v8.0/record/record.yaml
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: zoho
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe6n1xs5jjkcz991h2x
+    resources:
+      - resource_id: api-reference
+        uri: https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://www.zoho.com/crm/developer/docs/api/v8/oauth-overview.html
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.zoho.com/crm/zohocrm-pricing.html
+        roles:
+          - pricing
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.zoho.com/crm/signup.html
+        roles:
+          - access
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.zoho.com/terms.html
+        roles:
+          - terms
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - resource_id: api-limits
+        uri: https://www.zoho.com/crm/developer/docs/api/v8/api-limits.html
+        roles:
+          - documentation
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - resource_id: oas-repository
+        uri: https://github.com/zoho/crm-oas
+        roles:
+          - documentation
+        operated_by_participant_id: zoho
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.zoho.com/crm/signup.html
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://zohoapis.com/crm/v8
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: zoho
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - api-limits
+          - oas-repository
+        operated_by_participant_id: zoho
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: zoho
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: zoho-scope-0
+        source_id: source_zoho_insert_records
+        target:
+          node_kind: declaration
+          node_id: declaration_zoho_zoho_crm_crm_contact_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: zoho-participant
+        source_id: source_zoho_terms
+        target:
+          node_kind: participant
+          node_id: zoho
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: zoho-resource-api-reference
+        source_id: source_zoho_insert_records
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-resource-authentication
+        source_id: source_zoho_oauth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-resource-pricing
+        source_id: source_zoho_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-resource-account-signup
+        source_id: source_zoho_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-resource-service-terms
+        source_id: source_zoho_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-resource-api-limits
+        source_id: source_zoho_api_limits
+        target:
+          node_kind: resource
+          node_id: api-limits
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-resource-oas-repository
+        source_id: source_zoho_oas_repo
+        target:
+          node_kind: resource
+          node_id: oas-repository
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-endpoint-registration
+        source_id: source_zoho_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-endpoint-service-api
+        source_id: source_zoho_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zoho-interface-service-api
+        source_id: source_zoho_insert_records
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: zoho-interface-api-authentication
+        source_id: source_zoho_oauth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: zoho-relation-reference-describes-api
+        source_id: source_zoho_insert_records
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zoho-relation-authentication-authenticates-api
+        source_id: source_zoho_oauth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zoho-relation-signup-precedes-authentication
+        source_id: source_zoho_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zoho-operation-job-0
+        source_id: source_zoho_insert_records
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: zoho-operation-job-1
+        source_id: source_zoho_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: zoho-exclusion-free-job-no-checkout
+        source_id: source_zoho_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: zoho-exclusion-separate-eligibility-resource
+        source_id: source_zoho_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Zoho CRM's Free edition is free forever for 3 users and includes 5,000 API credits a day.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

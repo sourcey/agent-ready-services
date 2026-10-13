@@ -1,0 +1,422 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe1t5zaes0e4fgj1p4w
+  slug: attio
+  slug_aliases: []
+  name: Attio
+  domains:
+    - value: attio.com
+      role: primary
+      valid_from: 2026-07-27T07:35:35.497Z
+  category: crm-sales
+sources:
+  - source_id: source_attio_create_person
+    url: https://docs.attio.com/rest-api/endpoint-reference/people/create-a-person-record
+  - source_id: source_attio_openapi
+    url: https://api.attio.com/openapi/standard-objects
+  - source_id: source_attio_auth
+    url: https://docs.attio.com/rest-api/guides/authentication
+  - source_id: source_attio_mcp
+    url: https://docs.attio.com/mcp/overview
+  - source_id: source_attio_pricing
+    url: https://attio.com/pricing
+  - source_id: source_attio_terms
+    url: https://attio.com/legal/services-agreement
+declarations:
+  - declaration_id: declaration_attio_attio_crm_crm_contact_create
+    scope:
+      product:
+        key: attio-crm
+        name: Attio CRM
+      job:
+        key: crm-contact-create
+        name: Create a contact
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.attio.com/v2/objects/people/records
+        body:
+          media_type: application/json
+        spec:
+          url: https://api.attio.com/openapi/standard-objects
+          key_operations: null
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: create-record
+    job_bindings: []
+    participants:
+      - participant_id: attio
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe1t5zaes0e4fgj1p4w
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.attio.com/rest-api/endpoint-reference/people/create-a-person-record
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.attio.com/rest-api/guides/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://attio.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://app.attio.com/welcome/sign-in
+        roles:
+          - access
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://attio.com/legal/services-agreement
+        roles:
+          - terms
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://docs.attio.com/mcp/overview
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: attio
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://app.attio.com/welcome/sign-in
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.attio.com
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.attio.com/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: attio
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: attio
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: attio
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: attio-scope-0
+        source_id: source_attio_create_person
+        target:
+          node_kind: declaration
+          node_id: declaration_attio_attio_crm_crm_contact_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: attio-scope-1
+        source_id: source_attio_mcp
+        target:
+          node_kind: declaration
+          node_id: declaration_attio_attio_crm_crm_contact_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: attio-participant
+        source_id: source_attio_terms
+        target:
+          node_kind: participant
+          node_id: attio
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: attio-resource-api-reference
+        source_id: source_attio_create_person
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-resource-authentication
+        source_id: source_attio_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-resource-pricing
+        source_id: source_attio_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-resource-account-signup
+        source_id: source_attio_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-resource-service-terms
+        source_id: source_attio_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-resource-mcp-documentation
+        source_id: source_attio_mcp
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-endpoint-registration
+        source_id: source_attio_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-endpoint-service-api
+        source_id: source_attio_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-endpoint-mcp-server
+        source_id: source_attio_mcp
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: attio-interface-service-api
+        source_id: source_attio_create_person
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: attio-interface-mcp-server
+        source_id: source_attio_mcp
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: attio-interface-api-authentication
+        source_id: source_attio_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: attio-relation-reference-describes-api
+        source_id: source_attio_create_person
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: attio-relation-authentication-authenticates-api
+        source_id: source_attio_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: attio-relation-documentation-describes-mcp
+        source_id: source_attio_mcp
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: attio-relation-signup-precedes-authentication
+        source_id: source_attio_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: attio-operation-job-0
+        source_id: source_attio_create_person
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: attio-operation-job-1
+        source_id: source_attio_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: attio-operation-job-mcp-0
+        source_id: source_attio_mcp
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: attio-exclusion-free-job-no-checkout
+        source_id: source_attio_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: attio-exclusion-separate-eligibility-resource
+        source_id: source_attio_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Attio's Free plan needs no credit card and includes API and MCP server access.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
