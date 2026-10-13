@@ -1,0 +1,466 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyygma83ghr6dea0nzbdvpa1
+  slug: turso
+  slug_aliases: []
+  name: Turso
+  domains:
+    - value: turso.tech
+      role: primary
+      valid_from: 2026-07-31T23:19:17.294Z
+  category: databases
+sources:
+  - source_id: source_turso_create_db
+    url: https://docs.turso.tech/api-reference/databases/create
+  - source_id: source_turso_openapi
+    url: https://docs.turso.tech/api-reference/openapi.json
+  - source_id: source_turso_auth
+    url: https://docs.turso.tech/api-reference/authentication
+  - source_id: source_turso_create_token
+    url: https://docs.turso.tech/api-reference/tokens/create
+  - source_id: source_turso_revoke_token
+    url: https://docs.turso.tech/api-reference/tokens/revoke
+  - source_id: source_turso_mcp
+    url: https://docs.turso.tech/integrations/mcp
+  - source_id: source_turso_mcp_skill
+    url: https://github.com/tursodatabase/turso-mcp/blob/main/claude-code/skills/turso/SKILL.md
+  - source_id: source_turso_pricing
+    url: https://turso.tech/pricing
+  - source_id: source_turso_terms
+    url: https://turso.tech/terms-of-use
+declarations:
+  - declaration_id: declaration_turso_turso_cloud_database_create
+    scope:
+      product:
+        key: turso-cloud
+        name: Turso Cloud
+      job:
+        key: database-create
+        name: Create a database deployment
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.turso.tech/v1/organizations/my-org/databases
+        body:
+          media_type: application/json
+        spec:
+          url: https://docs.turso.tech/api-reference/openapi.json
+          key_operations:
+            create:
+              method: POST
+              path: /v1/auth/api-tokens/{tokenName}
+            revoke:
+              method: DELETE
+              path: /v1/auth/api-tokens/{tokenName}
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: create_database
+    job_bindings: []
+    participants:
+      - participant_id: turso
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyygma83ghr6dea0nzbdvpa1
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.turso.tech/api-reference/databases/create
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.turso.tech/api-reference/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://turso.tech/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://app.turso.tech/signup
+        roles:
+          - access
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://turso.tech/terms-of-use
+        roles:
+          - terms
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - resource_id: create-api-token
+        uri: https://docs.turso.tech/api-reference/tokens/create
+        roles:
+          - provisioning
+          - documentation
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - resource_id: revoke-api-token
+        uri: https://docs.turso.tech/api-reference/tokens/revoke
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://docs.turso.tech/integrations/mcp
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: turso
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://app.turso.tech/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.turso.tech
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.turso.ai/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: turso
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: turso
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: turso
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: turso-scope-0
+        source_id: source_turso_create_db
+        target:
+          node_kind: declaration
+          node_id: declaration_turso_turso_cloud_database_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: turso-scope-1
+        source_id: source_turso_mcp_skill
+        target:
+          node_kind: declaration
+          node_id: declaration_turso_turso_cloud_database_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: turso-participant
+        source_id: source_turso_terms
+        target:
+          node_kind: participant
+          node_id: turso
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: turso-resource-api-reference
+        source_id: source_turso_create_db
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-resource-authentication
+        source_id: source_turso_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-resource-pricing
+        source_id: source_turso_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-resource-account-signup
+        source_id: source_turso_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-resource-service-terms
+        source_id: source_turso_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-resource-create-api-token
+        source_id: source_turso_create_token
+        target:
+          node_kind: resource
+          node_id: create-api-token
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-resource-revoke-api-token
+        source_id: source_turso_revoke_token
+        target:
+          node_kind: resource
+          node_id: revoke-api-token
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-resource-mcp-documentation
+        source_id: source_turso_mcp
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-endpoint-registration
+        source_id: source_turso_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-endpoint-service-api
+        source_id: source_turso_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-endpoint-mcp-server
+        source_id: source_turso_mcp_skill
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: turso-interface-service-api
+        source_id: source_turso_create_db
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: turso-interface-mcp-server
+        source_id: source_turso_mcp_skill
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: turso-interface-api-authentication
+        source_id: source_turso_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: turso-relation-reference-describes-api
+        source_id: source_turso_create_db
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: turso-relation-authentication-authenticates-api
+        source_id: source_turso_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: turso-relation-documentation-describes-mcp
+        source_id: source_turso_mcp
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: turso-relation-signup-precedes-authentication
+        source_id: source_turso_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: turso-operation-job-0
+        source_id: source_turso_create_db
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: turso-operation-job-1
+        source_id: source_turso_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: turso-operation-job-mcp-0
+        source_id: source_turso_mcp_skill
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: turso-exclusion-free-job-no-checkout
+        source_id: source_turso_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: turso-exclusion-separate-eligibility-resource
+        source_id: source_turso_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Turso's Free plan starts with no credit card required and includes 100 databases.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

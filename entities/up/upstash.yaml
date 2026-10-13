@@ -1,0 +1,566 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyygma8214q65cdtzx9ssgqe
+  slug: upstash
+  slug_aliases: []
+  name: Upstash
+  domains:
+    - value: upstash.com
+      role: primary
+      valid_from: 2026-08-01T10:30:05.504Z
+  category: databases
+sources:
+  - source_id: source_upstash_create_db
+    url: https://upstash.com/docs/devops/developer-api/redis/create_database_global
+  - source_id: source_upstash_openapi
+    url: https://upstash.com/docs/devops/developer-api/openapi.yaml
+  - source_id: source_upstash_auth
+    url: https://upstash.com/docs/devops/developer-api/authentication
+  - source_id: source_upstash_api_keys
+    url: https://upstash.com/docs/devops/developer-api/introduction
+  - source_id: source_upstash_errors
+    url: https://upstash.com/docs/devops/developer-api/http_status_codes
+  - source_id: source_upstash_mcp
+    url: https://upstash.com/docs/agent-resources/mcp
+  - source_id: source_upstash_start
+    url: https://upstash.com/start-redis
+  - source_id: source_upstash_billing
+    url: https://upstash.com/docs/redis/overall/billing
+  - source_id: source_upstash_account
+    url: https://upstash.com/docs/common/account/createaccount
+  - source_id: source_upstash_terms
+    url: https://upstash.com/trust/terms.pdf
+declarations:
+  - declaration_id: declaration_upstash_upstash_redis_database_create
+    scope:
+      product:
+        key: upstash-redis
+        name: Upstash Redis
+      job:
+        key: database-create
+        name: Create a database deployment
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.upstash.com/v2/redis/database
+        body:
+          media_type: application/json
+        spec:
+          url: https://upstash.com/docs/devops/developer-api/openapi.yaml
+          key_operations: null
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: redis_create_database
+      - operation_id: job-agent
+        interface_id: agent-redis-api
+        kind: http
+        endpoint_id: agent-api
+        headers: []
+        method: POST
+        url: https://upstash.com/start-redis
+        body: null
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: upstash
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyygma8214q65cdtzx9ssgqe
+    resources:
+      - resource_id: api-reference
+        uri: https://upstash.com/docs/devops/developer-api/redis/create_database_global
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://upstash.com/docs/devops/developer-api/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: api-errors
+        uri: https://upstash.com/docs/devops/developer-api/http_status_codes
+        roles:
+          - status
+          - recovery
+          - documentation
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://upstash.com/docs/redis/overall/billing
+        roles:
+          - pricing
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://console.upstash.com
+        roles:
+          - access
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://upstash.com/trust/terms.pdf
+        roles:
+          - terms
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: api-keys
+        uri: https://upstash.com/docs/devops/developer-api/introduction
+        roles:
+          - provisioning
+          - recovery
+          - documentation
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://upstash.com/docs/agent-resources/mcp
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - resource_id: agent-guide
+        uri: https://upstash.com/start-redis
+        roles:
+          - discovery
+          - provisioning
+          - documentation
+        operated_by_participant_id: upstash
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://console.upstash.com
+        transport: http
+        roles:
+          - registration
+          - claim
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.upstash.com/v2
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.upstash.com/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - endpoint_id: agent-api
+        uri: https://upstash.com/start-redis
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: upstash
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - api-errors
+          - api-keys
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - interface_id: agent-redis-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - agent-api
+          - registration
+        resource_ids:
+          - agent-guide
+        operated_by_participant_id: upstash
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: upstash
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: guide-describes-agent-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: agent-guide
+        to:
+          node_kind: interface
+          node_id: agent-redis-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: upstash-scope-0
+        source_id: source_upstash_create_db
+        target:
+          node_kind: declaration
+          node_id: declaration_upstash_upstash_redis_database_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: upstash-scope-1
+        source_id: source_upstash_mcp
+        target:
+          node_kind: declaration
+          node_id: declaration_upstash_upstash_redis_database_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: upstash-participant
+        source_id: source_upstash_terms
+        target:
+          node_kind: participant
+          node_id: upstash
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: upstash-resource-api-reference
+        source_id: source_upstash_create_db
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-authentication
+        source_id: source_upstash_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-api-errors
+        source_id: source_upstash_errors
+        target:
+          node_kind: resource
+          node_id: api-errors
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-pricing
+        source_id: source_upstash_billing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-account-signup
+        source_id: source_upstash_account
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-service-terms
+        source_id: source_upstash_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-api-keys
+        source_id: source_upstash_api_keys
+        target:
+          node_kind: resource
+          node_id: api-keys
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-mcp-documentation
+        source_id: source_upstash_mcp
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-resource-agent-guide
+        source_id: source_upstash_start
+        target:
+          node_kind: resource
+          node_id: agent-guide
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-endpoint-registration
+        source_id: source_upstash_account
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-endpoint-registration-role-1
+        source_id: source_upstash_start
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /roles
+      - source_binding_id: upstash-endpoint-service-api
+        source_id: source_upstash_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-endpoint-mcp-server
+        source_id: source_upstash_mcp
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-endpoint-agent-api
+        source_id: source_upstash_start
+        target:
+          node_kind: endpoint
+          node_id: agent-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: upstash-interface-service-api
+        source_id: source_upstash_create_db
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: upstash-interface-mcp-server
+        source_id: source_upstash_mcp
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: upstash-interface-agent-redis-api
+        source_id: source_upstash_start
+        target:
+          node_kind: interface
+          node_id: agent-redis-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: upstash-interface-api-authentication
+        source_id: source_upstash_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: upstash-relation-reference-describes-api
+        source_id: source_upstash_create_db
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: upstash-relation-authentication-authenticates-api
+        source_id: source_upstash_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: upstash-relation-documentation-describes-mcp
+        source_id: source_upstash_mcp
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: upstash-relation-guide-describes-agent-api
+        source_id: source_upstash_start
+        target:
+          node_kind: relation
+          node_id: guide-describes-agent-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: upstash-relation-signup-precedes-authentication
+        source_id: source_upstash_account
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: upstash-operation-job-0
+        source_id: source_upstash_create_db
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: upstash-operation-job-1
+        source_id: source_upstash_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: upstash-operation-job-mcp-0
+        source_id: source_upstash_mcp
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: upstash-operation-job-agent-0
+        source_id: source_upstash_start
+        target:
+          node_kind: job_operation
+          node_id: job-agent
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+      - source_binding_id: upstash-exclusion-free-job-no-checkout
+        source_id: source_upstash_billing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: upstash-exclusion-separate-eligibility-resource
+        source_id: source_upstash_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Every Upstash account starts with a free Redis database, with no credit card required.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

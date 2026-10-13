@@ -1,0 +1,372 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe4zndzypt528e2ntzg
+  slug: redis
+  slug_aliases: []
+  name: Redis
+  domains:
+    - value: redis.io
+      role: primary
+      valid_from: 2026-07-27T07:37:54.348Z
+  category: databases
+sources:
+  - source_id: source_redis_create_db
+    url: https://redis.io/docs/latest/operate/rc/api/examples/create-database/
+  - source_id: source_redis_rest_api
+    url: https://redis.io/docs/latest/operate/rc/api/get-started/use-rest-api/
+  - source_id: source_redis_openapi
+    url: https://api.redislabs.com/v1/cloud-api-docs
+  - source_id: source_redis_api_keys
+    url: https://redis.io/docs/latest/operate/rc/api/get-started/manage-api-keys/
+  - source_id: source_redis_enable_api
+    url: https://redis.io/docs/latest/operate/rc/api/get-started/enable-the-api/
+  - source_id: source_redis_quickstart
+    url: https://redis.io/docs/latest/operate/rc/rc-quickstart/
+  - source_id: source_redis_pricing
+    url: https://redis.io/pricing/
+  - source_id: source_redis_terms
+    url: https://redis.io/legal/cloud-tos/
+declarations:
+  - declaration_id: declaration_redis_redis_cloud_database_create
+    scope:
+      product:
+        key: redis-cloud
+        name: Redis Cloud
+      job:
+        key: database-create
+        name: Create a database deployment
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.redislabs.com/v1/fixed/subscriptions/123456/databases
+        body:
+          media_type: application/json
+        spec:
+          url: https://api.redislabs.com/v1/cloud-api-docs
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: redis
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe4zndzypt528e2ntzg
+    resources:
+      - resource_id: api-reference
+        uri: https://redis.io/docs/latest/operate/rc/api/examples/create-database/
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://redis.io/docs/latest/operate/rc/api/get-started/manage-api-keys/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://redis.io/pricing/
+        roles:
+          - pricing
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://redis.io/try-free/
+        roles:
+          - access
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://redis.io/legal/cloud-tos/
+        roles:
+          - terms
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - resource_id: use-rest-api
+        uri: https://redis.io/docs/latest/operate/rc/api/get-started/use-rest-api/
+        roles:
+          - discovery
+          - documentation
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - resource_id: enable-the-api
+        uri: https://redis.io/docs/latest/operate/rc/api/get-started/enable-the-api/
+        roles:
+          - provisioning
+          - documentation
+        operated_by_participant_id: redis
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://redis.io/try-free/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.redislabs.com/v1
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: redis
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - use-rest-api
+        operated_by_participant_id: redis
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: redis
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: redis-scope-0
+        source_id: source_redis_create_db
+        target:
+          node_kind: declaration
+          node_id: declaration_redis_redis_cloud_database_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: redis-participant
+        source_id: source_redis_terms
+        target:
+          node_kind: participant
+          node_id: redis
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: redis-resource-api-reference
+        source_id: source_redis_create_db
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-resource-authentication
+        source_id: source_redis_api_keys
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-resource-pricing
+        source_id: source_redis_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-resource-account-signup
+        source_id: source_redis_quickstart
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-resource-service-terms
+        source_id: source_redis_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-resource-use-rest-api
+        source_id: source_redis_rest_api
+        target:
+          node_kind: resource
+          node_id: use-rest-api
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-resource-enable-the-api
+        source_id: source_redis_enable_api
+        target:
+          node_kind: resource
+          node_id: enable-the-api
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-endpoint-registration
+        source_id: source_redis_quickstart
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-endpoint-service-api
+        source_id: source_redis_rest_api
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: redis-interface-service-api
+        source_id: source_redis_create_db
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: redis-interface-api-authentication
+        source_id: source_redis_api_keys
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: redis-relation-reference-describes-api
+        source_id: source_redis_create_db
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: redis-relation-authentication-authenticates-api
+        source_id: source_redis_api_keys
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: redis-relation-signup-precedes-authentication
+        source_id: source_redis_quickstart
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: redis-operation-job-0
+        source_id: source_redis_create_db
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: redis-operation-job-1
+        source_id: source_redis_rest_api
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+      - source_binding_id: redis-operation-job-2
+        source_id: source_redis_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec
+      - source_binding_id: redis-exclusion-free-job-no-checkout
+        source_id: source_redis_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: redis-exclusion-separate-eligibility-resource
+        source_id: source_redis_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Redis Cloud's Free plan is always $0 for one 30 MB database, created with no payment details.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
