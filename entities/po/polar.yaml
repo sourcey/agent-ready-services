@@ -1,0 +1,424 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kzc2rqsw8fpc33xb0n7tdqv5
+  slug: polar
+  slug_aliases: []
+  name: Polar
+  domains:
+    - value: polar.sh
+      role: primary
+      valid_from: 2026-08-06T17:45:40.000Z
+  category: payments-fintech
+sources:
+  - source_id: source_polar_create_link
+    url: https://polar.sh/docs/api-reference/2026-04/checkout-links/create-checkout-link
+  - source_id: source_polar_openapi
+    url: https://polar.sh/docs/openapi/2026-04.openapi.json
+  - source_id: source_polar_auth
+    url: https://polar.sh/docs/integrate/authentication
+  - source_id: source_polar_mcp
+    url: https://polar.sh/docs/integrate/mcp
+  - source_id: source_polar_fees
+    url: https://polar.sh/docs/merchant-of-record/fees
+  - source_id: source_polar_home
+    url: https://polar.sh/
+  - source_id: source_polar_terms
+    url: https://polar.sh/legal/master-services-terms
+declarations:
+  - declaration_id: declaration_polar_polar_checkout_links_payment_create
+    scope:
+      product:
+        key: polar-checkout-links
+        name: Polar Checkout Links
+      job:
+        key: payment-create
+        name: Create a payment link
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.polar.sh/v1/checkout-links/
+        body:
+          media_type: application/json
+        spec:
+          url: https://polar.sh/docs/openapi/2026-04.openapi.json
+          key_operations: null
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: execute_tool
+    job_bindings: []
+    participants:
+      - participant_id: polar
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kzc2rqsw8fpc33xb0n7tdqv5
+    resources:
+      - resource_id: api-reference
+        uri: https://polar.sh/docs/api-reference/2026-04/checkout-links/create-checkout-link
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://polar.sh/docs/integrate/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://polar.sh/docs/merchant-of-record/fees
+        roles:
+          - pricing
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://polar.sh/signup
+        roles:
+          - access
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://polar.sh/legal/master-services-terms
+        roles:
+          - terms
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://polar.sh/docs/integrate/mcp
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: polar
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://polar.sh/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.polar.sh
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.polar.sh/mcp/polar-mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: polar
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: polar
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: polar
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: polar-scope-0
+        source_id: source_polar_create_link
+        target:
+          node_kind: declaration
+          node_id: declaration_polar_polar_checkout_links_payment_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: polar-scope-1
+        source_id: source_polar_mcp
+        target:
+          node_kind: declaration
+          node_id: declaration_polar_polar_checkout_links_payment_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: polar-participant
+        source_id: source_polar_terms
+        target:
+          node_kind: participant
+          node_id: polar
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: polar-resource-api-reference
+        source_id: source_polar_create_link
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-resource-authentication
+        source_id: source_polar_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-resource-pricing
+        source_id: source_polar_fees
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-resource-account-signup
+        source_id: source_polar_home
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-resource-service-terms
+        source_id: source_polar_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-resource-mcp-documentation
+        source_id: source_polar_mcp
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-endpoint-registration
+        source_id: source_polar_home
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-endpoint-service-api
+        source_id: source_polar_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-endpoint-mcp-server
+        source_id: source_polar_mcp
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: polar-interface-service-api
+        source_id: source_polar_create_link
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: polar-interface-mcp-server
+        source_id: source_polar_mcp
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: polar-interface-api-authentication
+        source_id: source_polar_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: polar-relation-reference-describes-api
+        source_id: source_polar_create_link
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: polar-relation-authentication-authenticates-api
+        source_id: source_polar_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: polar-relation-documentation-describes-mcp
+        source_id: source_polar_mcp
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: polar-relation-signup-precedes-authentication
+        source_id: source_polar_home
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: polar-operation-job-0
+        source_id: source_polar_create_link
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: polar-operation-job-1
+        source_id: source_polar_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: polar-operation-job-mcp-0
+        source_id: source_polar_mcp
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: polar-exclusion-free-job-no-checkout
+        source_id: source_polar_fees
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: polar-exclusion-separate-eligibility-resource
+        source_id: source_polar_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Polar's Starter plan has no monthly fee; Polar charges only per transaction, so creating a checkout link costs nothing.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
