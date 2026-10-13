@@ -1,0 +1,300 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe4gcx7z5278986a6zg
+  slug: qdrant
+  slug_aliases: []
+  name: Qdrant
+  domains:
+    - value: qdrant.tech
+      role: primary
+      valid_from: 2026-07-27T07:37:32.358Z
+  category: databases
+sources:
+  - source_id: source_qdrant_query_points
+    url: https://api.qdrant.tech/api-reference/search/query-points
+  - source_id: source_qdrant_openapi
+    url: https://raw.githubusercontent.com/qdrant/qdrant/master/docs/redoc/master/openapi.json
+  - source_id: source_qdrant_auth
+    url: https://qdrant.tech/documentation/cloud/authentication/
+  - source_id: source_qdrant_pricing
+    url: https://qdrant.tech/pricing/
+  - source_id: source_qdrant_terms
+    url: https://qdrant.tech/legal/terms_and_conditions/
+declarations:
+  - declaration_id: declaration_qdrant_qdrant_cloud_vector_upsert_query
+    scope:
+      product:
+        key: qdrant-cloud
+        name: Qdrant Cloud
+      job:
+        key: vector-upsert-query
+        name: Find a vector by query
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: spec
+        spec_url: https://raw.githubusercontent.com/qdrant/qdrant/master/docs/redoc/master/openapi.json
+        method: POST
+        path: /collections/{collection_name}/points/query
+        key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: qdrant
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe4gcx7z5278986a6zg
+    resources:
+      - resource_id: api-reference
+        uri: https://api.qdrant.tech/api-reference/search/query-points
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://qdrant.tech/documentation/cloud/authentication/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://qdrant.tech/pricing/
+        roles:
+          - pricing
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://cloud.qdrant.io/signup
+        roles:
+          - access
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://qdrant.tech/legal/terms_and_conditions/
+        roles:
+          - terms
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://cloud.qdrant.io/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids: []
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: qdrant
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: qdrant-scope-0
+        source_id: source_qdrant_query_points
+        target:
+          node_kind: declaration
+          node_id: declaration_qdrant_qdrant_cloud_vector_upsert_query
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: qdrant-participant
+        source_id: source_qdrant_terms
+        target:
+          node_kind: participant
+          node_id: qdrant
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: qdrant-resource-api-reference
+        source_id: source_qdrant_query_points
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-resource-authentication
+        source_id: source_qdrant_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-resource-pricing
+        source_id: source_qdrant_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-resource-account-signup
+        source_id: source_qdrant_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-resource-service-terms
+        source_id: source_qdrant_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-endpoint-registration
+        source_id: source_qdrant_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-interface-service-api
+        source_id: source_qdrant_query_points
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-interface-api-authentication
+        source_id: source_qdrant_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: qdrant-relation-reference-describes-api
+        source_id: source_qdrant_query_points
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: qdrant-relation-authentication-authenticates-api
+        source_id: source_qdrant_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: qdrant-relation-signup-precedes-authentication
+        source_id: source_qdrant_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: qdrant-operation-job-0
+        source_id: source_qdrant_query_points
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /spec_url
+          - /method
+          - /path
+      - source_binding_id: qdrant-operation-job-1
+        source_id: source_qdrant_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec_url
+      - source_binding_id: qdrant-exclusion-free-job-no-checkout
+        source_id: source_qdrant_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: qdrant-exclusion-separate-eligibility-resource
+        source_id: source_qdrant_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: "Qdrant Cloud's Free Tier is free forever: a single-node cluster for testing and prototypes."
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
