@@ -20,6 +20,8 @@ sources:
     url: https://techdocs.akamai.com/cloud-computing/docs/getting-started
   - source_id: source_linode_pricing
     url: https://www.linode.com/pricing/
+  - source_id: source_linode_openapi
+    url: https://raw.githubusercontent.com/linode/linode-api-openapi/main/openapi.json
   - source_id: source_linode_terms
     url: https://www.linode.com/legal-msa/
 declarations:
@@ -41,7 +43,15 @@ declarations:
         url: https://api.linode.com/v4/object-storage/buckets
         body:
           media_type: application/json
-        spec: null
+        spec:
+          url: https://raw.githubusercontent.com/linode/linode-api-openapi/main/openapi.json
+          key_operations:
+            create:
+              method: POST
+              path: /{apiVersion}/profile/tokens
+            revoke:
+              method: DELETE
+              path: /{apiVersion}/profile/tokens/{tokenId}
     job_bindings: []
     participants:
       - participant_id: linode
@@ -308,6 +318,13 @@ declarations:
           - /method
           - /url
           - /body
+      - source_binding_id: linode-operation-job-1
+        source_id: source_linode_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec
       - source_binding_id: linode-exclusion-separate-eligibility-resource
         source_id: source_linode_terms
         target:
