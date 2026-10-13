@@ -1,0 +1,449 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe4vc353d4w3zsz4wt0
+  slug: render
+  slug_aliases: []
+  name: Render
+  domains:
+    - value: render.com
+      role: primary
+      valid_from: 2026-07-27T07:37:54.994Z
+  category: hosting-infra
+sources:
+  - source_id: source_render_create_service
+    url: https://api-docs.render.com/reference/create-service
+  - source_id: source_render_api
+    url: https://render.com/docs/api
+  - source_id: source_render_openapi
+    url: https://api-docs.render.com/openapi/render-public-api-1.json
+  - source_id: source_render_llms
+    url: https://render.com/docs/llms.txt
+  - source_id: source_render_mcp
+    url: https://render.com/docs/mcp-server
+  - source_id: source_render_mcp_tools
+    url: https://github.com/render-oss/render-mcp-server
+  - source_id: source_render_free
+    url: https://render.com/docs/free
+  - source_id: source_render_pricing
+    url: https://render.com/pricing
+  - source_id: source_render_terms
+    url: https://render.com/terms
+declarations:
+  - declaration_id: declaration_render_render_web_services_deployment_create
+    scope:
+      product:
+        key: render-web-services
+        name: Render Web Services
+      job:
+        key: deployment-create
+        name: Create a deployment
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.render.com/v1/services
+        body:
+          media_type: application/json
+        spec:
+          url: https://api-docs.render.com/openapi/render-public-api-1.json
+          key_operations: null
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: create_web_service
+    job_bindings: []
+    participants:
+      - participant_id: render
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe4vc353d4w3zsz4wt0
+    resources:
+      - resource_id: api-reference
+        uri: https://api-docs.render.com/reference/create-service
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: render
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://render.com/docs/api
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: render
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://render.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: render
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://dashboard.render.com/register
+        roles:
+          - access
+        operated_by_participant_id: render
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://render.com/terms
+        roles:
+          - terms
+        operated_by_participant_id: render
+        standard_bindings: []
+      - resource_id: free-instances
+        uri: https://render.com/docs/free
+        roles:
+          - documentation
+        operated_by_participant_id: render
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://render.com/docs/mcp-server
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: render
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://dashboard.render.com/register
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: render
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.render.com/v1
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: render
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.render.com/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: render
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: render
+        standard_bindings: []
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: render
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: render
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: render-scope-0
+        source_id: source_render_create_service
+        target:
+          node_kind: declaration
+          node_id: declaration_render_render_web_services_deployment_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: render-scope-1
+        source_id: source_render_mcp_tools
+        target:
+          node_kind: declaration
+          node_id: declaration_render_render_web_services_deployment_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: render-participant
+        source_id: source_render_terms
+        target:
+          node_kind: participant
+          node_id: render
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: render-resource-api-reference
+        source_id: source_render_create_service
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-resource-authentication
+        source_id: source_render_api
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-resource-pricing
+        source_id: source_render_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-resource-account-signup
+        source_id: source_render_free
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-resource-service-terms
+        source_id: source_render_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-resource-free-instances
+        source_id: source_render_free
+        target:
+          node_kind: resource
+          node_id: free-instances
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-resource-mcp-documentation
+        source_id: source_render_mcp
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-endpoint-registration
+        source_id: source_render_free
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-endpoint-service-api
+        source_id: source_render_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-endpoint-mcp-server
+        source_id: source_render_mcp_tools
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: render-interface-service-api
+        source_id: source_render_create_service
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: render-interface-mcp-server
+        source_id: source_render_mcp_tools
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: render-interface-api-authentication
+        source_id: source_render_api
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: render-relation-reference-describes-api
+        source_id: source_render_create_service
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: render-relation-authentication-authenticates-api
+        source_id: source_render_api
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: render-relation-documentation-describes-mcp
+        source_id: source_render_mcp
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: render-relation-signup-precedes-authentication
+        source_id: source_render_free
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: render-operation-job-0
+        source_id: source_render_create_service
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: render-operation-job-1
+        source_id: source_render_llms
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec
+      - source_binding_id: render-operation-job-2
+        source_id: source_render_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+      - source_binding_id: render-operation-job-mcp-0
+        source_id: source_render_mcp_tools
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: render-exclusion-free-job-no-checkout
+        source_id: source_render_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: render-exclusion-separate-eligibility-resource
+        source_id: source_render_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Render's Hobby workspace is $0 a month, and Free web service instances run with no payment method.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
