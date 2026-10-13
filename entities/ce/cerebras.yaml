@@ -1,0 +1,387 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyygma82bz44sj39nyjey393
+  slug: cerebras
+  slug_aliases: []
+  name: Cerebras
+  domains:
+    - value: cerebras.ai
+      role: primary
+      valid_from: 2026-08-01T10:27:09.837Z
+  category: ai-ml
+sources:
+  - source_id: source_cerebras_chat
+    url: https://inference-docs.cerebras.ai/api-reference/chat-completions
+  - source_id: source_cerebras_tools
+    url: https://inference-docs.cerebras.ai/capabilities/tool-use
+  - source_id: source_cerebras_openapi
+    url: https://inference-docs.cerebras.ai/api-reference/openapi.yaml
+  - source_id: source_cerebras_auth
+    url: https://inference-docs.cerebras.ai/api-reference/authentication
+  - source_id: source_cerebras_keys
+    url: https://inference-docs.cerebras.ai/console/api-keys
+  - source_id: source_cerebras_errors
+    url: https://inference-docs.cerebras.ai/support/error
+  - source_id: source_cerebras_billing
+    url: https://inference-docs.cerebras.ai/console/account-billing
+  - source_id: source_cerebras_pricing
+    url: https://inference-docs.cerebras.ai/support/pricing
+  - source_id: source_cerebras_console
+    url: https://inference-docs.cerebras.ai/console/overview
+  - source_id: source_cerebras_terms
+    url: https://www.cerebras.ai/terms-of-service
+declarations:
+  - declaration_id: declaration_cerebras_cerebras_inference_api_model_chat_stream_tool
+    scope:
+      product:
+        key: cerebras-inference-api
+        name: Cerebras Inference API
+      job:
+        key: model-chat-stream-tool
+        name: Stream a completion with a tool call
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.cerebras.ai/v1/chat/completions
+        body:
+          media_type: application/json
+        spec:
+          url: https://inference-docs.cerebras.ai/api-reference/openapi.yaml
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: cerebras
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyygma82bz44sj39nyjey393
+    resources:
+      - resource_id: api-reference
+        uri: https://inference-docs.cerebras.ai/api-reference/chat-completions
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://inference-docs.cerebras.ai/api-reference/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - resource_id: api-errors
+        uri: https://inference-docs.cerebras.ai/support/error
+        roles:
+          - status
+          - recovery
+          - documentation
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://inference-docs.cerebras.ai/support/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://cloud.cerebras.ai
+        roles:
+          - checkout
+          - access
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.cerebras.ai/terms-of-service
+        roles:
+          - terms
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - resource_id: tool-use
+        uri: https://inference-docs.cerebras.ai/capabilities/tool-use
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - resource_id: api-keys
+        uri: https://inference-docs.cerebras.ai/console/api-keys
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://cloud.cerebras.ai
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.cerebras.ai
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - api-errors
+          - tool-use
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: cerebras
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: checkout
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: cerebras-scope-0
+        source_id: source_cerebras_chat
+        target:
+          node_kind: declaration
+          node_id: declaration_cerebras_cerebras_inference_api_model_chat_stream_tool
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: cerebras-participant
+        source_id: source_cerebras_terms
+        target:
+          node_kind: participant
+          node_id: cerebras
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: cerebras-resource-api-reference
+        source_id: source_cerebras_chat
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-authentication
+        source_id: source_cerebras_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-api-errors
+        source_id: source_cerebras_errors
+        target:
+          node_kind: resource
+          node_id: api-errors
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-pricing
+        source_id: source_cerebras_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-checkout
+        source_id: source_cerebras_billing
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-checkout-1
+        source_id: source_cerebras_console
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-service-terms
+        source_id: source_cerebras_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-tool-use
+        source_id: source_cerebras_tools
+        target:
+          node_kind: resource
+          node_id: tool-use
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-resource-api-keys
+        source_id: source_cerebras_keys
+        target:
+          node_kind: resource
+          node_id: api-keys
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-endpoint-registration
+        source_id: source_cerebras_console
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-endpoint-service-api
+        source_id: source_cerebras_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-interface-service-api
+        source_id: source_cerebras_chat
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-interface-api-authentication
+        source_id: source_cerebras_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: cerebras-relation-reference-describes-api
+        source_id: source_cerebras_chat
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: cerebras-relation-authentication-authenticates-api
+        source_id: source_cerebras_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: cerebras-relation-signup-precedes-authentication
+        source_id: source_cerebras_console
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: cerebras-operation-job-0
+        source_id: source_cerebras_chat
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: cerebras-operation-job-1
+        source_id: source_cerebras_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: cerebras-exclusion-separate-eligibility-resource
+        source_id: source_cerebras_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

@@ -1,0 +1,372 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyy3083w3k33krxmrqx1kr4e
+  slug: together-ai
+  slug_aliases: []
+  name: Together AI
+  domains:
+    - value: together.ai
+      role: primary
+      valid_from: 2026-08-01T07:08:27.771Z
+  category: ai-ml
+sources:
+  - source_id: source_together_ai_chat
+    url: https://docs.together.ai/docs/inference/chat/overview
+  - source_id: source_together_ai_functions
+    url: https://docs.together.ai/docs/inference/function-calling/overview
+  - source_id: source_together_ai_openapi
+    url: https://docs.together.ai/openapi.yaml
+  - source_id: source_together_ai_auth
+    url: https://docs.together.ai/docs/api-keys-authentication
+  - source_id: source_together_ai_account
+    url: https://docs.together.ai/docs/account-management
+  - source_id: source_together_ai_errors
+    url: https://docs.together.ai/docs/error-codes
+  - source_id: source_together_ai_billing
+    url: https://docs.together.ai/docs/billing-credits
+  - source_id: source_together_ai_terms
+    url: https://www.together.ai/terms-of-service
+declarations:
+  - declaration_id: declaration_together_ai_together_inference_api_model_chat_stream_tool
+    scope:
+      product:
+        key: together-inference-api
+        name: Together AI Inference API
+      job:
+        key: model-chat-stream-tool
+        name: Stream a completion with a tool call
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.together.ai/v1/chat/completions
+        body:
+          media_type: application/json
+        spec:
+          url: https://docs.together.ai/openapi.yaml
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: together-ai
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyy3083w3k33krxmrqx1kr4e
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.together.ai/docs/inference/chat/overview
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.together.ai/docs/api-keys-authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - resource_id: api-errors
+        uri: https://docs.together.ai/docs/error-codes
+        roles:
+          - status
+          - recovery
+          - documentation
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://docs.together.ai/docs/billing-credits
+        roles:
+          - pricing
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://api.together.ai/settings/organization/~current/billing
+        roles:
+          - checkout
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://api.together.ai/signin
+        roles:
+          - access
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.together.ai/terms-of-service
+        roles:
+          - terms
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - resource_id: function-calling
+        uri: https://docs.together.ai/docs/inference/function-calling/overview
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://api.together.ai/signin
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.together.ai/v1
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - api-errors
+          - function-calling
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: together-ai
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: together-ai-scope-0
+        source_id: source_together_ai_chat
+        target:
+          node_kind: declaration
+          node_id: declaration_together_ai_together_inference_api_model_chat_stream_tool
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: together-ai-participant
+        source_id: source_together_ai_terms
+        target:
+          node_kind: participant
+          node_id: together-ai
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: together-ai-resource-api-reference
+        source_id: source_together_ai_chat
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-resource-authentication
+        source_id: source_together_ai_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-resource-api-errors
+        source_id: source_together_ai_errors
+        target:
+          node_kind: resource
+          node_id: api-errors
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-resource-pricing
+        source_id: source_together_ai_billing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-resource-checkout
+        source_id: source_together_ai_billing
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-resource-account-signup
+        source_id: source_together_ai_account
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-resource-service-terms
+        source_id: source_together_ai_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-resource-function-calling
+        source_id: source_together_ai_functions
+        target:
+          node_kind: resource
+          node_id: function-calling
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-endpoint-registration
+        source_id: source_together_ai_account
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-endpoint-service-api
+        source_id: source_together_ai_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-interface-service-api
+        source_id: source_together_ai_chat
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-interface-api-authentication
+        source_id: source_together_ai_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: together-ai-relation-reference-describes-api
+        source_id: source_together_ai_chat
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: together-ai-relation-authentication-authenticates-api
+        source_id: source_together_ai_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: together-ai-relation-signup-precedes-authentication
+        source_id: source_together_ai_account
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: together-ai-operation-job-0
+        source_id: source_together_ai_chat
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: together-ai-operation-job-1
+        source_id: source_together_ai_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: together-ai-exclusion-separate-eligibility-resource
+        source_id: source_together_ai_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

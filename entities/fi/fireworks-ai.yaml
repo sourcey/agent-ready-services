@@ -1,0 +1,434 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe2nk90xmym1ves10h5
+  slug: fireworks-ai
+  slug_aliases: []
+  name: Fireworks AI
+  domains:
+    - value: fireworks.ai
+      role: primary
+      valid_from: 2026-07-27T07:36:34.037Z
+  category: ai-ml
+sources:
+  - source_id: source_fireworks_ai_chat
+    url: https://docs.fireworks.ai/api-reference/post-chatcompletions
+  - source_id: source_fireworks_ai_quickstart
+    url: https://docs.fireworks.ai/getting-started/quickstart
+  - source_id: source_fireworks_ai_tools
+    url: https://docs.fireworks.ai/guides/function-calling
+  - source_id: source_fireworks_ai_openapi
+    url: https://docs.fireworks.ai/merged.openapi.yaml
+  - source_id: source_fireworks_ai_create_key
+    url: https://docs.fireworks.ai/api-reference/create-api-key
+  - source_id: source_fireworks_ai_delete_key
+    url: https://docs.fireworks.ai/api-reference/delete-api-key
+  - source_id: source_fireworks_ai_errors
+    url: https://docs.fireworks.ai/guides/inference-error-codes
+  - source_id: source_fireworks_ai_pricing
+    url: https://docs.fireworks.ai/serverless/pricing
+  - source_id: source_fireworks_ai_credits
+    url: https://docs.fireworks.ai/faq-new/billing-pricing/what-happens-when-i-finish-my-1-dollar-credit
+  - source_id: source_fireworks_ai_quotas
+    url: https://docs.fireworks.ai/guides/quotas_usage/account-quotas
+  - source_id: source_fireworks_ai_signup
+    url: https://app.fireworks.ai/signup
+  - source_id: source_fireworks_ai_terms
+    url: https://fireworks.ai/terms-of-service
+declarations:
+  - declaration_id: declaration_fireworks_ai_fireworks_serverless_inference_model_chat_stream_tool
+    scope:
+      product:
+        key: fireworks-serverless-inference
+        name: Fireworks Serverless Inference
+      job:
+        key: model-chat-stream-tool
+        name: Stream a completion with a tool call
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.fireworks.ai/inference/v1/chat/completions
+        body:
+          media_type: application/json
+        spec:
+          url: https://docs.fireworks.ai/merged.openapi.yaml
+          key_operations:
+            create:
+              method: POST
+              path: /v1/accounts/{account_id}/users/{user_id}/apiKeys
+            revoke:
+              method: POST
+              path: /v1/accounts/{account_id}/users/{user_id}/apiKeys:delete
+    job_bindings: []
+    participants:
+      - participant_id: fireworks-ai
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe2nk90xmym1ves10h5
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.fireworks.ai/api-reference/post-chatcompletions
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.fireworks.ai/getting-started/quickstart
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: api-errors
+        uri: https://docs.fireworks.ai/guides/inference-error-codes
+        roles:
+          - status
+          - recovery
+          - documentation
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://docs.fireworks.ai/serverless/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://fireworks.ai/billing
+        roles:
+          - checkout
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://app.fireworks.ai/signup
+        roles:
+          - access
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://fireworks.ai/terms-of-service
+        roles:
+          - terms
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: tool-calling
+        uri: https://docs.fireworks.ai/guides/function-calling
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: credits
+        uri: https://docs.fireworks.ai/faq-new/billing-pricing/what-happens-when-i-finish-my-1-dollar-credit
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: create-api-key
+        uri: https://docs.fireworks.ai/api-reference/create-api-key
+        roles:
+          - provisioning
+          - documentation
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - resource_id: delete-api-key
+        uri: https://docs.fireworks.ai/api-reference/delete-api-key
+        roles:
+          - recovery
+          - documentation
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://app.fireworks.ai/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.fireworks.ai/inference
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - api-errors
+          - tool-calling
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: fireworks-ai
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: fireworks-ai-scope-0
+        source_id: source_fireworks_ai_chat
+        target:
+          node_kind: declaration
+          node_id: declaration_fireworks_ai_fireworks_serverless_inference_model_chat_stream_tool
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: fireworks-ai-participant
+        source_id: source_fireworks_ai_terms
+        target:
+          node_kind: participant
+          node_id: fireworks-ai
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: fireworks-ai-resource-api-reference
+        source_id: source_fireworks_ai_chat
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-authentication
+        source_id: source_fireworks_ai_quickstart
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-api-errors
+        source_id: source_fireworks_ai_errors
+        target:
+          node_kind: resource
+          node_id: api-errors
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-pricing
+        source_id: source_fireworks_ai_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-checkout
+        source_id: source_fireworks_ai_quotas
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-account-signup
+        source_id: source_fireworks_ai_signup
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-service-terms
+        source_id: source_fireworks_ai_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-tool-calling
+        source_id: source_fireworks_ai_tools
+        target:
+          node_kind: resource
+          node_id: tool-calling
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-credits
+        source_id: source_fireworks_ai_credits
+        target:
+          node_kind: resource
+          node_id: credits
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-create-api-key
+        source_id: source_fireworks_ai_create_key
+        target:
+          node_kind: resource
+          node_id: create-api-key
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-resource-delete-api-key
+        source_id: source_fireworks_ai_delete_key
+        target:
+          node_kind: resource
+          node_id: delete-api-key
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-endpoint-registration
+        source_id: source_fireworks_ai_signup
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-endpoint-service-api
+        source_id: source_fireworks_ai_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-interface-service-api
+        source_id: source_fireworks_ai_chat
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-interface-api-authentication
+        source_id: source_fireworks_ai_quickstart
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: fireworks-ai-relation-reference-describes-api
+        source_id: source_fireworks_ai_chat
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: fireworks-ai-relation-authentication-authenticates-api
+        source_id: source_fireworks_ai_quickstart
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: fireworks-ai-relation-signup-precedes-authentication
+        source_id: source_fireworks_ai_signup
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: fireworks-ai-operation-job-0
+        source_id: source_fireworks_ai_chat
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: fireworks-ai-operation-job-1
+        source_id: source_fireworks_ai_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: fireworks-ai-exclusion-separate-eligibility-resource
+        source_id: source_fireworks_ai_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
