@@ -1,0 +1,340 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe4bwy30s00e3d8f2py
+  slug: new-relic
+  slug_aliases: []
+  name: New Relic
+  domains:
+    - value: newrelic.com
+      role: primary
+      valid_from: 2026-07-27T07:37:32.371Z
+  category: observability
+sources:
+  - source_id: source_new_relic_ping_monitor
+    url: https://docs.newrelic.com/docs/apis/nerdgraph/examples/synthetics-api/ping-monitor
+  - source_id: source_new_relic_nerdgraph
+    url: https://docs.newrelic.com/docs/apis/nerdgraph/get-started/introduction-new-relic-nerdgraph
+  - source_id: source_new_relic_synthetics_api
+    url: https://docs.newrelic.com/docs/apis/nerdgraph/examples/synthetics-api/overview
+  - source_id: source_new_relic_pricing
+    url: https://newrelic.com/pricing
+  - source_id: source_new_relic_terms
+    url: https://newrelic.com/termsandconditions/terms
+declarations:
+  - declaration_id: declaration_new_relic_new_relic_synthetic_monitoring_monitor_create
+    scope:
+      product:
+        key: new-relic-synthetic-monitoring
+        name: New Relic Synthetic Monitoring
+      job:
+        key: monitor-create
+        name: Create a monitor
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.newrelic.com/graphql
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: new-relic
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe4bwy30s00e3d8f2py
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.newrelic.com/docs/apis/nerdgraph/examples/synthetics-api/ping-monitor
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.newrelic.com/docs/apis/nerdgraph/get-started/introduction-new-relic-nerdgraph
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://newrelic.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://newrelic.com/signup
+        roles:
+          - access
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://newrelic.com/termsandconditions/terms
+        roles:
+          - terms
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+      - resource_id: synthetics-api
+        uri: https://docs.newrelic.com/docs/apis/nerdgraph/examples/synthetics-api/overview
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://newrelic.com/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.newrelic.com/graphql
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - synthetics-api
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: new-relic
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: new-relic-scope-0
+        source_id: source_new_relic_ping_monitor
+        target:
+          node_kind: declaration
+          node_id: declaration_new_relic_new_relic_synthetic_monitoring_monitor_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: new-relic-participant
+        source_id: source_new_relic_terms
+        target:
+          node_kind: participant
+          node_id: new-relic
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: new-relic-resource-api-reference
+        source_id: source_new_relic_ping_monitor
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-resource-authentication
+        source_id: source_new_relic_nerdgraph
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-resource-pricing
+        source_id: source_new_relic_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-resource-account-signup
+        source_id: source_new_relic_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-resource-service-terms
+        source_id: source_new_relic_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-resource-synthetics-api
+        source_id: source_new_relic_synthetics_api
+        target:
+          node_kind: resource
+          node_id: synthetics-api
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-endpoint-registration
+        source_id: source_new_relic_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-endpoint-service-api
+        source_id: source_new_relic_nerdgraph
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-interface-service-api
+        source_id: source_new_relic_ping_monitor
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-interface-api-authentication
+        source_id: source_new_relic_nerdgraph
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: new-relic-relation-reference-describes-api
+        source_id: source_new_relic_ping_monitor
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: new-relic-relation-authentication-authenticates-api
+        source_id: source_new_relic_nerdgraph
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: new-relic-relation-signup-precedes-authentication
+        source_id: source_new_relic_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: new-relic-operation-job-0
+        source_id: source_new_relic_ping_monitor
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: new-relic-operation-job-1
+        source_id: source_new_relic_nerdgraph
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+      - source_binding_id: new-relic-exclusion-free-job-no-checkout
+        source_id: source_new_relic_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: new-relic-exclusion-separate-eligibility-resource
+        source_id: source_new_relic_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: New Relic's perpetual free tier needs no credit card and includes one full platform user and access to its capabilities.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

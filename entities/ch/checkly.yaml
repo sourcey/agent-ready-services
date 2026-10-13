@@ -1,0 +1,330 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyy3083w3k33krxmrqx1kr3r
+  slug: checkly
+  slug_aliases: []
+  name: Checkly
+  domains:
+    - value: checklyhq.com
+      role: primary
+      valid_from: 2026-08-01T06:47:55.295Z
+  category: observability
+sources:
+  - source_id: source_checkly_create_check
+    url: https://www.checklyhq.com/docs/api-reference/checks/create-an-api-check
+  - source_id: source_checkly_overview
+    url: https://www.checklyhq.com/docs/api-reference/overview
+  - source_id: source_checkly_openapi
+    url: https://api.checklyhq.com/openapi.json
+  - source_id: source_checkly_pricing
+    url: https://www.checklyhq.com/pricing/
+  - source_id: source_checkly_terms
+    url: https://www.checklyhq.com/terms/
+declarations:
+  - declaration_id: declaration_checkly_checkly_monitoring_monitor_create
+    scope:
+      product:
+        key: checkly-monitoring
+        name: Checkly Monitoring
+      job:
+        key: monitor-create
+        name: Create a monitor
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers:
+          - name: x-checkly-account
+            value: 00000000-0000-0000-0000-000000000000
+        method: POST
+        url: https://api.checklyhq.com/v1/checks/api
+        body:
+          media_type: application/json
+        spec:
+          url: https://api.checklyhq.com/openapi.json
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: checkly
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyy3083w3k33krxmrqx1kr3r
+    resources:
+      - resource_id: api-reference
+        uri: https://www.checklyhq.com/docs/api-reference/checks/create-an-api-check
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: checkly
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://www.checklyhq.com/docs/api-reference/overview
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: checkly
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.checklyhq.com/pricing/
+        roles:
+          - pricing
+        operated_by_participant_id: checkly
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://app.checklyhq.com/signup
+        roles:
+          - access
+        operated_by_participant_id: checkly
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.checklyhq.com/terms/
+        roles:
+          - terms
+        operated_by_participant_id: checkly
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://app.checklyhq.com/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: checkly
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.checklyhq.com
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: checkly
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: checkly
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: checkly
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: checkly-scope-0
+        source_id: source_checkly_create_check
+        target:
+          node_kind: declaration
+          node_id: declaration_checkly_checkly_monitoring_monitor_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: checkly-participant
+        source_id: source_checkly_terms
+        target:
+          node_kind: participant
+          node_id: checkly
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: checkly-resource-api-reference
+        source_id: source_checkly_create_check
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: checkly-resource-authentication
+        source_id: source_checkly_overview
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: checkly-resource-pricing
+        source_id: source_checkly_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: checkly-resource-account-signup
+        source_id: source_checkly_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: checkly-resource-service-terms
+        source_id: source_checkly_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: checkly-endpoint-registration
+        source_id: source_checkly_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: checkly-endpoint-service-api
+        source_id: source_checkly_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: checkly-interface-service-api
+        source_id: source_checkly_create_check
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: checkly-interface-api-authentication
+        source_id: source_checkly_overview
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: checkly-relation-reference-describes-api
+        source_id: source_checkly_create_check
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: checkly-relation-authentication-authenticates-api
+        source_id: source_checkly_overview
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: checkly-relation-signup-precedes-authentication
+        source_id: source_checkly_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: checkly-operation-job-0
+        source_id: source_checkly_create_check
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /headers
+          - /body
+          - /spec
+      - source_binding_id: checkly-operation-job-1
+        source_id: source_checkly_overview
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /headers
+          - /spec
+      - source_binding_id: checkly-exclusion-free-job-no-checkout
+        source_id: source_checkly_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: checkly-exclusion-separate-eligibility-resource
+        source_id: source_checkly_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Checkly's Hobby plan is $0 a month and includes 10 uptime monitors.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
