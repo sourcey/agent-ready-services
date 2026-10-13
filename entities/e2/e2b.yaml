@@ -43,7 +43,13 @@ declarations:
           media_type: application/json
         spec:
           url: https://raw.githubusercontent.com/e2b-dev/infra/main/spec/openapi.yml
-          key_operations: null
+          key_operations:
+            create:
+              method: POST
+              path: /api-keys
+            revoke:
+              method: DELETE
+              path: "/api-keys/{apiKeyID}"
     job_bindings: []
     participants:
       - participant_id: e2b
