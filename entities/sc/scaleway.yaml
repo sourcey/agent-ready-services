@@ -1,0 +1,346 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe5hcab62zzpv7f3yat
+  slug: scaleway
+  slug_aliases: []
+  name: Scaleway
+  domains:
+    - value: scaleway.com
+      role: primary
+      valid_from: 2026-07-27T07:42:06.969Z
+  category: hosting-infra
+sources:
+  - source_id: source_scaleway_bucket_ops
+    url: https://www.scaleway.com/en/docs/object-storage/api-cli/bucket-operations/
+  - source_id: source_scaleway_aws_cli
+    url: https://www.scaleway.com/en/docs/object-storage/api-cli/object-storage-aws-cli/
+  - source_id: source_scaleway_api_keys
+    url: https://www.scaleway.com/en/docs/iam/api-cli/using-api-key-object-storage/
+  - source_id: source_scaleway_payment
+    url: https://www.scaleway.com/en/docs/billing/how-to/add-payment-method/
+  - source_id: source_scaleway_account
+    url: https://www.scaleway.com/en/docs/account/setup-lifecycle/create-an-account/
+  - source_id: source_scaleway_pricing
+    url: https://www.scaleway.com/en/pricing/storage/
+  - source_id: source_scaleway_terms
+    url: https://www.scaleway.com/en/contracts/
+declarations:
+  - declaration_id: declaration_scaleway_scaleway_object_storage_bucket_create
+    scope:
+      product:
+        key: scaleway-object-storage
+        name: Scaleway Object Storage
+      job:
+        key: bucket-create
+        name: Create a storage bucket
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: PUT
+        url: https://s3.nl-ams.scw.cloud/sourcey-probe-0000
+        body: null
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: scaleway
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe5hcab62zzpv7f3yat
+    resources:
+      - resource_id: api-reference
+        uri: https://www.scaleway.com/en/docs/object-storage/api-cli/bucket-operations/
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://www.scaleway.com/en/docs/iam/api-cli/using-api-key-object-storage/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.scaleway.com/en/pricing/storage/
+        roles:
+          - pricing
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://console.scaleway.com/billing/payment
+        roles:
+          - checkout
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://account.scaleway.com/register?service=console
+        roles:
+          - access
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.scaleway.com/en/contracts/
+        roles:
+          - terms
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - resource_id: aws-cli
+        uri: https://www.scaleway.com/en/docs/object-storage/api-cli/object-storage-aws-cli/
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://account.scaleway.com/register?service=console
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://s3.nl-ams.scw.cloud
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - aws-cli
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: scaleway
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: scaleway-scope-0
+        source_id: source_scaleway_bucket_ops
+        target:
+          node_kind: declaration
+          node_id: declaration_scaleway_scaleway_object_storage_bucket_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: scaleway-participant
+        source_id: source_scaleway_terms
+        target:
+          node_kind: participant
+          node_id: scaleway
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: scaleway-resource-api-reference
+        source_id: source_scaleway_bucket_ops
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-resource-authentication
+        source_id: source_scaleway_api_keys
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-resource-pricing
+        source_id: source_scaleway_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-resource-checkout
+        source_id: source_scaleway_payment
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-resource-account-signup
+        source_id: source_scaleway_account
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-resource-service-terms
+        source_id: source_scaleway_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-resource-aws-cli
+        source_id: source_scaleway_aws_cli
+        target:
+          node_kind: resource
+          node_id: aws-cli
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-endpoint-registration
+        source_id: source_scaleway_account
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-endpoint-service-api
+        source_id: source_scaleway_aws_cli
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-interface-service-api
+        source_id: source_scaleway_bucket_ops
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-interface-api-authentication
+        source_id: source_scaleway_api_keys
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: scaleway-relation-reference-describes-api
+        source_id: source_scaleway_bucket_ops
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: scaleway-relation-authentication-authenticates-api
+        source_id: source_scaleway_api_keys
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: scaleway-relation-signup-precedes-authentication
+        source_id: source_scaleway_account
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: scaleway-operation-job-0
+        source_id: source_scaleway_bucket_ops
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+      - source_binding_id: scaleway-operation-job-1
+        source_id: source_scaleway_aws_cli
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+      - source_binding_id: scaleway-exclusion-separate-eligibility-resource
+        source_id: source_scaleway_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
