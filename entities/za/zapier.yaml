@@ -1,0 +1,306 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyyts97tghgjktasgc05vqj2
+  slug: zapier
+  slug_aliases: []
+  name: Zapier
+  domains:
+    - value: zapier.com
+      role: primary
+      valid_from: 2026-08-01T13:50:00.000Z
+  category: no-code
+sources:
+  - source_id: source_zapier_tools
+    url: https://docs.zapier.com/mcp/overview/how-tools-work
+  - source_id: source_zapier_connections
+    url: https://docs.zapier.com/mcp/overview/how-connections-work
+  - source_id: source_zapier_build
+    url: https://docs.zapier.com/mcp/get-started/build-a-workflow
+  - source_id: source_zapier_pricing
+    url: https://zapier.com/pricing
+  - source_id: source_zapier_terms
+    url: https://zapier.com/legal/terms-of-service
+declarations:
+  - declaration_id: declaration_zapier_zapier_next_gen_zaps_workflow_run
+    scope:
+      product:
+        key: zapier-next-gen-zaps
+        name: Zapier Next Gen Zaps
+      job:
+        key: workflow-run
+        name: Run a workflow
+    job_operations:
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: run_workflow
+    job_bindings: []
+    participants:
+      - participant_id: zapier
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyyts97tghgjktasgc05vqj2
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.zapier.com/mcp/overview/how-tools-work
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.zapier.com/mcp/overview/how-connections-work
+        roles:
+          - authentication
+          - documentation
+          - operations
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://zapier.com/pricing
+        roles:
+          - pricing
+          - checkout
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://zapier.com/sign-up
+        roles:
+          - access
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://zapier.com/legal/terms-of-service
+        roles:
+          - terms
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - resource_id: next-gen-zaps
+        uri: https://docs.zapier.com/mcp/get-started/build-a-workflow
+        roles:
+          - eligibility
+          - documentation
+        operated_by_participant_id: zapier
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://zapier.com/sign-up
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.zapier.com/api/v1/connect
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - endpoint_id: early-access
+        uri: https://zapier.com/workflow/early-access
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: zapier
+        standard_bindings: []
+    interfaces:
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+          - early-access
+        resource_ids:
+          - authentication
+        operated_by_participant_id: zapier
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: zapier
+        standard_bindings: []
+    relations:
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: authentication
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: zapier-scope-0
+        source_id: source_zapier_tools
+        target:
+          node_kind: declaration
+          node_id: declaration_zapier_zapier_next_gen_zaps_workflow_run
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: zapier-participant
+        source_id: source_zapier_terms
+        target:
+          node_kind: participant
+          node_id: zapier
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: zapier-resource-api-reference
+        source_id: source_zapier_tools
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-resource-authentication
+        source_id: source_zapier_connections
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-resource-pricing
+        source_id: source_zapier_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-resource-account-signup
+        source_id: source_zapier_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-resource-service-terms
+        source_id: source_zapier_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-resource-next-gen-zaps
+        source_id: source_zapier_build
+        target:
+          node_kind: resource
+          node_id: next-gen-zaps
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-endpoint-registration
+        source_id: source_zapier_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-endpoint-mcp-server
+        source_id: source_zapier_tools
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-endpoint-early-access
+        source_id: source_zapier_build
+        target:
+          node_kind: endpoint
+          node_id: early-access
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zapier-interface-mcp-server
+        source_id: source_zapier_tools
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: zapier-interface-api-authentication
+        source_id: source_zapier_connections
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: zapier-relation-documentation-describes-mcp
+        source_id: source_zapier_connections
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zapier-relation-signup-precedes-authentication
+        source_id: source_zapier_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zapier-operation-job-mcp-0
+        source_id: source_zapier_tools
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+    surface_exclusions: []
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

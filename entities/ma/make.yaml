@@ -1,0 +1,314 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyxthgpy3tfte8bd2eng1ncw
+  slug: make
+  slug_aliases: []
+  name: Make
+  domains:
+    - value: make.com
+      role: primary
+      valid_from: 2026-07-31T23:16:47.469Z
+  category: no-code
+sources:
+  - source_id: source_make_scenarios
+    url: https://developers.make.com/api-documentation/api-reference/scenarios
+  - source_id: source_make_auth
+    url: https://developers.make.com/api-documentation/authentication/create-authentication-token
+  - source_id: source_make_pricing
+    url: https://www.make.com/en/pricing
+  - source_id: source_make_terms
+    url: https://www.make.com/en/terms-and-conditions
+declarations:
+  - declaration_id: declaration_make_make_scenarios_workflow_run
+    scope:
+      product:
+        key: make-scenarios
+        name: Make Scenarios
+      job:
+        key: workflow-run
+        name: Run a workflow
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://eu1.make.com/api/v2/scenarios/1/run
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: make
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyxthgpy3tfte8bd2eng1ncw
+    resources:
+      - resource_id: api-reference
+        uri: https://developers.make.com/api-documentation/api-reference/scenarios
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: make
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developers.make.com/api-documentation/authentication/create-authentication-token
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: make
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.make.com/en/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: make
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.make.com/en/register
+        roles:
+          - access
+        operated_by_participant_id: make
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.make.com/en/terms-and-conditions
+        roles:
+          - terms
+        operated_by_participant_id: make
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.make.com/en/register
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: make
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://eu1.make.com/api/v2
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: make
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: make
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: make
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: make-scope-0
+        source_id: source_make_scenarios
+        target:
+          node_kind: declaration
+          node_id: declaration_make_make_scenarios_workflow_run
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: make-participant
+        source_id: source_make_terms
+        target:
+          node_kind: participant
+          node_id: make
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: make-resource-api-reference
+        source_id: source_make_scenarios
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: make-resource-authentication
+        source_id: source_make_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: make-resource-pricing
+        source_id: source_make_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: make-resource-account-signup
+        source_id: source_make_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: make-resource-service-terms
+        source_id: source_make_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: make-endpoint-registration
+        source_id: source_make_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: make-endpoint-service-api
+        source_id: source_make_scenarios
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: make-interface-service-api
+        source_id: source_make_scenarios
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: make-interface-api-authentication
+        source_id: source_make_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: make-relation-reference-describes-api
+        source_id: source_make_scenarios
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: make-relation-authentication-authenticates-api
+        source_id: source_make_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: make-relation-signup-precedes-authentication
+        source_id: source_make_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: make-operation-job-0
+        source_id: source_make_scenarios
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: make-exclusion-free-job-no-checkout
+        source_id: source_make_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: make-exclusion-separate-eligibility-resource
+        source_id: source_make_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Make's Free plan includes 1,000 credits a month at no charge.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
