@@ -1,0 +1,337 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyyts97rczvy7tt3n9gd0y3n
+  slug: brex
+  slug_aliases: []
+  name: Brex
+  domains:
+    - value: brex.com
+      role: primary
+      valid_from: 2026-08-01T13:50:00.000Z
+  category: banking
+sources:
+  - source_id: source_brex_create_vendor
+    url: https://developer.brex.com/openapi/payments_api/vendors/createvendor
+  - source_id: source_brex_payments_api
+    url: https://developer.brex.com/openapi/payments_api
+  - source_id: source_brex_openapi
+    url: https://developer.brex.com/_bundle/openapi/payments_api.yaml
+  - source_id: source_brex_auth
+    url: https://developer.brex.com/guides/authentication
+  - source_id: source_brex_signup
+    url: https://www.brex.com/signup
+  - source_id: source_brex_pricing
+    url: https://www.brex.com/pricing
+  - source_id: source_brex_terms
+    url: https://www.brex.com/legal/platform-agreement
+declarations:
+  - declaration_id: declaration_brex_brex_payments_api_payee_create
+    scope:
+      product:
+        key: brex-payments-api
+        name: Brex Payments API
+      job:
+        key: payee-create
+        name: Add a payee
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.brex.com/v1/vendors
+        body:
+          media_type: application/json
+        spec:
+          url: https://developer.brex.com/_bundle/openapi/payments_api.yaml
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: brex
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyyts97rczvy7tt3n9gd0y3n
+    resources:
+      - resource_id: api-reference
+        uri: https://developer.brex.com/openapi/payments_api/vendors/createvendor
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: brex
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.brex.com/guides/authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: brex
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.brex.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: brex
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.brex.com/signup
+        roles:
+          - access
+        operated_by_participant_id: brex
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.brex.com/legal/platform-agreement
+        roles:
+          - terms
+        operated_by_participant_id: brex
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: service-api
+        uri: https://api.brex.com
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: brex
+        standard_bindings: []
+      - endpoint_id: account-application
+        uri: https://www.brex.com/signup
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: brex
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: brex
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: brex
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: brex-scope-0
+        source_id: source_brex_create_vendor
+        target:
+          node_kind: declaration
+          node_id: declaration_brex_brex_payments_api_payee_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: brex-participant
+        source_id: source_brex_terms
+        target:
+          node_kind: participant
+          node_id: brex
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: brex-resource-api-reference
+        source_id: source_brex_create_vendor
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brex-resource-authentication
+        source_id: source_brex_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brex-resource-pricing
+        source_id: source_brex_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brex-resource-account-signup
+        source_id: source_brex_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brex-resource-service-terms
+        source_id: source_brex_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brex-endpoint-service-api
+        source_id: source_brex_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brex-endpoint-account-application
+        source_id: source_brex_signup
+        target:
+          node_kind: endpoint
+          node_id: account-application
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: brex-interface-service-api
+        source_id: source_brex_create_vendor
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: brex-interface-api-authentication
+        source_id: source_brex_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: brex-relation-reference-describes-api
+        source_id: source_brex_create_vendor
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: brex-relation-authentication-authenticates-api
+        source_id: source_brex_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: brex-relation-signup-precedes-authentication
+        source_id: source_brex_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: brex-operation-job-0
+        source_id: source_brex_create_vendor
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: brex-operation-job-1
+        source_id: source_brex_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+      - source_binding_id: brex-operation-job-2
+        source_id: source_brex_payments_api
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec
+      - source_binding_id: brex-exclusion-free-job-no-checkout
+        source_id: source_brex_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: brex-exclusion-separate-eligibility-resource
+        source_id: source_brex_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Brex Essentials is $0 per user a month and includes Brex API access and bill pay.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Brex opens accounts by application and approves each one.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

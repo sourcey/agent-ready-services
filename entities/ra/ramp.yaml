@@ -1,0 +1,342 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe4g7kgfr7x2skc0vt3
+  slug: ramp
+  slug_aliases: []
+  name: Ramp
+  domains:
+    - value: ramp.com
+      role: primary
+      valid_from: 2026-07-27T07:37:55.261Z
+  category: finance-accounting
+sources:
+  - source_id: source_ramp_vendors
+    url: https://docs.ramp.com/developer-api/v1/api/vendors
+  - source_id: source_ramp_openapi
+    url: https://docs.ramp.com/openapi/developer-api.json
+  - source_id: source_ramp_llms
+    url: https://docs.ramp.com/llms.txt
+  - source_id: source_ramp_auth
+    url: https://docs.ramp.com/developer-api/v1/authorization
+  - source_id: source_ramp_apply
+    url: https://support.ramp.com/applying-and-signing-up-for-ramp-us-based
+  - source_id: source_ramp_pricing
+    url: https://ramp.com/pricing
+  - source_id: source_ramp_terms
+    url: https://ramp.com/legal/customer-terms/platform-agreement/platform-agreement
+declarations:
+  - declaration_id: declaration_ramp_ramp_developer_api_payee_create
+    scope:
+      product:
+        key: ramp-developer-api
+        name: Ramp Developer API
+      job:
+        key: payee-create
+        name: Add a payee
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.ramp.com/developer/v1/vendors
+        body:
+          media_type: application/json
+        spec:
+          url: https://docs.ramp.com/openapi/developer-api.json
+          key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: ramp
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe4g7kgfr7x2skc0vt3
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.ramp.com/developer-api/v1/api/vendors
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: ramp
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.ramp.com/developer-api/v1/authorization
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: ramp
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://ramp.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: ramp
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://app.ramp.com/sign-up
+        roles:
+          - access
+        operated_by_participant_id: ramp
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://ramp.com/legal/customer-terms/platform-agreement/platform-agreement
+        roles:
+          - terms
+        operated_by_participant_id: ramp
+        standard_bindings: []
+      - resource_id: application-qualifications
+        uri: https://support.ramp.com/applying-and-signing-up-for-ramp-us-based
+        roles:
+          - eligibility
+          - documentation
+        operated_by_participant_id: ramp
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: service-api
+        uri: https://api.ramp.com
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: ramp
+        standard_bindings: []
+      - endpoint_id: account-application
+        uri: https://app.ramp.com/sign-up
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: ramp
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: ramp
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: ramp
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: ramp-scope-0
+        source_id: source_ramp_vendors
+        target:
+          node_kind: declaration
+          node_id: declaration_ramp_ramp_developer_api_payee_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: ramp-participant
+        source_id: source_ramp_terms
+        target:
+          node_kind: participant
+          node_id: ramp
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: ramp-resource-api-reference
+        source_id: source_ramp_vendors
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-resource-authentication
+        source_id: source_ramp_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-resource-pricing
+        source_id: source_ramp_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-resource-account-signup
+        source_id: source_ramp_apply
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-resource-service-terms
+        source_id: source_ramp_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-resource-application-qualifications
+        source_id: source_ramp_apply
+        target:
+          node_kind: resource
+          node_id: application-qualifications
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-endpoint-service-api
+        source_id: source_ramp_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-endpoint-account-application
+        source_id: source_ramp_apply
+        target:
+          node_kind: endpoint
+          node_id: account-application
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: ramp-interface-service-api
+        source_id: source_ramp_vendors
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: ramp-interface-api-authentication
+        source_id: source_ramp_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: ramp-relation-reference-describes-api
+        source_id: source_ramp_vendors
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: ramp-relation-authentication-authenticates-api
+        source_id: source_ramp_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: ramp-relation-signup-precedes-authentication
+        source_id: source_ramp_apply
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: ramp-operation-job-0
+        source_id: source_ramp_vendors
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: ramp-operation-job-1
+        source_id: source_ramp_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+      - source_binding_id: ramp-operation-job-2
+        source_id: source_ramp_llms
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec
+      - source_binding_id: ramp-exclusion-free-job-no-checkout
+        source_id: source_ramp_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: Ramp's base plan is free to start, and adding a vendor costs nothing.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
