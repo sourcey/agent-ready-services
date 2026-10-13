@@ -1,0 +1,346 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyygma823nzqdmttehnq0v5m
+  slug: msg91
+  slug_aliases: []
+  name: MSG91
+  domains:
+    - value: msg91.com
+      role: primary
+      valid_from: 2026-08-01T07:24:20.328Z
+  category: communication
+sources:
+  - source_id: source_msg91_send_sms
+    url: https://docs.msg91.com/sms/send-sms
+  - source_id: source_msg91_authkey
+    url: https://msg91.com/help/api/where-can-i-find-my-authentication-ke
+  - source_id: source_msg91_credits
+    url: https://msg91.com/help/credits
+  - source_id: source_msg91_emandate
+    url: https://msg91.com/help/credits/how-to-create-an-e-mandate-for-auto-recharge
+  - source_id: source_msg91_home
+    url: https://msg91.com/
+  - source_id: source_msg91_terms
+    url: https://msg91.com/terms-of-use
+declarations:
+  - declaration_id: declaration_msg91_msg91_sms_sms_send
+    scope:
+      product:
+        key: msg91-sms
+        name: MSG91 SMS
+      job:
+        key: sms-send
+        name: Send a text message
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://control.msg91.com/api/v5/flow
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: msg91
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyygma823nzqdmttehnq0v5m
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.msg91.com/sms/send-sms
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://msg91.com/help/api/where-can-i-find-my-authentication-ke
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://msg91.com/help/credits
+        roles:
+          - pricing
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://control.msg91.com/signin/
+        roles:
+          - checkout
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://msg91.com/signup
+        roles:
+          - access
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://msg91.com/terms-of-use
+        roles:
+          - terms
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - resource_id: auto-recharge
+        uri: https://msg91.com/help/credits/how-to-create-an-e-mandate-for-auto-recharge
+        roles:
+          - documentation
+        operated_by_participant_id: msg91
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://msg91.com/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://control.msg91.com/api/v5
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: msg91
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: msg91
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: msg91
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: msg91-scope-0
+        source_id: source_msg91_send_sms
+        target:
+          node_kind: declaration
+          node_id: declaration_msg91_msg91_sms_sms_send
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: msg91-participant
+        source_id: source_msg91_terms
+        target:
+          node_kind: participant
+          node_id: msg91
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: msg91-resource-api-reference
+        source_id: source_msg91_send_sms
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-resource-authentication
+        source_id: source_msg91_authkey
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-resource-pricing
+        source_id: source_msg91_credits
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-resource-checkout
+        source_id: source_msg91_emandate
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-resource-checkout-1
+        source_id: source_msg91_send_sms
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-resource-account-signup
+        source_id: source_msg91_home
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-resource-service-terms
+        source_id: source_msg91_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-resource-auto-recharge
+        source_id: source_msg91_emandate
+        target:
+          node_kind: resource
+          node_id: auto-recharge
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-endpoint-registration
+        source_id: source_msg91_home
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-endpoint-service-api
+        source_id: source_msg91_send_sms
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: msg91-interface-service-api
+        source_id: source_msg91_send_sms
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: msg91-interface-api-authentication
+        source_id: source_msg91_authkey
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: msg91-relation-reference-describes-api
+        source_id: source_msg91_send_sms
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: msg91-relation-authentication-authenticates-api
+        source_id: source_msg91_authkey
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: msg91-relation-signup-precedes-authentication
+        source_id: source_msg91_home
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: msg91-operation-job-0
+        source_id: source_msg91_send_sms
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: msg91-exclusion-separate-eligibility-resource
+        source_id: source_msg91_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
