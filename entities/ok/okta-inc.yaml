@@ -1,0 +1,316 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyyjpn04p2nymzqhm9m613vw
+  slug: okta-inc
+  slug_aliases: []
+  name: Okta, Inc.
+  domains:
+    - value: okta.com
+      role: primary
+      valid_from: 2026-08-01T11:36:40.331Z
+  category: auth-security
+sources:
+  - source_id: source_okta_inc_create_user
+    url: https://developer.okta.com/docs/api/openapi/okta-management/management/tags/user/other/createuser
+  - source_id: source_okta_inc_openapi
+    url: https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml
+  - source_id: source_okta_inc_api_token
+    url: https://developer.okta.com/docs/guides/create-an-api-token/main/
+  - source_id: source_okta_inc_pricing
+    url: https://www.okta.com/pricing/
+  - source_id: source_okta_inc_terms
+    url: https://www.okta.com/legal/terms-of-service/
+declarations:
+  - declaration_id: declaration_okta_inc_okta_workforce_identity_user_create
+    scope:
+      product:
+        key: okta-workforce-identity
+        name: Okta Workforce Identity
+      job:
+        key: user-create
+        name: Create a user
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: spec
+        spec_url: https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml
+        method: POST
+        path: /api/v1/users
+        key_operations: null
+    job_bindings: []
+    participants:
+      - participant_id: okta-inc
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyyjpn04p2nymzqhm9m613vw
+    resources:
+      - resource_id: api-reference
+        uri: https://developer.okta.com/docs/api/openapi/okta-management/management/tags/user/other/createuser
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.okta.com/docs/guides/create-an-api-token/main/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.okta.com/pricing/
+        roles:
+          - pricing
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://www.okta.com/contact-sales/
+        roles:
+          - checkout
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.okta.com/free-trial/
+        roles:
+          - access
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.okta.com/legal/terms-of-service/
+        roles:
+          - terms
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.okta.com/free-trial/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+      - endpoint_id: sales
+        uri: https://www.okta.com/contact-sales/
+        transport: http
+        roles:
+          - access_request
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - sales
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: okta-inc
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: okta-inc-scope-0
+        source_id: source_okta_inc_create_user
+        target:
+          node_kind: declaration
+          node_id: declaration_okta_inc_okta_workforce_identity_user_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: okta-inc-participant
+        source_id: source_okta_inc_terms
+        target:
+          node_kind: participant
+          node_id: okta-inc
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: okta-inc-resource-api-reference
+        source_id: source_okta_inc_create_user
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-resource-authentication
+        source_id: source_okta_inc_api_token
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-resource-pricing
+        source_id: source_okta_inc_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-resource-checkout
+        source_id: source_okta_inc_pricing
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-resource-account-signup
+        source_id: source_okta_inc_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-resource-service-terms
+        source_id: source_okta_inc_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-endpoint-registration
+        source_id: source_okta_inc_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-endpoint-sales
+        source_id: source_okta_inc_pricing
+        target:
+          node_kind: endpoint
+          node_id: sales
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-interface-service-api
+        source_id: source_okta_inc_create_user
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-interface-api-authentication
+        source_id: source_okta_inc_api_token
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: okta-inc-relation-reference-describes-api
+        source_id: source_okta_inc_create_user
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: okta-inc-relation-authentication-authenticates-api
+        source_id: source_okta_inc_api_token
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: okta-inc-relation-signup-precedes-authentication
+        source_id: source_okta_inc_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: okta-inc-operation-job-0
+        source_id: source_okta_inc_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /spec_url
+          - /method
+          - /path
+      - source_binding_id: okta-inc-exclusion-separate-eligibility-resource
+        source_id: source_okta_inc_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
