@@ -43,7 +43,13 @@ declarations:
           media_type: application/json
         spec:
           url: https://docs.vast.ai/api-reference/openapi.yaml
-          key_operations: null
+          key_operations:
+            create:
+              method: POST
+              path: /api/v0/auth/apikeys
+            revoke:
+              method: DELETE
+              path: "/api/v0/auth/apikeys/{id}"
     job_bindings: []
     participants:
       - participant_id: vast-ai
