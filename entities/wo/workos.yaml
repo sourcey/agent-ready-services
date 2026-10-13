@@ -1,0 +1,442 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyygma822smsegab8rym0sqk
+  slug: workos
+  slug_aliases: []
+  name: WorkOS
+  domains:
+    - value: workos.com
+      role: primary
+      valid_from: 2026-07-31T23:20:01.615Z
+  category: auth-security
+sources:
+  - source_id: source_workos_create_user
+    url: https://workos.com/docs/reference/authkit/user/create
+  - source_id: source_workos_reference
+    url: https://workos.com/docs/reference
+  - source_id: source_workos_openapi
+    url: https://workos.com/docs/openapi.json
+  - source_id: source_workos_auth
+    url: https://workos.com/docs/reference/api-authentication
+  - source_id: source_workos_mcp
+    url: https://workos.com/docs/mcp
+  - source_id: source_workos_mcp_tools
+    url: https://github.com/workos/skills/blob/main/mcp/README.md
+  - source_id: source_workos_pricing
+    url: https://workos.com/pricing
+  - source_id: source_workos_terms
+    url: https://workos.com/legal/terms-of-service
+declarations:
+  - declaration_id: declaration_workos_workos_authkit_user_create
+    scope:
+      product:
+        key: workos-authkit
+        name: WorkOS AuthKit
+      job:
+        key: user-create
+        name: Create a user
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.workos.com/user_management/users
+        body:
+          media_type: application/json
+        spec:
+          url: https://workos.com/docs/openapi.json
+          key_operations: null
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: mutate
+    job_bindings: []
+    participants:
+      - participant_id: workos
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyygma822smsegab8rym0sqk
+    resources:
+      - resource_id: api-reference
+        uri: https://workos.com/docs/reference/authkit/user/create
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://workos.com/docs/reference/api-authentication
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://workos.com/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://workos.com/signup
+        roles:
+          - access
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://workos.com/legal/terms-of-service
+        roles:
+          - terms
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - resource_id: api-reference-index
+        uri: https://workos.com/docs/reference
+        roles:
+          - discovery
+          - documentation
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://workos.com/docs/mcp
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: workos
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://workos.com/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.workos.com
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.workos.com/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: workos
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+          - api-reference-index
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: workos
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: workos
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: workos-scope-0
+        source_id: source_workos_create_user
+        target:
+          node_kind: declaration
+          node_id: declaration_workos_workos_authkit_user_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: workos-scope-1
+        source_id: source_workos_mcp_tools
+        target:
+          node_kind: declaration
+          node_id: declaration_workos_workos_authkit_user_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: workos-participant
+        source_id: source_workos_terms
+        target:
+          node_kind: participant
+          node_id: workos
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: workos-resource-api-reference
+        source_id: source_workos_create_user
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-resource-authentication
+        source_id: source_workos_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-resource-pricing
+        source_id: source_workos_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-resource-account-signup
+        source_id: source_workos_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-resource-service-terms
+        source_id: source_workos_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-resource-api-reference-index
+        source_id: source_workos_reference
+        target:
+          node_kind: resource
+          node_id: api-reference-index
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-resource-mcp-documentation
+        source_id: source_workos_mcp
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-endpoint-registration
+        source_id: source_workos_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-endpoint-service-api
+        source_id: source_workos_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-endpoint-mcp-server
+        source_id: source_workos_mcp_tools
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: workos-interface-service-api
+        source_id: source_workos_create_user
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: workos-interface-mcp-server
+        source_id: source_workos_mcp_tools
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: workos-interface-api-authentication
+        source_id: source_workos_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: workos-relation-reference-describes-api
+        source_id: source_workos_create_user
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: workos-relation-authentication-authenticates-api
+        source_id: source_workos_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: workos-relation-documentation-describes-mcp
+        source_id: source_workos_mcp
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: workos-relation-signup-precedes-authentication
+        source_id: source_workos_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: workos-operation-job-0
+        source_id: source_workos_create_user
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: workos-operation-job-1
+        source_id: source_workos_reference
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec
+      - source_binding_id: workos-operation-job-mcp-0
+        source_id: source_workos_mcp_tools
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: workos-exclusion-free-job-no-checkout
+        source_id: source_workos_pricing
+        target:
+          node_kind: surface_exclusion
+          node_id: free-job-no-checkout
+        field_paths:
+          - /role
+          - /rationale
+      - source_binding_id: workos-exclusion-separate-eligibility-resource
+        source_id: source_workos_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: free-job-no-checkout
+        role: checkout
+        rationale: WorkOS AuthKit is free for the first million monthly active users, and staging environments are free.
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
