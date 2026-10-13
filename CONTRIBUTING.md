@@ -61,7 +61,10 @@ refuses a job that is not in it. These are the jobs today:
 | --- | --- | --- |
 | `bounty-claim` | bounty-board | Claim a bounty |
 | `bucket-create` | cloud-platform | Create a storage bucket |
+| `cad-document-create` | cad | Create a CAD document |
 | `chat-message-post` | team-chat | Post a message |
+| `compute-instance-create` | compute | Create a compute instance |
+| `content-entry-create` | content-management | Create a content entry |
 | `crm-contact-create` | crm | Create a contact |
 | `database-create` | database | Create a database deployment |
 | `deployment-create` | frontend-hosting | Create a deployment |
@@ -69,14 +72,25 @@ refuses a job that is not in it. These are the jobs today:
 | `email-send` | email | Send an email |
 | `error-event-report` | error-tracking | Report an error |
 | `feature-flag-create` | feature-flags | Create a feature flag |
+| `incident-declare` | incident-management | Declare an incident |
+| `invoice-create` | invoicing | Create an invoice |
 | `model-chat-stream-tool` | model-api | Stream a completion with a tool call |
 | `monitor-create` | monitoring | Create a monitor |
+| `payee-create` | business-banking | Add a payee |
 | `payment-create` | payments | Create a payment link |
+| `product-event-capture` | product-analytics | Capture a product event |
 | `repository-create` | repository-hosting | Create a repository |
+| `sandbox-code-run` | code-sandbox | Run code in a sandbox |
 | `search-record-find` | search | Find a record by search |
+| `signature-envelope-send` | e-signature | Send an envelope for signature |
 | `sms-send` | sms-messaging | Send a text message |
+| `support-ticket-create` | customer-support | Create a support ticket |
+| `table-record-create` | tables | Add a table record |
+| `task-create` | task-tracking | Create a task |
 | `user-create` | auth | Create a user |
 | `vector-upsert-query` | vector-database | Find a vector by query |
+| `video-asset-create` | video | Create a video asset |
+| `workflow-run` | workflow-automation | Run a workflow |
 | `workspace-page-create` | workspace | Create a page |
 
 Write the job's key and name in `scope.job` exactly as the library has them.
