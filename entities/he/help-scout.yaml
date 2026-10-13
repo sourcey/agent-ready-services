@@ -1,0 +1,306 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe3c80bycfhyx7m3jym
+  slug: help-scout
+  slug_aliases: []
+  name: Help Scout
+  domains:
+    - value: helpscout.com
+      role: primary
+      valid_from: 2026-07-27T07:40:56.959Z
+  category: support
+sources:
+  - source_id: source_help_scout_create_conversation
+    url: https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/
+  - source_id: source_help_scout_auth
+    url: https://developer.helpscout.com/mailbox-api/overview/authentication/
+  - source_id: source_help_scout_llms
+    url: https://developer.helpscout.com/llms.txt
+  - source_id: source_help_scout_pricing
+    url: https://www.helpscout.com/pricing/
+  - source_id: source_help_scout_terms
+    url: https://www.helpscout.com/company/legal/terms-of-service/
+declarations:
+  - declaration_id: declaration_help_scout_help_scout_mailbox_api_support_ticket_create
+    scope:
+      product:
+        key: help-scout-mailbox-api
+        name: Help Scout Mailbox API
+      job:
+        key: support-ticket-create
+        name: Create a support ticket
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://api.helpscout.net/v2/conversations
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: help-scout
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe3c80bycfhyx7m3jym
+    resources:
+      - resource_id: api-reference
+        uri: https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.helpscout.com/mailbox-api/overview/authentication/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.helpscout.com/pricing/
+        roles:
+          - pricing
+          - checkout
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://secure.helpscout.net/members/register/57/
+        roles:
+          - access
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.helpscout.com/company/legal/terms-of-service/
+        roles:
+          - terms
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://secure.helpscout.net/members/register/57/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://api.helpscout.net/v2
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: help-scout
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: help-scout-scope-0
+        source_id: source_help_scout_create_conversation
+        target:
+          node_kind: declaration
+          node_id: declaration_help_scout_help_scout_mailbox_api_support_ticket_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: help-scout-participant
+        source_id: source_help_scout_terms
+        target:
+          node_kind: participant
+          node_id: help-scout
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: help-scout-resource-api-reference
+        source_id: source_help_scout_create_conversation
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-resource-authentication
+        source_id: source_help_scout_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-resource-pricing
+        source_id: source_help_scout_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-resource-account-signup
+        source_id: source_help_scout_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-resource-service-terms
+        source_id: source_help_scout_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-endpoint-registration
+        source_id: source_help_scout_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-endpoint-service-api
+        source_id: source_help_scout_llms
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-interface-service-api
+        source_id: source_help_scout_create_conversation
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-interface-api-authentication
+        source_id: source_help_scout_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: help-scout-relation-reference-describes-api
+        source_id: source_help_scout_create_conversation
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: help-scout-relation-authentication-authenticates-api
+        source_id: source_help_scout_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: help-scout-relation-signup-precedes-authentication
+        source_id: source_help_scout_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: help-scout-operation-job-0
+        source_id: source_help_scout_create_conversation
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+      - source_binding_id: help-scout-exclusion-separate-eligibility-resource
+        source_id: source_help_scout_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z

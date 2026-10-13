@@ -1,0 +1,298 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe6eqd854n10kf92e5b
+  slug: zendesk
+  slug_aliases: []
+  name: Zendesk
+  domains:
+    - value: zendesk.com
+      role: primary
+      valid_from: 2026-07-27T07:42:27.282Z
+  category: support
+sources:
+  - source_id: source_zendesk_tickets
+    url: https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/
+  - source_id: source_zendesk_oas
+    url: https://developer.zendesk.com/zendesk/oas.yaml
+  - source_id: source_zendesk_auth
+    url: https://developer.zendesk.com/api-reference/introduction/security-and-auth/
+  - source_id: source_zendesk_pricing
+    url: https://www.zendesk.com/pricing/
+  - source_id: source_zendesk_terms
+    url: https://www.zendesk.com/company/agreements-and-terms/main-services-agreement/
+declarations:
+  - declaration_id: declaration_zendesk_zendesk_support_support_ticket_create
+    scope:
+      product:
+        key: zendesk-support
+        name: Zendesk Support
+      job:
+        key: support-ticket-create
+        name: Create a support ticket
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: spec
+        spec_url: https://developer.zendesk.com/zendesk/oas.yaml
+        method: POST
+        path: /api/v2/tickets
+        key_operations:
+          create:
+            method: POST
+            path: /api/v2/api_tokens
+          revoke:
+            method: DELETE
+            path: /api/v2/api_tokens/{id}
+    job_bindings: []
+    participants:
+      - participant_id: zendesk
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe6eqd854n10kf92e5b
+    resources:
+      - resource_id: api-reference
+        uri: https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://developer.zendesk.com/api-reference/introduction/security-and-auth/
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://www.zendesk.com/pricing/
+        roles:
+          - pricing
+          - checkout
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://www.zendesk.com/register/
+        roles:
+          - access
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.zendesk.com/company/agreements-and-terms/main-services-agreement/
+        roles:
+          - terms
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://www.zendesk.com/register/
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids: []
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: zendesk
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: zendesk-scope-0
+        source_id: source_zendesk_tickets
+        target:
+          node_kind: declaration
+          node_id: declaration_zendesk_zendesk_support_support_ticket_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: zendesk-participant
+        source_id: source_zendesk_terms
+        target:
+          node_kind: participant
+          node_id: zendesk
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: zendesk-resource-api-reference
+        source_id: source_zendesk_tickets
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-resource-authentication
+        source_id: source_zendesk_auth
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-resource-pricing
+        source_id: source_zendesk_pricing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-resource-account-signup
+        source_id: source_zendesk_pricing
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-resource-service-terms
+        source_id: source_zendesk_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-endpoint-registration
+        source_id: source_zendesk_pricing
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-interface-service-api
+        source_id: source_zendesk_tickets
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-interface-api-authentication
+        source_id: source_zendesk_auth
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: zendesk-relation-reference-describes-api
+        source_id: source_zendesk_tickets
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zendesk-relation-authentication-authenticates-api
+        source_id: source_zendesk_auth
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zendesk-relation-signup-precedes-authentication
+        source_id: source_zendesk_pricing
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: zendesk-operation-job-0
+        source_id: source_zendesk_tickets
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /spec_url
+          - /method
+          - /path
+          - /key_operations
+      - source_binding_id: zendesk-operation-job-1
+        source_id: source_zendesk_oas
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /spec_url
+          - /key_operations
+      - source_binding_id: zendesk-exclusion-separate-eligibility-resource
+        source_id: source_zendesk_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
