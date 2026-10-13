@@ -1,0 +1,432 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_01kyh8fpe5qw7f7jmdejafprke
+  slug: runpod
+  slug_aliases: []
+  name: Runpod
+  domains:
+    - value: runpod.io
+      role: primary
+      valid_from: 2026-07-27T07:42:06.099Z
+  category: ai-ml
+sources:
+  - source_id: source_runpod_create_pod
+    url: https://docs.runpod.io/api-reference/pods/POST/pods
+  - source_id: source_runpod_openapi
+    url: https://rest.runpod.io/v1/openapi.json
+  - source_id: source_runpod_credentials
+    url: https://docs.runpod.io/get-started/credentials
+  - source_id: source_runpod_mcp
+    url: https://docs.runpod.io/get-started/mcp-servers
+  - source_id: source_runpod_mcp_tools
+    url: https://github.com/runpod/runpod-mcp/blob/main/src/specgen/generated/tools.gen.ts
+  - source_id: source_runpod_billing
+    url: https://docs.runpod.io/accounts-billing/billing
+  - source_id: source_runpod_accounts
+    url: https://docs.runpod.io/accounts-billing/manage-accounts
+  - source_id: source_runpod_tutorial
+    url: https://docs.runpod.io/tutorials/serverless/run-gemma-7b
+  - source_id: source_runpod_terms
+    url: https://www.runpod.io/legal/terms-of-service
+declarations:
+  - declaration_id: declaration_runpod_runpod_pods_compute_instance_create
+    scope:
+      product:
+        key: runpod-pods
+        name: Runpod Pods
+      job:
+        key: compute-instance-create
+        name: Create a compute instance
+    job_operations:
+      - operation_id: job
+        interface_id: service-api
+        kind: http
+        endpoint_id: service-api
+        headers: []
+        method: POST
+        url: https://rest.runpod.io/v1/pods
+        body:
+          media_type: application/json
+        spec:
+          url: https://rest.runpod.io/v1/openapi.json
+          key_operations: null
+      - operation_id: job-mcp
+        interface_id: mcp-server
+        kind: mcp
+        endpoint_id: mcp-server
+        tool: create-pod
+    job_bindings: []
+    participants:
+      - participant_id: runpod
+        roles:
+          - subject
+          - access_operator
+          - identity_provider
+          - payment_provider
+          - provisioning_provider
+          - operations_provider
+        identity:
+          entity_id: ent_01kyh8fpe5qw7f7jmdejafprke
+    resources:
+      - resource_id: api-reference
+        uri: https://docs.runpod.io/api-reference/pods/POST/pods
+        roles:
+          - discovery
+          - provisioning
+          - operations
+          - documentation
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.runpod.io/get-started/credentials
+        roles:
+          - authentication
+          - documentation
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://docs.runpod.io/accounts-billing/billing
+        roles:
+          - pricing
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - resource_id: checkout
+        uri: https://console.runpod.io/user/billing
+        roles:
+          - checkout
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - resource_id: account-signup
+        uri: https://console.runpod.io/signup
+        roles:
+          - access
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - resource_id: service-terms
+        uri: https://www.runpod.io/legal/terms-of-service
+        roles:
+          - terms
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - resource_id: mcp-documentation
+        uri: https://docs.runpod.io/get-started/mcp-servers
+        roles:
+          - operations
+          - documentation
+        operated_by_participant_id: runpod
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: registration
+        uri: https://console.runpod.io/signup
+        transport: http
+        roles:
+          - registration
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - endpoint_id: service-api
+        uri: https://rest.runpod.io/v1
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - endpoint_id: mcp-server
+        uri: https://mcp.getrunpod.io/
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: runpod
+        standard_bindings: []
+    interfaces:
+      - interface_id: service-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - service-api
+        resource_ids:
+          - api-reference
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - interface_id: mcp-server
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-server
+        resource_ids:
+          - mcp-documentation
+        operated_by_participant_id: runpod
+        standard_bindings: []
+      - interface_id: api-authentication
+        modality: network_api
+        functions:
+          - authentication
+        endpoint_ids: []
+        resource_ids:
+          - authentication
+        operated_by_participant_id: runpod
+        standard_bindings: []
+    relations:
+      - relation_id: reference-describes-api
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: api-reference
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: authentication-authenticates-api
+        kind: authenticates
+        from:
+          node_kind: interface
+          node_id: api-authentication
+        to:
+          node_kind: interface
+          node_id: service-api
+      - relation_id: documentation-describes-mcp
+        kind: describes
+        from:
+          node_kind: resource
+          node_id: mcp-documentation
+        to:
+          node_kind: interface
+          node_id: mcp-server
+      - relation_id: signup-precedes-authentication
+        kind: precedes
+        from:
+          node_kind: resource
+          node_id: account-signup
+        to:
+          node_kind: interface
+          node_id: api-authentication
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: runpod-scope-0
+        source_id: source_runpod_create_pod
+        target:
+          node_kind: declaration
+          node_id: declaration_runpod_runpod_pods_compute_instance_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: runpod-scope-1
+        source_id: source_runpod_mcp_tools
+        target:
+          node_kind: declaration
+          node_id: declaration_runpod_runpod_pods_compute_instance_create
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+      - source_binding_id: runpod-participant
+        source_id: source_runpod_terms
+        target:
+          node_kind: participant
+          node_id: runpod
+        field_paths:
+          - /roles
+          - /identity
+      - source_binding_id: runpod-resource-api-reference
+        source_id: source_runpod_create_pod
+        target:
+          node_kind: resource
+          node_id: api-reference
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-resource-authentication
+        source_id: source_runpod_credentials
+        target:
+          node_kind: resource
+          node_id: authentication
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-resource-pricing
+        source_id: source_runpod_billing
+        target:
+          node_kind: resource
+          node_id: pricing
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-resource-checkout
+        source_id: source_runpod_accounts
+        target:
+          node_kind: resource
+          node_id: checkout
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-resource-account-signup
+        source_id: source_runpod_tutorial
+        target:
+          node_kind: resource
+          node_id: account-signup
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-resource-service-terms
+        source_id: source_runpod_terms
+        target:
+          node_kind: resource
+          node_id: service-terms
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-resource-mcp-documentation
+        source_id: source_runpod_mcp
+        target:
+          node_kind: resource
+          node_id: mcp-documentation
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-endpoint-registration
+        source_id: source_runpod_tutorial
+        target:
+          node_kind: endpoint
+          node_id: registration
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-endpoint-service-api
+        source_id: source_runpod_openapi
+        target:
+          node_kind: endpoint
+          node_id: service-api
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-endpoint-mcp-server
+        source_id: source_runpod_mcp_tools
+        target:
+          node_kind: endpoint
+          node_id: mcp-server
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+      - source_binding_id: runpod-interface-service-api
+        source_id: source_runpod_create_pod
+        target:
+          node_kind: interface
+          node_id: service-api
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: runpod-interface-mcp-server
+        source_id: source_runpod_mcp_tools
+        target:
+          node_kind: interface
+          node_id: mcp-server
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: runpod-interface-api-authentication
+        source_id: source_runpod_credentials
+        target:
+          node_kind: interface
+          node_id: api-authentication
+        field_paths:
+          - /modality
+          - /functions
+          - /resource_ids
+          - /operated_by_participant_id
+      - source_binding_id: runpod-relation-reference-describes-api
+        source_id: source_runpod_create_pod
+        target:
+          node_kind: relation
+          node_id: reference-describes-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: runpod-relation-authentication-authenticates-api
+        source_id: source_runpod_credentials
+        target:
+          node_kind: relation
+          node_id: authentication-authenticates-api
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: runpod-relation-documentation-describes-mcp
+        source_id: source_runpod_mcp
+        target:
+          node_kind: relation
+          node_id: documentation-describes-mcp
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: runpod-relation-signup-precedes-authentication
+        source_id: source_runpod_tutorial
+        target:
+          node_kind: relation
+          node_id: signup-precedes-authentication
+        field_paths:
+          - /kind
+          - /from
+          - /to
+      - source_binding_id: runpod-operation-job-0
+        source_id: source_runpod_create_pod
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+      - source_binding_id: runpod-operation-job-1
+        source_id: source_runpod_openapi
+        target:
+          node_kind: job_operation
+          node_id: job
+        field_paths:
+          - /url
+          - /spec
+      - source_binding_id: runpod-operation-job-mcp-0
+        source_id: source_runpod_mcp_tools
+        target:
+          node_kind: job_operation
+          node_id: job-mcp
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+      - source_binding_id: runpod-exclusion-separate-eligibility-resource
+        source_id: source_runpod_terms
+        target:
+          node_kind: surface_exclusion
+          node_id: separate-eligibility-resource
+        field_paths:
+          - /role
+          - /rationale
+    surface_exclusions:
+      - exclusion_id: separate-eligibility-resource
+        role: eligibility
+        rationale: Access conditions are published within the vendor's terms; no separate eligibility resource is declared.
+    authority_intent: community
+    declared_at: 2026-10-13T12:00:00.000Z
