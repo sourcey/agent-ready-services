@@ -36,7 +36,7 @@ declarations:
       product: { key: datadog-api, name: Datadog API }
       job: { key: monitor-create, name: Create a monitor }
     job_operations:
-      - { operation_id: create-monitor, interface_id: monitor-api, kind: http, endpoint_id: datadog-api, method: POST, url: https://api.datadoghq.com/api/v1/monitor, headers: [], body: { media_type: application/json }, spec: { url: https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml, key_operations: null } }
+      - { operation_id: create-monitor, interface_id: monitor-api, kind: http, endpoint_id: datadog-api, method: POST, url: https://api.datadoghq.com/api/v1/monitor, headers: [], body: { media_type: application/json }, spec: { url: https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml, key_operations: { create: { method: POST, path: /api/v1/api_key }, revoke: { method: DELETE, path: "/api/v1/api_key/{key}" } } } }
       - { operation_id: datadog-mcp, interface_id: datadog-mcp, kind: mcp, endpoint_id: mcp-server, tool: create_datadog_monitor }
     job_bindings: []
     participants:
