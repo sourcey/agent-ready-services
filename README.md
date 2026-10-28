@@ -47,10 +47,8 @@ Sourcey follows the job along six steps:
 | Confirm | Can the agent tell a failure from a success by typed errors? |
 | Sustain | Can the agent keep its access alive and revoke it without a person? |
 
-Each card also says where the job itself stands: **Job verified** once a run
-has done it, **Job reachable, not yet run** when an interface for it answers
-(or, where it has no public endpoint, the vendor's spec covers it), or no
-machine interface performs it.
+**Job verified** appears only after a verified run completes the job. Finding
+an interface is part of the assessment, not proof that the job was completed.
 
 Every card carries one letter, from A+ to F, for the kind of person-step the
 path needs: the heaviest kind anywhere on the path sets it, and A allows one
@@ -66,8 +64,7 @@ step (a listing that names no interface for the job is F):
 | D | Access depends on sales or approval. |
 | F | No machine interface for the job. |
 
-Every published card is graded from its listing and its probes (labelled
-**Probed** until a run of the job verifies it). A
+Every published card is graded from its listing and its probes. A
 request the service did not answer (a timeout, a 5xx, a rate limit) sets no
 fact, and the service is probed again; a document left unanswered on every
 probe for at least an hour, with no answer between, is read as absent. A job
@@ -76,7 +73,7 @@ interface performs the job, and a run of it is proof, not the grade: it marks
 the job verified and never changes a step or the letter. Only an account
 holder runs one, with Sourcey's GitHub Action, which attests the result
 (**Vendor-run, verified**); Sourcey never runs a job itself. The Action is not
-yet published; until it is, every card is Probed. Sourcey holds no keys for
+yet published. Sourcey holds no keys for
 any listed service.
 
 ## What lives here
@@ -101,15 +98,15 @@ Sourcey's Catalog holds every published card and its history.
 
 ## Add or improve a service
 
-[CONTRIBUTING.md](CONTRIBUTING.md) shows a listing and its job request first,
-then how to add a job binding. If you know the service but not the file format, open a
-[listing request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
-instead. Sourcey checks every company against its existing identity records
+[Submit a service](https://sourcey.com/submit?type=agent-readiness) on the web,
+or follow [CONTRIBUTING.md](CONTRIBUTING.md) to submit a listing in a pull
+request. Both paths use the same company listing rule. Sourcey checks every
+company against its existing identity records
 before a listing merges, so one company has one identity across all of
 Sourcey.
 
-After a listing merges, Sourcey reads the merged commit, runs discovery, the
-probes and any binding it may run, and publishes the card once every step of
+After a listing merges, Sourcey reads the merged commit, runs discovery and the
+probes, and publishes the card once every step of
 a path is settled, or at once as F when the listing names no interface for
 the job. A company can then claim its card, fix what stops the agent
 and ask for a re-probe. Each published card keeps its history, so an

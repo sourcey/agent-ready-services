@@ -16,16 +16,37 @@ attribution and corrections.
 
 ## Choose a path
 
-1. **Request a listing** when you know the service but not the file format.
-   Open a
-   [listing request](https://github.com/sourcey/agent-ready-services/issues/new?template=request-assessment.yml)
-   and Sourcey writes the listing.
+1. **Use the [submission form](https://sourcey.com/submit?type=agent-readiness)**
+   to describe the company and service without writing YAML. It shows the
+   company checks before anything is submitted.
 2. **Write the listing yourself** as YAML in a pull request. The example below
    is the bar for review.
 
 Sourcey's own listing form, API and MCP tool write the same
 `sourcey.agent-readiness-authoring/v1alpha1` file. There is no shorthand
 format.
+
+## What the checks mean
+
+1. **Company:** an existing company keeps its record. A new company must meet
+   the [automatic listing rule](https://sourcey.com/submit?type=agent-readiness),
+   or use paid human verification. The checklist shows what was found and which
+   requirement was not met. A check that could not finish is not a failed
+   requirement: retry it without paying.
+2. **Files:** `sourcey/validation` checks the exact changed YAML with the
+   repository's pinned Catalog Verifier and checks the commit sign-off. Fix
+   any reported file or field, then push the correction to the same pull request.
+3. **Admission:** `sourcey/admission` checks whether Sourcey can accept that
+   exact change. Both checks must pass. If company verification is needed,
+   the admission result links to the review and checkout; paying does not
+   bypass invalid, conflicting or unsupported facts.
+4. **Assessment:** an admitted listing triggers Sourcey's probes. Its report
+   card is published when the assessment settles. A green file check is not
+   a readiness grade.
+
+Human verification verifies the company. It does not buy a higher grade or
+the separate **Job verified** result. The optional vendor-run Action for that
+result is not published yet; a listing needs no job binding to be assessed.
 
 ## Before you edit
 
