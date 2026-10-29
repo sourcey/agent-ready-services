@@ -114,4 +114,4 @@ declarations:
     surface_exclusions:
       - { exclusion_id: worker-checkout, role: checkout, rationale: "The assessed worker earns the posted bounty; posting fees and x402 funding belong to the separate buyer flow." }
     authority_intent: entity
-    declared_at: 2026-09-15T11:15:00.000Z
+    declared_at: 2026-10-29T11:09:25.000Z
