@@ -128,7 +128,7 @@ declarations:
       - { source_binding_id: nitrosend-endpoint-mcp, source_id: source_nitrosend_skill, target: { node_kind: endpoint, node_id: nitrosend-mcp }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
       - { source_binding_id: nitrosend-interface-api, source_id: source_nitrosend_sending, target: { node_kind: interface, node_id: email-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
       - { source_binding_id: nitrosend-interface-mcp, source_id: source_nitrosend_rest, target: { node_kind: interface, node_id: nitrosend-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
-      - { source_binding_id: nitrosend-send-api, source_id: source_nitrosend_sending, target: { node_kind: job_operation, node_id: send-email-api }, field_paths: [/interface_id, /endpoint_id, /method, /url, /headers, /body] }
+      - { source_binding_id: nitrosend-send-api, source_id: source_nitrosend_sending, target: { node_kind: job_operation, node_id: send-email-api }, field_paths: [/interface_id, /endpoint_id, /method, /url, /body] }
       - { source_binding_id: nitrosend-send-api-spec, source_id: source_nitrosend_openapi, target: { node_kind: job_operation, node_id: send-email-api }, field_paths: [/spec] }
       - { source_binding_id: nitrosend-send-mcp, source_id: source_nitrosend_rest, target: { node_kind: job_operation, node_id: send-email-mcp }, field_paths: [/interface_id, /endpoint_id, /tool] }
       - { source_binding_id: nitrosend-registration, source_id: source_nitrosend_skill, target: { node_kind: account_operation, node_id: account-signup }, field_paths: [/interface_id, /role, /endpoint_id, /method, /url, /spec_url] }
