@@ -1,0 +1,141 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_nafeb24t2z23n3xdy1tzhdswbf
+  slug: nitrosend
+  slug_aliases: []
+  name: Nitrosend
+  domains:
+    - value: nitrosend.com
+      role: primary
+      valid_from: 2026-10-29T12:50:22.733Z
+  category: communication
+company:
+  summary: Nitrosend provides email campaigns, automation flows and transactional messaging through a dashboard, API and MCP.
+  site_url: https://nitrosend.com/
+sources:
+  - { source_id: source_nitrosend_home, url: https://nitrosend.com/ }
+  - { source_id: source_nitrosend_sending, url: https://docs.nitrosend.com/guides/sending-emails }
+  - { source_id: source_nitrosend_rest, url: https://docs.nitrosend.com/integrations/rest-api }
+  - { source_id: source_nitrosend_auth, url: https://docs.nitrosend.com/authentication }
+  - { source_id: source_nitrosend_skill, url: https://nitrosend.com/SKILL.md }
+  - { source_id: source_nitrosend_openapi, url: https://api.nitrosend.com/openapi.yaml }
+  - { source_id: source_nitrosend_pricing, url: https://nitrosend.com/pricing }
+  - { source_id: source_nitrosend_terms, url: https://nitrosend.com/terms }
+declarations:
+  - declaration_id: declaration_nitrosend_nitrosend_email_email_send
+    scope:
+      product: { key: nitrosend-email, name: Nitrosend email }
+      job: { key: email-send, name: Send an email }
+    job_operations:
+      - operation_id: send-email-api
+        interface_id: email-api
+        kind: http
+        endpoint_id: nitrosend-api
+        method: POST
+        url: https://api.nitrosend.com/v1/my/messages
+        headers: []
+        body: { media_type: application/json }
+        spec: { url: https://api.nitrosend.com/openapi.yaml }
+      - operation_id: send-email-mcp
+        interface_id: nitrosend-mcp
+        kind: mcp
+        endpoint_id: nitrosend-mcp
+        tool: nitro_send_message
+    account_operations:
+      - operation_id: account-signup
+        interface_id: email-api
+        role: registration
+        endpoint_id: nitrosend-api
+        method: POST
+        url: https://api.nitrosend.com/v1/signup
+        spec_url: https://api.nitrosend.com/openapi.yaml
+    job_bindings: []
+    participants:
+      - participant_id: nitrosend
+        roles: [subject, access_operator, identity_provider, operations_provider]
+        identity: { entity_id: ent_nafeb24t2z23n3xdy1tzhdswbf }
+    resources:
+      - resource_id: send-email
+        uri: https://docs.nitrosend.com/guides/sending-emails
+        roles: [documentation, operations, provisioning, status]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+      - resource_id: rest-api
+        uri: https://docs.nitrosend.com/integrations/rest-api
+        roles: [discovery, documentation, operations]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+      - resource_id: authentication
+        uri: https://docs.nitrosend.com/authentication
+        roles: [authentication, documentation, recovery]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+      - resource_id: agent-onboarding
+        uri: https://nitrosend.com/SKILL.md
+        roles: [discovery, documentation, access, authentication, provisioning, recovery]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://nitrosend.com/pricing
+        roles: [pricing]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+      - resource_id: terms
+        uri: https://nitrosend.com/terms
+        roles: [terms]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: nitrosend-api
+        uri: https://api.nitrosend.com
+        transport: http
+        roles: [service]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+      - endpoint_id: nitrosend-mcp
+        uri: https://api.nitrosend.com/mcp
+        transport: http
+        roles: [service, protected_resource]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+    interfaces:
+      - interface_id: email-api
+        modality: network_api
+        functions: [service_operation, authentication]
+        endpoint_ids: [nitrosend-api]
+        resource_ids: [send-email, rest-api, authentication, agent-onboarding]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+      - interface_id: nitrosend-mcp
+        modality: tool_server
+        functions: [service_operation, authentication]
+        endpoint_ids: [nitrosend-mcp]
+        resource_ids: [rest-api, authentication, agent-onboarding]
+        operated_by_participant_id: nitrosend
+        standard_bindings: []
+    relations: []
+    offer_relations: []
+    source_bindings:
+      - { source_binding_id: nitrosend-scope, source_id: source_nitrosend_sending, target: { node_kind: declaration, node_id: declaration_nitrosend_nitrosend_email_email_send }, field_paths: [/scope/product/name, /scope/job/name] }
+      - { source_binding_id: nitrosend-participant, source_id: source_nitrosend_home, target: { node_kind: participant, node_id: nitrosend }, field_paths: [/roles, /identity] }
+      - { source_binding_id: nitrosend-resource-sending, source_id: source_nitrosend_sending, target: { node_kind: resource, node_id: send-email }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-resource-rest, source_id: source_nitrosend_rest, target: { node_kind: resource, node_id: rest-api }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-resource-auth, source_id: source_nitrosend_auth, target: { node_kind: resource, node_id: authentication }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-resource-onboarding, source_id: source_nitrosend_skill, target: { node_kind: resource, node_id: agent-onboarding }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-resource-pricing, source_id: source_nitrosend_pricing, target: { node_kind: resource, node_id: pricing }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-resource-terms, source_id: source_nitrosend_terms, target: { node_kind: resource, node_id: terms }, field_paths: [/uri, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-endpoint-api, source_id: source_nitrosend_openapi, target: { node_kind: endpoint, node_id: nitrosend-api }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-endpoint-mcp, source_id: source_nitrosend_skill, target: { node_kind: endpoint, node_id: nitrosend-mcp }, field_paths: [/uri, /transport, /roles, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-interface-api, source_id: source_nitrosend_sending, target: { node_kind: interface, node_id: email-api }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-interface-mcp, source_id: source_nitrosend_rest, target: { node_kind: interface, node_id: nitrosend-mcp }, field_paths: [/modality, /functions, /endpoint_ids, /resource_ids, /operated_by_participant_id] }
+      - { source_binding_id: nitrosend-send-api, source_id: source_nitrosend_sending, target: { node_kind: job_operation, node_id: send-email-api }, field_paths: [/interface_id, /endpoint_id, /method, /url, /headers, /body] }
+      - { source_binding_id: nitrosend-send-api-spec, source_id: source_nitrosend_openapi, target: { node_kind: job_operation, node_id: send-email-api }, field_paths: [/spec] }
+      - { source_binding_id: nitrosend-send-mcp, source_id: source_nitrosend_rest, target: { node_kind: job_operation, node_id: send-email-mcp }, field_paths: [/interface_id, /endpoint_id, /tool] }
+      - { source_binding_id: nitrosend-registration, source_id: source_nitrosend_skill, target: { node_kind: account_operation, node_id: account-signup }, field_paths: [/interface_id, /role, /endpoint_id, /method, /url, /spec_url] }
+      - { source_binding_id: nitrosend-exclusion-eligibility, source_id: source_nitrosend_terms, target: { node_kind: surface_exclusion, node_id: service-terms-eligibility }, field_paths: [/role, /rationale] }
+      - { source_binding_id: nitrosend-exclusion-checkout, source_id: source_nitrosend_pricing, target: { node_kind: surface_exclusion, node_id: free-email-no-checkout }, field_paths: [/role, /rationale] }
+    surface_exclusions:
+      - { exclusion_id: service-terms-eligibility, role: eligibility, rationale: Access conditions are stated in Nitrosend's service terms. }
+      - { exclusion_id: free-email-no-checkout, role: checkout, rationale: Nitrosend's Free plan includes starter emails and a monthly sending allowance with no card required. }
+    authority_intent: entity
+    declared_at: 2026-10-29T12:50:22.733Z
