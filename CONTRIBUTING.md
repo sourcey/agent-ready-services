@@ -22,6 +22,9 @@ attribution and corrections.
 2. **Write the listing yourself** as YAML in a pull request. The example below
    is the bar for review.
 
+Open a pull request directly. An issue is optional for suggesting a service;
+it is not a reservation or a prerequisite for submitting one.
+
 Sourcey's own listing form, API and MCP tool write the same
 `sourcey.agent-readiness-authoring/v1alpha1` file. There is no shorthand
 format.
@@ -47,6 +50,25 @@ format.
 Human verification verifies the company. It does not buy a higher grade or
 the separate **Job verified** result. The optional vendor-run Action for that
 result is not published yet; a listing needs no job binding to be assessed.
+
+## Sign off your contribution
+
+Use `git commit --signoff` for every commit. This certifies the
+[Developer Certificate of Origin](https://developercertificate.org/), not a
+cryptographic signature or vendor ownership. No GPG setup is required. The
+form uses your signed-in Sourcey account and requires no Git commit.
+
+You can contribute as a community member. To attest the company's own record,
+use **Claim this record** on its Sourcey page after it is listed. Domain email,
+DNS TXT, an HTTPS file and signed inbound email are the available proof paths,
+subject to the claim page's current availability. A claim is free, targets the
+exact current company revision and does not sign offers or prove a readiness
+grade. Human verification and a verified run remain separate.
+
+If company verification is offered, follow the admission result's Sourcey
+link to review its scope and price and continue with the same pull request.
+You do not need a new issue, branch or submission. Correct unsupported facts
+instead; an unavailable check is a retry, never a payment requirement.
 
 ## Before you edit
 
