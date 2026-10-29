@@ -35,7 +35,7 @@ declarations:
         url: https://api.nitrosend.com/v1/my/messages
         headers: []
         body: { media_type: application/json }
-        spec: { url: https://api.nitrosend.com/openapi.yaml }
+        spec: { url: https://api.nitrosend.com/openapi.yaml, key_operations: null }
       - operation_id: send-email-mcp
         interface_id: nitrosend-mcp
         kind: mcp
