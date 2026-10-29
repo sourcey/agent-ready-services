@@ -3,12 +3,11 @@
 - Entity:
 - Product:
 - Job key:
-- Listing request issue:
 
 ## Contributor checks
 
 - [ ] This pull request changes Entity YAML only, or documentation and workflow files only, not both.
-- [ ] Sourcey confirmed the stable Entity ID and every related Offer ID, if any.
+- [ ] An existing company uses its Sourcey Entity ID; a new company follows the new-company instructions.
 - [ ] `scope.job` is a key and name from Sourcey's job library.
 - [ ] The scope's sources are public pages that document this product doing every step of this job.
 - [ ] Every source, resource and endpoint is public HTTPS material.
@@ -21,3 +20,7 @@
 - [ ] Every commit has a `Signed-off-by` line for the Developer Certificate of Origin.
 
 A merged listing asks Sourcey to probe the job. It does not mean the service is ready, or decide what letter it gets.
+
+No reservation issue is required. The admission result links to human
+verification when a new company does not meet the automatic listing rule.
+DCO sign-off certifies your contribution, not vendor authority or a grade.
