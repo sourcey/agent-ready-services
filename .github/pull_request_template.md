@@ -16,7 +16,7 @@
 - [ ] Every authored field a source binding can cover is covered (a job binding's interface and calls included).
 - [ ] Any job binding uses only declared endpoints and contains no key, token or other credential.
 - [ ] The file contains no run record, step outcome, letter, report card, private evidence or generated output.
-- [ ] `authority_intent` is `entity` only when Sourcey has already confirmed control of the Entity's own domain.
+- [ ] `authority_intent` is `entity` if I represent the company, or `community` if I contribute independently.
 - [ ] Every commit has a `Signed-off-by` line for the Developer Certificate of Origin.
 
 A merged listing asks Sourcey to probe the job. It does not mean the service is ready, or decide what letter it gets.
@@ -24,3 +24,5 @@ A merged listing asks Sourcey to probe the job. It does not mean the service is 
 No reservation issue is required. The admission result links to human
 verification when a new company does not meet the automatic listing rule.
 DCO sign-off certifies your contribution, not vendor authority or a grade.
+Company representatives follow the Sourcey check’s **Review and confirm** link
+to approve the exact submission before it is published. Signing is free.
