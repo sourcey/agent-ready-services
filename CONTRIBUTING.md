@@ -58,12 +58,18 @@ Use `git commit --signoff` for every commit. This certifies the
 cryptographic signature or vendor ownership. No GPG setup is required. The
 form uses your signed-in Sourcey account and requires no Git commit.
 
-You can contribute as a community member. To attest the company's own record,
-use **Claim this record** on its Sourcey page after it is listed. Domain email,
-DNS TXT, an HTTPS file and signed inbound email are the available proof paths,
-subject to the claim page's current availability. A claim is free, targets the
-exact current company revision and does not sign offers or prove a readiness
-grade. Human verification and a verified run remain separate.
+Choose `authority_intent: entity` in your declaration when you represent the
+company, or `community` when you contribute independently. Company representatives
+follow the Sourcey check’s **Review and confirm** link to review the exact private
+submission and prove domain control. Domain email, DNS TXT, an HTTPS file and
+signed inbound email use the same free confirmation flow.
+
+A new company's listing is confirmed first. Its service declaration then needs
+its own explicit approval; the same account can reuse unexpired company control
+without repeating the domain challenge. No details are published as vendor-signed
+before approval. Independent contributions are checked against public sources
+and admitted as observed records. Neither path chooses a grade. Human verification
+and a verified run remain separate.
 
 If company verification is offered, follow the admission result's Sourcey
 link to review its scope and price and continue with the same pull request.
@@ -78,8 +84,9 @@ instead; an unavailable check is a retry, never a payment requirement.
    so do not copy a credit or deal into a listing.
 3. If Sourcey does not list the company yet, see
    [A company new to Sourcey](#a-company-new-to-sourcey).
-4. Use `authority_intent: entity` only when Sourcey has already confirmed that
-   you control the company's own domain. Otherwise use `community`.
+4. Use `authority_intent: entity` when you represent the company. You confirm
+   control and approve the exact submission through the Sourcey check before
+   it is admitted. Independent contributors use `community`.
 
 Never include keys, tokens, passwords, personal data, unpublished terms or
 captures from a signed-in session. Public URLs are enough.
