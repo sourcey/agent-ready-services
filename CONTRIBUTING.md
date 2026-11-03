@@ -511,9 +511,11 @@ not the grade: it marks the job verified and never changes a step or the
 letter. The job library still says what success is, so a binding can
 locate the evidence but never decide whether it passes.
 
-Sourcey never runs a binding itself. The account holder runs it, with any
-key in their own GitHub secrets, through Sourcey's GitHub Action, which
-attests the run. The Action is not yet published.
+Sourcey never runs a binding itself. The account holder runs it through the
+[Agent Readiness Action](https://github.com/sourcey/agent-readiness-action),
+on their own GitHub Actions runner with their keys in their own GitHub
+secrets, and the Action attests the run. Once the listing is published, its
+report card's **Verify the job** page shows the workflow to add, filled in.
 
 To bind the Acme DB listing above, add the binding in place of
 `job_bindings: []`:
@@ -586,17 +588,42 @@ What each part of a binding does:
   from an earlier call's response.
 - **`assertions`** map each of the job's assertions to where its evidence is
   in a response. The library defines the assertions and how each one passes.
-- **`delegation`** says how the agent gets authority: `none`, `entered` (a key
-  the service issued, kept by the account holder), `oauth`, or `minted` (an
-  entered key mints the one the job uses). It names each credential by role and
-  limits where it may be sent.
+- **`delegation`** says how the agent gets authority. It names each
+  credential by role and limits where it may be sent:
+  - `none`: the job needs no credential.
+  - `entered`: a key or token the service issued, kept by the account holder.
+    Each credential's `placement` is `bearer` or `basic` on `authorization`, a
+    named `header`, a `form` field or a `query` parameter.
+  - `minted`: an entered credential (`from`) obtains the one the job uses
+    through the service's own API: a `call`, and `keep` rules that read each
+    issued credential from the response by JSON pointer.
+  - `oauth_client_credentials`: a client id and secret obtain a fresh access
+    token from the declared `token_endpoint_id` on every run, sent as
+    `client_secret_basic` or `client_secret_post`, with the binding's
+    `scopes`. `access` says where the token may go.
+  - `oauth_refresh_token`: a refresh token from a consent the account holder
+    gave once obtains the access token. Its `client_authentication` can also
+    be `none`, for a public client. When the service rotates refresh tokens,
+    the Action can write the new one back to the account holder's secret.
+
+  Consent never happens inside a run. An OAuth binding's calls carry the
+  access token by its `access` role:
+
+  ```yaml
+          delegation:
+            kind: oauth_client_credentials
+            token_endpoint_id: token
+            client_authentication: client_secret_basic
+            scopes: [databases:write]
+            access: { role: access_token, endpoint_ids: [api], methods: [GET, POST, DELETE] }
+  ```
 - **`payment`** is `none`, `prepaid_balance` or `per_call` (x402 or MPP).
 - **`cleanup`** removes what the job created. A job that changes something
   must clean up after itself.
 
-A binding never contains a key or token. It only names a credential's role.
-Sourcey holds no keys for listed services: it runs a binding only when the
-binding needs none.
+A binding never contains a key or token. It only names a credential's role,
+and the account holder's one GitHub secret maps each role to its value.
+Sourcey holds no keys for listed services.
 
 ## Pull request rules
 

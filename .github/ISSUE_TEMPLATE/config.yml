@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: List a service yourself
+    url: https://sourcey.com/submit?type=agent-readiness
+    about: Add the listing through Sourcey's form, which checks it as you go, or open a pull request following CONTRIBUTING.md.
+  - name: Verify a listed job
+    url: https://sourcey.com/agent-readiness
+    about: Run the job with your own account through the Agent Readiness Action; each report card's Verify the job page shows how.
   - name: Claim or correct a company record
     url: https://sourcey.com/support
     about: Find the company's Sourcey record, and prove control of its domain before listing with Entity authority.
