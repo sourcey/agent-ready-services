@@ -7,6 +7,8 @@ body:
   - type: markdown
     attributes:
       value: |
+        The quickest way to list a service is to add it yourself at https://sourcey.com/submit?type=agent-readiness, or with a pull request following [CONTRIBUTING.md](https://github.com/sourcey/agent-ready-services/blob/main/CONTRIBUTING.md). Use this form when you'd rather Sourcey add it.
+
         A request is not a readiness claim. Do not include keys, tokens, personal data, captures from a signed-in session or unpublished material.
   - type: input
     id: entity
