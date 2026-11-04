@@ -24,32 +24,11 @@ body:
       description: The exact product, API, platform or service an agent would use.
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: job
     attributes:
       label: Job
-      description: The job from Sourcey's job library for this kind of service. Choose "None of these fit" if no job matches.
-      options:
-        - bounty-claim (Claim a bounty)
-        - bucket-create (Create a storage bucket)
-        - chat-message-post (Post a message)
-        - crm-contact-create (Create a contact)
-        - database-create (Create a database deployment)
-        - deployment-create (Create a deployment)
-        - dns-resolve (Resolve a name)
-        - email-send (Send an email)
-        - error-event-report (Report an error)
-        - feature-flag-create (Create a feature flag)
-        - model-chat-stream-tool (Stream a completion with a tool call)
-        - monitor-create (Create a monitor)
-        - payment-create (Create a payment link)
-        - repository-create (Create a repository)
-        - search-record-find (Find a record by search)
-        - sms-send (Send a text message)
-        - user-create (Create a user)
-        - vector-upsert-query (Find a vector by query)
-        - workspace-page-create (Create a page)
-        - None of these fit
+      description: The job's key from the job library in CONTRIBUTING.md, such as `email-send`. If none fits, write "No matching job".
     validations:
       required: true
   - type: textarea
