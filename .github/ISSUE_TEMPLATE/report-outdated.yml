@@ -16,7 +16,7 @@ body:
       label: Step, or the job
       options:
         - Discover
-        - Authority
+        - Access
         - Onboard
         - Pay
         - Confirm

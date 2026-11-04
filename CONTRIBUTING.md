@@ -48,8 +48,9 @@ format.
    a readiness grade.
 
 Human verification verifies the company. It does not buy a higher grade or
-the separate **Job verified** result. The optional vendor-run Action for that
-result is not published yet; a listing needs no job binding to be assessed.
+the separate **Job verified** result. For that, the account holder runs the
+Agent Readiness Action: each report card's **Verify the job** page shows how,
+step by step. It's optional; a listing needs no job binding to be graded.
 
 ## Sign off your contribution
 
@@ -429,7 +430,7 @@ listing and those probes and labelled Probed, until a run verifies the job.
     credential (Telnyx's `POST /v2/bot_signup`). Where the document covers it
     and requires no credential for it (an empty requirement, or none in a
     document that requires one on its other operations), the agent registers
-    itself (Authority and Onboard `machine`). A document that states no
+    itself (Access and Onboard `machine`). A document that states no
     security anywhere says nothing about it.
   - `role: top_up`: an operation the agent funds the balance the job draws on
     with, paid by the agent itself. Where the document covers it and declares

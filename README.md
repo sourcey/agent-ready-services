@@ -72,9 +72,9 @@ binding adds the verified tier. It says exactly how one
 interface performs the job, and a run of it is proof, not the grade: it marks
 the job verified and never changes a step or the letter. Only an account
 holder runs one, with Sourcey's GitHub Action, which attests the result
-(**Vendor-run, verified**); Sourcey never runs a job itself. The Action is not
-yet published. Sourcey holds no keys for
-any listed service.
+(**Vendor-run, verified**); Sourcey never runs a job itself. Each report
+card's **Verify the job** page shows how to set it up. Sourcey holds no keys
+for any listed service.
 
 ## What lives here
 
