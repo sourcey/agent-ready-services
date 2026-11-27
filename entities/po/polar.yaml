@@ -52,7 +52,7 @@ declarations:
         interface_id: mcp-server
         kind: mcp
         endpoint_id: mcp-server
-        tool: execute_tool
+        tool: execute
     job_bindings: []
     participants:
       - participant_id: polar
@@ -80,6 +80,7 @@ declarations:
         roles:
           - authentication
           - documentation
+          - recovery
         operated_by_participant_id: polar
         standard_bindings: []
       - resource_id: pricing
