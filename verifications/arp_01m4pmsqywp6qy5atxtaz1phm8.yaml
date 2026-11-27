@@ -1,0 +1,5 @@
+schema_version: sourcey.agent-readiness-verification-authoring/v1alpha1
+profile_id: arp_01m4pmsqywp6qy5atxtaz1phm8
+declaration_revision_digest: sha256:ef1d9bbd38e72e267de256503b36895c062d0dbe96998e729804cc713d60832c
+intake_id: ari_01m8dztjdjnf7m1z4nghe725yz
+run_digest: sha256:98e690b198b19ee539e950c07f24d404d14c3b59b587965ce25902a115c39120
