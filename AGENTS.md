@@ -15,6 +15,12 @@ workflow installs and checks against: the verifier's pinned manifest and
 lockfile under `.github/catalog-verifier/` with its digest, and the Sourcey
 root set and its digest, under `.github/`.
 
+Verification proposal YAML under `verifications/` may reference one exact
+declaration and Sourcey-retained run evidence. Catalog owns its schema and
+checks. A proposal contains no run record, capture, credential, grade,
+certificate or approval claim. A verification is admitted only through the
+exact proposal PR and its merge, using the same admission owner as a listing.
+
 Do not add executable product code, other package manifests, copied schemas
 or job libraries, tests, captures, run records, step outcomes, letters,
 credentials, current profiles, generated indexes, release artifacts,
@@ -68,14 +74,16 @@ When editing a listing:
   types; no header or query parameter carries a credential.
 - A listing needs no job binding. Add one only when its calls, endpoints and
   credentials are documented publicly; never put a credential in the file.
-  Sourcey holds no keys: it runs a binding only when the binding needs none.
+  Sourcey holds no keys. Account holders run job bindings through the Action;
+  Sourcey replays their retained evidence through a verification PR.
 - Keep listing changes and documentation or workflow changes in separate pull
   requests.
 
 Sourcey's Catalog is the only executable contract authority. A listing asks
 Sourcey to probe a job; it never shows that a service is ready. A Git merge
-activates the exact admitted file. Sourcey's authenticated form and tools use
-the same Catalog admission without a synthetic pull request or any code here.
+activates the exact admitted file. Sourcey's authenticated form and supported
+listing issues prepare PRs under that same Catalog admission, without adding
+executable code here.
 
 The public `sourcey/validation` check must start automatically for every
 opened or updated pull request. It runs this repository's exact digest-pinned

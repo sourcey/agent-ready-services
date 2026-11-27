@@ -18,16 +18,18 @@ attribution and corrections.
 
 1. **Use the [submission form](https://sourcey.com/submit?type=agent-readiness)**
    to describe the company and service without writing YAML. It shows the
-   company checks before anything is submitted.
+   company checks and prepares a pull request for the same review lane.
 2. **Write the listing yourself** as YAML in a pull request. The example below
    is the bar for review.
 
-Open a pull request directly. An issue is optional for suggesting a service;
-it is not a reservation or a prerequisite for submitting one.
+Open a pull request directly. A listing or assessment request issue is also
+supported: Sourcey reads its public documentation and prepares a community
+declaration PR, or records the precise missing source or canonical job. An
+issue is not a reservation or a prerequisite for submitting a PR.
 
-Sourcey's own listing form, API and MCP tool write the same
+Sourcey's own listing form, API and MCP tool prepare the same
 `sourcey.agent-readiness-authoring/v1alpha1` file. There is no shorthand
-format.
+format. Only an admitted PR merge activates a declaration.
 
 ## What the checks mean
 
@@ -50,7 +52,24 @@ format.
 Human verification verifies the company. It does not buy a higher grade or
 the separate **Job verified** result. For that, the account holder runs the
 Agent Readiness Action: each report card's **Verify the job** page shows how,
-step by step. It's optional; a listing needs no job binding to be graded.
+step by step. The Action produces attested evidence for a verification PR.
+It's optional; a listing needs no job binding to be graded.
+
+## Verification proposals
+
+Verification contributions use this repository's PR lane too. Uploading a
+run retains its evidence privately and prepares a small YAML reference at
+`verifications/<profile_id>.yaml`. The Action's summary links the PR once
+prepared. You can also propose the exact retained reference directly.
+
+The reference identifies the profile, declaration revision, intake and run.
+It contains no grade, run record, capture, credential or approval claim.
+The pinned verifier checks its format; Sourcey's admission check replays the
+attested evidence and checks the declaration the PR would leave current.
+Merge authorizes publication. Closing the PR leaves the evidence unpublished.
+
+Scheduled Sourcey probes of an already admitted declaration retain their
+existing authorization; they do not open a new PR for each freshness check.
 
 ## Sign off your contribution
 
@@ -140,6 +159,7 @@ refuses a job that is not in it. These are the jobs today:
 | `user-create` | auth | Create a user |
 | `vector-upsert-query` | vector-database | Find a vector by query |
 | `video-asset-create` | video | Create a video asset |
+| `web-search` | web-search | Search the web |
 | `workflow-run` | workflow-automation | Run a workflow |
 | `workspace-page-create` | workspace | Create a page |
 

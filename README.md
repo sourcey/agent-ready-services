@@ -47,7 +47,7 @@ Sourcey follows the job along six steps:
 | Confirm | Can the agent tell a failure from a success by typed errors? |
 | Sustain | Can the agent keep its access alive and revoke it without a person? |
 
-**Job verified** appears only after a verified run completes the job. Finding
+**Job verified** appears after a successful run's verification PR is admitted and merged. Finding
 an interface is part of the assessment, not proof that the job was completed.
 
 Every card carries one letter, from A+ to F, for the kind of person-step the
@@ -78,7 +78,7 @@ for any listed service.
 
 ## What lives here
 
-Only listings live here:
+Listings and verification references live here:
 
 - the company's shared Sourcey identity and the public sources the listing
   cites;
@@ -89,7 +89,9 @@ Only listings live here:
 - surface exclusions, which say why a contributor left a surface out;
 - standard bindings and a source for every field;
 - optional relations to existing Sourcey Offers;
-- optional job bindings, for the verified tier.
+- optional job bindings, for the verified tier;
+- small verification proposal YAML references under `verifications/`, naming
+  Sourcey-retained evidence for one exact profile and declaration.
 
 Nothing else belongs here: no run records, captures, step outcomes, letters,
 credentials, freshness data, generated indexes or release state. A merged
