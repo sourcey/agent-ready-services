@@ -1,0 +1,200 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_yn54crr3jkq50w01bvrvn3m3v4
+  slug: xiulab-inc
+  slug_aliases: []
+  name: XiuLab Inc
+  domains:
+    - value: xiu.ai
+      role: primary
+      valid_from: 2026-11-27T03:12:05.438Z
+  category: ai-ml
+company:
+  summary: Model APIs for businesses, teams, and developers.
+  site_url: https://xiu.ai/
+sources:
+  - source_id: source_xiulab_inc_91de5dae95527bc11965fef8
+    url: https://docs.xiu.ai/en/router/
+  - source_id: source_xiulab_inc_f4df76700099ae48fb196447
+    url: https://docs.xiu.ai/router/models-pricing-usage/
+  - source_id: source_xiulab_inc_ff9c0adf0f10a7d0a82889f3
+    url: https://xiu.ai/
+  - source_id: source_xiulab_inc_d0502d36aabf2e27cb42c629
+    url: https://xiu.ai/pricing
+declarations:
+  - declaration_id: declaration_xiulab_inc_xiurouter_model_chat_stream_tool
+    scope:
+      product:
+        key: xiurouter
+        name: XiuRouter
+      job:
+        key: model-chat-stream-tool
+        name: Stream a completion with a tool call
+    job_operations:
+      - operation_id: chat-completions
+        interface_id: openai-chat-completions
+        kind: http
+        endpoint_id: router-api-v1
+        method: POST
+        url: https://router-api.xiu.ai/v1/chat/completions
+        headers: []
+        body:
+          media_type: application/json
+        spec: null
+    job_bindings: []
+    participants:
+      - participant_id: subject
+        roles:
+          - subject
+        identity:
+          entity_id: ent_yn54crr3jkq50w01bvrvn3m3v4
+      - participant_id: xiulab
+        roles:
+          - access_operator
+          - operations_provider
+          - payment_provider
+        identity:
+          origin_source_id: source_xiulab_inc_ff9c0adf0f10a7d0a82889f3
+    resources:
+      - resource_id: home
+        uri: https://xiu.ai/
+        roles:
+          - discovery
+        operated_by_participant_id: xiulab
+        standard_bindings: []
+      - resource_id: pricing
+        uri: https://xiu.ai/pricing
+        roles:
+          - pricing
+        operated_by_participant_id: xiulab
+        standard_bindings: []
+      - resource_id: docs
+        uri: https://docs.xiu.ai/en/router/
+        roles:
+          - documentation
+        operated_by_participant_id: xiulab
+        standard_bindings: []
+      - resource_id: console
+        uri: https://router.xiu.ai
+        roles:
+          - checkout
+          - provisioning
+        operated_by_participant_id: xiulab
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: router-api-v1
+        uri: https://router-api.xiu.ai/v1
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: xiulab
+        standard_bindings: []
+    interfaces:
+      - interface_id: openai-chat-completions
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - router-api-v1
+        resource_ids:
+          - docs
+        operated_by_participant_id: xiulab
+        standard_bindings: []
+    relations: []
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: binding_declaration_declaration_xiulab_inc_xiurouter_model_chat_stream_tool_91de5dae95527bc11965fef8
+        source_id: source_xiulab_inc_91de5dae95527bc11965fef8
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+        target:
+          node_kind: declaration
+          node_id: declaration_xiulab_inc_xiurouter_model_chat_stream_tool
+      - source_binding_id: binding_participant_subject_ff9c0adf0f10a7d0a82889f3
+        source_id: source_xiulab_inc_ff9c0adf0f10a7d0a82889f3
+        field_paths:
+          - /roles
+          - /identity
+        target:
+          node_kind: participant
+          node_id: subject
+      - source_binding_id: binding_job_operation_chat_completions_f4df76700099ae48fb196447
+        source_id: source_xiulab_inc_f4df76700099ae48fb196447
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+        target:
+          node_kind: job_operation
+          node_id: chat-completions
+      - source_binding_id: binding_participant_xiulab_ff9c0adf0f10a7d0a82889f3
+        source_id: source_xiulab_inc_ff9c0adf0f10a7d0a82889f3
+        field_paths:
+          - /roles
+          - /identity
+        target:
+          node_kind: participant
+          node_id: xiulab
+      - source_binding_id: binding_resource_home_ff9c0adf0f10a7d0a82889f3
+        source_id: source_xiulab_inc_ff9c0adf0f10a7d0a82889f3
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: home
+      - source_binding_id: binding_resource_pricing_d0502d36aabf2e27cb42c629
+        source_id: source_xiulab_inc_d0502d36aabf2e27cb42c629
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: pricing
+      - source_binding_id: binding_resource_docs_91de5dae95527bc11965fef8
+        source_id: source_xiulab_inc_91de5dae95527bc11965fef8
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: docs
+      - source_binding_id: binding_resource_console_91de5dae95527bc11965fef8
+        source_id: source_xiulab_inc_91de5dae95527bc11965fef8
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: console
+      - source_binding_id: binding_endpoint_router_api_v1_91de5dae95527bc11965fef8
+        source_id: source_xiulab_inc_91de5dae95527bc11965fef8
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: endpoint
+          node_id: router-api-v1
+      - source_binding_id: binding_interface_openai_chat_completions_91de5dae95527bc11965fef8
+        source_id: source_xiulab_inc_91de5dae95527bc11965fef8
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: openai-chat-completions
+    surface_exclusions: []
+    authority_intent: community
+    declared_at: 2026-11-27T11:01:50.496Z
