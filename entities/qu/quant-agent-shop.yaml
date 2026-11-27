@@ -1,0 +1,217 @@
+schema_version: sourcey.agent-readiness-authoring/v1alpha1
+entity:
+  entity_id: ent_54azsv00p8hdjfn76knhfdfn6w
+  slug: quant-agent-shop
+  slug_aliases: []
+  name: Quant Agent Shop
+  domains:
+    - value: quantagentshop.com
+      role: primary
+      valid_from: 2026-11-27T03:12:05.759Z
+  category: apis-integration
+company:
+  summary: Pay-per-call web tools for AI agents over HTTP and MCP.
+  site_url: https://quantagentshop.com/
+sources:
+  - source_id: source_quant_agent_shop_4b7694621cec26f1a838a30a
+    url: https://github.com/TeaTime0906/quant-agent-shop
+  - source_id: source_quant_agent_shop_e45b1e38a8d1f2b1d9d76b90
+    url: https://quantagentshop.com/
+  - source_id: source_quant_agent_shop_7250861c07a5f1e285895224
+    url: https://quantagentshop.com/llms.txt
+declarations:
+  - declaration_id: declaration_quant_agent_shop_quant_agent_shop_api_web_search
+    scope:
+      product:
+        key: quant-agent-shop-api
+        name: Quant Agent Shop API
+      job:
+        key: web-search
+        name: Search the web
+    job_operations:
+      - operation_id: web-search-op
+        interface_id: http-api
+        kind: http
+        endpoint_id: web-search-endpoint
+        method: POST
+        url: https://quantagentshop.com/v1/web-search
+        headers: []
+        body:
+          media_type: application/json
+        spec:
+          url: https://quantagentshop.com/openapi.json
+          key_operations: null
+      - operation_id: mcp-web-search-op
+        interface_id: mcp-api
+        kind: mcp
+        endpoint_id: mcp-endpoint
+        tool: quantagentshop_web_search
+    job_bindings: []
+    participants:
+      - participant_id: subject
+        roles:
+          - subject
+        identity:
+          entity_id: ent_54azsv00p8hdjfn76knhfdfn6w
+      - participant_id: quant-agent-shop
+        roles:
+          - operations_provider
+        identity:
+          origin_source_id: source_quant_agent_shop_e45b1e38a8d1f2b1d9d76b90
+    resources:
+      - resource_id: api-docs
+        uri: https://quantagentshop.com/llms.txt
+        roles:
+          - documentation
+          - pricing
+        operated_by_participant_id: quant-agent-shop
+        standard_bindings: []
+    endpoints:
+      - endpoint_id: web-search-endpoint
+        uri: https://quantagentshop.com/v1/web-search
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: quant-agent-shop
+        standard_bindings: []
+      - endpoint_id: mcp-endpoint
+        uri: https://quantagentshop.com/mcp
+        transport: http
+        roles:
+          - service
+        operated_by_participant_id: quant-agent-shop
+        standard_bindings: []
+    interfaces:
+      - interface_id: http-api
+        modality: network_api
+        functions:
+          - service_operation
+        endpoint_ids:
+          - web-search-endpoint
+        resource_ids:
+          - api-docs
+        operated_by_participant_id: quant-agent-shop
+        standard_bindings: []
+      - interface_id: mcp-api
+        modality: tool_server
+        functions:
+          - service_operation
+        endpoint_ids:
+          - mcp-endpoint
+        resource_ids:
+          - api-docs
+        operated_by_participant_id: quant-agent-shop
+        standard_bindings: []
+    relations: []
+    offer_relations: []
+    source_bindings:
+      - source_binding_id: binding_declaration_declaration_quant_agent_shop_quant_agent_shop_api_web_search_e45b1e38a8d1f2b1d9d76b90
+        source_id: source_quant_agent_shop_e45b1e38a8d1f2b1d9d76b90
+        field_paths:
+          - /scope/product/name
+          - /scope/job/name
+        target:
+          node_kind: declaration
+          node_id: declaration_quant_agent_shop_quant_agent_shop_api_web_search
+      - source_binding_id: binding_participant_subject_e45b1e38a8d1f2b1d9d76b90
+        source_id: source_quant_agent_shop_e45b1e38a8d1f2b1d9d76b90
+        field_paths:
+          - /roles
+          - /identity
+        target:
+          node_kind: participant
+          node_id: subject
+      - source_binding_id: binding_job_operation_web_search_op_7250861c07a5f1e285895224
+        source_id: source_quant_agent_shop_7250861c07a5f1e285895224
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /method
+          - /url
+          - /body
+          - /spec
+        target:
+          node_kind: job_operation
+          node_id: web-search-op
+      - source_binding_id: binding_job_operation_mcp_web_search_op_4b7694621cec26f1a838a30a
+        source_id: source_quant_agent_shop_4b7694621cec26f1a838a30a
+        field_paths:
+          - /interface_id
+          - /endpoint_id
+          - /tool
+        target:
+          node_kind: job_operation
+          node_id: mcp-web-search-op
+      - source_binding_id: binding_participant_quant_agent_shop_e45b1e38a8d1f2b1d9d76b90
+        source_id: source_quant_agent_shop_e45b1e38a8d1f2b1d9d76b90
+        field_paths:
+          - /roles
+          - /identity
+        target:
+          node_kind: participant
+          node_id: quant-agent-shop
+      - source_binding_id: binding_resource_api_docs_7250861c07a5f1e285895224
+        source_id: source_quant_agent_shop_7250861c07a5f1e285895224
+        field_paths:
+          - /uri
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: resource
+          node_id: api-docs
+      - source_binding_id: binding_endpoint_web_search_endpoint_7250861c07a5f1e285895224
+        source_id: source_quant_agent_shop_7250861c07a5f1e285895224
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: endpoint
+          node_id: web-search-endpoint
+      - source_binding_id: binding_endpoint_mcp_endpoint_4b7694621cec26f1a838a30a
+        source_id: source_quant_agent_shop_4b7694621cec26f1a838a30a
+        field_paths:
+          - /uri
+          - /transport
+          - /roles
+          - /operated_by_participant_id
+        target:
+          node_kind: endpoint
+          node_id: mcp-endpoint
+      - source_binding_id: binding_interface_http_api_7250861c07a5f1e285895224
+        source_id: source_quant_agent_shop_7250861c07a5f1e285895224
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: http-api
+      - source_binding_id: binding_interface_mcp_api_4b7694621cec26f1a838a30a
+        source_id: source_quant_agent_shop_4b7694621cec26f1a838a30a
+        field_paths:
+          - /modality
+          - /functions
+          - /endpoint_ids
+          - /resource_ids
+          - /operated_by_participant_id
+        target:
+          node_kind: interface
+          node_id: mcp-api
+      - source_binding_id: binding_surface_exclusion_no_checkout_7250861c07a5f1e285895224
+        source_id: source_quant_agent_shop_7250861c07a5f1e285895224
+        field_paths:
+          - /role
+          - /rationale
+        target:
+          node_kind: surface_exclusion
+          node_id: no-checkout
+    surface_exclusions:
+      - exclusion_id: no-checkout
+        role: checkout
+        rationale: Payment is per-call via x402 protocol, no checkout page.
+    authority_intent: community
+    declared_at: 2026-11-27T11:02:48.751Z
