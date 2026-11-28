@@ -1,0 +1,33 @@
+vendor: Polar
+entity_id: ent_01kzc2rqsw8fpc33xb0n7tdqv5
+slug: polar
+category: payments-fintech
+name: Polar
+description: |
+  Polar is a merchant-of-record monetization platform that lets developers
+  sell software, subscriptions, and digital products through a hosted
+  checkout, customer portal, and REST API.
+website: https://polar.sh
+tags:
+  - payments
+  - merchant-of-record
+  - subscriptions
+  - billing
+  - api
+status: candidate
+product:
+  name: Polar Payments API
+  type: api
+  funnel: service-access
+surfaces:
+  discovery: https://polar.sh/docs
+  terms: https://polar.sh/legal/terms
+  pricing: https://polar.sh/pricing
+  signup: https://polar.sh/start
+  authentication: https://polar.sh/docs/api/authentication
+  provisioning: https://polar.sh/docs/api
+  status: https://status.polar.sh
+  operation: https://polar.sh/docs/api
+  limits: https://polar.sh/docs/api/rate-limits
+  errors: https://polar.sh/docs/api/errors
+  recovery: https://polar.sh/support
