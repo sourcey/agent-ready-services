@@ -20,7 +20,7 @@ describe('Polar service definition', () => {
     expect(data.entity_id).toMatch(/^ent_/);
   });
 
-  test('should include required top‑level fields', () => {
+  test('should include required top-level fields', () => {
     expect(data).toHaveProperty('slug', 'polar');
     expect(data).toHaveProperty('category', 'payments-fintech');
   });
